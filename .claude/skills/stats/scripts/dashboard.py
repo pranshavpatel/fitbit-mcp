@@ -1665,7 +1665,9 @@ def _short(label: str, n: int) -> str:
 
 
 def sec_insights(m: dict, w: int) -> list[Text]:
-    """What tends to come before your better and worse recovery mornings. Correlation, not proof."""
+    """What tends to come before your better and worse recovery mornings: each habit's effect as a
+    thick bar from 0, with its 95 % range drawn thin around it. A range that crosses the center line
+    could be chance. Correlation, not proof."""
     ins = m.get("insights") or {}
     effects = ins.get("effects") or []
     out: list[Text] = []
@@ -1683,28 +1685,48 @@ def sec_insights(m: dict, w: int) -> list[Text]:
     else:
         out += headline(w, "none", ("No clear pattern", "yet in {} mornings".format(ins["n_days"])))
     out.append(blank())
-    longest = max(len(e["label"]) for e in effects) if effects else 20
-    label_w = max(16, min(longest + 2, w - 2 - 11 - 20))
-    half = max(4, min(10, (w - 2 - label_w - 20 - 1) // 2))
-    out.append(fit(T(("  {:<{}}".format("next-morning Recovery when…", label_w), C["muted"]),
-                     ("worse"[-half:].rjust(half) + "│" + "better"[:half], C["muted"])), w))
+    lw = max(14, min(w - 40, max((len(e["label"]) for e in effects), default=20) + 1))
+    plot_w = w - lw - 15                             # "  " + label + plot + "  with vs w/o"
+    plot_w -= (plot_w + 1) % 2                       # odd, so 0 has its own column
+    span = 30.0
+
+    def X(v: float) -> int:
+        return int(round((max(-span, min(span, v)) + span) / (2 * span) * (plot_w - 1)))
+
+    axis = [" "] * plot_w
+    for v, lab in ((-30, "-30"), (0, "0"), (30, "+30")):
+        i = X(v) - (len(lab) // 2 if v == 0 else 0 if v < 0 else len(lab) - 1)
+        axis[i:i + len(lab)] = list(lab)
+    head = "next-morning Recovery when…" if lw >= 28 else "Recovery when…"
+    out.append(fit(T(("  {:<{}}".format(_short(head, lw), lw), C["muted"]), ("".join(axis), C["muted"]),
+                     ("  with vs w/o", C["muted"])), w))
+    zero = X(0)
     for e in effects:
+        se = abs(e["diff"] / e["t"]) if e.get("t") else span
+        lo, hi = e["diff"] - 1.96 * se, e["diff"] + 1.96 * se
         clear = e["strength"] != "unclear"
-        f = max(-1.0, min(1.0, e["diff"] / INSIGHT_SCALE))
-        n = int(round(abs(f) * half))
         col = (C["good"] if e["diff"] > 0 else C["flag"]) if clear else C["rule"]
-        left = (" " * (half - n) + "█" * n) if e["diff"] < 0 else " " * half
-        right = ("█" * n + " " * (half - n)) if e["diff"] > 0 else " " * half
-        out.append(fit(T(("  {:<{}}".format(_short(e["label"], label_w), label_w), C["ink2"] if clear else C["muted"]),
-                         (left, col), ("│", C["rule"]), (right, col),
-                         (" {:>+4.0f}".format(e["diff"]), ("bold " + C["ink"]) if clear else C["muted"]),
-                         ("  {:<7}".format(e["strength"]), C["ink2"] if clear else C["muted"]),
-                         (" {}/{}".format(e["n_yes"], e["n_no"]), C["muted"])), w))
+        a, b_ = sorted((zero, X(e["diff"])))
+        row = Text(no_wrap=True)
+        for i in range(plot_w):
+            v = i / (plot_w - 1) * 2 * span - span
+            if a <= i <= b_ and i != zero and e["diff"] != 0:
+                row.append("█", style=col)
+            elif i == zero:
+                row.append("│", style=C["rule"])
+            elif lo <= v <= hi:
+                row.append("─", style=col if clear else C["faint"])
+            else:
+                row.append(" ")
+        out.append(fit(T(("  {:<{}}".format(_short(e["label"], lw - 1), lw), C["ink"] if clear else C["muted"]), row,
+                         ("  {:>3} vs {:<3}".format(e["mean_yes"], e["mean_no"]), C["ink2"] if clear else C["muted"])), w))
     out.append(blank())
-    out += K.para("Average Recovery the next morning with vs without each habit, over {} mornings since {} "
-                  "(n = mornings with/without). This is correlation in your own data, not proof: hard days, "
-                  "late nights and short sleep often come together. Recovery includes the sleep score, so the "
-                  "sleep rows partly measure themselves. clear |t| ≥ 2.5 · likely ≥ 1.7."
+    out += _flow([T(("█", C["good"]), (" better", C["muted"])), T(("█", C["flag"]), (" worse", C["muted"])),
+                  T(("─", C["ink2"]), (" 95% range: if it crosses │ it could be chance", C["muted"])),
+                  T(("█", C["rule"]), (" unclear", C["muted"]))], w, gap=3, indent=2)
+    out += K.para("Average Recovery the next morning with vs without each habit, over {} mornings since {}. "
+                  "Correlation in your own data, not proof: hard days, late nights and short sleep often come together, "
+                  "and Recovery includes the sleep score, so the sleep rows partly measure themselves."
                   .format(ins["n_days"], sdate(ins["since"])), w, C["muted"], indent=2, prefix=Text("  "))
     return out
 
