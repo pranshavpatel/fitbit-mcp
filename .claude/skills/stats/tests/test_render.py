@@ -406,8 +406,8 @@ def test_single_column_draws_each_box_once(model):
 @pytest.mark.parametrize("ratio, zone", [(0.5, "too little"), (1.0, "sweet spot"), (1.4, "caution"), (1.8, "risky"), (2.6, "risky")])
 def test_load_gauge_thickens_the_active_zone(ratio, zone):
     lines = [l.plain for l in dashboard.load_gauge(ratio, 76)]
-    top, bottom = lines[0], lines[1]
-    assert "▂" not in top and "▓" in top                        # only the active zone reaches the top row
-    assert "{:.2f} {}".format(ratio, zone) in lines[2]
-    start = top.index("▓")
-    assert bottom[start] == "▓"                                 # and it fills both rows
+    gauge = lines[0]
+    assert gauge.startswith("  0 ") and gauge.endswith(" 2")
+    thick = gauge.strip("02 ").replace("─", " ").split()
+    assert len(thick) == 1 and set(thick[0]) == {"▓"}          # exactly one zone is the thick block, the rest are thin lines
+    assert "{:.2f} {}".format(ratio, zone) in lines[1]

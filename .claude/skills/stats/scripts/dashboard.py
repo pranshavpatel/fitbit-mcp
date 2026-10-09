@@ -905,27 +905,23 @@ LOAD_ZONES = ((0.0, 0.8, "too little", "#3987e5"), (0.8, 1.3, "sweet spot", "#0c
 
 
 def load_gauge(ratio: float | None, w: int) -> list[Text]:
-    """The 7 ÷ 28-day load ratio on a 0–2 scale. The zone you're in is drawn twice as tall in its color;
-    the others are a thin line, so where you are reads at a glance."""
-    gw = max(20, w - 4)
+    """The 7 ÷ 28-day load ratio on a 0–2 scale, in one row: every zone is a thin centered line in its
+    color except the one you're in, which is a thick textured block, so where you are stands out."""
+    gw = max(20, w - 8)                               # "  0 " + gauge + " 2"
     active = None if ratio is None else next((z for z in LOAD_ZONES if z[0] <= min(ratio, 1.999) < z[1]), LOAD_ZONES[-1])
-    top, bottom = Text("  ", no_wrap=True), Text("  ", no_wrap=True)
+    bar = T(("  0 ", C["muted"]))
     for z in LOAD_ZONES:
         a, b, _, col = z
         cells = round(b / 2 * gw) - round(a / 2 * gw)
-        if z is active:
-            top.append("▓" * cells, style=col)
-            bottom.append("▓" * cells, style=col)
-        else:
-            top.append(" " * cells)
-            bottom.append("▂" * cells, style=col)
-    out = [fit(top, w), fit(bottom, w)]
+        bar.append(("▓" if z is active else "─") * cells, style=col)
+    bar.append(" 2", style=C["muted"])
+    out = [fit(bar, w)]
     if ratio is not None:
         x = min(gw - 1, round(min(2.0, ratio) / 2 * gw))
         label = "▲ {:.2f} {}".format(ratio, active[2])
-        x = min(x, gw - len(label) + 1) if x > gw - len(label) else x
-        out.append(fit(T(("  " + " " * x, ""), (label, "bold " + C["ink"])), w))
-    names, pos = Text("  ", no_wrap=True), 0
+        x = max(0, min(x, gw - len(label)))
+        out.append(fit(T(("    " + " " * x, ""), (label, "bold " + C["ink"])), w))
+    names, pos = Text("    ", no_wrap=True), 0
     for z in LOAD_ZONES:
         a, b, name, col = z
         x = round((a + b) / 4 * gw) - len(name) // 2
