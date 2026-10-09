@@ -493,6 +493,31 @@ def deep_journal(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
     return [("Habits · 30 days", lines, "sleep")]
 
 
+def deep_priorities(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
+    import priorities as PR
+    wk = (m.get("priorities") or {}).get("week") or {}
+    if not wk.get("set_days"):
+        return []
+    rate = (wk["done"] + 0.5 * wk["partial"]) / max(1, wk["items"])
+    lines = headline(w, "good" if rate >= 0.6 else "watch", ("{}/{}".format(wk["set_days"], wk["days"]), "days with priorities"),
+                     ("{}/{}".format(wk["done"], wk["items"]), "done"), ("{}".format(wk["partial"]), "some progress"))
+    lines.append(blank())
+    col = {"done": C["good"], "partial": C["watch"], "missed": C["flag"], None: C["ink2"]}
+    for d_ in wk["by_day"]:
+        if not d_["items"]:
+            lines.append(fit(T(("  {:<10}".format(sdate(d_["date"])), C["muted"]), ("—", C["faint"])), w))
+            continue
+        for k, it in enumerate(d_["items"]):
+            lines.append(fit(T(("  {:<10}".format(sdate(d_["date"]) if k == 0 else ""), C["muted"]),
+                               (PR.GLYPH[it.get("status")] + " ", "bold " + col[it.get("status")]),
+                               (DB._short(it["text"], max(10, w - 28)), C["ink"]),
+                               ("  " + PR.LABEL[it.get("status")], C["muted"])), w))
+    lines.append(blank())
+    lines += _legend([("●", C["good"], "done"), ("◐", C["watch"], "some progress"), ("✕", C["flag"], "not today"),
+                      ("○", C["ink2"], "not reviewed")], w)
+    return [("Priorities · 7 days", lines, "activity")]
+
+
 def deep_insights(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
     effects = [e for e in (m.get("insights") or {}).get("effects", []) if e.get("yes_vals")][:6]
     if not effects:
@@ -519,5 +544,5 @@ def deep_insights(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
 DEEP = {
     "sleep": deep_sleep, "recovery": deep_recovery, "strain": deep_strain, "workouts": deep_workouts,
     "training": deep_training, "lifting": deep_lifting, "freshness": deep_fresh, "muscles": deep_fresh,
-    "journal": deep_journal, "insights": deep_insights,
+    "journal": lambda m, w: deep_priorities(m, w) + deep_journal(m, w), "insights": deep_insights,
 }

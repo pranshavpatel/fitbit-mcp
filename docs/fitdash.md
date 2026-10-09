@@ -98,6 +98,17 @@ fitdash journal habits                            # the list and keys
 `+` = did it, `-` = didn't, and the start of a key is enough. Define habits in `stats.json`
 (`good: true` to do, `false` to avoid, `null` to just track).
 
+### Priorities
+
+```sh
+fitdash priorities                                 # set (morning) or review (evening)
+fitdash priorities set "…" "…" "…"                 # today's top 3
+fitdash priorities done 1 | some 2 | missed 3      # how each one went
+```
+
+`fitdash` asks for them on its own in the morning and evening. See
+[automation.md](automation.md#daily-priorities).
+
 ## Automation
 
 | Command | What it does |

@@ -79,6 +79,7 @@ fitdash --section sleep                    # one area, extended: 8 weeks + extra
 fitdash --period week                      # this week vs last
 fitdash lift bench 3x8@60 row 4x10@50      # log sets (kg; 25lb for pounds; no @ = bodyweight)
 fitdash journal +mobility -junk-food note "slept well"
+fitdash priorities set "ship the report" "pull day" "call mom"   # today's top 3; the coach checks in
 fitdash coach run                          # a Claude-written note if one is due
 fitdash brief --install                    # a notification every morning
 fitdash web --install                      # the phone app, running in the background

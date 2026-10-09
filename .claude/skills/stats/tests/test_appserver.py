@@ -106,3 +106,20 @@ def test_sync_unavailable_without_a_command(srv):
     base = srv[0]
     assert call(base, "/api/sync")[1]["available"] is False
     assert call(base, "/api/sync", {})[0] == 400
+
+
+def test_priorities_roundtrip(srv):
+    base, home, _ = srv
+    code, v, _ = call(base, "/api/priorities", {"date": "today", "items": ["ship it", " ", "gym"]})
+    assert code == 200 and [i["text"] for i in v["priorities"]["items"]] == ["ship it", "gym"]
+    code, v, _ = call(base, "/api/priorities", {"date": "today", "index": 2, "status": "done"})
+    assert v["priorities"]["items"][1]["status"] == "done"
+    code, v, _ = call(base, "/api/priorities", {"date": "today", "index": 2, "status": None})
+    assert v["priorities"]["items"][1]["status"] is None
+    code, v, _ = call(base, "/api/priorities", {"date": "today", "reflection": "good focus"})
+    assert v["priorities"]["reflection"] == "good focus"
+    assert call(base, "/api/priorities", {"items": ["a", "b", "c", "d"]})[0] == 400
+    assert call(base, "/api/priorities", {"index": 9, "status": "done"})[0] == 400
+    assert call(base, "/api/priorities", {"index": 1, "status": "maybe"})[0] == 400
+    _, m, _ = call(base, "/api/model")
+    assert m["priorities"]["today"]["reflection"] == "good focus"

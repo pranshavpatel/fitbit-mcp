@@ -30,6 +30,8 @@ sync of the fitbit-mcp project; `tag` and `lift` write only your own logs in ~/.
                                         run the phone app in the background (this Mac only) and keep
                                         the terminal-style page fresh; reach it from your phone with
                                         Tailscale: tailscale serve --bg 8787
+  fitdash priorities [set "…" "…" "…" | done 1 | some 2 | missed 3 | reflect "…" | show]
+                                        today's top 3: asked in the morning, reviewed in the evening
   fitdash coach run | show | set <kind> "text" | --install | --uninstall
                                         the coach note in the Today box: written by Claude in the
                                         morning, after workouts and in the evening
@@ -1210,6 +1212,35 @@ def _attention(m: dict) -> list[tuple[str, str]]:
     return [tuple(x) for x in m.get("attention") or []]
 
 
+def _priority_lines(m: dict, w: int) -> list[Text]:
+    """PRIORITIES: today's top 3 with their status, or how to set them."""
+    import priorities as PR
+    pr = m.get("priorities") or {}
+    e = pr.get("today") or {}
+    items = e.get("items") or []
+    wk = pr.get("week") or {}
+    head = T(("PRIORITIES", "bold " + C["activity"]))
+    if wk.get("set_days"):
+        head.append("  {} of {} done this week · {}-day streak".format(wk["done"], wk["items"], wk["streak"]), style=C["muted"])
+    out = [fit(head, w)]
+    if not items:
+        out += K.para("None set yet. What are today's top 3? fitdash priorities set \"…\" \"…\" \"…\"",
+                      w, C["muted"], indent=2, prefix=Text("  "))
+    else:
+        col = {"done": C["good"], "partial": C["watch"], "missed": C["flag"], None: C["ink2"]}
+        for k, it in enumerate(items, 1):
+            st = it.get("status")
+            tail = "" if st is None else " · " + PR.LABEL[st]
+            out += K.para("{}. {}".format(k, it["text"]) + tail, w, C["ink"] if st is None else C["ink2"], indent=6,
+                          prefix=T(("  {} ".format(PR.GLYPH[st]), "bold " + col[st])))
+        if pr.get("prompt") == "review":
+            out.append(fit(T(("  How did they go? fitdash priorities", C["muted"])), w))
+        if e.get("reflection"):
+            out += K.para("“{}”".format(e["reflection"]), w, C["muted"], indent=4, prefix=Text("    "))
+    out.append(blank())
+    return out
+
+
 def _coach_lines(m: dict, w: int) -> list[Text]:
     """COACH · <kind> · <time>, then the note. A rule-based note is marked "auto"."""
     import coach as CO
@@ -1249,6 +1280,7 @@ def sec_focus(m: dict, w: int) -> list[Text]:
                   prefix=T(("{} {} ".format(K.ICON[v["level"]], word.upper()), "bold reverse " + C[v["level"]]), "  "))
     out.append(blank())
     out += _coach_lines(m, w)
+    out += _priority_lines(m, w)
 
     # key numbers: value, context, 14-day trend (today = last, bold)
     s, b = m["series"], m["baselines"]
@@ -1957,6 +1989,12 @@ def main(argv=None) -> int:
         return coach(argv[1:])
     if argv[:1] == ["app"]:
         return app(argv[1:])
+    if argv[:1] in (["priorities"], ["p"]):
+        import priorities as PR
+        if argv[1:2] in (["-h"], ["--help"]):
+            print(PR.__doc__)
+            return 0
+        return PR.cli(argv[1:], D.data_home(), datetime.now(D.NY), sys.stdin.isatty() and sys.stdout.isatty())
     ap = argparse.ArgumentParser(prog="fitdash", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--section", choices=SECTIONS)
     ap.add_argument("--period", choices=("day", "week", "month"), default="day")
@@ -1982,6 +2020,14 @@ def main(argv=None) -> int:
     # the phone page is refreshed in the background: it syncs when stale, like a look in the terminal
     if args.sync or ((interactive or args.html is not None) and not args.no_sync and not args.date):
         auto_sync(force=args.sync)
+    # morning: ask for today's top 3; evening: ask how they went (only in a terminal, once a day)
+    if interactive and sys.stdin.isatty() and args.section in (None, "today", "overview") and args.period == "day":
+        import priorities as PR
+        if PR.prompts_enabled(D.load_config()):
+            now_ = datetime.now(D.NY)
+            kind = PR.due_prompt(PR.load(D.data_home()), now_)
+            if kind:
+                PR.run_prompt(D.data_home(), now_, kind)
     day = date.fromisoformat(args.date) if args.date else datetime.now(D.NY).date()
     width = args.width or shutil.get_terminal_size((100, 40)).columns
     width = max(60, width)

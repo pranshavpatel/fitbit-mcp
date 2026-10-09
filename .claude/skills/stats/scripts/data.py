@@ -24,6 +24,7 @@ from tz import local_zone
 import coach as CO
 import journal as J
 import lifts as L
+import priorities as PR
 import scores as S
 
 NY = local_zone()      # the display timezone (tz.py); named NY for history
@@ -81,6 +82,7 @@ def load_config(home: Path | None = None) -> dict:
     cfg["journal"] = J.load(home or data_home())
     cfg["habit_list"] = J.habits(cfg)
     cfg["coach_notes"] = CO.load(home or data_home())
+    cfg["priorities_log"] = PR.load(home or data_home())
     return cfg
 
 
@@ -722,6 +724,10 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
     model["insights"] = _insights(day, nights, asleep, strain_by_day, steps, rec, workouts_all, low_wear,
                                   journal, habit_list)
     model["journal"] = _journal(journal, habit_list, day, model["insights"])
+    pdays = cfg.get("priorities_log") or {}
+    pkey = PR.plan_day(now) if today_partial else day          # after midnight, still last night's list
+    model["priorities"] = {"date": pkey.isoformat(), "today": pdays.get(pkey.isoformat()),
+                           "week": PR.summary(pdays, pkey), "prompt": PR.due_prompt(pdays, now) if today_partial else None}
     model["hr_zones_bpm"] = None if not hr_max else [round(p * hr_max) for p in S.ZONE_PCT]
 
     # ---- workouts

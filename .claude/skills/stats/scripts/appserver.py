@@ -10,6 +10,8 @@ Routes
     POST /api/journal         {"date", "habits": {key: true|false|null}, "note"}
     POST /api/lift            {"date", "text": "bench 3x8@60 row 4x10@50"} → parsed entries or an error
     POST /api/lift/undo       {"date"}
+    POST /api/priorities      {"date", "items": ["…", "…", "…"]} | {"date", "index": 1-3, "status": "done"|"partial"|"missed"|null}
+                              | {"date", "reflection": "…"}
     POST /api/sync            start a Google sync in the background
     GET  /api/sync            {"running", "last"}
 
@@ -34,6 +36,7 @@ from urllib.parse import parse_qs, urlparse
 import data as D
 import journal as J
 import lifts as L
+import priorities as PR
 import scores as S
 
 APP_DIR = Path(__file__).resolve().parent.parent / "app"
@@ -124,10 +127,39 @@ def log_view(state: State, d: date) -> dict:
         for e in L.load(state.home)[day_]:
             if e["exercise"] not in recent:
                 recent.append(e["exercise"])
+    pd = _plan_day(d)
     return {"date": d.isoformat(), "habits": hs, "journal": entry,
+            "priorities": {"date": pd.isoformat(), **(PR.load(state.home).get(pd.isoformat()) or {"items": [], "reflection": ""})},
             "lifts": [{**e, "text": L.describe(e)} for e in lifts],
             "sets": {k: v for k, v in S.weekly_sets(lifts).items() if v},
             "recent_exercises": recent[:12], "exercises": sorted(S.EXERCISES)}
+
+
+def _plan_day(d: date) -> date:
+    """Today's priorities after midnight are still last night's list (priorities.plan_day)."""
+    now = datetime.now(D.NY)
+    return PR.plan_day(now) if d == now.date() else d
+
+
+def save_priorities(state: State, body: dict) -> dict:
+    d = day_arg(body.get("date"))
+    pd, now = _plan_day(d), datetime.now(D.NY)
+    if "items" in body:
+        items = body["items"]
+        if not isinstance(items, list) or not all(isinstance(t, str) for t in items):
+            raise ValueError("items must be a list of text")
+        PR.set_items(state.home, pd, items, now)
+    if "index" in body:
+        st = body.get("status")
+        if st not in (None, "done", "partial", "missed"):
+            raise ValueError("status is done, partial, missed or null")
+        PR.mark(state.home, pd, int(body["index"]), st, now)
+    if "reflection" in body:
+        if not isinstance(body["reflection"], str):
+            raise ValueError("reflection must be text")
+        PR.reflect(state.home, pd, body["reflection"], now)
+    state.invalidate()
+    return log_view(state, d)
 
 
 def save_journal(state: State, body: dict) -> dict:
@@ -272,9 +304,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(save_lift(self.state, body))
             if path == "/api/lift/undo":
                 return self._json(undo_lift(self.state, body))
+            if path == "/api/priorities":
+                return self._json(save_priorities(self.state, body))
             if path == "/api/sync":
                 return self._json(start_sync(self.state))
-        except (ValueError, L.LiftError) as exc:
+        except (ValueError, TypeError, L.LiftError, PR.PriorityError) as exc:
             return self._error(400, str(exc))
         return self._error(404, "not found")
 

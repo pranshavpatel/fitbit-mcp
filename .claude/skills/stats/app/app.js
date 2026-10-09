@@ -180,6 +180,7 @@ function renderToday(m) {
   </section>
   <section class="card verdict ${esc(v.level)}"><b>${esc(word)}</b><p>${esc(rest.join(":").trim())}</p></section>
   ${note || co.fallback ? `<section class="card coach"><div class="who"><div class="avatar">C</div><div><b>Coach</b><div class="muted">${note ? esc(({ morning: "Morning", activity: "After your workout", evening: "Closing the day", note: "Note" })[note.kind] || "Note") + " · " + clock(note.at) : "auto · no written note yet"}</div></div></div><p>${esc(note ? note.text : co.fallback)}</p></section>` : ""}
+  ${priorityCard(m)}
   <div class="tiles">
     ${tile("HRV", num(last14("hrv").slice(-1)[0]), " ms", avg("hrv"), last14("hrv"), C.green)}
     ${tile("Resting HR", num(last14("rhr").slice(-1)[0]), " bpm", avg("rhr"), last14("rhr"), C.red)}
@@ -193,6 +194,17 @@ function renderToday(m) {
     <dt>Training</dt><dd>${sp.next ? `Next: <b>${esc(sp.next)}</b>${fresh != null ? ` · ${fresh}% fresh` : ""}` : "—"}<div class="muted">Gym ${tr.gym_week}/${tr.gym_goal} this week</div></dd>
     <dt>Sleep debt</dt><dd>${hm(tn.debt)}</dd>
   </dl></section>`;
+}
+
+const PR_GLYPH = { done: "●", partial: "◐", missed: "✕" }, PR_LABEL = { done: "done", partial: "some progress", missed: "not today" };
+function priorityCard(m) {
+  const pr = m.priorities || {}, e = pr.today || {}, items = e.items || [], wk = pr.week || {};
+  const late = new Date(m.now || Date.now()).getHours() >= 19;
+  const head = `<h2>Priorities ${wk.set_days ? `<small>${wk.done}/${wk.items} done this week · ${wk.streak}-day streak</small>` : ""}</h2>`;
+  if (!items.length) return `<section class="card">${head}<p class="sub">What are today's top 3? Setting them is the most important minute of your day.</p><a class="btn" href="#log" style="display:inline-block;text-decoration:none;margin-top:6px">Set priorities</a></section>`;
+  return `<section class="card">${head}<ul class="list">${items.map((i, k) => `<li><span class="ic ${i.status === "done" ? "good" : i.status === "partial" ? "watch" : i.status === "missed" ? "flag" : "muted"}">${PR_GLYPH[i.status] || "○"}</span><span style="flex:1">${esc(i.text)}${i.status ? ` <span class="muted">· ${PR_LABEL[i.status]}</span>` : ""}</span></li>`).join("")}</ul>
+    ${late && items.some((i) => !i.status) ? `<a class="btn ghost" href="#log" style="display:inline-block;text-decoration:none;margin-top:10px">How did they go?</a>` : ""}
+    ${e.reflection ? `<p class="muted" style="margin:10px 0 0">“${esc(e.reflection)}”</p>` : ""}</section>`;
 }
 
 /* ------------------------------------------------------------------ sleep */
@@ -307,6 +319,21 @@ async function loadLog() {
   try { S.log = await api("/api/log?date=" + S.logDate); render(); }
   catch (e) { toast(e.message); }
 }
+function priorityEditor(L) {
+  const p = L.priorities || { items: [] }, items = p.items || [];
+  if (!items.length || S.editPriorities) {
+    const v = (k) => esc((items[k] || {}).text || "");
+    return `<section class="card"><h2>Top 3 priorities <small>${esc(mday(p.date || L.date))}</small></h2>
+      <p class="muted" style="margin:0 0 10px">What would make today a win? The coach will check in on these.</p>
+      ${[0, 1, 2].map((k) => `<input type="text" class="prio-in" data-k="${k}" placeholder="${k + 1}." value="${v(k)}" style="margin-bottom:8px" autocomplete="off">`).join("")}
+      <div class="row" style="justify-content:flex-end;gap:8px">${S.editPriorities ? `<button class="btn ghost" id="prio-cancel">Cancel</button>` : ""}<button class="btn" id="prio-save">Save</button></div></section>`;
+  }
+  return `<section class="card"><h2>Top 3 priorities <small><button class="btn ghost" id="prio-edit" style="padding:4px 10px;font-size:12px">Edit</button></small></h2>
+    ${items.map((i, k) => `<div class="habit" style="flex-wrap:wrap"><span class="name" style="flex:1 1 100%;margin-bottom:6px">${k + 1}. ${esc(i.text)}</span><div class="choice">
+      ${[["done", "Done", "pos"], ["partial", "Some", "mid"], ["missed", "Not today", "neg"]].map(([st, lab, cls]) => `<button class="${cls} ${i.status === st ? "on" : ""}" data-prio="${k + 1}" data-st="${st}">${lab}</button>`).join("")}</div></div>`).join("")}
+    <textarea id="prio-reflect" rows="2" placeholder="What helped, or what got in the way?" style="margin-top:10px">${esc(p.reflection || "")}</textarea>
+    <div class="row" style="justify-content:flex-end;margin-top:8px"><button class="btn ghost" id="prio-reflect-save">Save reflection</button></div></section>`;
+}
 function renderLog() {
   const L = S.log;
   if (!L) { loadLog(); return `<div class="loading"><div class="spinner"></div></div>`; }
@@ -320,6 +347,7 @@ function renderLog() {
   };
   return `
   <div class="between" style="margin:0 2px 12px"><div class="seg">${["today", "yesterday"].map((d) => `<button data-day="${d}" class="${S.logDate === d ? "on" : ""}">${d[0].toUpperCase() + d.slice(1)}</button>`).join("")}</div><span class="muted">${esc(mday(L.date))}</span></div>
+  ${priorityEditor(L)}
   <section class="card"><h2>Habits</h2>
     ${groups.map(([g, title, color, pos, neg]) => { const hs = L.habits.filter((h) => h.good === g); return hs.length ? `<div class="group-title" style="color:${color}">${title}</div>${hs.map((h) => habitRow(h, pos, neg)).join("")}` : ""; }).join("")}
     <div class="divider"></div>
@@ -339,11 +367,32 @@ view.addEventListener("click", async (ev) => {
   const t = ev.target.closest("button");
   if (!t) return;
   if (t.id === "retry") { load(true); return; }
-  if (t.dataset.day) { S.logDate = t.dataset.day; S.log = null; render(); return; }
+  if (t.dataset.day) { S.logDate = t.dataset.day; S.log = null; S.editPriorities = false; render(); return; }
   if (t.dataset.habit) {
     const cur = (S.log.journal.habits || {})[t.dataset.habit], val = t.dataset.val === "true";
     const next = cur === val ? null : val;                     // tap the active one again to clear it
     try { S.log = await api("/api/journal", { date: S.logDate, habits: { [t.dataset.habit]: next } }); S.loadedAt = 0; render(); }
+    catch (e) { toast(e.message); }
+    return;
+  }
+  if (t.id === "prio-edit") { S.editPriorities = true; render(); return; }
+  if (t.id === "prio-cancel") { S.editPriorities = false; render(); return; }
+  if (t.id === "prio-save") {
+    const items = [...document.querySelectorAll(".prio-in")].map((i) => i.value.trim()).filter(Boolean);
+    if (!items.length) { toast("Add at least one priority"); return; }
+    try { S.log = await api("/api/priorities", { date: S.logDate, items }); S.editPriorities = false; S.loadedAt = 0; toast("Priorities set"); render(); }
+    catch (e) { toast(e.message); }
+    return;
+  }
+  if (t.dataset.prio) {
+    const cur = ((S.log.priorities.items || [])[t.dataset.prio - 1] || {}).status;
+    const status = cur === t.dataset.st ? null : t.dataset.st;
+    try { S.log = await api("/api/priorities", { date: S.logDate, index: Number(t.dataset.prio), status }); S.loadedAt = 0; render(); }
+    catch (e) { toast(e.message); }
+    return;
+  }
+  if (t.id === "prio-reflect-save") {
+    try { S.log = await api("/api/priorities", { date: S.logDate, reflection: $("#prio-reflect").value }); toast("Saved"); render(); }
     catch (e) { toast(e.message); }
     return;
   }

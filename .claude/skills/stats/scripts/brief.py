@@ -72,6 +72,8 @@ def compose(m: dict) -> tuple[str, str]:
     lf = m.get("lifting") or {}
     if lf.get("has_log") and lf.get("under"):
         body.append("Low sets: {}.".format(", ".join(lf["under"][:3])))
+    if not ((m.get("priorities") or {}).get("today") or {}).get("items"):
+        body.append("Set today's top 3: fitdash priorities.")
     j = m.get("journal") or {}
     if j.get("has_log") and not j.get("yesterday_logged") and not j.get("today_logged"):
         body.append("Journal yesterday: fitdash journal.")

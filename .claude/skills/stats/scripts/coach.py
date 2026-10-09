@@ -35,8 +35,10 @@ from zoneinfo import ZoneInfo
 from tz import local_zone
 
 NY = local_zone()      # the display timezone (tz.py); named NY for history
-KINDS = ("morning", "activity", "evening")
-KIND_TITLE = {"morning": "Morning", "activity": "After your workout", "evening": "Closing the day", "note": "Note"}
+KINDS = ("morning", "midday", "activity", "evening")
+KIND_TITLE = {"morning": "Morning", "midday": "Midday check-in", "activity": "After your workout",
+              "evening": "Closing the day", "note": "Note"}
+MIDDAY = (13 * 60, 16 * 60)       # the priorities check-in, once, if today's priorities are still open
 LABEL = "com.fitdash.coach"
 MAX_WORDS = 75
 KEEP = 90                         # notes kept in the file
@@ -56,14 +58,23 @@ Rules:
 - Not medical advice: for anything worrying or persistent, suggest a clinician in a few words.
 - Use the 7-day trends and earlier notes: point out a pattern when it matters, and don't repeat
   what an earlier note today already said.
+- The user's top 3 priorities for the day (`priorities`) are the point of the day; health serves
+  them. Help them be intentional: name a priority by its words, link it to their energy, and be
+  encouraging but honest. Never guilt-trip. If none are set, ask them to pick 3
+  (`fitdash priorities`, or the phone app's Log tab).
 
 Note types:
 - morning: how they recovered and slept, and what today should look like (training intensity
-  vs recovery, the split day, steps).
+  vs recovery, the split day, steps). If priorities are set, say when to tackle the hardest one
+  given their recovery (e.g. green: do it first; red: protect a focused block, keep training light).
+- midday: a short check-in on the priorities still open: which one to move forward next, with a
+  concrete next step and a time block, plus any health nudge that helps (food, a walk, caffeine
+  cut-off). If one is already done, acknowledge it.
 - activity: react to the workout that just ended (load, zones, how it fits today's target and the
   week, recovery/fueling/sleep implications). Name the workout.
-- evening: close the day (strain vs target, wins, what to fix) and set up tonight (asleep-by time,
-  wind-down, the sleep experiment).
+- evening: close the day. Ask how the priorities went (they can mark them with `fitdash priorities`
+  or in the app), credit what got done, and turn anything missed into one small, specific step for
+  tomorrow. Then health: strain vs target and tonight's asleep-by time.
 """
 
 
@@ -167,6 +178,9 @@ def due(m: dict, notes: list[dict], now: datetime) -> tuple[str, dict | None] | 
             return "activity", w
     if mins >= _evening_start(m) and "evening" not in kinds_done:
         return "evening", None
+    items = (((m.get("priorities") or {}).get("today")) or {}).get("items") or []
+    if MIDDAY[0] <= mins < MIDDAY[1] and "midday" not in kinds_done and any(i.get("status") is None for i in items):
+        return "midday", None
     if 5 * 60 <= mins < 12 * 60 and "morning" not in kinds_done:
         if (m.get("sleep") or {}).get("has_night") or mins >= 10 * 60 + 30:
             return "morning", None
@@ -295,6 +309,15 @@ def context(m: dict, kind: str, workout: dict | None, now: datetime, profile: st
     wk = m.get("week_review") or {}
     if wk.get("rows"):
         ctx["this_week_vs_last"] = {r["metric"]: {"now": r["avg"], "prev": r["prev"]} for r in wk["rows"] if r["avg"] is not None}
+    pr = m.get("priorities") or {}
+    today_pr = pr.get("today") or {}
+    ctx["priorities"] = {
+        "today": [{"text": i["text"], "status": i.get("status") or "open"} for i in today_pr.get("items", [])] or None,
+        "reflection": today_pr.get("reflection") or None,
+        "last_7_days": {k: (pr.get("week") or {}).get(k) for k in ("set_days", "items", "done", "partial", "missed", "streak")},
+        "recent": [{"date": d_["date"], "items": [{"text": i["text"], "status": i.get("status") or "open"} for i in d_["items"]]}
+                   for d_ in (pr.get("week") or {}).get("by_day", [])[-4:-1] if d_["items"]],
+    }
     if earlier:
         ctx["earlier_notes_today"] = [{"kind": n["kind"], "at": n["at"][11:], "text": n["text"]} for n in earlier]
     if profile.strip():
@@ -353,6 +376,11 @@ def fallback(m: dict, now: datetime) -> str:
     parts = []
     k = kind_for(now)
     sc = (sl.get("score") or {}).get("score")
+    items = ((m.get("priorities") or {}).get("today") or {}).get("items") or []
+    if k == "evening" and items and any(not i.get("status") for i in items):
+        parts.append("How did your priorities go? Mark them with fitdash priorities.")
+    if k == "morning" and not items:
+        parts.append("Set today's top 3 priorities: fitdash priorities.")
     if k == "evening":
         if st.get("day") is not None and st.get("target"):
             lo, hi = st["target"]
@@ -368,6 +396,10 @@ def fallback(m: dict, now: datetime) -> str:
                              .format(_clock(ab), need))
             else:
                 parts.append("Aim to be asleep by {} for your {} need; screens off 30 min before.".format(_clock(ab), need))
+    elif k == "day" and ((m.get("priorities") or {}).get("today") or {}).get("items"):
+        open_ = [i["text"] for i in m["priorities"]["today"]["items"] if not i.get("status")]
+        if open_:
+            parts.append("Still open: {}. Pick one and give it a focused block now.".format("; ".join(open_)))
     else:
         if rec.get("score") is not None:
             parts.append("Recovery {}%{}.".format(rec["score"], "" if sc is None else ", sleep score {}".format(sc)))

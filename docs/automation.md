@@ -24,6 +24,7 @@ fitdash coach show
 | Note | When |
 | --- | --- |
 | morning | 05:00–12:00, once last night's sleep has synced (or from 10:30), once a day |
+| midday | 13:00–16:00, once, if some of today's priorities are still open |
 | activity | a workout of 10+ min that ended in the last 4 h, unless a later note already covered it |
 | evening | from 21:00, or 90 min before tonight's asleep-by time if that's earlier, but not before 20:00. Until 04:00 it still counts as the previous day. |
 
@@ -44,6 +45,34 @@ shows a rule-based note marked "auto".
 
 The summary goes to Anthropic each time, like anything you ask Claude. Leave out sections in
 `coach.context()` if you'd rather not share them.
+
+## Daily priorities
+
+```sh
+fitdash priorities                               # asks for today's top 3 (morning) or how they went (evening)
+fitdash priorities set "ship the report" "pull day" "call mom"
+fitdash priorities done 1 | some 2 | missed 3    # mark one
+fitdash priorities reflect "phone in the other room helped"
+fitdash priorities show [yesterday]
+```
+
+- **Morning:** the first time you run `fitdash` in a terminal between 04:00 and 14:00 with no
+  priorities set, it asks for up to three. Press Enter on the first one to skip, and it won't ask
+  again that day.
+- **Evening:** from 19:00 (until 04:00) it asks how each one went: *done*, *some progress* or *not
+  today*, plus what helped or got in the way.
+- **Turning it off:** `"priorities_prompt": false` in `stats.json`, or `FITDASH_NO_PROMPT=1`.
+- **Where they show up:**
+  - the Today box (● done · ◐ some · ✕ not today · ○ open) and the phone app's Today and Log tabs;
+  - `--section journal`, which adds a 7-day record;
+  - the 9 a.m. brief, which nudges you when none are set.
+- **The coach uses them:**
+  - The morning note says when to tackle the hardest one given your recovery.
+  - A **midday check-in** (13:00–16:00, only if some are still open) picks the next one and suggests
+    a time block.
+  - The evening note asks how they went and turns anything missed into one small step for tomorrow.
+
+Stored in `~/.fitbit-mcp/priorities.json`.
 
 ## Morning brief
 

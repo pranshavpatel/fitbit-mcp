@@ -159,6 +159,7 @@ svg text { font: 10px -apple-system, system-ui, sans-serif; fill: var(--text3); 
   padding: 8px 12px; font-size: 13px; font-weight: 700; min-width: 74px; cursor: pointer;
 }
 .choice button.on.pos { background: rgba(60,226,111,.16); border-color: var(--green); color: var(--green); }
+.choice button.on.mid { background: rgba(255,214,10,.14); border-color: var(--yellow); color: var(--yellow); }
 .choice button.on.neg { background: rgba(255,69,58,.16); border-color: var(--red); color: var(--red); }
 .group-title { font-size: 12px; font-weight: 800; letter-spacing: .08em; margin: 14px 0 2px; }
 textarea, input[type=text] {
