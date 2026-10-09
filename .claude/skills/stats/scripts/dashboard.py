@@ -360,34 +360,47 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
 
 
 def sec_experiment(m: dict, w: int) -> list[Text]:
+    """The sleep experiment night by night: when you fell asleep (green on target, red later) and how
+    long you slept, in rows of up to 7 nights."""
     ex = m.get("experiment")
     if not ex:
-        return [nodata(w, "No experiment configured (stats.json → experiment).")]
-    upcoming = [r for r in ex["nights"] if r["state"] == "upcoming"]
-    lvl = "none" if not ex["logged"] else "good" if ex["hits"] == ex["logged"] else "watch"
-    out = headline(w, lvl, ("{}/{}".format(ex["hits"], ex["logged"]), "nights on target"),
-                   ("{}".format(short_clock(D.hhmm(ex["lights_out"]))), "lights out"))
-    if upcoming:
-        nth = ex["nights"].index(upcoming[0]) + 1
-        out += takeaway("Tonight is night {} of {}: lights out by {}, wake at 8:30.".format(
-            nth, len(ex["nights"]), short_clock(D.hhmm(ex["lights_out"]))), w)
+        return nodata_lines(w, "No sleep experiment running. Set one in stats.json (\"experiment\").")
+    nights = ex["nights"]
+    done = [n for n in nights if n["state"] != "upcoming"]
+    hits = [n for n in done if n["state"] == "hit"]
+    out = headline(w, "good" if done and len(hits) >= len(done) * 0.7 else "watch" if done else "none",
+                   ("{}/{}".format(len(hits), len(done)), "nights on target"), ("{}".format(len(nights) - len(done)), "to go"))
+    out += takeaway(ex["name"] + ".", w)
     out.append(blank())
-    sq = Text(no_wrap=True)
-    for r in ex["nights"]:
-        g, col = {"hit": ("■", C["good"]), "miss": ("▣", C["watch"]), "missing": ("□", C["muted"]),
-                  "upcoming": ("□", C["muted"])}[r["state"]]
-        sq.append(g + " ", style=col)
-    out.append(fit(sq, w))
-    out.append(fit(T(("■ on target  ▣ later  □ to come", C["muted"])), w))
-    if ex["baseline_onset"] is not None:
-        on = lambda v: short_clock((v + 18 * 60) % 1440) if v is not None else "—"  # noqa: E731
-        out += details([("Asleep at", "{} vs {} before".format(on(ex["exp_onset"]), on(ex["baseline_onset"]))),
-                        ("Sleep", "{} vs {} before".format(hm(ex["exp_asleep"]), hm(ex["baseline_asleep"]))),
-                        ("Note", "14 nights shows a trend, not proof")], w)
+    cell = max(9, min(10, (w - 2) // 7))
+    per_row = max(1, min(7, (w - 2) // cell))
+
+    def at(n):
+        if not n.get("start"):
+            return ""
+        t = D.local_dt(n["start"])
+        return short_clock(t.hour * 60 + t.minute)
+
+    for first in range(0, len(nights), per_row):
+        chunk = nights[first:first + per_row]
+        r1, r2, r3 = Text("  ", no_wrap=True), Text("  ", no_wrap=True), Text("  ", no_wrap=True)
+        for k, n in enumerate(chunk):
+            st = n["state"]
+            col = C["good"] if st == "hit" else C["flag"] if st == "miss" else C["faint"]
+            r1.append("night {}".format(first + k + 1).ljust(cell), style=C["muted"])
+            if st == "upcoming":
+                r2.append("□".ljust(cell), style=col)
+            else:
+                r2.append(("■ " + at(n)).ljust(cell), style="bold " + col)
+            r3.append((hm(n["asleep"]) if n.get("asleep") else "").ljust(cell), style=C["muted"])
+        out += [fit(r1, w), fit(r2, w)] + ([fit(r3, w)] if r3.plain.strip() else [])
+        if first + per_row < len(nights):
+            out.append(blank())
+    out.append(blank())
+    out += _flow([T(("■ ", C["good"]), ("asleep by {}".format(short_clock(D.hhmm(ex["lights_out"]))), C["muted"])),
+                  T(("■ ", C["flag"]), ("later", C["muted"])), T(("□ ", C["faint"]), ("to come", C["muted"]))], w, gap=3, indent=2)
     return out
 
-
-# ---------------------------------------------------------------- recovery & heart
 
 def sec_recovery(m: dict, w: int) -> list[Text]:
     rec, b, h = m["recovery"], m["baselines"], m["heart"]
