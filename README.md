@@ -27,6 +27,16 @@ log, habit tracking and an AI coach.**
 | **Journal & habits, linked to next-morning recovery** | **Sleep score, stages and 14 nights of timing** |
 | ![Journal](docs/demo/journal.svg) | ![Sleep](docs/demo/sleep.svg) |
 
+### Deep dives
+
+Ask for one section and you get an extended view: 8 weeks of history and extra charts, such as
+stages night by night, bed & wake statistics, a recovery calendar, recovery vs yesterday's strain,
+an hour-by-day activity heatmap, 6 weeks of lifting volume and when each muscle will be ready.
+
+| `fitdash --section sleep` | `fitdash --section lifting` |
+| --- | --- |
+| ![Sleep, extended](docs/demo/sleep_extended.svg) | ![Lifting, extended](docs/demo/lifting_extended.svg) |
+
 ### The phone app
 
 A WHOOP-style web app served by your own computer and opened over Tailscale. It shows everything
@@ -65,7 +75,7 @@ The step-by-step version, with settings and troubleshooting, is in
 
 ```sh
 fitdash                                    # everything: Today box, then every area in its own box
-fitdash --section freshness                # one area (sleep, recovery, insights, journal, lifting, …)
+fitdash --section sleep                    # one area, extended: 8 weeks + extra charts (recovery, lifting, …)
 fitdash --period week                      # this week vs last
 fitdash lift bench 3x8@60 row 4x10@50      # log sets (kg; 25lb for pounds; no @ = bodyweight)
 fitdash journal +mobility -junk-food note "slept well"

@@ -46,7 +46,7 @@ uv run --quiet --script <skill>/scripts/dashboard.py --no-color --width 80 [flag
 | Request | Flags |
 |---|---|
 | "my stats", "show me everything", dashboard | none |
-| only one area ("just my sleep") | `--section today\|sleep\|recovery\|freshness\|strain\|workouts\|training\|week\|body\|logs` |
+| only one area ("just my sleep"), or a deep dive into one ("analyze my sleep") — a single section shows an extended view: 8 weeks and extra boxes (deep.py) | `--section today\|sleep\|recovery\|freshness\|strain\|workouts\|training\|week\|body\|logs` |
 | muscle recovery, "which muscles are fresh" | `--section freshness` (add `--sort freshness` for least-recovered first) |
 | "I did pull yesterday" | run `<script> tag yesterday pull`, then render |
 | "I did bench 3x8 at 60 and rows 4x10 at 50" | run `<script> lift bench 3x8@60 row 4x10@50` (`yesterday` / a date first for past days; `25lb` for pounds; no `@` for bodyweight), then `--section lifting` |

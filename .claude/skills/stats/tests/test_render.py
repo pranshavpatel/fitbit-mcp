@@ -349,3 +349,47 @@ def test_fresh_data_skips_sync_and_sync_flag_forces_it(sync_env, monkeypatch):
     _tty(monkeypatch, False)
     dashboard.main(["--sync", "--section", "logs", "--no-color"])
     assert sync_env.n == 1
+
+
+# ---------------------------------------------------------------- extended single-section views
+
+import deep  # noqa: E402
+
+
+@pytest.mark.parametrize("width", WIDTHS)
+@pytest.mark.parametrize("section", sorted(deep.DEEP))
+def test_extended_views_fit_and_add_boxes(tmp_path, monkeypatch, width, section):
+    import lifts as L
+    import journal as J
+    L.save(tmp_path, {"2026-10-05": L.parse("bench 3x8@60 row 4x10@50".split(), "2026-10-05T19:00"),
+                      "2026-09-28": L.parse("bench 3x8@57.5 squat 4x6@90".split(), "2026-09-28T19:00")})
+    J.save(tmp_path, {"2026-10-0{}".format(i): {"habits": {"alcohol": i % 2 == 0, "stretch": True}, "note": ""} for i in range(1, 8)})
+    db = tmp_path / "fitbit.sqlite3"
+    fixture_db.create(db)
+    (tmp_path / "coaching").mkdir(exist_ok=True)
+    (tmp_path / "coaching" / "stats.json").write_text(json.dumps(fixture_db.CONFIG))
+    monkeypatch.setenv("FITBIT_MCP_HOME", str(tmp_path))
+    store = D.open_store(tmp_path)
+    try:
+        m = D.build_model(store, fixture_db.FIXTURE_DAY, D.load_config(tmp_path), days=56, now=NOW)
+    finally:
+        store.close()
+    lines = _render(m, width, section=section)
+    _check(lines, width)
+    boxes = sum(1 for ln in lines if ln.startswith("╭"))
+    assert boxes >= 2, section                                     # the normal box plus at least one extra
+
+
+def test_deep_model_shapes(model):
+    dp = model["deep"]
+    assert len(dp["nights"]) == len(dp["daily"]) == len(model["days"])
+    assert len(dp["hours"]) == 7 and len(dp["lift_weeks"]) == 6 and len(dp["days30"]) == 30
+    assert all("ready_in_h" in r for r in model["muscles"]["rows"])
+
+
+def test_hours_until_fresh():
+    import scores as S
+    assert S.hours_until_fresh(95, "chest") == 0
+    assert S.hours_until_fresh(80, "chest") == pytest.approx(48.0)               # 20 → 10 fatigue: one half-life
+    assert S.hours_until_fresh(80, "chest", rate=1.25) == pytest.approx(48 / 1.25)
+    assert S.hours_until_fresh(80, "biceps") == pytest.approx(36.0)

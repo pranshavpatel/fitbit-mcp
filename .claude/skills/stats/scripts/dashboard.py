@@ -1623,10 +1623,12 @@ def render(m: dict, console: Console, width: int, section: str | None = None, fu
         return
     if section in ("muscles", "freshness"):
         console.print(box_for("muscles", m, min(width, FRESH_MAX_W), color, sort))
+        _deep_boxes(m, console, section, bw)
         return
     if section:
         for k in [section] + (["experiment"] if section == "sleep" else []):
             console.print(box_for(k, m, bw, color, sort))
+        _deep_boxes(m, console, section, bw)
         return
     if width >= TWO_COL_MIN:
         col_w = min(MAX_W, (width - 1) // 2)
@@ -1648,6 +1650,16 @@ def render(m: dict, console: Console, width: int, section: str | None = None, fu
     for k in ORDER:
         console.print(box_for(k, m, bw, color, sort))
     console.print(panel("Data", sec_footer(m, inner), bw, "muted"))
+
+
+def _deep_boxes(m: dict, console: Console, section: str, bw: int) -> None:
+    """A single section gets an extended view: more history and extra charts (deep.py)."""
+    if not m.get("deep"):
+        return
+    import deep as DP
+    fn = DP.DEEP.get(section)
+    for title, lines, col in (fn(m, bw - 4) if fn else []):
+        console.print(panel(title, lines, bw, col))
 
 
 def make_console(width: int, no_color: bool, file=None, force_terminal: bool | None = None) -> Console:
@@ -1948,7 +1960,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="fitdash", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--section", choices=SECTIONS)
     ap.add_argument("--period", choices=("day", "week", "month"), default="day")
-    ap.add_argument("--days", type=int, default=28, help="trend window in days (14-90, default 28)")
+    ap.add_argument("--days", type=int, help="trend window in days (14-90; default 28, or 56 for one --section)")
     ap.add_argument("--date", help="YYYY-MM-DD (default: today, local timezone)")
     ap.add_argument("--full", "--compact", action="store_true", help=argparse.SUPPRESS)   # old flags; the default shows everything
     ap.add_argument("--width", type=int)
@@ -1975,7 +1987,7 @@ def main(argv=None) -> int:
     width = max(60, width)
     store = D.open_store()
     try:
-        m = D.build_model(store, day, D.load_config(), days=max(14, min(90, args.days)), period=args.period)
+        m = D.build_model(store, day, D.load_config(), days=max(14, min(90, args.days or (56 if args.section else 28))), period=args.period)
     finally:
         if store:
             store.close()

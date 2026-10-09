@@ -140,7 +140,7 @@ def model(tmp_path):
 def _panel(m, width, sort="default", color=False):
     buf = io.StringIO()
     console = dashboard.make_console(width, no_color=not color, file=buf, force_terminal=color)
-    dashboard.render(m, console, width, "freshness", sort=sort)
+    console.print(dashboard.freshness_panel(m, min(width, dashboard.FRESH_MAX_W), color, sort))   # the card panel alone
     return buf.getvalue()
 
 

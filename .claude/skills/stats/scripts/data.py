@@ -824,7 +824,67 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
     model["week_review"] = _period("week", day, today_partial, metrics, additive=additive)
     if period in ("week", "month"):
         model["period"] = _period(period, day, today_partial, metrics, additive=additive)
+    model["deep"] = _deep(store, day, hist, nights, need, perf, sscore, sleep_scores, asleep, rec, strain_by_day,
+                          steps, azm, workouts_all, low_wear, lift_sets, journal, habit_list)
     return model
+
+
+def _deep(store, day: date, hist: int, nights: dict, need: dict, perf: dict, sscore: dict, sleep_scores: dict,
+          asleep: dict, rec: dict, strain_by_day: dict, steps: dict, azm: dict, workouts: list[dict], low_wear: set,
+          lift_sets: dict, journal: dict, habit_list: list[dict]) -> dict:
+    """Longer history for the single-section views (`fitdash --section X`): per-night sleep detail,
+    per-day load, 8 weeks of workouts, a 7 × 24 activity grid, 6 weeks of lifting volume and 30 days
+    of habits. Plain lists, so `--json` and the phone app get them too."""
+    days_ = span(day, hist)
+    out_nights = []
+    for x in days_:
+        main_ = (nights.get(x) or {}).get("main")
+        sc_ = sleep_scores.get(x)
+        out_nights.append({
+            "date": x, "start": main_["start"] if main_ else None, "end": main_["end"] if main_ else None,
+            "asleep": asleep.get(x), "need": need[x].total if x in need else None,
+            "debt": need[x].debt if x in need else None, "perf": perf.get(x), "score": sscore.get(x),
+            "band": sc_.band if sc_ else None,
+            "stages": {k: main_.get("stage_{}_minutes".format(k)) for k in ("deep", "light", "rem", "awake")} if main_ else None,
+        })
+    daily = []
+    for x in days_:
+        z = azm.get(x, {})
+        ws = [w for w in workouts if w["date"] == x]
+        daily.append({"date": x, "recovery": rec[x].score if x in rec else None, "strain": strain_by_day.get(x),
+                      "steps": steps.get(x), "low_wear": x in low_wear,
+                      "zones": {"fat_burn": z.get("FAT_BURN", 0), "cardio": z.get("CARDIO", 0), "peak": z.get("PEAK", 0)} if z else None,
+                      "workout_min": round(S.union_minutes(w["epoch"] for w in ws)) if ws else 0,
+                      "workouts": len(ws)})
+    since56 = iso(day - timedelta(days=55))
+    wk_list = [{k: w.get(k) for k in ("date", "start", "type", "label", "minutes", "strain", "zone", "distance_km", "split")}
+               for w in workouts if w["date"] >= since56]
+    hours = [{"date": x, "hours": _hourly_activity(store.activity_levels(x))} for x in span(day, 7)]
+    weeks = []
+    for i in range(5, -1, -1):
+        we = day - timedelta(days=7 * i)
+        ws_ = we - timedelta(days=6)
+        entries = [e for x, es in lift_sets.items() if iso(ws_) <= x <= iso(we) for e in es]
+        weeks.append({"end": iso(we), "sets": {k: round(v, 1) for k, v in S.weekly_sets(entries).items()}})
+    habits30 = []
+    d30 = span(day, 30)
+    for h in habit_list:
+        cells = [((journal.get(x) or {}).get("habits") or {}).get(h["key"]) for x in d30]
+        good = (lambda c, g=h.get("good"): c is not None and (c == g if g is not None else c))
+        cur = best = run = 0
+        for c in cells:
+            run = run + 1 if good(c) else 0
+            best = max(best, run)
+        tail = cells[:-1] if cells and cells[-1] is None else cells     # today not logged yet doesn't break it
+        for c in reversed(tail):
+            if not good(c):
+                break
+            cur += 1
+        habits30.append({"key": h["key"], "label": h["label"], "good": h.get("good"), "cells": cells,
+                         "yes": sum(1 for c in cells if c is True), "logged": sum(1 for c in cells if c is not None),
+                         "streak": cur, "best_streak": best})
+    return {"nights": out_nights, "daily": daily, "workouts": wk_list, "hours": hours, "lift_weeks": weeks,
+            "habits30": habits30, "days30": d30}
 
 
 def _label_lifts(workouts: list[dict], cfg: dict) -> None:
@@ -903,7 +963,8 @@ def _muscles(workouts: list[dict], now: datetime, day: date, recovery_score: flo
     for u in used:
         for mu in u["targets"]:
             last[mu] = u
-    rows = [{"muscle": mu, "fresh": fresh[mu], "last": (last.get(mu) or {}).get("date"),
+    rows = [{"muscle": mu, "fresh": fresh[mu], "ready_in_h": round(S.hours_until_fresh(fresh[mu], mu, rate), 1),
+             "last": (last.get(mu) or {}).get("date"),
              "split": (last.get(mu) or {}).get("what"), "source": (last.get(mu) or {}).get("source")}
             for mu in S.MUSCLES]
     has_strength = any(w["type"] == "STRENGTH_TRAINING" and w["date"] >= iso(day - timedelta(days=30))
@@ -994,6 +1055,7 @@ def _insights(day: date, nights: dict, asleep: dict, strain_by_day: dict, steps:
         eff = S.compare(yes, no, yes_label)
         if eff:
             out["effects"].append({**asdict(eff), "key": key, "no_label": no_label, "source": source,
+                                   "yes_vals": [round(v) for v in yes], "no_vals": [round(v) for v in no],
                                    "mean_yes": round(statistics.fmean(yes)), "mean_no": round(statistics.fmean(no))})
 
     factor(lambda x: None if onset(x) is None else onset(x) <= 60, "asleep by 1:00", "after 1:00", "bedtime")

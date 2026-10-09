@@ -623,6 +623,15 @@ def muscle_freshness(sessions: Sequence[dict], rate: float = 1.0) -> dict[str, i
     return {mu: int(max(0, min(100, math.floor(100 - f + 0.5)))) for mu, f in fatigue.items()}
 
 
+def hours_until_fresh(fresh_pct: int, muscle: str, rate: float = 1.0, target: int = 90) -> float:
+    """Hours until a muscle is back to `target` % if nothing new is done: all its fatigue shares one
+    half-life, so the total decays as one exponential. 0 if it's already there."""
+    fatigue, allowed = 100.0 - fresh_pct, 100.0 - target
+    if fatigue <= allowed:
+        return 0.0
+    return HALF_LIFE_H[muscle] / max(rate, 1e-6) * math.log2(fatigue / allowed)
+
+
 def freshness_color(pct: int | None) -> str:
     """State color: 100 neutral gray, 90-99 bright green, 70-89 green, 40-69 amber, under 40 red."""
     if pct is None:

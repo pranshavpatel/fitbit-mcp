@@ -24,6 +24,22 @@ Below that it's one column, at most 100 wide.
 
 ### Sections (`--section NAME`)
 
+On its own, a section shows its normal box plus an **extended view**: 8 weeks of history instead of 4, and
+extra boxes you don't get in the full dashboard:
+
+| Section | Extended view adds |
+| --- | --- |
+| `sleep` | Hours vs need and sleep score for every night, stages night by night, timing stats (average bed and wake time, spread, weekend vs weekday), sleep-debt balance over 28 nights, best and worst nights |
+| `recovery` | A recovery calendar (weeks × days), recovery vs the previous day's strain as a scatter plot |
+| `strain` | Activity by hour for 7 days (heatmap), HR zones per day for 14 days, weekly totals for 8 weeks |
+| `workouts` | An 8-week workout calendar, totals per activity type |
+| `freshness` | *Ready when*: when each muscle is back to 90 % |
+| `lifting` | Hard sets per muscle for 6 weeks (heat table), 1RM progress chart per lift |
+| `training` | Weekly totals and *Ready when* |
+| `journal` | 30-day rate, current and best streak per habit |
+| `insights` | Every morning as a dot, with vs without each habit |
+
+
 | Section | Shows |
 | --- | --- |
 | `today` | Rings (Recovery, Strain, Sleep), the verdict, the coach note, key numbers with 14-day trends, *Needs attention* and *Plan* |

@@ -127,8 +127,18 @@ def main() -> int:
         ("sleep", 100, "sleep", "fitdash --section sleep"),
         ("training", 100, "training", "fitdash --section training"),
     ]
+    gallery = {**m, "deep": None}                  # the gallery shows the normal boxes only
     for name, width, section, title in shots:
-        svg(name, width, lambda con, w=width, s=section: dashboard.render(m, con, w, s), title)
+        svg(name, width, lambda con, w=width, s=section: dashboard.render(gallery, con, w, s), title)
+    # extended single-section views (8 weeks of history + the extra boxes)
+    store = D.open_store(HOME)
+    try:
+        m56 = D.build_model(store, DAY, D.load_config(HOME), days=56, now=NOW)
+    finally:
+        store.close()
+    for section in ("sleep", "lifting"):
+        svg(section + "_extended", 100, lambda con, s=section: dashboard.render(m56, con, 100, s),
+            "fitdash --section " + section)
     shutil.rmtree(HOME, ignore_errors=True)
     return 0
 
