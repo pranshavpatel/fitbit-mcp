@@ -232,6 +232,8 @@ def test_brief_default_time():
     ("incline db press", "incline dumbbell press"), ("incline dbp", "incline dumbbell press"),
     ("decline flies", "chest fly"), ("machine chest press", "chest press"),
     ("cable lateral raises", "lateral raise"), ("single hand tricep pushdown", "single arm pushdown"),
-    ("overhead tricep extensions", "triceps extension"), ("seated cable rows", "row")])
+    ("overhead tricep extensions", "triceps extension"), ("seated cable rows", "row"),
+    ("latpulldown", "lat pulldown"), ("widegrip rows", "wide grip row"), ("lower back extensions", "back extension"),
+    ("incline bicep curls", "incline curl"), ("preacher curls", "preacher curl"), ("archer pull", "archer pull")])
 def test_gym_floor_names(typed, canon):
     assert S.canonical_exercise(typed) == canon
