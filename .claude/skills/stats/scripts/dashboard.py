@@ -1079,43 +1079,57 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 7) -> list[Text]:
 # ---------------------------------------------------------------- body & nutrition
 
 def sec_body(m: dict, w: int) -> list[Text]:
+    """Weight trend as a lean-bulk pace gauge, the weigh-ins against the lean-bulk corridor, and a
+    few quiet details."""
     b = m["body"]
     out: list[Text] = []
+    if not b.get("latest_kg"):
+        out += headline(w, "none", ("No weigh-ins", "yet"))
+        out += takeaway("Weigh in on your Fitbit scale or log weight in the Fitbit app; the lean-bulk pace "
+                        "appears after a few weigh-ins.", w)
+        return out
     tr = b["trend"]
-    if b["weights"]:
-        if tr["kg_per_week"] is None or not b.get("pace_reliable"):
-            lvl = "none"
-        else:
-            lvl = "watch" if tr["status"] in ("below pace", "above pace") else "good"
-        parts = [("{:.1f} kg".format(b["latest_kg"]), "latest")]
-        if tr["kg_per_week"] is not None:
-            parts.append(("{:+.2f} kg/wk".format(tr["kg_per_week"]), tr["status"] + " for a lean bulk"))
-        out += headline(w, lvl, *parts)
-        if not b.get("pace_reliable"):
-            out += takeaway("Rough estimate: {} weigh-ins, the last {} days ago. Weigh in weekly to sharpen it.".format(
-                len(b["weights"]), b["days_since_weigh_in"]), w)
-        out.append(blank())
-        out += _weight_corridor(b, date.fromisoformat(m["date"]), w)
-    else:
-        out += headline(w, "none", ("—", "no weigh-ins logged"))
+    rate = tr.get("kg_per_week")
+    on_pace = tr.get("status") in ("on pace", "at the low edge", "at the high edge")
+    out += headline(w, "good" if on_pace else "watch" if rate is not None else "none",
+                    ("{:.1f} kg".format(b["latest_kg"]), "latest"),
+                    ("{:+.2f} kg/wk".format(rate) if rate is not None else "—", tr.get("status") or tr.get("reason") or ""))
     out.append(blank())
-    mac = b["macros"]
-    food = None
-    if b["cal_in_today"] is not None:
-        food = "{:,.0f} in / {:,.0f} out kcal".format(b["cal_in_today"], b["cal_out_today"] or 0)
-        if any(v is not None for v in mac.values()):
-            food += " · " + " ".join("{} {:.0f}g".format({"protein": "P", "carbohydrate": "C", "fat": "F"}[k], v)
-                                     for k, v in mac.items() if v is not None)
-    out += details([
-        ("Target pace", "+{:.2f}–{:.2f} kg/wk".format(*b["pace_target_kg"]) if b["pace_target_kg"] else ""),
-        ("BMI", "{:.1f}".format(b["bmi"]) if b["bmi"] else ""),
-        ("Weigh-ins", "{} (last {})".format(len(b["weights"]), sdate(b["weights"][-1][0])) if b["weights"] else ""),
-        ("Body fat", "{:.1f}%".format(b["body_fat"][1]) if b["body_fat"] else "not logged"),
-        ("Food today", food or "not logged" + (" (last {})".format(sdate(b["last_food_log"])) if b["last_food_log"] else "")),
-        ("Water", "{:.1f} L".format(b["water_ml"] / 1000) if b["water_ml"] is not None else "not logged"),
-        ("Symptoms & mood", "permission not granted" if m["logs"].get("symptoms") == "scope_not_granted" else
-         ("no entries" if m["logs"].get("symptoms") else "")),
-    ], w)
+
+    # pace gauge: −0.2 … +0.8 kg/week, the lean-bulk range in green, your trend as ●
+    out.append(section_title("Lean-bulk pace", w, "kg per week"))
+    lo, hi = b.get("pace_target_kg") or (0.16, 0.32)
+    gw = max(20, w - 6)
+
+    def X(v: float) -> int:
+        return int(round((max(-0.2, min(0.8, v)) + 0.2) / 1.0 * (gw - 1)))
+
+    row = [("─", C["faint"])] * gw
+    for i in range(X(lo), X(hi) + 1):
+        row[i] = ("━", C["good"])
+    row[X(0)] = ("│", C["rule"])
+    if rate is not None:
+        row[X(rate)] = ("●", "bold " + C["ink"])
+    t = Text("  ", no_wrap=True)
+    for ch, col in row:
+        t.append(ch, style=col)
+    out.append(fit(t, w))
+    labels, pos = Text("  ", no_wrap=True), 0
+    for v, lab in ((-0.2, "−0.2"), (0, "0"), (lo, "{:.2f}".format(lo)), (hi, "{:.2f}".format(hi)), (0.8, "+0.8")):
+        x = X(v) - (len(lab) - 1 if v == 0.8 else 0)
+        gap = max(1 if pos else 0, x - pos)
+        labels.append(" " * gap + lab, style=C["good"] if v in (lo, hi) else C["muted"])
+        pos += gap + len(lab)
+    out.append(fit(labels, w))
+    out += takeaway("━ is a lean bulk (0.25–0.5 % of body weight a week). ● is your trend from {} weigh-in{}."
+                    .format(len(b["weights"]), "" if len(b["weights"]) == 1 else "s"), w)
+    out.append(blank())
+    out += _weight_corridor(b, date.fromisoformat(m["date"]), w)
+    out.append(blank())
+    stale = b.get("days_since_weigh_in")
+    out += details([("Weigh-in", "today" if stale == 0 else "{} days ago".format(stale) if stale is not None else "—"),
+                    ("Food", "not logged" if b.get("cal_in_today") is None else "{:,.0f} kcal".format(b["cal_in_today"])),
+                    ("BMI", "{}".format(b.get("bmi") or "—"))], w)
     return out
 
 
