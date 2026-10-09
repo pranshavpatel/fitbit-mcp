@@ -54,3 +54,12 @@ def test_timing_chart_never_wraps_an_early_bedtime():
     nights = [{"date": "2026-10-01", "start": "2026-10-01T20:30:00", "end": "2026-10-02T05:00:00", "asleep": 480}]
     row = _plain(K.timing_chart(nights, 70, []))[0]
     assert row.count("█") > 10          # a real bar from the left edge, not a single cell at the far right
+
+
+def test_bed_wake_hours_colored_by_length():
+    import charts as K
+    nights = [{"date": "2026-10-0{}".format(i), "start": "2026-10-0{}T01:00:00".format(i), "end": "2026-10-0{}T{:02d}:00:00".format(i, 1 + h),
+               "asleep": h * 60} for i, h in ((1, 8), (2, 6), (3, 4))]
+    rows = K.timing_chart(nights, 80, [])
+    styles = [str(r.spans[-1].style) for r in rows[:3]]
+    assert K.C["good"] in styles[0] and K.C["watch"] in styles[1] and K.C["flag"] in styles[2]

@@ -355,7 +355,8 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
             legend.append(T(("┃", glyph_color), (" {} {}".format(short_clock(D.hhmm(cfg[key])), label), C["muted"])))
     out.append(section_title("Bed & wake", w, "14 nights"))
     out += K.timing_chart(sl["timing"], w, marks)
-    legend += [T(("7h+", "bold " + C["good"]), (" enough", C["muted"])), T(("<7h", "bold " + C["watch"]), (" short", C["muted"]))]
+    legend += [T(("7h+", "bold " + C["good"]), (" enough", C["muted"])), T(("5–7h", "bold " + C["watch"]), (" short", C["muted"])),
+               T(("<5h", "bold " + C["flag"]), (" very short", C["muted"]))]
     out += _flow(legend, w, gap=3)
     return out
 

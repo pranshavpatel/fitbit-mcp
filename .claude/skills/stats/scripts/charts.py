@@ -534,7 +534,8 @@ def timing_chart(nights: Sequence[dict], w: int, marks: Sequence[tuple[float, st
             for i in range(a, max(a, b) + 1):
                 cells[i] = ("█" if cells[i][0] == " " else "▓", C["sleep"])
             tail = "{:>{w}}".format(_hm(n.get("asleep")), w=tail_w)
-            tail_style = "bold " + (C["good"] if (n.get("asleep") or 0) >= 420 else C["watch"])   # 7 h+ in green
+            hrs = n.get("asleep") or 0
+            tail_style = "bold " + (C["good"] if hrs >= 420 else C["watch"] if hrs >= 300 else C["flag"])  # 7h+ / 5–7h / <5h
         else:
             cells = [("·" if i % 4 == 0 else " ", C["faint"]) for i in range(plot_w)]
             for c, (g, colr) in mcols.items():
