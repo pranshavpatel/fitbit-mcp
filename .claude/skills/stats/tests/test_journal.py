@@ -124,18 +124,20 @@ def test_box_groups_do_and_avoid(journaled):
     assert "slips in the last 7 days" in text and "TRACKING" in text       # creatine is neutral by default
 
 
-def test_box_colors_green_for_do_red_for_avoid(journaled):
+def test_box_colors_mean_on_track(tmp_path, monkeypatch):
+    # alcohol is a habit to avoid, stretch one to do: skipping alcohol and stretching are both "on track" (green),
+    # drinking and not stretching are both "off track" (red)
+    J.save(tmp_path, {"2026-10-07": {"habits": {"alcohol": False, "stretch": True}, "note": ""},
+                      "2026-10-08": {"habits": {"alcohol": True, "stretch": False}, "note": ""}})
+    m = _model(tmp_path, monkeypatch)
     buf = io.StringIO()
     console = dashboard.make_console(100, no_color=False, file=buf, force_terminal=True)
-    console._color_system = __import__("rich.console").console.ColorSystem.TRUECOLOR
-    dashboard.render(journaled, console, 100, "journal")
-    out = buf.getvalue()
+    dashboard.render(m, console, 100, "journal")
     green, red = "38;2;12;163;12", "38;2;208;59;59"
-    do_line = next(l for l in out.splitlines() if "stretching" in l)
-    avoid_line = next(l for l in out.splitlines() if "alcohol" in l)
-    assert green in do_line and red not in do_line.split("stretching")[1].split("  ")[0]
-    assert red in avoid_line
-
+    for label in ("stretching", "alcohol"):
+        line = next(l for l in buf.getvalue().splitlines() if label in l)
+        cells = line.split(label, 1)[1]
+        assert cells.index(green) < cells.index(red), label         # yesterday on track, today off track
 
 def test_ask_prints_group_headers(tmp_path):
     out = io.StringIO()

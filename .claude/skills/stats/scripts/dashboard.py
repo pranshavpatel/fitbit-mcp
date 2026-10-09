@@ -49,6 +49,7 @@ import json
 import math
 import os
 import shutil
+import statistics
 import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -1620,44 +1621,68 @@ def sec_journal(m: dict, w: int) -> list[Text]:
                         "fitdash journal to be asked each habit. After about 5 days with and 5 without a habit, "
                         "its link to your next-morning Recovery shows up here and in What drives your recovery.", w)
         return out
-    lvl = "good" if j["logged7"] >= 5 else "watch" if j["logged7"] >= 2 else "none"
-    out += headline(w, lvl, ("{}/7".format(j["logged7"]), "days journaled"),
-                    ("{}".format(j["streak"]), "day streak"))
+    rows, days = j["rows"], j["days"]
+
+    def on_track(r, c):
+        """True when that day went the right way: did a habit to do, or skipped one to avoid."""
+        if c is None or r["good"] is None:
+            return None
+        return c if r["good"] else not c
+
+    day_scores = []
+    for i in range(len(days)):
+        outcomes = [on_track(r, r["cells"][i]) for r in rows if on_track(r, r["cells"][i]) is not None]
+        day_scores.append(None if not outcomes else sum(outcomes) / len(outcomes))
+    week = [x for x in day_scores[-7:] if x is not None]
+    out += headline(w, "good" if week and statistics.fmean(week) >= 0.7 else "watch" if week else "none",
+                    ("{:.0f}%".format(100 * statistics.fmean(week)) if week else "—", "of habits on track, last 7 days"),
+                    ("{}/7".format(j["logged7"]), "days logged"), ("{}".format(j["streak"]), "day streak"))
     if not j["today_logged"] and not j["yesterday_logged"]:
         out += takeaway("Yesterday isn't logged yet: fitdash journal yesterday", w)
     out.append(blank())
-    days = j["days"]
-    label_w = min(22, max(12, max(len(r["label"]) for r in j["rows"]) + 1))
-    ndays = len(days) if w >= label_w + 2 + 2 * 14 + 16 else 7
-    days = days[-ndays:]
+    label_w = min(22, max(12, max(len(r["label"]) for r in rows) + 1))
+    n = len(days) if w >= label_w + 2 + 2 * len(days) + 10 else 7
     head = T(("  " + " " * label_w, ""))
-    for x in days:
+    for x in days[-n:]:
         head.append(date.fromisoformat(x).strftime("%a")[0] + " ", style=C["muted"])
-    head.append("  7d   next AM", style=C["muted"])
+    head.append("  7 days", style=C["muted"])
     out.append(fit(head, w))
-    groups = [(True, "TO DO", C["good"], "done"), (False, "TO AVOID", C["flag"], "slips"),
-              (None, "TRACKING", C["strain"][4], "times")]
-    for good, title, col, word in groups:
-        rows = [r for r in j["rows"] if r.get("good") is good]
-        if not rows:
+    score_row = T(("  {:<{}}".format("day score", label_w), "bold " + C["ink2"]))
+    for v in day_scores[-n:]:
+        score_row.append(("·" if v is None else K.EIGHTHS[max(1, min(8, int(round(v * 8))))]) + " ",
+                         style=C["faint"] if v is None else K.ramp([C["flag"], C["watch"], C["good"]], v))
+    out.append(fit(score_row, w))
+    out.append(blank())
+    for good, title, col, word in ((True, "TO DO", C["good"], "done"), (False, "TO AVOID", C["flag"], "slips"),
+                                   (None, "TRACKING", C["strain"][4], "times")):
+        group = [r for r in rows if r["good"] is good]
+        if not group:
             continue
-        hits, logged = sum(r["yes7"] for r in rows), sum(r["logged7"] for r in rows)
+        hits = sum(r["yes7"] for r in group)
         out.append(fit(T(("  " + title, "bold " + col),
-                         ("  {} {} in the last 7 days".format(hits, word) if logged else "", C["muted"])), w))
-        for r in rows:
-            out.append(_habit_row(r, ndays, label_w, col, w))
+                         ("  {} {} in the last 7 days".format(hits, word) if any(r["logged7"] for r in group) else "", C["muted"])), w))
+        for r in group:
+            row = T(("  {:<{}}".format(_short(r["label"], label_w - 1), label_w), C["ink2"]))
+            for c in r["cells"][-n:]:
+                o = on_track(r, c)
+                if c is None:
+                    row.append("· ", style=C["faint"])
+                elif o is None:
+                    row.append("■ " if c else "□ ", style=C["strain"][4])
+                else:
+                    row.append("■ ", style=C["good"] if o else C["flag"])
+            ok = sum(1 for c in r["cells"][-7:] if on_track(r, c)) if r["good"] is not None else r["yes7"]
+            row.append("  {}/{}".format(ok, r["logged7"]) if r["logged7"] else "  –", style="bold " + C["ink"])
+            out.append(fit(row, w))
         out.append(blank())
+    out += _flow([T(("■", C["good"]), (" on track (did it / avoided it)", C["muted"])), T(("■", C["flag"]), (" off track", C["muted"])),
+                  T(("·", C["faint"]), (" not logged", C["muted"]))], w, gap=3, indent=2)
     if j.get("last_note"):
         d_, note = j["last_note"]
-        out += K.para(note, w, C["ink2"], indent=2, prefix=T(("  {} ".format(sdate(d_)), C["muted"])))
-    out += details([("●", "did it (green: to do · red: to avoid)"), ("○", "didn't"), ("·", "not logged"), ("7d", "times in the last 7 days"),
-                    ("next AM", "Recovery difference the morning after, once there are 5+ days each way")], w)
+        out.append(blank())
+        label = date.fromisoformat(d_).strftime("%a %-d %b")
+        out += K.para("“{}”".format(note), w, C["ink2"], indent=4, prefix=T(("  " + label + "  ", C["muted"])))
     return out
-
-
-# ---------------------------------------------------------------- insights
-
-INSIGHT_SCALE = 25.0     # recovery points at a full bar
 
 
 def _short(label: str, n: int) -> str:
