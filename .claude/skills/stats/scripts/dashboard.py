@@ -115,6 +115,11 @@ def blank() -> Text:
     return Text("")
 
 
+def section_title(title: str, w: int, note: str = "") -> Text:
+    """A section heading inside a box: UPPERCASE in bold, with a quieter note beside it."""
+    return fit(T((title.upper(), "bold " + C["ink2"]), ("  " + note if note else "", C["muted"])), w)
+
+
 def sub(title: str, w: int, note: str = "") -> Text:
     return K.fit_parts(w, (title, "bold " + C["ink2"]), (None, "  " + note if note else "", C["muted"]))
 
@@ -314,8 +319,10 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
                         (sc.get("band") or "—", ""), (hm(sl["asleep"]), "asleep"),
                         ("{} → {}".format(clock(sl["start"]), clock(sl["end"])), ""))
         out.append(blank())
+        out.append(section_title("Score breakdown", w, "out of 100"))
         out += _sleep_breakdown(sl, w)
         out.append(blank())
+        out.append(section_title("Stages", w))
         if sl["timeline"]:
             total = max(seg["end_min"] for seg in sl["timeline"])
             out += K.hypnogram(sl["timeline"], total, w, clock(sl["start"]), clock(sl["end"]))
@@ -345,8 +352,9 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
         if cfg.get(key):
             marks.append((D.hhmm(cfg[key]), "┃", glyph_color))
             legend.append(T(("┃", glyph_color), (" {} {}".format(short_clock(D.hhmm(cfg[key])), label), C["muted"])))
-    out.append(sub("Bed & wake · 14 nights", w))
+    out.append(section_title("Bed & wake", w, "14 nights"))
     out += K.timing_chart(sl["timing"], w, marks)
+    legend += [T(("7h+", "bold " + C["good"]), (" enough", C["muted"])), T(("<7h", "bold " + C["watch"]), (" short", C["muted"]))]
     out += _flow(legend, w, gap=3)
     return out
 
