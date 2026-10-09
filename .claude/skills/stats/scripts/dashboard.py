@@ -1338,6 +1338,45 @@ def sec_focus(m: dict, w: int) -> list[Text]:
     return out
 
 
+def _todays_plan(m: dict, w: int) -> list[Text]:
+    """TODAY'S PLAN: a checklist of concrete actions (bedtime, next lift, steps, impact, strain)."""
+    out = [fit(T(("TODAY'S PLAN", "bold " + C["ink2"])), w)]
+    sl, tr, cfg = m["sleep"], m["training"], m["config"]
+    tn = sl.get("tonight") or {}
+    sp = tr.get("split") or {}
+    items = []
+    if tn.get("asleep_by") is not None:
+        why = "{} need · {} debt to pay down".format(hm((tn.get("need") or {}).get("total")), hm(tn.get("debt")))
+        ex = m.get("experiment")
+        upcoming = [r for r in (ex or {}).get("nights", []) if r["state"] == "upcoming"]
+        if upcoming:
+            why += " · experiment night {} of {}: lights out by {} at the latest".format(
+                ex["nights"].index(upcoming[0]) + 1, len(ex["nights"]), short_clock(D.hhmm(ex["lights_out"])))
+        items.append(("Asleep by {}".format(short_clock(tn["asleep_by"])), why))
+    elif cfg.get("bedtime_goal"):
+        items.append(("In bed by {}".format(short_clock(D.hhmm(cfg["bedtime_goal"]))), "your bedtime goal"))
+    if sp.get("next"):
+        fresh = (sp.get("fresh") or {}).get(sp["next"])
+        tip = "" if fresh is None else " · muscles {}% fresh".format(fresh) + (": go lighter or swap the order" if fresh < 70 else "")
+        items.append(("Next lift: {}".format(sp["next"]), "gym {}/{} this week{}".format(tr["gym_week"], tr["gym_goal"], tip)))
+    else:
+        items.append(("Next lift: —", "tell Claude your last split day"))
+    steps = (m.get("activity") or {}).get("steps") or 0
+    goal = cfg.get("steps_goal") or 10000
+    if m.get("partial_day") and steps < goal:
+        items.append(("{:,} more steps".format(int(goal - steps)), "{:,} so far of {:,}".format(int(steps), goal)))
+    if tr.get("impact_spike_recent"):
+        items.append(("No running or jumping", "impact spike this or last week (knee)"))
+    st = m["strain"]
+    if st.get("target") and st.get("day") is not None:
+        lo, hi = st["target"]
+        state = "in range" if lo <= st["day"] <= hi else "below" if st["day"] < lo else "above"
+        items.append(("Strain {:.0f}–{:.0f}".format(lo, hi), "{:.1f} so far, {}".format(st["day"], state)))
+    for head, why in items:
+        out += K.para(why, w, C["muted"], indent=6, prefix=T(("  □ ", C["ink2"]), (head, "bold " + C["ink"]), ("  ", "")))
+    return out
+
+
 def _attention_and_plan(m: dict, w: int) -> list[Text]:
     out: list[Text] = []
     att = _attention(m)
@@ -1349,33 +1388,7 @@ def _attention_and_plan(m: dict, w: int) -> list[Text]:
         out.append(K.status_chip("good", "Nothing flagged today", w))
     out.append(blank())
 
-    # tonight / this week
-    out.append(fit(T(("PLAN", "bold " + C["ink2"])), w))
-    ex = m.get("experiment")
-    cfg = m["config"]
-    tonight = None
-    tn = m["sleep"].get("tonight") or {}
-    if tn.get("asleep_by") is not None:
-        tonight = "asleep by {} to get your {} need before the {} wake".format(
-            short_clock(tn["asleep_by"]), hm(tn["need"]["total"]), short_clock(tn["wake"]))
-    if ex:
-        upcoming = [r for r in ex["nights"] if r["state"] == "upcoming"]
-        if upcoming:
-            nth = ex["nights"].index(upcoming[0]) + 1
-            exp = "experiment night {} of {}: lights out by {} at the latest".format(
-                nth, len(ex["nights"]), short_clock(D.hhmm(ex["lights_out"])))
-            tonight = (tonight + " · " + exp) if tonight else exp
-    if not tonight and cfg.get("bedtime_goal"):
-        tonight = "in bed by {}".format(short_clock(D.hhmm(cfg["bedtime_goal"])))
-    if tonight:
-        out += K.para(tonight, w, C["ink2"], indent=12, prefix=T(("{:<12}".format("Tonight"), C["muted"])))
-    tr = m["training"]
-    nxt = tr["split"]["next"] or "— (tell Claude your last split day)"
-    ready = (tr["split"].get("fresh") or {}).get(tr["split"]["next"])
-    if ready is not None:
-        nxt += " · muscles {}% fresh".format(ready)
-    out += K.para("gym {}/{} · next split {}".format(tr["gym_week"], tr["gym_goal"], nxt), w, C["ink2"], indent=12,
-                  prefix=T(("{:<12}".format("This week"), C["muted"])))
+    out += _todays_plan(m, w)
     return out
 
 
@@ -1680,7 +1693,7 @@ def sec_insights(m: dict, w: int) -> list[Text]:
 MAX_W = 100        # a single column never gets wider than this: long lines are hard to scan
 TWO_COL_MIN = 140  # from here, boxes sit in two columns (each at least 69 wide)
 COLUMNS = (["sleep", "experiment", "recovery", "insights", "journal", "body"],      # left: recovery side
-           ["muscles", "lifting", "training", "workouts", "strain"])    # right: training side    # right: training side, muscle building first
+           ["muscles", "lifting", "training", "workouts", "strain"])    # right: training side, muscle building first
 
 PANELS = {
     "sleep": ("Sleep", sec_sleep, "sleep"),
@@ -1697,7 +1710,7 @@ PANELS = {
     "journal": ("Journal & habits", sec_journal, "sleep"),
     "logs": ("Logs", sec_logs, "muted"),
 }
-ORDER = COLUMNS[0][:5] + COLUMNS[1] + ["week"] + COLUMNS[0][3:]   # single column: recovery, training, the week, body
+ORDER = COLUMNS[0][:-1] + COLUMNS[1] + ["week"] + COLUMNS[0][-1:]   # single column: recovery, training, the week, body
 
 
 def panel(title: str, lines: list[Text], width: int, color: str | None) -> Panel:

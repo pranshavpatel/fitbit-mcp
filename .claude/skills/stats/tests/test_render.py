@@ -393,3 +393,8 @@ def test_hours_until_fresh():
     assert S.hours_until_fresh(80, "chest") == pytest.approx(48.0)               # 20 → 10 fatigue: one half-life
     assert S.hours_until_fresh(80, "chest", rate=1.25) == pytest.approx(48 / 1.25)
     assert S.hours_until_fresh(80, "biceps") == pytest.approx(36.0)
+
+
+def test_single_column_draws_each_box_once(model):
+    assert len(dashboard.ORDER) == len(set(dashboard.ORDER))
+    assert set(dashboard.ORDER) == set(dashboard.COLUMNS[0] + dashboard.COLUMNS[1] + ["week"])
