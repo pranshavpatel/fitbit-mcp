@@ -237,3 +237,28 @@ def test_brief_default_time():
     ("incline bicep curls", "incline curl"), ("preacher curls", "preacher curl"), ("archer pull", "archer pull")])
 def test_gym_floor_names(typed, canon):
     assert S.canonical_exercise(typed) == canon
+
+
+def test_session_label_and_tonnage():
+    push = L.parse("bench 4x8@60 ohp 3x8@40 pushdown 3x12@25".split(), "t")
+    pull = L.parse("row 4x10@50 pulldown 3x10@50 curls 3x12@12".split(), "t")
+    arms = L.parse("curls 4x12@12 pushdown 4x12@25".split(), "t")
+    assert S.session_label(push) == "push" and S.session_label(pull) == "pull" and S.session_label(arms) == "arms"
+    assert set(S.session_label(push + L.parse("squat 5x5@100 lunge 3x10@20".split(), "t")).split(" + ")) == {"push", "legs"}
+    assert S.tonnage(L.parse("bench 3x8@60 pullups 3x8".split(), "t")) == 3 * 8 * 60     # bodyweight left out
+
+
+def test_pounds_are_kept_as_typed():
+    e = L.parse("curl 3x12@25lb".split(), "t")[0]
+    assert e["lb"] == 25 and e["kg"] == 11.3 and L.describe(e) == "curl 3x12@25lb"
+
+
+def test_lifting_box_story(logged_model):
+    lf = logged_model["lifting"]
+    assert [x["label"] for x in lf["sessions"]] == ["push", "pull"]
+    assert len(lf["weekly"]) == 8 and lf["best_sets"]
+    buf = io.StringIO()
+    dashboard.render(logged_model, dashboard.make_console(100, no_color=True, file=buf), 100, "lifting")
+    text = buf.getvalue()
+    for needle in ("PUSH", "PULL", "LEGS", "not trained", "Sessions this week", "Weekly volume · 8 weeks", "Volume per session"):
+        assert needle in text, needle

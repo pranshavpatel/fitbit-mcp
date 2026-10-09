@@ -1009,7 +1009,41 @@ def _lifting(lift_sets: dict[str, list[dict]], day: date) -> dict:
                        "pr": len(pts) >= 2 and last_ >= max(p["e1rm"] for p in pts[:-1]) + 0.05})
     lifts_.sort(key=lambda r: r["last"]["date"], reverse=True)
     lo, hi = S.HYPERTROPHY_SETS
+
+    def session(x: str) -> dict:
+        es = lift_sets[x]
+        by_ex: dict[str, list[dict]] = {}
+        for e in es:
+            by_ex.setdefault(e["exercise"], []).append(e)
+        exercises = []
+        for ex, group in by_ex.items():
+            best = max(group, key=lambda e: (S.e1rm(e.get("kg"), e["reps"]) or 0, e["reps"]))
+            exercises.append({"exercise": ex, "sets": sum(e["sets"] for e in group), "kg": best.get("kg"),
+                              "lb": best.get("lb"),
+                              "reps": best["reps"], "e1rm": None if S.e1rm(best.get("kg"), best["reps"]) is None
+                              else round(S.e1rm(best.get("kg"), best["reps"]), 1)})
+        return {"date": x, "label": S.session_label(es), "sets": sum(e["sets"] for e in es),
+                "tonnage": round(S.tonnage(es)), "exercises": exercises}
+
+    weekly = []
+    for i in range(7, -1, -1):
+        we = day - timedelta(days=7 * i)
+        es = [e for x, el in lift_sets.items() if iso(we - timedelta(days=6)) <= x <= iso(we) for e in el]
+        ws = S.weekly_sets(es)
+        weekly.append({"end": iso(we), "sets": sum(e["sets"] for e in es), "tonnage": round(S.tonnage(es)),
+                       "groups": {g: round(sum(ws[mu] for mu in ms), 1) for g, ms in S.MUSCLE_GROUPS}})
+    best_sets = {}
+    for x in sorted(lift_sets):
+        for e in lift_sets[x]:
+            v = S.e1rm(e.get("kg"), e["reps"])
+            if v is not None and v >= best_sets.get(e["exercise"], {}).get("e1rm", 0):
+                best_sets[e["exercise"]] = {"exercise": e["exercise"], "kg": e["kg"], "lb": e.get("lb"), "reps": e["reps"],
+                                            "e1rm": round(v, 1), "date": x}
     return {
+        "sessions": [session(x) for x in sorted(lift_sets) if wk0 <= x <= d],
+        "recent_sessions": [session(x) for x in sorted(lift_sets) if since <= x <= d],
+        "weekly": weekly, "best_sets": sorted(best_sets.values(), key=lambda b: b["date"], reverse=True),
+        "groups": [[g, list(ms)] for g, ms in S.MUSCLE_GROUPS],
         "has_log": bool(lift_sets), "logged_days_week": sorted({x for x in lift_sets if wk0 <= x <= d}),
         "sets": {mu: round(v, 1) for mu, v in sets.items()},
         "sets_prev": {mu: round(v, 1) for mu, v in sets_prev.items()},

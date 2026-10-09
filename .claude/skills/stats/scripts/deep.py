@@ -426,22 +426,63 @@ def deep_lifting(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
     if not lf.get("has_log"):
         return []
     panels = []
-    weeks = dp.get("lift_weeks") or []
     lo, hi = lf.get("target", [10, 20])
-    cell = max(5, min(8, (w - 14) // max(1, len(weeks))))
-    lines = [fit(T(("  {:<11}".format("week ending"), C["muted"]), *[(sdate(x["end"])[4:].rjust(cell), C["muted"]) for x in weeks]), w)]
-    for mu in S.MUSCLES:
-        row = T(("  {:<11}".format(MUSCLE_NAMES[mu].lower()), C["ink2"]))
-        for x in weeks:
-            v = x["sets"].get(mu, 0)
-            col = C["faint"] if v == 0 else C["good"] if lo <= v <= hi else C["watch"] if v < lo else C["strain"][4]
-            row.append(("{:g}".format(v) if v else "·").rjust(cell), style=("bold " if lo <= v <= hi else "") + col)
-        lines.append(fit(row, w))
-    lines.append(blank())
-    lines += _legend([("n", C["good"], "{}–{} sets (growth range)".format(lo, hi)), ("n", C["watch"], "under"),
-                      ("n", C["strain"][4], "over")], w)
-    panels.append(("Hard sets per muscle · 6 weeks", lines, "activity"))
 
+    # 1. weekly volume by group, 8 weeks: stacked bars, so balance and consistency show at a glance
+    weekly = lf.get("weekly") or []
+    if weekly:
+        top = max(sum(x["groups"].values()) for x in weekly) or 1
+        bar_w = max(10, w - 30)
+        logged = [x for x in weekly if x["sets"]]
+        lines = headline(w, "good" if len(logged) >= 4 else "watch",
+                         ("{}/{}".format(len(logged), len(weekly)), "weeks with logged lifting"),
+                         ("{:.0f}".format(statistics.fmean([x["sets"] for x in logged]) if logged else 0), "sets per logged week"))
+        lines.append(blank())
+        for x in weekly:
+            gs = x["groups"]
+            total = sum(gs.values())
+            width = round(bar_w * total / top)
+            bar = K.segbar([(gs[g], "█", DB.GROUP_COLOR[g]) for g in ("push", "pull", "legs", "core")], width) if width else T(("·", C["faint"]))
+            lines.append(fit(T(("  {:<7}".format(sdate(x["end"])[4:]), C["muted"]), bar, " " * (bar_w - max(1, width)),
+                               ("  {:>5}".format(x["sets"] if x["sets"] else "—"), "bold " + C["ink"] if total else C["muted"]),
+                               ("  {:>8}".format("{:,}kg".format(x["tonnage"]) if x["tonnage"] else ""), C["muted"])), w))
+        lines.append(blank())
+        lines += _legend([("█", DB.GROUP_COLOR[g], g) for g in ("push", "pull", "legs", "core")] +
+                         [("n", C["ink"], "sets done"), ("kg", C["muted"], "lifted")], w)
+        panels.append(("Weekly volume · 8 weeks", lines, "activity"))
+
+    # 2. the per-muscle table, once there are at least two weeks to compare
+    weeks = dp.get("lift_weeks") or []
+    if sum(1 for x in weeks if any(x["sets"].values())) >= 2:
+        cell = max(5, min(8, (w - 14) // max(1, len(weeks))))
+        lines = [fit(T(("  {:<11}".format("week ending"), C["muted"]), *[(sdate(x["end"])[4:].rjust(cell), C["muted"]) for x in weeks]), w)]
+        for mu in S.MUSCLES:
+            row = T(("  {:<11}".format(MUSCLE_NAMES[mu].lower()), C["ink2"]))
+            for x in weeks:
+                v = x["sets"].get(mu, 0)
+                col = C["faint"] if v == 0 else C["good"] if lo <= v <= hi else C["watch"] if v < lo else C["strain"][4]
+                row.append(("{:g}".format(v) if v else "·").rjust(cell), style=("bold " if lo <= v <= hi else "") + col)
+            lines.append(fit(row, w))
+        lines.append(blank())
+        lines += _legend([("n", C["good"], "{}–{} sets".format(lo, hi)), ("n", C["watch"], "under"), ("n", C["strain"][4], "over")], w)
+        panels.append(("Hard sets per muscle · 6 weeks", lines, "activity"))
+
+    # 3. volume per session
+    recent = (lf.get("recent_sessions") or [])[-12:]
+    if recent:
+        top = max(x["tonnage"] for x in recent) or 1
+        bar_w = max(10, w - 36)
+        lines = []
+        for x in recent:
+            lab = x["label"]
+            col = DB.GROUP_COLOR.get(lab.split(" ")[0], DB.GROUP_COLOR["pull"])
+            lines.append(fit(T(("  {:<9}".format(sdate(x["date"])), C["ink2"]), ("{:<11}".format(lab), col),
+                               K.hbar(x["tonnage"] / top, bar_w, col), ("  {:>7}".format("{:,}kg".format(x["tonnage"])), "bold " + C["ink"])), w))
+        lines += K.para("Weight × reps × sets per session: a rough total of the work done. Compare sessions of the "
+                        "same type.", w, C["muted"], indent=2, prefix=Text("  "))
+        panels.append(("Volume per session", lines, "activity"))
+
+    # 4. strength charts for lifts done at least twice
     lifts = [r for r in lf.get("lifts", []) if len(r["points"]) >= 2][:4]
     if lifts:
         lines = []
@@ -457,6 +498,12 @@ def deep_lifting(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
                                (sdate(r["points"][-1]["date"]), C["muted"])), w))
             lines.append(blank())
         panels.append(("Lift progress · estimated 1RM", lines, "activity"))
+    else:
+        panels.append(("Lift progress · estimated 1RM",
+                       K.para("Strength charts appear once you've logged a lift on two different days. Log your next "
+                              "{} with the same exercise names to start them.".format(
+                                  ((m.get("training") or {}).get("split") or {}).get("next") or "session"),
+                              w, C["muted"], indent=2, prefix=Text("  ")), "activity"))
     return panels
 
 

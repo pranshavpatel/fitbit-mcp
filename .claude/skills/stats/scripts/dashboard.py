@@ -1404,8 +1404,49 @@ def _sets_bar(v: float, lo: int, hi: int, cells: int) -> Text:
     return t
 
 
+GROUP_COLOR = {"push": "#e5704b", "pull": "#3987e5", "legs": "#c27ce6", "core": "#eda100"}
+GROUP_NAME = {"push": "PUSH", "pull": "PULL", "legs": "LEGS", "core": "CORE"}
+
+
+def _wt(e: dict) -> str:
+    """A set's weight as typed: 50lb, 59kg, or bw."""
+    if e.get("lb") is not None:
+        return "{:g}lb".format(e["lb"])
+    return "bw" if not e.get("kg") else "{:g}kg".format(round(e["kg"], 1))
+
+
+def _target_bar(v: float, cells: int, color: str, lo: int, hi: int) -> Text:
+    """One cell per set up to `cells` (20 at full width): the 10–20 target zone is a shaded track,
+    below it a dotted one, so where a bar stops says how far from the zone it is."""
+    scale = cells / hi
+    t = Text(no_wrap=True)
+    for i in range(cells):
+        a, b = i / scale, (i + 1) / scale
+        if v >= b:
+            t.append("█", style=color)
+        elif v > a:
+            t.append(K.HBLOCKS[max(1, int((v - a) / (b - a) * 8))], style=color)
+        elif a >= lo:
+            t.append("░", style=C["rule"])
+        else:
+            t.append("·", style=C["faint"])
+    t.append("▶" if v > hi else " ", style=color)
+    return t
+
+
+def _need(v: float, lo: int, hi: int) -> tuple[str, str]:
+    if v > hi:
+        return "{:g} over".format(round(v - hi, 1)), C["watch"]
+    if v >= lo:
+        return "✓ in range", C["good"]
+    if v == 0:
+        return "not trained", C["muted"]
+    return "need {:g}".format(round(lo - v + 0.0001, 1) if (lo - v) % 1 else lo - v), C["ink2"]
+
+
 def sec_lifting(m: dict, w: int) -> list[Text]:
-    """Weekly hard sets per muscle vs the 10-20 hypertrophy range, and per-lift progress."""
+    """This week's volume by muscle group against the 10–20 set target, the sessions behind it, and
+    strength: progress charts for lifts done twice or more, best sets for the rest."""
     lf = m.get("lifting") or {}
     out: list[Text] = []
     if not lf.get("has_log"):
@@ -1416,55 +1457,99 @@ def sec_lifting(m: dict, w: int) -> list[Text]:
                         "and Muscle Freshness uses your real sets.", w)
         return out
     lo, hi = lf["target"]
-    sets, prev = lf["sets"], lf.get("sets_prev") or {}
+    sets = lf["sets"]
+    sessions = lf.get("sessions") or []
     in_range = [mu for mu in S.MUSCLES if lo <= sets[mu] <= hi]
-    logged = lf["logged_days_week"]
-    lvl = "good" if len(in_range) >= 8 else "watch" if logged else "none"
-    out += headline(w, lvl, ("{}/{}".format(len(in_range), len(S.MUSCLES)), "muscles at {}-{} sets".format(lo, hi)),
-                    ("{}".format(len(logged)), "session{} logged in 7 days".format("" if len(logged) == 1 else "s")))
+    total_sets = sum(x["sets"] for x in sessions)
+    tons = sum(x["tonnage"] for x in sessions)
+    out += headline(w, "good" if len(in_range) >= 8 else "watch" if sessions else "none",
+                    ("{}".format(len(sessions)), "session{} this week".format("" if len(sessions) == 1 else "s")),
+                    ("{}".format(total_sets), "sets"), ("{:,} kg".format(tons), "lifted"),
+                    ("{}/{}".format(len(in_range), len(S.MUSCLES)), "muscles in range"))
+    groups = [(g, ms, sum(sets[mu] for mu in ms) / (len(ms) * lo)) for g, ms in lf.get("groups") or []]
+    behind = [(g, ms) for g, ms, frac in groups if frac < 0.5 and g != "core"]
+    if behind:
+        nxt = ((m.get("training") or {}).get("split") or {}).get("next")
+        out += takeaway("Behind this week: {}.{}".format(
+            ", ".join("{} ({:g} sets)".format(GROUP_NAME[g].lower(), round(sum(sets[mu] for mu in ms), 1)) for g, ms in behind),
+            " Next session: {}.".format(nxt) if nxt else ""), w)
     out.append(blank())
-    out.append(sub("Hard sets per muscle · last 7 days", w))
-    name_w = 11
-    cells = max(10, min(25, w - 2 - name_w - 22))
-    axis = [" "] * cells
+
+    # ---- volume vs target, grouped
+    cells = 20 if w >= 70 else 10
+    name_w = 12
+    head = Text(" " * (4 + name_w), no_wrap=True)
+    axis = [" "] * (cells + 1)
     for v in (0, lo, hi):
-        i = min(cells - len(str(v)), int(round(v / SETS_SCALE * cells)))
+        i = min(cells - len(str(v)) + 1, int(round(v / hi * cells)))
         axis[i:i + len(str(v))] = list(str(v))
-    out.append(fit(T(("  " + " " * name_w + "".join(axis), C["muted"]), ("  sets    vs prev", C["muted"])), w))
-    for mu in S.MUSCLES:
-        v, pv = sets[mu], prev.get(mu, 0.0)
-        icon, ic = ("✓", C["good"]) if lo <= v <= hi else ("!", C["watch"]) if v < lo else ("!", C["strain"][3])
-        delta = v - pv
-        dtxt = "same" if abs(delta) < 0.25 else "{:+g}".format(round(delta * 2) / 2)
-        out.append(fit(T(("  {:<{}}".format(MUSCLE_NAMES[mu].lower(), name_w), C["ink2"]), _sets_bar(v, lo, hi, cells),
-                         (" {:>5g}".format(round(v * 2) / 2), "bold " + C["ink"]), (" " + icon, "bold " + ic),
-                         ("  {:>6}".format(dtxt), C["muted"])), w))
-    if lf["under"] and logged:
-        need = sorted(lf["under"], key=lambda mu: sets[mu])
-        out += takeaway("Under {}: {}.".format(lo, ", ".join("{} (+{:g})".format(MUSCLE_NAMES[mu].lower(),
-                                                                               math.ceil(lo - sets[mu]))
-                                                         for mu in need[:5])), w)
-    lifts = lf.get("lifts") or []
-    if lifts:
-        out.append(blank())
-        out.append(sub("Progress · best est. 1RM per session, 8 weeks", w))
-        ex_w = min(20, max(12, w - 46))
-        for r in lifts[:6]:
-            vals = [p["e1rm"] for p in r["points"]][-10:]
-            chg = r["change_pct"]
-            ctxt = "first log" if chg is None else "{:+.1f}%".format(chg)
-            ccol = C["muted"] if chg is None else C["good"] if chg > 0 else C["watch"] if chg < 0 else C["ink2"]
-            name = r["exercise"] if len(r["exercise"]) < ex_w else LIFT_SHORT.get(r["exercise"], r["exercise"])
-            line = T(("  {:<{}} ".format(_short(name, ex_w - 1), ex_w - 1), C["ink2"]),
-                     K.spark(vals, C["strain"][4]), (" " * (11 - len(vals)), ""),
-                     ("{:>5.0f} kg".format(r["last"]["e1rm"]), "bold " + C["ink"]), ("  {:>9}".format(ctxt), ccol),
-                     ("  ★ PR" if r["pr"] else "", "bold " + C["good"]))
-            if w >= 70:
-                line.append("  {} {}".format(r["last"]["top"], sdate(r["last"]["date"])[:3]), style=C["muted"])
-            out.append(K.fit_parts(w, line))
+    head.append("".join(axis), style=C["muted"])
+    head.append("{:>6}  {}".format("sets", "status"), style=C["muted"])
+    out.append(fit(T(("Hard sets per muscle · last 7 days · target {}–{}".format(lo, hi), "bold " + C["ink2"])), w))
+    out.append(fit(head, w))
+    for g, ms in lf.get("groups") or []:
+        col = GROUP_COLOR[g]
+        gsum = sum(sets[mu] for mu in ms)
+        out.append(fit(T(("  " + GROUP_NAME[g], "bold " + col), ("  {:g} sets".format(round(gsum, 1)), C["muted"])), w))
+        for mu in ms:
+            v = sets[mu]
+            word, wcol = _need(v, lo, hi)
+            out.append(fit(T(("    {:<{}}".format(MUSCLE_NAMES[mu].lower(), name_w), C["ink2"] if v else C["muted"]),
+                             _target_bar(v, cells, col, lo, hi),
+                             (" {:>5}".format("{:g}".format(round(v, 1)) if v else "0"), "bold " + C["ink"] if v else C["muted"]),
+                             ("  " + word, wcol)), w))
+    out += _flow([T(("·", C["faint"]), (" under {}".format(lo), C["muted"])), T(("░", C["rule"]), (" the {}–{} target zone".format(lo, hi), C["muted"])),
+                   T(("█", C["ink2"]), (" sets done", C["muted"]))], w, gap=3, indent=4)
     out.append(blank())
-    out += details([("sets", "primary muscle 1, secondary ½"), ("1RM", "Epley from your best set"),
-                    ("log", "fitdash lift <exercise> 3x8@60")], w)
+
+    # ---- sessions
+    if sessions:
+        out.append(sub("Sessions this week", w))
+        for x in sorted(sessions, key=lambda x: x["date"], reverse=True):
+            lab = x["label"]
+            col = GROUP_COLOR.get(lab.split(" ")[0], C["ink2"]) if lab != "arms" else GROUP_COLOR["pull"]
+            out.append(fit(T(("  {:<9}".format(sdate(x["date"])), C["ink2"]), ("{:<12}".format(lab.upper()), "bold " + col),
+                             ("{:>3} sets".format(x["sets"]), C["ink"]), ("   {:,} kg lifted".format(x["tonnage"]), C["muted"])), w))
+            tops = sorted(x["exercises"], key=lambda e: -(e["e1rm"] or 0))
+            items = ["{} {}×{}".format(LIFT_SHORT.get(e["exercise"], e["exercise"]), _wt(e), e["reps"]) for e in tops]
+            out += K.para(" · ".join(items), w, C["muted"], indent=4, prefix=Text("    "))
+        out.append(blank())
+
+    # ---- strength
+    lifts = lf.get("lifts") or []
+    trending = [r for r in lifts if len(r["points"]) >= 2]
+    if trending:
+        out.append(sub("Getting stronger? · est. 1RM, 8 weeks", w))
+        ex_w = min(20, max(12, w - 46))
+        for r in trending[:6]:
+            vals = [p["e1rm"] for p in r["points"]][-10:]
+            chg = r["change_pct"] or 0
+            name = r["exercise"] if len(r["exercise"]) < ex_w else LIFT_SHORT.get(r["exercise"], r["exercise"])
+            out.append(K.fit_parts(w, T(("  {:<{}} ".format(_short(name, ex_w - 1), ex_w - 1), C["ink2"]),
+                                        K.spark(vals, C["strain"][4]), (" " * (11 - len(vals)), ""),
+                                        ("{:>5.0f} kg".format(vals[-1]), "bold " + C["ink"]),
+                                        ("  {:+.1f}%".format(chg), C["good"] if chg > 0 else C["watch"] if chg < 0 else C["ink2"]),
+                                        ("  ★ PR" if r["pr"] else "", "bold " + C["good"]))))
+        out.append(blank())
+    best = [b for b in lf.get("best_sets") or [] if not any(t["exercise"] == b["exercise"] for t in trending)]
+    if best:
+        out.append(sub("Best sets so far" + (" · progress charts start from the 2nd session of a lift" if not trending else ""), w))
+        col_w = (w - 2) // 2 if w >= 80 else w - 2
+        cells_ = []
+        for b in best[:10]:
+            name = LIFT_SHORT.get(b["exercise"], b["exercise"])
+            cells_.append(T(("{:<16}".format(_short(name, 15)), C["ink2"]), ("{:>7}×{:<3}".format(_wt(b), b["reps"]), "bold " + C["ink"]),
+                            ("{:>4.0f} kg 1RM".format(b["e1rm"]), C["muted"])))
+        for i in range(0, len(cells_), 2 if col_w < w - 2 else 1):
+            row = Text("  ", no_wrap=True)
+            row.append_text(cells_[i])
+            if col_w < w - 2 and i + 1 < len(cells_):
+                row.append(" " * max(2, col_w - cells_[i].cell_len))
+                row.append_text(cells_[i + 1])
+            out.append(fit(row, w))
+        out.append(blank())
+    out += details([("sets", "a hard set counts 1 for the main muscle, ½ for helpers"), ("1RM", "estimated from your best set"),
+                    ("deep dive", "fitdash --section lifting")], w)
     return out
 
 

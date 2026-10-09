@@ -79,13 +79,16 @@ def parse(tokens: list[str], at: str) -> list[dict]:
         sets, reps = int(m.group(1)), int(m.group(2))
         if not (1 <= sets <= 20 and 1 <= reps <= 100):
             raise LiftError("'{}' looks wrong: 1-20 sets of 1-100 reps".format(tok))
-        kg = None
+        kg, lb = None, None
         if m.group(3):
             kg = float(m.group(3))
             if (m.group(4) or "").lower().startswith("lb"):
-                kg *= LB_TO_KG
+                lb, kg = kg, kg * LB_TO_KG          # keep what was typed, for display
             kg = round(kg, 1)
-        entries.append({"exercise": ex, "sets": sets, "reps": reps, "kg": kg, "at": at})
+        entry = {"exercise": ex, "sets": sets, "reps": reps, "kg": kg, "at": at}
+        if lb is not None:
+            entry["lb"] = lb
+        entries.append(entry)
         pending = True
     if name and not pending:
         raise LiftError("'{}' has no sets (write e.g. 3x8@60)".format(" ".join(name)))
@@ -94,8 +97,15 @@ def parse(tokens: list[str], at: str) -> list[dict]:
     return entries
 
 
+def weight_text(e: dict) -> str:
+    """How the weight was typed: 50lb, 59 (kg) or bodyweight."""
+    if e.get("lb") is not None:
+        return "{:g}lb".format(e["lb"])
+    return "" if e.get("kg") is None else "{:g}".format(e["kg"])
+
+
 def describe(e: dict) -> str:
-    w = "" if e.get("kg") is None else "@{:g}".format(e["kg"])
+    w = "" if e.get("kg") is None else "@" + weight_text(e)
     return "{} {}x{}{}".format(e["exercise"], e["sets"], e["reps"], w)
 
 

@@ -842,6 +842,28 @@ def weekly_sets(entries: Sequence[dict]) -> dict[str, float]:
     return out
 
 
+MUSCLE_GROUPS = (("push", ("chest", "shoulders", "triceps")), ("pull", ("lats", "biceps")),
+                 ("legs", ("quads", "hamstrings", "glutes", "calves")), ("core", ("abs",)))
+
+
+def session_label(entries: Sequence[dict]) -> str:
+    """What a session trained, from its sets: the group with most set credit ("push", "pull", …),
+    "arms" when biceps + triceps dominate, or "a + b" when two groups are close."""
+    sets = weekly_sets(entries)
+    total = sum(sets.values()) or 1
+    if (sets["biceps"] + sets["triceps"]) / total >= 0.6:
+        return "arms"
+    by = sorted(((sum(sets[m] for m in ms), g) for g, ms in MUSCLE_GROUPS), reverse=True)
+    if by[1][0] >= 0.35 * total:
+        return "{} + {}".format(by[0][1], by[1][1])
+    return by[0][1]
+
+
+def tonnage(entries: Sequence[dict]) -> float:
+    """Volume load: sets × reps × kg, bodyweight sets left out."""
+    return sum(e["sets"] * e["reps"] * e["kg"] for e in entries if e.get("kg"))
+
+
 HYPERTROPHY_SETS = (10, 20)     # hard sets per muscle per week: the commonly cited hypertrophy range
 
 
