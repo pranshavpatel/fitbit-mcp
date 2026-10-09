@@ -537,9 +537,11 @@ def sec_strain(m: dict, w: int) -> list[Text]:
         cols.append(STRAIN_STATE_COLOR[state])
     out += [fit(x, w) for x in K.columns(ser, 4, col_w, gap, cols, top=21, label_w=6, fmt=lambda v: "{:.0f}".format(v),
                                          value_fmt=lambda v: "{:.0f}".format(v), today_fmt=lambda v: "{:.1f}".format(v))]
-    out += _flow([T(("█", STRAIN_STATE_COLOR["in"]), (" in range {}".format(tally["in"]), C["muted"])),
-                  T(("█", STRAIN_STATE_COLOR["below"]), (" below {}".format(tally["below"]), C["muted"])),
-                  T(("█", STRAIN_STATE_COLOR["above"]), (" above {}".format(tally["above"]), C["muted"])),
+    def days(n: int) -> str:
+        return "{} day{}".format(n, "" if n == 1 else "s")
+    out += _flow([T(("█", STRAIN_STATE_COLOR["in"]), (" {} in range".format(days(tally["in"])), C["muted"])),
+                  T(("█", STRAIN_STATE_COLOR["below"]), (" {} below".format(days(tally["below"])), C["muted"])),
+                  T(("█", STRAIN_STATE_COLOR["above"]), (" {} above".format(days(tally["above"])), C["muted"])),
                   T(("", ""), ("each day vs its own recovery-based target", C["muted"]))], w, gap=3, indent=2)
     out.append(blank())
 
