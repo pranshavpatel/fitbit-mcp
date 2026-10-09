@@ -804,67 +804,68 @@ CARD_ROWS = MI.H // 2      # card height = icon height
 CARD_TEXT_AT = {1: "name", 2: "pct", 4: "dots"}   # like the reference: name and % at the top, dots at the bottom
 
 
-def _card(row: dict, color: bool) -> list[Text]:
+def _card(row: dict, color: bool, now: datetime | None = None) -> list[Text]:
+    """Icon, name, % in its freshness color, when it's ready again, and the dots."""
     pct = row["fresh"]
     icon = MI.render(row["muscle"], S.freshness_color(pct), color=color)
-    parts = {"name": T((MUSCLE_NAMES[row["muscle"]], "bold " + MF["title"])),
-             "pct": T(("{}% recovered".format(pct), MF["dim"])),
-             "dots": fresh_dots(pct, color)}
+    h = row.get("ready_in_h") or 0
+    if h <= 0:
+        when = T(("ready now", C["good"]))
+    else:
+        t = (now or datetime.now(D.NY)) + timedelta(hours=h)
+        when = T(("ready " + t.strftime("%a %-I%p").replace("AM", "a").replace("PM", "p"), MF["dim"]))
+    parts = {1: T((MUSCLE_NAMES[row["muscle"]], "bold " + MF["title"])),
+             2: T(("{}%".format(pct), "bold " + S.freshness_color(pct))), 3: when, 4: fresh_dots(pct, color)}
     out = []
     for i in range(CARD_ROWS):
-        text = parts.get(CARD_TEXT_AT.get(i, ""), Text(""))
-        out.append(icon[i] + Text("  ") + text + Text(" " * (CARD_TEXT_W - text.cell_len)))
+        text = parts.get(i, Text(""))
+        out.append(icon[i] + Text("  ") + text + Text(" " * max(0, CARD_TEXT_W - text.cell_len)))
     return out
 
 
 def sec_freshness(m: dict, w: int, color: bool = True, sort: str = "default") -> list[Text]:
-    """The Muscle Freshness card grid. Everything inside comes from the model; no free text."""
+    """The Muscle Freshness card grid, most recovered first (`--sort freshness`: least recovered first),
+    each card with when that muscle is back to 90 %."""
     mu = m["muscles"]
     out: list[Text] = []
-    head = T(("Muscle Freshness", "bold " + MF["title"]))
-    out.append(fit(head + Text(" " * max(1, w - head.cell_len - 1)) + T(("→", MF["dim"])), w))
+    order_note = "least recovered first" if sort == "freshness" else "most recovered first"
+    head = T(("Muscle Freshness", "bold " + MF["title"]), ("  " + order_note, MF["dim"]))
+    out.append(fit(head, w))
     if not mu.get("has_strength"):
         out.append(fit(T(("· no strength sessions logged", MF["dim"])), w))
         out += K.para("Log sets with: fitdash lift bench 3x8@60 row 4x10@50 (or tag a session: "
                       "fitdash tag <date> <split day>)", w, MF["dim"])
         return out
-    rows = {r["muscle"]: r for r in mu["rows"]}
-    sp = m["training"]["split"]
-    nxt, ready = sp.get("next"), (sp.get("fresh") or {}).get(sp.get("next"))
-    worst = min(mu["rows"], key=lambda r: (r["fresh"], S.MUSCLES.index(r["muscle"])))
-    if worst["fresh"] < 90:
-        line = T(("! ", "bold #ffb340"),
-                 ("{} still recovering, {}%".format(MUSCLE_NAMES[worst["muscle"]], worst["fresh"]), MF["dim"]))
-        if nxt and ready is not None and ready >= 90:
-            line.append(" · {} muscles ready".format(split_title(nxt).lower()), style=MF["dim"])
-    elif nxt and ready is not None:
-        line = T(("✓ ", "bold " + S.freshness_color(ready)), ("{} muscles ready".format(split_title(nxt)), MF["dim"]))
-    else:
-        line = T(("✓ ", "bold #34c759"), ("All muscles 90%+ recovered", MF["dim"]))
-    out += K.para(line.plain[2:], w, MF["dim"], indent=2, prefix=line[:2])
+    rows = list(mu["rows"])
+    ready = sum(1 for r in rows if r["fresh"] >= 90)
+    nxt = (m["training"]["split"] or {}).get("next")
+    line = T(("{}/{}".format(ready, len(rows)), "bold " + MF["title"]), (" muscles ready now", MF["dim"]))
+    if nxt:
+        line.append(" · next to train: ", style=MF["dim"])
+        line.append(nxt, style="bold " + MF["title"])
+    out += K.para(line.plain, w, MF["dim"]) if line.cell_len > w else [fit(line, w)]
     out.append(blank())
-
-    order = list(S.MUSCLES)
-    if sort == "freshness":
-        order.sort(key=lambda k: (rows[k]["fresh"], S.MUSCLES.index(k)))
-    cards = [_card(rows[k], color) for k in order]
+    key = (lambda r: (r["fresh"], S.MUSCLES.index(r["muscle"]))) if sort == "freshness" else \
+          (lambda r: (-r["fresh"], S.MUSCLES.index(r["muscle"])))
+    now = datetime.fromisoformat(m["now"]) if m.get("now") else None
+    cards = [_card(r, color, now) for r in sorted(rows, key=key)]
     cols = 2 if w + 6 >= FRESH_TWO_COL else 1                 # panel width = w + borders + padding
     gutter = max(4, (w - cols * CARD_W) // cols) if cols == 2 else 0
     for i in range(0, len(cards), cols):
         group = cards[i:i + cols]
         for r in range(CARD_ROWS):
-            line = Text(no_wrap=True)
+            ln = Text(no_wrap=True)
             for j, c in enumerate(group):
                 if j:
-                    line.append(" " * gutter)
-                line.append_text(c[r])
-            out.append(fit(line, w))
+                    ln.append(" " * gutter)
+                ln.append_text(c[r])
+            out.append(fit(ln, w))
         if i + cols < len(cards):
             out.append(blank())
     out.append(blank())
     assumed = [x for x in mu["sessions"] if x["source"] == "assumed"]
     from_sets = [x for x in mu["sessions"] if x["source"] == "sets"]
-    note = "estimated from logged sessions"
+    note = "ready = back to 90 %, if you don't train it again"
     if from_sets:
         note += " · from your logged sets: " + ", ".join(sdate(x["date"])[:3] for x in from_sets)
     if assumed:

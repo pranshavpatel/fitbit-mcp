@@ -1,3 +1,4 @@
+import re
 """Muscle Freshness: the fatigue model, the dots, the icons, snapshots and the tag command."""
 import io
 import json
@@ -153,7 +154,8 @@ def test_snapshot(model, width):
     assert lines[-1].startswith("╰") and lines[-1].endswith("╯")
     assert all(ln.startswith("│") and ln.endswith("│") for ln in lines[1:-1])
     assert len({cell_len(ln) for ln in lines}) == 1                 # borders line up on every row
-    two_cols = sum(ln.count("% recovered") for ln in lines) == 10 and any(ln.count("% recovered") == 2 for ln in lines)
+    card_ready = [len(re.findall(r"  ready (?:now|[A-Z][a-z]{2} )", ln)) for ln in lines]    # one per card, not the header or footnote
+    two_cols = sum(card_ready) == 10 and any(n == 2 for n in card_ready)
     assert two_cols == (min(width, dashboard.FRESH_MAX_W) >= dashboard.FRESH_TWO_COL)
     snap = SNAP / "freshness_{}.txt".format(width)
     if os.environ.get("UPDATE_SNAPSHOTS") == "1" or not snap.exists():
@@ -164,7 +166,7 @@ def test_snapshot(model, width):
 
 def test_sort_by_freshness(model):
     out = _panel(model, 60, sort="freshness")
-    pcts = [int(ln.split("%")[0].split()[-1]) for ln in out.splitlines() if "% recovered" in ln]
+    pcts = [int(x) for ln in out.splitlines() for x in re.findall(r"\b(\d{1,3})%", ln) if "%" in ln and "ready" not in ln]
     assert pcts == sorted(pcts)
 
 
@@ -179,7 +181,7 @@ def test_no_strength_data_shows_a_message_not_numbers(tmp_path):
     m = D.build_model(store, fixture_db.FIXTURE_DAY, dict(D.DEFAULT_CONFIG, **fixture_db.CONFIG), now=NOW)
     store.close()
     out = _panel(m, 80)
-    assert "no strength sessions logged" in out and "% recovered" not in out
+    assert "no strength sessions logged" in out and "ready " not in out
 
 
 # ---------------------------------------------------------------- tag command

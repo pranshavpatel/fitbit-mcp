@@ -280,7 +280,7 @@ function miniRing(p, color) {
 }
 function renderTrain(m) {
   const tr = m.training || {}, sp = tr.split || {}, mu = m.muscles || {}, lf = m.lifting || {}, wk = (m.workouts || {}).week || [];
-  const rows = [...(mu.rows || [])].sort((a, b) => a.fresh - b.fresh);
+  const rows = [...(mu.rows || [])].sort((a, b) => b.fresh - a.fresh);
   const ac = tr.acwr || {};
   const lo = (lf.target || [10, 20])[0], hi = (lf.target || [10, 20])[1];
   const byDay = {};
@@ -291,7 +291,7 @@ function renderTrain(m) {
     <div class="queue">${(sp.queue || []).map((d, i) => `<div class="${i === 0 ? "next" : ""}"><b>${esc(d)}</b><span>${i === 0 ? "next · " : ""}${(sp.fresh || {})[d] ?? "—"}% fresh</span></div>`).join("")}</div>
     ${sp.last_done ? `<p class="muted" style="margin:10px 0 0">Last: ${esc(sp.last_done)} on ${esc(mday(sp.last_done_date))}</p>` : ""}
   </section>
-  <section class="card"><h2>Muscle freshness <small>least recovered first</small></h2>
+  <section class="card"><h2>Muscle freshness <small>most recovered first</small></h2>
     ${mu.has_strength ? `<div class="muscles">${rows.map((r) => `<div class="muscle">${miniRing(r.fresh, freshColor(r.fresh))}<div><b>${MUSCLE[r.muscle] || esc(r.muscle)}</b><span>${r.last ? "trained " + esc(dow(r.last)) : "fresh"}</span></div></div>`).join("")}</div>`
       : `<p class="empty">No strength sessions yet. Log one in the Log tab.</p>`}
   </section>

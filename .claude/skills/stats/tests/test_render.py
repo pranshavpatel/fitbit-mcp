@@ -218,7 +218,10 @@ def test_muscle_box(model):
     assert all(0 <= r["fresh"] <= 100 for r in rows.values())
     for width in WIDTHS:
         text = "\n".join(_render(model, width, section="freshness"))
-        assert "Muscle Freshness" in text and "% recovered" in text and "●" in text
+        assert "Muscle Freshness" in text and "ready " in text and "%" in text and "●" in text
+    text = "\n".join(_render(model, 100, section="freshness"))
+    order = [r["fresh"] for r in model["muscles"]["rows"]]
+    assert "most recovered first" in text and max(order) >= min(order)
     workouts = "\n".join(_render(model, 100, section="workouts"))
     assert any("Z{}".format(z) in workouts for z in range(1, 6))
 
