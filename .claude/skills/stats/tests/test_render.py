@@ -414,3 +414,9 @@ def test_load_gauge_thickens_the_active_zone(ratio, zone):
     thick = gauge.strip("02 ").replace("─", " ").split()
     assert len(thick) == 1 and set(thick[0]) == {"▓"}          # exactly one zone is the thick block, the rest are thin lines
     assert "{:.2f} {}".format(ratio, zone) in lines[1]
+
+
+def test_strain_box_legend_counts_days(model):
+    buf = io.StringIO()
+    dashboard.render(model, dashboard.make_console(100, no_color=True, file=buf), 100, "strain")
+    assert "in range" in buf.getvalue() and "below" in buf.getvalue() and "above" in buf.getvalue()

@@ -63,3 +63,11 @@ def test_bed_wake_hours_colored_by_length():
     rows = K.timing_chart(nights, 80, [])
     styles = [str(r.spans[-1].style) for r in rows[:3]]
     assert K.C["good"] in styles[0] and K.C["watch"] in styles[1] and K.C["flag"] in styles[2]
+
+
+def test_columns_accept_a_color_per_bar():
+    import charts as K
+    rows = K.columns([5.0, 12.0, 18.0, 9.0], 3, 1, 1, ["#111111", "#222222", "#333333", "#444444"], top=21)
+    styles = {str(sp.style) for r in rows for sp in r.spans}
+    assert {"#111111", "#222222", "#333333"} <= styles          # the last (today) bar is drawn bold ink
+

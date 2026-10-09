@@ -484,6 +484,9 @@ def _diverging(label: str, z: float | None, points: float, w: int) -> Text:
 
 # ---------------------------------------------------------------- strain & activity
 
+STRAIN_STATE_COLOR = {"in": "#0ca30c", "below": "#3987e5", "above": "#fab219"}
+
+
 def sec_strain(m: dict, w: int) -> list[Text]:
     st, a = m["strain"], m["activity"]
     tgt = st["target"]
@@ -521,8 +524,23 @@ def sec_strain(m: dict, w: int) -> list[Text]:
         ser = ser[-((w - 7 + gap) // (col_w + gap)):]
     out.append(sub("Strain · {} days".format(len(ser)), w, "avg {:.1f}".format(m["baselines"]["strain"]["mean"])
                    if m["baselines"].get("strain") else ""))
-    out += [fit(x, w) for x in K.columns(ser, 4, col_w, gap, K.strain_color, top=21, label_w=6, fmt=lambda v: "{:.0f}".format(v),
+    # each day against its own target (from that morning's recovery): in range, below or above
+    recs = m["series"]["recovery"][-len(ser):]
+    cols, tally = [], {"in": 0, "below": 0, "above": 0}
+    for v, r in zip(ser, recs):
+        tgt = S.strain_target(r)
+        if v is None or tgt is None:
+            cols.append(C["none"])
+            continue
+        state = "in" if tgt[0] <= v <= tgt[1] else "below" if v < tgt[0] else "above"
+        tally[state] += 1
+        cols.append(STRAIN_STATE_COLOR[state])
+    out += [fit(x, w) for x in K.columns(ser, 4, col_w, gap, cols, top=21, label_w=6, fmt=lambda v: "{:.0f}".format(v),
                                          value_fmt=lambda v: "{:.0f}".format(v), today_fmt=lambda v: "{:.1f}".format(v))]
+    out += _flow([T(("█", STRAIN_STATE_COLOR["in"]), (" in range {}".format(tally["in"]), C["muted"])),
+                  T(("█", STRAIN_STATE_COLOR["below"]), (" below {}".format(tally["below"]), C["muted"])),
+                  T(("█", STRAIN_STATE_COLOR["above"]), (" above {}".format(tally["above"]), C["muted"])),
+                  T(("", ""), ("each day vs its own recovery-based target", C["muted"]))], w, gap=3, indent=2)
     out.append(blank())
 
     goal = m["config"].get("steps_goal") or 10000

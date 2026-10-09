@@ -239,7 +239,7 @@ def spark(values: Sequence[float | None], color: str | Callable[[float], str], l
 
 
 def columns(values: Sequence[float | None], height: int, col_w: int, gap: int,
-            color: str | Callable[[float], str], top: float | None = None, goal: float | None = None,
+            color: str | Callable[[float], str] | Sequence[str], top: float | None = None, goal: float | None = None,
             label_w: int = 6, fmt: Callable[[float], str] = lambda v: "{:.0f}".format(v),
             value_fmt: Callable[[float], str] | None = None,
             today_fmt: Callable[[float], str] | None = None) -> list[Text]:
@@ -268,7 +268,8 @@ def columns(values: Sequence[float | None], height: int, col_w: int, gap: int,
                 ch, st = ("·" if row == 0 else "┈" if row == goal_row else " "), C["muted"]
             else:
                 level = v / top * height * 8 - row * 8
-                st = ("bold " + C["ink"]) if last else (color(v) if callable(color) else color)
+                st = ("bold " + C["ink"]) if last else (color[i] if isinstance(color, (list, tuple)) else
+                                                         color(v) if callable(color) else color)
                 if level >= 8:
                     ch = "█"
                 elif level >= 1:
