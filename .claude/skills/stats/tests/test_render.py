@@ -146,7 +146,8 @@ def test_long_trend_window_fits(tmp_path, width):
 @pytest.mark.parametrize("width", WIDTHS)
 def test_visual_workouts_training_body(model, width):
     workouts = "\n".join(_render(model, width, section="workouts"))
-    assert "Intensity this week" in workouts and "Key sessions" in workouts   # day rows, intensity split, key sessions
+    assert "WHEN YOU TRAINED" in workouts and "TIME BY ACTIVITY" in workouts and "KEY SESSIONS" in workouts
+    assert "easy Z1–2" in workouts and "Zones" in workouts                       # intensity legend and HR zones
     assert "▚" in workouts and "lifting" in workouts                          # lifting time has its own pattern
     training = "\n".join(_render(model, width, section="training"))
     assert "SPLIT QUEUE" in training and "▶ next" in training and "% ready" in training   # readiness bars
@@ -261,12 +262,13 @@ def test_no_dim_attribute_and_readable_secondary_text(model):
 
 def test_workouts_one_row_per_day(model):
     lines = _render(model, 100, section="workouts")
-    top = lines[:next(i for i, ln in enumerate(lines) if "Intensity this week" in ln)]
-    day_rows = [ln for ln in top if any(ln.startswith("│  {} ".format(dn)) for dn in ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"))]
+    start = next(i for i, ln in enumerate(lines) if "WHEN YOU TRAINED" in ln)
+    end = next(i for i, ln in enumerate(lines) if "TIME BY ACTIVITY" in ln)
+    day_rows = [ln for ln in lines[start:end] if any(ln.startswith("│   {} ".format(dn)) for dn in ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"))]
     assert len(day_rows) == 7                                         # the week at a glance, not a row per session
-    assert sum("Key sessions" in ln for ln in lines) == 1
-    key = lines[next(i for i, ln in enumerate(lines) if "Key sessions" in ln) + 1:]
-    assert sum(1 for ln in key[:5] if ln.startswith("│  ") and any(ch.isdigit() for ch in ln[:12])) <= 4   # at most 4 key sessions
+    assert sum("KEY SESSIONS" in ln for ln in lines) == 1
+    key = lines[next(i for i, ln in enumerate(lines) if "KEY SESSIONS" in ln) + 1:]
+    assert sum(1 for ln in key[:5] if ln.startswith("│   ") and any(ch.isdigit() for ch in ln[:30])) <= 4   # at most 4 key sessions
 
 
 def test_week_vs_last_box(model):

@@ -610,7 +610,25 @@ def _what(sessions: list[dict]) -> str:
     return " · ".join(out)
 
 
+def _mix_cells(mix: dict, n: int) -> list[tuple[str, str]]:
+    """The textured cells of a mix bar (lifting ▚, then zones 1→5 as ░▒▓█), for drawing into a grid."""
+    order = ["lift", 1, 2, 3, 4, 5]
+    parts = [(mix.get(k, 0), LIFT_GLYPH if k == "lift" else ZONE5_GLYPH[k], LIFT_COLOR if k == "lift" else ZONE5_COLOR[k])
+             for k in order if mix.get(k, 0) > 0]
+    total = sum(p[0] for p in parts) or 1
+    raw = [p[0] / total * n for p in parts]
+    cells = [int(x) for x in raw]
+    for i in sorted(range(len(raw)), key=lambda i: raw[i] - cells[i], reverse=True)[:n - sum(cells)]:
+        cells[i] += 1
+    out = []
+    for (_, g, col), k in zip(parts, cells):
+        out += [(g, col)] * k
+    return out
+
+
 def sec_workouts(m: dict, w: int) -> list[Text]:
+    """When you trained (a 7-day timeline, each session textured by intensity), time by activity,
+    key sessions, records and your zones."""
     wk = m["workouts"]
     sessions = wk["week"]
     days = [d["date"] for d in wk["strip"]]
@@ -626,86 +644,102 @@ def sec_workouts(m: dict, w: int) -> list[Text]:
         out.append(nodata(w, "  No workouts in the last 7 days."))
         return out
 
-    # ---- one row per day
+    # ---- when you trained: 6 am → midnight, one row per day, each session textured by its intensity
+    out.append(section_title("When you trained", w, "6 am → midnight"))
+    start, span = 6 * 60, 18 * 60
+    tw = w - 14
+
+    def X(minutes: float) -> int:
+        return int(max(0, min(tw - 1, (minutes - start) / span * tw)))
+
     by_day: dict[str, list[dict]] = {d: [] for d in days}
-    for s in sessions:
-        by_day.setdefault(s["date"], []).append(s)
-    mixes = {d: {} for d in days}
+    for s_ in sessions:
+        by_day.setdefault(s_["date"], []).append(s_)
+    week_mix: dict = {}
     for d in days:
-        for s in by_day[d]:
-            for k, v in _session_mix(s).items():
-                mixes[d][k] = mixes[d].get(k, 0) + v
-    peak = max([sum(x.values()) for x in mixes.values()] + [1])
-    bar_w = max(8, min(24, w - 50))
-    what_w = max(10, w - 6 - bar_w - 8 - 7)        # day 6 · bar · time 8 · what · strain 7
-    out.append(fit(T(" " * (6 + bar_w), ("{:>6}  ".format("time"), C["muted"]), ("{:<{n}}".format("what", n=what_w), C["muted"]),
-                     ("{:>7}".format("strain"), C["muted"])), w))
-    for d, row in zip(days, wk["strip"]):
+        cells = [("·" if k % max(1, tw // 6) == 0 else " ", C["faint"]) for k in range(tw)]
+        for s_ in by_day[d]:
+            t0 = D.local_dt(s_["start"])
+            a_ = X(t0.hour * 60 + t0.minute)
+            b_ = max(a_ + 1, X(t0.hour * 60 + t0.minute + s_["minutes"]))
+            mix = _session_mix(s_)
+            for k, v in mix.items():
+                week_mix[k] = week_mix.get(k, 0) + v
+            for i, cell in enumerate(_mix_cells(mix, b_ - a_)):
+                if a_ + i < tw:
+                    cells[a_ + i] = cell
         is_today = d == m["date"]
-        day_lab = T((" {:<4}".format(sdate(d)[:3]), ("bold " + C["ink"]) if is_today else C["ink2"]))
-        mix = mixes[d]
-        if not mix:
-            rest = "so far" if is_today and m["partial_day"] else "rest"
-            out.append(fit(day_lab + T((" " + "·".ljust(bar_w), C["muted"]), ("{:>6}  ".format("—"), C["muted"]),
-                                       (rest, C["muted"])), w))
-            continue
-        cells = max(1, int(round(sum(mix.values()) / peak * bar_w)))
-        bar = _mix_bar(mix, cells)
+        row = T(("  {:<4}".format(sdate(d)[:3]), ("bold " + C["ink"]) if is_today else C["muted"]))
+        for g, col in cells:
+            row.append(g, style=col)
         st = strain_by_day.get(d)
-        line = day_lab + Text(" ") + bar + Text(" " * (bar_w - bar.cell_len))
-        line.append("{:>6}  ".format(hm(row["minutes"])), style="bold " + C["ink"])
-        line.append(_what(by_day[d])[:what_w].ljust(what_w), style=C["ink2"])
-        line.append("{:>7}".format("{:.1f}".format(st) if st is not None else "—"), style="bold " + K.strain_color(st))
-        out.append(fit(line, w))
+        if by_day[d]:
+            row.append("  {:>5}".format("{:.1f}".format(st) if st is not None else "—"), style="bold " + K.strain_color(st))
+        else:
+            row.append("  {:>5}".format("so far" if is_today and m["partial_day"] else "rest"), style=C["muted"])
+        out.append(fit(row, w))
+    ticks, pos = Text("      ", no_wrap=True), 0
+    for hh, lab in ((6, "6a"), (9, "9a"), (12, "12p"), (15, "3p"), (18, "6p"), (21, "9p")):
+        x = X(hh * 60)
+        ticks.append(" " * max(0, x - pos) + lab, style=C["muted"])
+        pos = x + len(lab)
+    out.append(fit(ticks, w))
+    tot = sum(week_mix.values()) or 1
+    easy = week_mix.get(1, 0) + week_mix.get(2, 0)
+    hard = week_mix.get(4, 0) + week_mix.get(5, 0)
+    out += _flow([T((ZONE5_GLYPH[2], ZONE5_COLOR[2]), (" easy Z1–2 ", C["ink2"]), ("{:.0f}%".format(100 * easy / tot), "bold " + C["ink"])),
+                  T((ZONE5_GLYPH[3], ZONE5_COLOR[3]), (" moderate Z3 ", C["ink2"]), ("{:.0f}%".format(100 * week_mix.get(3, 0) / tot), "bold " + C["ink"])),
+                  T((ZONE5_GLYPH[4], ZONE5_COLOR[4]), (" hard Z4–5 ", C["ink2"]), ("{:.0f}%".format(100 * hard / tot), "bold " + C["ink"])),
+                  T((LIFT_GLYPH, LIFT_COLOR), (" lifting ", C["ink2"]), (hm(week_mix.get("lift", 0)) or "0m", "bold " + C["ink"]))], w, 3, 2)
     out.append(blank())
 
-    # ---- how the week's time split by intensity
-    week = {}
-    for mix in mixes.values():
-        for k, v in mix.items():
-            week[k] = week.get(k, 0) + v
-    tot = sum(week.values()) or 1
-    easy = week.get(1, 0) + week.get(2, 0)
-    mod = week.get(3, 0)
-    hard = week.get(4, 0) + week.get(5, 0)
-    lift = week.get("lift", 0)
-    out.append(sub("Intensity this week", w))
-    out.append(fit(T("  ", _mix_bar(week, max(10, min(48, w - 4)))), w))
-    out += _flow([T((ZONE5_GLYPH[2], ZONE5_COLOR[2]), (" easy Z1–2 ", C["ink2"]), ("{:.0f}%".format(100 * easy / tot), "bold " + C["ink"])),
-                  T((ZONE5_GLYPH[3], ZONE5_COLOR[3]), (" moderate Z3 ", C["ink2"]), ("{:.0f}%".format(100 * mod / tot), "bold " + C["ink"])),
-                  T((ZONE5_GLYPH[4], ZONE5_COLOR[4]), (" hard Z4–5 ", C["ink2"]), ("{:.0f}%".format(100 * hard / tot), "bold " + C["ink"])),
-                  T((LIFT_GLYPH, LIFT_COLOR), (" lifting ", C["ink2"]), (hm(lift) if lift else "0m", "bold " + C["ink"]))], w, 3, 2)
+    # ---- time by activity, each bar split by intensity the same way
+    out.append(section_title("Time by activity", w))
+    by_type: dict[str, dict] = {}
+    for s_ in sessions:
+        e = by_type.setdefault(s_["type"], {"label": s_["label"], "n": 0, "min": 0.0, "mix": {}})
+        e["n"] += 1
+        e["min"] += s_["minutes"]
+        for k, v in _session_mix(s_).items():
+            e["mix"][k] = e["mix"].get(k, 0) + v
+    top = max(e["min"] for e in by_type.values()) or 1
+    bar_w = max(10, w - 32)
+    for t_, e in sorted(by_type.items(), key=lambda kv: -kv[1]["min"]):
+        cells = max(1, int(round(e["min"] / top * bar_w)))
+        bar = _mix_bar(e["mix"], cells)
+        out.append(fit(T(("  ", ""), K.chip(t_), (" {:<10}".format(e["label"][:10]), C["ink2"]), bar, " " * (bar_w - bar.cell_len),
+                         ("  {:>5}".format(hm(e["min"])), "bold " + C["ink"]), ("  ×{}".format(e["n"]), C["muted"])), w))
     out.append(blank())
 
     # ---- the sessions that matter: lifts first (muscle is the goal), then the hardest and longest cardio
-    lifts = [s for s in sessions if s["type"] == "STRENGTH_TRAINING"]
-    cardio = sorted((s for s in sessions if s["type"] != "STRENGTH_TRAINING" and s["strain"] is not None),
-                    key=lambda s: s["strain"], reverse=True)
-    runs = sorted((s for s in sessions if s["type"] in IMPACT and s["distance_km"]), key=lambda s: s["distance_km"], reverse=True)
+    lifts = [s_ for s_ in sessions if s_["type"] == "STRENGTH_TRAINING"]
+    cardio = sorted((s_ for s_ in sessions if s_["type"] != "STRENGTH_TRAINING" and s_["strain"] is not None),
+                    key=lambda s_: s_["strain"], reverse=True)
+    runs = sorted((s_ for s_ in sessions if s_["type"] in IMPACT and s_["distance_km"]), key=lambda s_: s_["distance_km"], reverse=True)
     key: list[dict] = []
-    for s in lifts + cardio[:1] + runs[:1]:
-        if s not in key:
-            key.append(s)
-    key.sort(key=lambda s: (s["date"], s["start"]), reverse=True)
-    out.append(sub("Key sessions", w))
-    for s in key[:4]:
-        if s["type"] == "STRENGTH_TRAINING":
-            name = split_title(s.get("split")) if s.get("split") else "Lift"
-            name += "~" if s.get("split_source") == "assumed" else ""
-            detail = " · ".join(s.get("muscles") or []) or "muscles not tagged"
+    for s_ in lifts + cardio[:1] + runs[:1]:
+        if s_ not in key:
+            key.append(s_)
+    key.sort(key=lambda s_: (s_["date"], s_["start"]), reverse=True)
+    out.append(section_title("Key sessions", w))
+    for s_ in key[:4]:
+        if s_["type"] == "STRENGTH_TRAINING":
+            name = split_title(s_.get("split")) if s_.get("split") else "Lift"
+            name += "~" if s_.get("split_source") == "assumed" else ""
+            detail = " · ".join(s_.get("muscles") or []) or "muscles not tagged"
         else:
-            name = s["label"]
+            name = s_["label"]
             bits = []
-            if s["distance_km"]:
-                bits.append("{:.1f} km".format(s["distance_km"]))
-            if s["pace_s_per_km"] and s["type"] in IMPACT:
-                bits.append("{}:{:02d}/km".format(*divmod(int(s["pace_s_per_km"]), 60)))
-            if s.get("zone"):
-                bits.append("mostly Z{}".format(s["zone"]))
+            if s_["distance_km"]:
+                bits.append("{:.1f} km".format(s_["distance_km"]))
+            if s_["pace_s_per_km"] and s_["type"] in IMPACT:
+                bits.append("{}:{:02d}/km".format(*divmod(int(s_["pace_s_per_km"]), 60)))
+            if s_.get("zone"):
+                bits.append("mostly Z{}".format(s_["zone"]))
             detail = " · ".join(bits)
-        st = s["strain"]
-        head = T((" {:<4}".format(sdate(s["date"])[:3]), C["ink2"]), K.chip(s["type"]), (" {:<10}".format(name[:10]), "bold " + C["ink"]),
-                 ("{:>6}  ".format(hm(s["minutes"])), C["ink2"]))
+        st = s_["strain"]
+        head = T(("  {:<4}".format(sdate(s_["date"])[:3]), C["ink2"]), K.chip(s_["type"]), (" {:<10}".format(name[:10]), "bold " + C["ink"]),
+                 ("{:>6}  ".format(hm(s_["minutes"])), C["ink2"]))
         tail = T(("{:>5}".format("{:.1f}".format(st) if st is not None else "—"), "bold " + K.strain_color(st)))
         room = w - head.cell_len - tail.cell_len - 1
         out.append(fit(head + T((detail[:room].ljust(room), C["muted"])) + Text(" ") + tail, w))
