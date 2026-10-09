@@ -850,89 +850,109 @@ def freshness_panel(m: dict, width: int, color: bool, sort: str = "default") -> 
 
 # ---------------------------------------------------------------- training plan
 
-def sec_training(m: dict, w: int) -> list[Text]:
-    tr = m["training"]
-    sp = tr["split"]
-    out: list[Text] = []
-    behind = tr["gym_week"] < tr["gym_goal"]
-    out += headline(w, "good" if sp["next"] else "none", ("Next: " + sp["next"] if sp["next"] else "Next: —", ""),
-                    ("{}/{}".format(tr["gym_week"], tr["gym_goal"]), "gym sessions this week"))
-    if sp["next"]:
-        out += _split_track(sp, w)
-    else:
-        out += takeaway(sp["reason"] or "", w)
-    boxes = Text("  ", no_wrap=True)
-    for i in range(tr["gym_goal"]):
-        boxes.append("■ " if i < tr["gym_week"] else "□ ", style=C["strain"][3] if i < tr["gym_week"] else C["muted"])
-    if behind:
-        boxes.append(" {} to go".format(tr["gym_goal"] - tr["gym_week"]), style=C["muted"])
-    out.append(fit(boxes, w))
-    out.append(blank())
-
-    ac = tr["acwr"]
-    lvl = "none" if ac["ratio"] is None else "good" if ac["zone"] == "sweet spot" else "flag" if ac["zone"] == "high" else "watch"
-    out.append(K.fit_parts(w, (K.ICON[lvl] + " ", "bold " + C[lvl]), ("Load ratio ", C["ink2"]),
-                           ("{:.2f}".format(ac["ratio"]) if ac["ratio"] is not None else "—", "bold " + C["ink"]),
-                           ("  " + (ac["zone"] if ac["ratio"] is not None else ac["reason"] or ""), C["ink2"])))
-    gw = max(20, min(50, w - 12))
-    bar = Text(no_wrap=True)
-    for i in range(gw):
-        x = (i + 0.5) / gw * 2.0
-        if x < S.ACWR_SWEET[0]:
-            bar.append("─", style=C["muted"])          # low
-        elif x <= S.ACWR_SWEET[1]:
-            bar.append("━", style=C["good"])           # sweet spot
-        elif x <= S.ACWR_WARN:
-            bar.append("═", style=C["watch"])          # caution
+def tex_bar(frac: float | None, width: int, color: str, marker: float | None = None, track: str = "·") -> Text:
+    """A textured bar: ▓ cells (a gritty, printed look) instead of solid blocks. `marker` (0-1)
+    draws a │ for a limit or goal."""
+    t = Text(no_wrap=True)
+    n = 0 if frac is None else int(round(max(0.0, min(1.0, frac)) * width))
+    mk = None if marker is None else min(width - 1, int(round(max(0.0, min(1.0, marker)) * width)))
+    for i in range(width):
+        if i == mk:
+            t.append("│", style=C["ink2"])
+        elif i < n:
+            t.append("▓", style=color)
         else:
-            bar.append("▓", style=C["flag"])           # risky
-    out.append(fit(T(("  0 ", C["muted"]), bar, (" 2", C["muted"])), w))
-    ticks = [" "] * (gw + 4)
-    for val in (S.ACWR_SWEET[0], S.ACWR_SWEET[1], S.ACWR_WARN):
-        c = 4 + int(val / 2.0 * gw)
-        for j, ch in enumerate("{:g}".format(val)):
-            if c + j < len(ticks):
-                ticks[c + j] = ch
-    marker = [" "] * (gw + 4)
-    if ac["ratio"] is not None:
-        marker[4 + min(gw - 1, int(ac["ratio"] / 2.0 * gw))] = "▲"
-    out.append(fit(T(("".join(marker).rstrip(), "bold " + C[lvl])), w))
-    out.append(fit(T(("".join(ticks).rstrip(), C["muted"])), w))
-    out += _flow([T((g, C["muted"])) for g in ("─ low", "━ sweet spot", "═ caution", "▓ risky",
-                                                        "· 7-day ÷ 28-day load")], w, 2, 2)
+            t.append(track, style=C["faint"])
+    return t
+
+
+LOAD_ZONES = ((0.0, 0.8, "too little", "#3987e5"), (0.8, 1.3, "sweet spot", "#0ca30c"),
+              (1.3, 1.5, "caution", "#fab219"), (1.5, 2.0, "risky", "#d03b3b"))
+
+
+def load_gauge(ratio: float | None, w: int) -> list[Text]:
+    """The 7 ÷ 28-day load ratio on a 0–2 scale. The zone you're in is drawn twice as tall in its color;
+    the others are a thin line, so where you are reads at a glance."""
+    gw = max(20, w - 4)
+    active = None if ratio is None else next((z for z in LOAD_ZONES if z[0] <= min(ratio, 1.999) < z[1]), LOAD_ZONES[-1])
+    top, bottom = Text("  ", no_wrap=True), Text("  ", no_wrap=True)
+    for z in LOAD_ZONES:
+        a, b, _, col = z
+        cells = round(b / 2 * gw) - round(a / 2 * gw)
+        if z is active:
+            top.append("▓" * cells, style=col)
+            bottom.append("▓" * cells, style=col)
+        else:
+            top.append(" " * cells)
+            bottom.append("▂" * cells, style=col)
+    out = [fit(top, w), fit(bottom, w)]
+    if ratio is not None:
+        x = min(gw - 1, round(min(2.0, ratio) / 2 * gw))
+        label = "▲ {:.2f} {}".format(ratio, active[2])
+        x = min(x, gw - len(label) + 1) if x > gw - len(label) else x
+        out.append(fit(T(("  " + " " * x, ""), (label, "bold " + C["ink"])), w))
+    names, pos = Text("  ", no_wrap=True), 0
+    for z in LOAD_ZONES:
+        a, b, name, col = z
+        x = round((a + b) / 4 * gw) - len(name) // 2
+        names.append(" " * max(1 if pos else 0, x - pos) + name, style=("bold " + col) if z is active else col)
+        pos = max(pos, x) + len(name)
+    out.append(fit(names, w))
+    return out
+
+
+def sec_training(m: dict, w: int) -> list[Text]:
+    """Split queue as readiness bars, the training-load gauge, and running/impact minutes per week
+    against your limit."""
+    tr = m["training"]
+    sp = tr.get("split") or {}
+    out: list[Text] = []
+    out += headline(w, "good" if tr["gym_week"] >= tr["gym_goal"] - 1 else "watch",
+                    ("{}/{}".format(tr["gym_week"], tr["gym_goal"]), "gym sessions this week"),
+                    ("next: " + (sp.get("next") or "—"), ""))
+    if not sp.get("next") and sp.get("reason"):
+        out += takeaway(sp["reason"], w)
     out.append(blank())
 
-    wks = tr["impact_weeks"]
-    vals = [x["minutes"] for x in wks]
-    spike = any(x["spike"] for x in wks[-2:])
-    out.append(K.fit_parts(w, (K.ICON["watch" if spike else "good"] + " ", "bold " + C["watch" if spike else "good"]),
-                           ("Running + soccer", C["ink2"]), (None, "  ·  minutes per week  ·  ▲ spike", C["muted"])))
-    if spike:
-        lim = tr.get("impact_limit")
-        out += takeaway("Jumped over 30% above your 4-week average. No running or jumping until the knee is checked"
-                        + (", then keep this week under {} min.".format(lim) if lim else "."), w)
-    if any(v for v in vals if v):
-        cw = 3 if w >= 7 + 8 * 6 else 2
-        gap = 3 if w >= 7 + 8 * 6 else 1
-        out += [fit(x, w) for x in K.columns(vals, 4, cw, gap, lambda v: C["activity"], label_w=6, fmt=lambda v: "{:.0f}m".format(v),
-                                             value_fmt=lambda v: "{:.0f}".format(v))]
-        flags = Text(" " * 7, no_wrap=True)
-        for i, x in enumerate(wks):
-            if i:
-                flags.append(" " * gap)
-            flags.append(("▲" if x["spike"] else " ").center(cw), style="bold " + C["flag"])
-        slot = cw + gap
-        lab_chars = [" "] * (7 + slot * len(wks))
-        for i, x in enumerate(wks):
-            d = date.fromisoformat(x["start"])
-            txt = "now" if x["partial"] else "{}/{}".format(d.month, d.day) if slot >= 5 else str(d.day)
-            for j, ch in enumerate(txt[:slot - 1]):
-                lab_chars[7 + i * slot + j] = ch
-        out += [fit(flags, w), fit(T(("".join(lab_chars).rstrip(), C["muted"])), w)]
-        if wks[-1]["partial"]:
-            out.append(nodata(w, "       weeks start Monday · \"now\" is this week so far"))
+    queue = sp.get("queue") or []
+    if queue:
+        out.append(section_title("Split queue", w, "ready = least-recovered muscle in that day"))
+        name_w = min(22, max(len(d_) for d_ in queue) + 2)
+        bar_w = max(8, w - name_w - 22)
+        for i, d_ in enumerate(queue):
+            fresh = (sp.get("fresh") or {}).get(d_)
+            col = S.freshness_color(fresh)
+            out.append(fit(T(("  {:<7}".format("▶ next" if i == 0 else "{}.".format(i + 1)), "bold " + C["strain"][4] if i == 0 else C["muted"]),
+                             ("{:<{}}".format(_short(d_, name_w - 1), name_w), "bold " + C["ink"] if i == 0 else C["ink2"]),
+                             tex_bar((fresh or 0) / 100, bar_w, col), ("  {:>3}% ready".format(fresh if fresh is not None else "—"), col)), w))
+        if sp.get("last_done"):
+            out.append(fit(T(("  last: {} on {}".format(sp["last_done"], sdate(sp["last_done_date"])), C["muted"])), w))
+        out.append(blank())
+
+    ac = tr.get("acwr") or {}
+    out.append(section_title("Training load", w, "last 7 days ÷ last 28 days"))
+    if ac.get("ratio") is None:
+        out += nodata_lines(w, ac.get("reason") or "needs a few weeks of activity data")
     else:
-        out.append(nodata(w, "  No running or soccer in 8 weeks."))
+        out += load_gauge(ac["ratio"], w)
+    out.append(blank())
+
+    weeks = tr.get("impact_weeks") or []
+    if weeks:
+        lim = tr.get("impact_limit")
+        out.append(section_title("Running & impact", w, "minutes per week" + (" · │ limit {:.0f}".format(lim) if lim else "")))
+        mx = max([x["minutes"] or 0 for x in weeks] + [lim or 0]) or 1
+        bw = max(10, w - 26)
+        for x in weeks:
+            v = x["minutes"]
+            col = C["watch"] if x.get("spike") else C["none"] if x.get("partial") else C["strain"][4]
+            out.append(fit(T(("  {:<7}".format("now" if x.get("partial") else sdate(x["start"])[4:]), C["muted"]),
+                             tex_bar((v or 0) / mx, bw, col, marker=(lim / mx) if lim else None, track=" "),
+                             ("  {:>4}".format(v if v is not None else "—"), "bold " + C["ink"]),
+                             ("  spike" if x.get("spike") else "", C["watch"])), w))
+        if tr.get("impact_spike_recent"):
+            out += takeaway("Over 30% above your 4-week average: no running or jumping until the knee is checked"
+                            + (", then keep this week under {:.0f} min.".format(lim) if lim else "."), w)
     return out
 
 

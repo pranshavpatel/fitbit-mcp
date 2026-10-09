@@ -149,7 +149,8 @@ def test_visual_workouts_training_body(model, width):
     assert "Intensity this week" in workouts and "Key sessions" in workouts   # day rows, intensity split, key sessions
     assert "▚" in workouts and "lifting" in workouts                          # lifting time has its own pattern
     training = "\n".join(_render(model, width, section="training"))
-    assert "▶ NEXT" in training and "┏" in training and "✓" in training     # split track, next chip highlighted
+    assert "SPLIT QUEUE" in training and "▶ next" in training and "% ready" in training   # readiness bars
+    assert "TRAINING LOAD" in training and "▲" in training and "▓" in training           # textured gauge
     body = "\n".join(_render(model, width, section="body"))
     assert "lean-bulk corridor" in body and "Target by today" in body and "●" in body
 
@@ -177,7 +178,7 @@ def test_review_fixes_in_model(model):
     text = "\n".join(_render(model, 100, section="workouts"))
     assert hardest["label"] in text                                        # the headline's session is visible
     week = "\n".join(_render(model, 100, section="training"))
-    assert "═" in week and "▓" in week and "1.3" in week                    # load zones readable without color
+    assert all(z in week for z in ("too little", "sweet spot", "caution", "risky")) and "▓" in week   # zones named, so readable without color
 
 
 def test_low_wear_day_is_missing_not_rest(tmp_path):
@@ -398,3 +399,13 @@ def test_hours_until_fresh():
 def test_single_column_draws_each_box_once(model):
     assert len(dashboard.ORDER) == len(set(dashboard.ORDER))
     assert set(dashboard.ORDER) == set(dashboard.COLUMNS[0] + dashboard.COLUMNS[1] + ["week"])
+
+
+@pytest.mark.parametrize("ratio, zone", [(0.5, "too little"), (1.0, "sweet spot"), (1.4, "caution"), (1.8, "risky"), (2.6, "risky")])
+def test_load_gauge_thickens_the_active_zone(ratio, zone):
+    lines = [l.plain for l in dashboard.load_gauge(ratio, 76)]
+    top, bottom = lines[0], lines[1]
+    assert "▂" not in top and "▓" in top                        # only the active zone reaches the top row
+    assert "{:.2f} {}".format(ratio, zone) in lines[2]
+    start = top.index("▓")
+    assert bottom[start] == "▓"                                 # and it fills both rows
