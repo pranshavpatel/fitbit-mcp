@@ -1973,8 +1973,13 @@ def brief(argv: list[str]) -> int:
     return 0
 
 
+SUBCOMMANDS = ("tag", "lift", "journal", "j", "brief", "web", "coach", "app", "priorities", "p")
+
+
 def main(argv=None) -> int:
     argv = sys.argv[1:] if argv is None else argv
+    if argv and argv[0].startswith("--") and argv[0][2:] in SUBCOMMANDS:
+        argv = [argv[0][2:]] + argv[1:]          # `fitdash --priorities …` works like `fitdash priorities …`
     if argv[:1] == ["tag"]:
         return tag(argv[1:])
     if argv[:1] == ["lift"]:

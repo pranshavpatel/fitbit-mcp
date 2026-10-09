@@ -132,3 +132,15 @@ def test_journal_section_shows_priority_history(pmodel):
     buf = io.StringIO()
     dashboard.render(pmodel, dashboard.make_console(100, no_color=True, file=buf), 100, "journal")
     assert "Priorities · 7 days" in buf.getvalue()
+
+
+def test_dashed_subcommand_works(tmp_path, monkeypatch):
+    monkeypatch.setenv("FITBIT_MCP_HOME", str(tmp_path))
+    assert dashboard.main(["--priorities", "set", "a", "b"]) == 0
+    assert [i["text"] for i in next(iter(PR.load(tmp_path).values()))["items"]] == ["a", "b"]
+
+
+def test_dashed_subcommand_works(tmp_path, monkeypatch):
+    monkeypatch.setenv("FITBIT_MCP_HOME", str(tmp_path))
+    assert dashboard.main(["--priorities", "set", "a", "b"]) == 0
+    assert [i["text"] for i in next(iter(PR.load(tmp_path).values()))["items"]] == ["a", "b"]
