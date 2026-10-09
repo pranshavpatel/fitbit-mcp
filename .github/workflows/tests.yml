@@ -1,0 +1,23 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: MCP server tests
+        run: |
+          uv sync --frozen
+          uv run pytest
+      - name: fitdash tests
+        run: uv run --no-project --with rich --with pytest pytest -p no:cacheprovider .claude/skills/stats/tests

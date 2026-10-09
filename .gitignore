@@ -1,0 +1,29 @@
+# Python / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Credentials and health data must never be committed. They normally live in
+# ~/.fitbit-mcp (outside this repo); these patterns are a safety net.
+config.json
+client_secret*.json
+.credentials/
+credentials/
+.fitbit-mcp/
+exports/
+raw/
+takeout/
+*.sqlite3
+*.sqlite3-*
+*.zip
+*.tgz
+
+# Generated dashboards contain personal health data
+dashboard/
+
+# Local editor / agent settings
+.claude/settings.local.json
+.DS_Store
+*.tmp
+docs/demo/phone.html

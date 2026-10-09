@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "fitbit-local": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--quiet",
+        "--frozen",
+        "--directory",
+        "${CLAUDE_PROJECT_DIR:-.}",
+        "fitbit-mcp"
+      ],
+      "env": {
+        "FITBIT_MCP_HOME": "${FITBIT_MCP_HOME:-~/.fitbit-mcp}"
+      }
+    }
+  }
+}

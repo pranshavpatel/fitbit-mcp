@@ -1,0 +1,29 @@
+[project]
+name = "fitbit-mcp"
+version = "0.1.0"
+description = "Local, read-only MCP server for importing and exploring your own Fitbit / Google Health data"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=2.3,<3",
+    "requests>=2.32.4,<3",
+]
+
+[project.scripts]
+fitbit-mcp = "fitbit_mcp.server:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fitbit_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+# the restart-recovery tests deliberately kill a worker thread to simulate a dying server process
+filterwarnings = ["ignore::pytest.PytestUnhandledThreadExceptionWarning"]

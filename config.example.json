@@ -1,0 +1,12 @@
+{
+  "fitbit_client_id": "YOUR_FITBIT_APP_CLIENT_ID",
+  "fitbit_client_secret": "",
+  "fitbit_redirect_uri": "http://127.0.0.1:8765/callback",
+  "ghealth_dir": "~/.config/ghealth",
+  "timezone": "",
+  "history_floor": "",
+  "takeout_max_total_bytes": 21474836480,
+  "takeout_max_file_bytes": 4294967296,
+  "takeout_max_files": 500000,
+  "takeout_max_ratio": 200
+}
