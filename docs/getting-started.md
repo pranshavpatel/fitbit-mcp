@@ -74,6 +74,7 @@ Create `~/.fitbit-mcp/coaching/stats.json`. Every key is optional:
   "timezone": "Europe/London",
   "bedtime_goal": "23:30",
   "wake_anchor": "07:30",
+  "sleep_need": "8:00",
   "steps_goal": 10000,
   "gym_goal": 4,
   "split": ["push (chest/tri)", "pull (back/bi)", "legs/abs", "arms"],
@@ -93,6 +94,7 @@ Create `~/.fitbit-mcp/coaching/stats.json`. Every key is optional:
 | --- | --- |
 | `timezone` | IANA zone for every date and clock time. Default: `$FITDASH_TZ`, then this key, then your computer's zone. |
 | `bedtime_goal`, `wake_anchor` | Drive tonight's "asleep by" time and the bed & wake chart. |
+| `sleep_need` | Your base sleep need. Leave it out to learn it from your nights (see [scores.md](scores.md#sleep)). |
 | `split`, `split_anchor` | Your lifting rotation. The anchor is one session you know, and later lifts follow the queue. |
 | `impact_types` | Workout types counted for the running/jumping spike warning. |
 | `experiment` | A sleep experiment tracked night by night. |

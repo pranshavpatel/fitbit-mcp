@@ -128,18 +128,31 @@ def test_zone_calibration_from_thresholds():
 # ---------------------------------------------------------------- sleep
 
 def test_baseline_sleep_need_calibration_and_default():
-    assert S.baseline_sleep_need([400, 420]) == (S.NEED_DEFAULT_MIN, False)
-    need, ok = S.baseline_sleep_need([300] * 10)
-    assert ok and need == S.NEED_MIN
-    need, _ = S.baseline_sleep_need([600] * 10)
-    assert need == S.NEED_MAX
+    assert S.baseline_sleep_need([400, 420, 410]) == (S.NEED_DEFAULT_MIN, False)
+    need, ok = S.baseline_sleep_need([300] * 11)
+    assert ok and need == S.NEED_MIN                                   # clamped to 7 h
+    need, _ = S.baseline_sleep_need([600] * 11)
+    assert need == S.NEED_MAX                                          # clamped to 9 h
+    assert S.baseline_sleep_need([300] * 11, fixed=480) == (480, True)  # "sleep_need" in stats.json wins
 
 
-def test_sleep_debt_weights_and_missing():
-    assert S.sleep_debt([None, None, None], 480) == 0
-    assert S.sleep_debt([480, 480, 480], 480) == 0
-    assert S.sleep_debt([240, None, None], 480) == 240
-    assert S.sleep_debt([240, 480, 480], 480) == pytest.approx(0.5 * 240)
+def test_baseline_leaves_out_rebound_nights():
+    # boom-bust: every short night (4 h) is followed by a 10 h rebound
+    boom_bust = [240, 600] * 10 + [450, 460, 470, 455, 465, 450, 470, 460]
+    need, _ = S.baseline_sleep_need(boom_bust)
+    assert need < 480                       # the 10 h nights are left out; ordinary nights decide
+    with_rebounds = S.percentile([v for v in boom_bust[1:]], 0.75)
+    assert with_rebounds > 590              # what the old method would have said
+
+
+def test_sleep_debt_balance_repays_and_fades():
+    assert S.sleep_debt([None] * 7, 480) == 0
+    assert S.sleep_debt([480] * 7, 480) == 0
+    assert S.sleep_debt([240], 480) == 240                             # one 4 h night: 4 h of debt
+    assert S.sleep_debt([240, 720], 480) == 0                          # a 12 h night pays it back
+    assert S.sleep_debt([240, 600], 480) == pytest.approx(240 * S.DEBT_DECAY - 120)
+    assert S.sleep_debt([240, None, None], 480) == pytest.approx(240 * S.DEBT_DECAY ** 2)   # fades
+    assert S.sleep_debt([240] + [480] * 10, 480) == 0                  # older than a week: gone
 
 
 def test_sleep_need_components():

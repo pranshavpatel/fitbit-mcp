@@ -37,8 +37,17 @@ is "—".
 
 ## Sleep
 
-**Sleep need** = your baseline (75th percentile of the last 28 nights, clamped to 7–9 h)
-+ a strain adjustment for yesterday + ½ of recent sleep debt − credit for naps.
+**Sleep need** = baseline + a strain adjustment for yesterday + ½ of your sleep debt (at most
+1 h) − credit for naps.
+
+- **Baseline**: the 75th percentile of the last 28 nights, which is roughly what you sleep when
+  nothing cuts the night short, clamped to the 7–9 h adult range. Nights right after one under 6 h
+  are left out: they're *rebound* sleep, your body repaying debt, and with an irregular schedule
+  they'd make your normal need look much higher than it is. You can set it yourself with
+  `"sleep_need": "8:00"` in `stats.json`, which is worth doing until you have a few regular weeks.
+- **Sleep debt**: a running balance over the last 7 nights. A night under your baseline adds the
+  shortfall, a night over it pays debt back, the balance never goes below zero, and older debt fades
+  15 % per night. Only half is added to tonight's need, because one night can't repay it all.
 
 **Sleep score 0–100** has the four components WHOOP describes for its 2025 Sleep Performance. WHOOP
 doesn't publish the weights, so these are ours:
@@ -53,7 +62,7 @@ doesn't publish the weights, so these are ours:
 Missing parts are re-weighted. Bands: ≥ 90 optimal, 70–89 sufficient, < 70 poor.
 
 **Tonight's "asleep by"** = tonight's need counted back from your `wake_anchor`. Tonight's need
-includes today's strain and half the average shortfall of the last 3 nights.
+includes today's strain and half of the debt balance, including last night.
 
 ## Training load
 

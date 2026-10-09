@@ -552,13 +552,14 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
     asleep = {x: n["main"]["minutes_asleep"] for x, n in nights.items() if n["main"] and n["main"].get("minutes_asleep") is not None}
     nap_min = {x: sum(s.get("minutes_asleep") or 0 for s in n["naps"]) for x, n in nights.items()}
     need, perf = {}, {}
+    fixed_need = hhmm(cfg.get("sleep_need")) if cfg.get("sleep_need") else None   # "8:00" in stats.json
     for x in span(day, hist + BASELINE_DAYS):
         if x not in asleep:
             continue
         xd = date.fromisoformat(x)
-        base_need, _ = S.baseline_sleep_need(asleep.get(y) for y in span(xd - timedelta(days=1), BASELINE_DAYS))
-        prev = [asleep.get(iso(xd - timedelta(days=i))) for i in (1, 2, 3)]
-        debt = S.sleep_debt(prev, base_need)
+        base_need, _ = S.baseline_sleep_need([asleep.get(y) for y in span(xd - timedelta(days=1), BASELINE_DAYS + 1)],
+                                             fixed_need)
+        debt = S.sleep_debt([asleep.get(y) for y in span(xd - timedelta(days=1), S.DEBT_NIGHTS)], base_need)
         yday = iso(xd - timedelta(days=1))
         need[x] = S.sleep_need(base_need, strain_by_day.get(yday), debt, nap_min.get(yday, 0))
         perf[x] = S.sleep_performance(asleep[x], need[x].total)
@@ -654,8 +655,8 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
             "consistency": (sleep_scores[d].components.get("consistency") or {}).get("score") if d in sleep_scores else None,
         })
     # going into tonight: last night counts toward debt, today's strain (so far) and naps adjust the need
-    base_tonight, _ = S.baseline_sleep_need(asleep.get(y) for y in span(day, BASELINE_DAYS))
-    debt_tonight = S.sleep_debt([asleep.get(iso(day - timedelta(days=i))) for i in (0, 1, 2)], base_tonight)
+    base_tonight, _ = S.baseline_sleep_need([asleep.get(y) for y in span(day, BASELINE_DAYS + 1)], fixed_need)
+    debt_tonight = S.sleep_debt([asleep.get(y) for y in span(day, S.DEBT_NIGHTS)], base_tonight)
     need_tonight = S.sleep_need(base_tonight, strain_by_day.get(d), debt_tonight, nap_min.get(d, 0))
     wake = hhmm(cfg.get("wake_anchor")) if cfg.get("wake_anchor") else None
     sleep_model["tonight"] = {"need": asdict(need_tonight), "debt": round(debt_tonight),

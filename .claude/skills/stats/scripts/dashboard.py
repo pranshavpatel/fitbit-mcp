@@ -325,10 +325,10 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
         out.append(blank())
         nd = sl.get("need") or {}
         out += details([
-            ("Need", "{} (base {} + debt {} + strain {}{})".format(
+            ("Need", "{} (base {} + ½ of debt {} + strain {}{})".format(
                 hm(nd.get("total")), hm(nd.get("base")), hm(nd.get("debt_adj")), hm(nd.get("strain_adj")),
                 " − naps {}".format(hm(nd.get("nap_credit"))) if nd.get("nap_credit") else "")),
-            ("Short going into tonight", "{}/night".format(hm((sl.get("tonight") or {}).get("debt")))),
+            ("Sleep debt going into tonight", hm((sl.get("tonight") or {}).get("debt"))),
             ("Restorative", "{} ({}%)".format(hm(sl["restorative_min"]), sl["restorative_pct"])),
             ("Awake", "{}×".format(sl["awake_count"]) if sl["awake_count"] is not None else "—"),
             ("Naps", ", ".join(hm(n["asleep"]) for n in sl.get("naps") or []) or "none"),
@@ -1209,7 +1209,7 @@ def _attention(m: dict) -> list[tuple[str, str]]:
     sl = m["sleep"]
     debt = (sl.get("tonight") or {}).get("debt")
     if debt and debt >= 60:
-        items.append(("watch", "Averaging {} short of your sleep need over the last 3 nights".format(hm(debt))))
+        items.append(("watch", "Sleep debt of {} built up over the last week".format(hm(debt))))
     said = any("consistency" in txt for _, txt in items)        # the sleep-score line may already name it
     if sl.get("consistency") is not None and sl["consistency"] < 50 and not said:
         items.append(("watch", "Bed and wake times vary a lot (consistency {}%)".format(sl["consistency"])))

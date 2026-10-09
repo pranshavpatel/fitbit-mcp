@@ -109,15 +109,17 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   bed), consistency 15 % (bed/wake regularity over the last 4 nights) and sleep stress 15 %
   (100 − % of the night's 5-minute HRV readings below the user's own 20th percentile from the
   previous 28 nights). Missing parts are re-weighted. Bands: ≥ 90 optimal, 70–89 sufficient,
-  < 70 poor. Need = personal baseline (75th percentile of the last 28 nights, clamped to 7–9 h) +
-  strain adjustment + ½ of sleep debt − nap credit. Recovery uses this score as its sleep input.
+  < 70 poor. Need = personal baseline + strain adjustment + ½ of sleep debt (max 1 h) − nap
+  credit. Baseline = 75th percentile of the last 28 nights, clamped to 7–9 h, leaving out rebound
+  nights (any night after one under 6 h), or `"sleep_need": "8:00"` in stats.json when set. Sleep
+  debt is a running 7-night balance: short nights add, long nights pay back, older debt fades 15 %
+  a night. Recovery uses this score as its sleep input.
 - **Load ratio.** Mean daily TRIMP over 7 days ÷ over 28 days. 0.8–1.3 is the sweet spot;
   above 1.5 is a warning.
 - **Impact spike.** A week of running + soccer more than 1.3× the previous 4-week average
   (and ≥ 60 min).
 - **Tonight's bedtime.** Sleep need going into tonight (baseline + today's strain + ½ of the
-  average nightly shortfall over the last 3 nights, including last night) counted back from the
-  wake anchor. The experiment's lights-out time is shown as the latest limit.
+  sleep-debt balance including last night) counted back from the wake anchor. The experiment's lights-out time is shown as the latest limit.
 - **Wear coverage.** A day with under 10 h of activity-level plus sleep minutes counts as not
   worn: its strain is a gap (·), never a rest day, so it can't drag down the load ratio.
 - **Muscle freshness.** A fatigue model in `scripts/scores.py`. Each session adds fatigue to the

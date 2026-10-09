@@ -12,7 +12,7 @@ import statistics
 from dataclasses import dataclass, field
 from typing import Iterable, Sequence
 
-FORMULA_VERSION = "stats-scores v1.0"
+FORMULA_VERSION = "stats-scores v1.1"
 
 # ---------------------------------------------------------------- baselines
 
@@ -236,28 +236,46 @@ def strain_target(recovery_score: float | None) -> tuple[float, float] | None:
 
 NEED_DEFAULT_MIN = 480.0
 NEED_MIN, NEED_MAX = 420.0, 540.0       # personal baseline need is clamped to 7-9 h
-DEBT_WEIGHTS = (0.5, 0.3, 0.2)          # last night counts most
+REBOUND_AFTER_MIN = 360.0               # a night after one under 6 h is a rebound: left out of the baseline
+DEBT_NIGHTS = 7                         # the debt balance looks back a week
+DEBT_DECAY = 0.85                       # each night, older debt fades by 15 %
+DEBT_REPAY_RATE = 1.0                   # an hour over need pays back an hour of debt
 DEBT_ADJ_RATE, DEBT_ADJ_CAP = 0.5, 60.0
 STRAIN_ADJ_FREE, STRAIN_ADJ_PER_POINT, STRAIN_ADJ_CAP = 10.0, 4.0, 45.0
 NAP_CREDIT_CAP = 90.0
 
 
-def baseline_sleep_need(asleep_history: Iterable[float | None]) -> tuple[float, bool]:
+def baseline_sleep_need(nights: Sequence[float | None], fixed: float | None = None) -> tuple[float, bool]:
     """Personal need = 75th percentile of recent nights (what you sleep when nothing cuts it short),
-    clamped to 7-9 h. Returns (minutes, calibrated?)."""
-    vals = [v for v in asleep_history if v is not None]
+    clamped to 7-9 h, leaving out *rebound* nights: a night that follows one under REBOUND_AFTER_MIN
+    is the body repaying debt, not its normal need, and with a boom-bust schedule those nights would
+    inflate the baseline. `nights` is oldest first; the first one only serves as the night before the
+    second. `fixed` (minutes, from "sleep_need" in stats.json) overrides all of it.
+    Returns (minutes, calibrated?)."""
+    if fixed:
+        return clamp(fixed, NEED_MIN, NEED_MAX), True
+    nights = list(nights)
+    vals = [a for prev, a in zip(nights, nights[1:])
+            if a is not None and not (prev is not None and prev < REBOUND_AFTER_MIN)]
+    if len(vals) < 7:                           # too few ordinary nights: fall back to all of them
+        vals = [a for a in nights[1:] if a is not None]
     if len(vals) < 7:
         return NEED_DEFAULT_MIN, False
     return clamp(percentile(vals, 0.75), NEED_MIN, NEED_MAX), True
 
 
-def sleep_debt(recent_asleep: Sequence[float | None], base_need: float) -> float:
-    """Weighted shortfall over the last 3 nights (most recent first). Missing nights are skipped."""
-    pairs = [(w, a) for w, a in zip(DEBT_WEIGHTS, recent_asleep) if a is not None]
-    if not pairs:
-        return 0.0
-    wsum = sum(w for w, _ in pairs)
-    return sum(w * max(0.0, base_need - a) for w, a in pairs) / wsum
+def sleep_debt(nights: Sequence[float | None], base_need: float) -> float:
+    """Running sleep-debt balance over the last DEBT_NIGHTS nights, oldest first: each night adds its
+    shortfall and a long night pays debt back (surplus × DEBT_REPAY_RATE), the balance never drops
+    below zero, and older debt fades by DEBT_DECAY per night. Missing nights change nothing."""
+    balance = 0.0
+    for a in list(nights)[-DEBT_NIGHTS:]:
+        balance *= DEBT_DECAY
+        if a is None:
+            continue
+        diff = base_need - a
+        balance = max(0.0, balance + (diff if diff > 0 else diff * DEBT_REPAY_RATE))
+    return balance
 
 
 @dataclass
