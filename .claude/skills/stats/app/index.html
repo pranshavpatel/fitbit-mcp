@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="fitdash">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="app.css">
+<title>fitdash</title>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <div>
+      <div class="eyebrow" id="top-eyebrow">fitdash</div>
+      <h1 id="top-title">Today</h1>
+    </div>
+    <button class="sync" id="sync-btn" type="button" aria-label="Sync now">
+      <span class="sync-dot"></span><span id="sync-label">—</span>
+    </button>
+  </div>
+</header>
+<main id="view" aria-live="polite">
+  <div class="loading"><div class="spinner"></div><p>Loading your data…</p></div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<nav class="tabs" aria-label="Sections">
+  <a href="#today" data-tab="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg><span>Today</span></a>
+  <a href="#sleep" data-tab="sleep"><svg viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg><span>Sleep</span></a>
+  <a href="#train" data-tab="train"><svg viewBox="0 0 24 24"><path d="M3 10v4M6 7v10M18 7v10M21 10v4M6 12h12"/></svg><span>Training</span></a>
+  <a href="#log" data-tab="log"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Log</span></a>
+  <a href="#trends" data-tab="trends"><svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9"/></svg><span>Trends</span></a>
+</nav>
+<script src="app.js"></script>
+</body>
+</html>

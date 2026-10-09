@@ -91,8 +91,9 @@ fitdash journal habits                            # the list and keys
 | `fitdash coach --install` | Check every 30 min for a due note (launchd) |
 | `fitdash brief [--print]` | Sync, then a macOS notification with today's call |
 | `fitdash brief --install [HH:MM]` | Run the brief every morning |
-| `fitdash --html [PATH]` | Write the dashboard as a phone-friendly page |
-| `fitdash web --install` | Refresh that page every 30 min and serve it on 127.0.0.1:8787 |
+| `fitdash app [--port 8787]` | Serve the phone app on 127.0.0.1 (view everything, log habits and lifts) |
+| `fitdash web --install` | Run the phone app in the background and keep the terminal-style page (`/terminal`) fresh |
+| `fitdash --html [PATH]` | Write the terminal-style dashboard as one HTML page |
 
 All `--install` commands have `--uninstall`, and `brief` and `web` also have `--status`. Details:
 [automation.md](automation.md).

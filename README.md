@@ -14,7 +14,7 @@ log, habit tracking and an AI coach.**
 | --- | --- |
 | **[fitbit-local MCP server](docs/mcp-server.md)** | Connects your Google Health (or legacy Fitbit) account read-only, imports your full history into a local SQLite database, keeps it synced, and gives Claude 13 tools to query, summarize and export it. Also imports Google Takeout. |
 | **[`fitdash`](docs/fitdash.md)** | A terminal dashboard on top of that database: Recovery %, Strain 0–21 and Sleep score rings, sleep stages and timing, HRV / resting HR trends, workouts and HR zones, training load, muscle freshness, lifting volume and progress, habits, body weight and more. |
-| **[Coach, brief & phone page](docs/automation.md)** | A Claude-written coach note in the morning, after workouts and in the evening; a 9 a.m. notification; and the dashboard as a web page you can open on your phone over Tailscale. |
+| **[Phone app, coach & brief](docs/automation.md)** | A WHOOP-style phone app (view everything, log habits and lifts) served from your computer over Tailscale; a Claude-written coach note in the morning, after workouts and in the evening; and a 9 a.m. notification. |
 | **[Claude Code skills](.claude/skills)** | `/stats` (sync, show the dashboard, coach) and `daily-health-brief`, so you can just ask Claude "show me my stats" or "I did bench 3x8 at 60". |
 
 ## A quick look
@@ -27,11 +27,14 @@ log, habit tracking and an AI coach.**
 | **Journal & habits, linked to next-morning recovery** | **Sleep score, stages and 14 nights of timing** |
 | ![Journal](docs/demo/journal.svg) | ![Sleep](docs/demo/sleep.svg) |
 
-<details><summary>On a phone (Safari, over Tailscale)</summary>
+### The phone app
 
-<img src="docs/demo/phone.png" width="360" alt="fitdash on a phone">
+A WHOOP-style web app served by your own computer and opened over Tailscale. It shows everything
+the dashboard does, and you can tap to log habits and lifts.
 
-</details>
+| Today | Sleep | Training | Log | Trends |
+| --- | --- | --- | --- | --- |
+| <img src="docs/demo/app_today.png" width="150"> | <img src="docs/demo/app_sleep.png" width="150"> | <img src="docs/demo/app_train.png" width="150"> | <img src="docs/demo/app_log.png" width="150"> | <img src="docs/demo/app_trends.png" width="150"> |
 
 ## Quick start
 
@@ -68,7 +71,7 @@ fitdash lift bench 3x8@60 row 4x10@50      # log sets (kg; 25lb for pounds; no @
 fitdash journal +mobility -junk-food note "slept well"
 fitdash coach run                          # a Claude-written note if one is due
 fitdash brief --install                    # a notification every morning
-fitdash web --install                      # the dashboard as a phone-friendly page
+fitdash web --install                      # the phone app, running in the background
 ```
 
 Full reference: [docs/fitdash.md](docs/fitdash.md).
@@ -107,6 +110,7 @@ tests/                   server tests (synthetic fakes of the Google/Fitbit APIs
 .claude/skills/daily-health-brief/   a lighter one-screen brief
 docs/                    guides, plus demo/ (screenshots and the script that makes them)
 bin/install-fitdash.sh   installs the `fitdash` command
+.claude/skills/stats/app/  the phone app (HTML/CSS/JS, no build step)
 ```
 
 More in [docs/architecture.md](docs/architecture.md), including how to add a metric or a section.

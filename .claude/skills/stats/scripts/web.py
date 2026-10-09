@@ -1,7 +1,8 @@
-"""fitdash on your phone: the dashboard as a web page, served only to your own devices.
+"""fitdash on your phone: the phone app (appserver.py) and the terminal-style page, served only to
+your own devices.
 
     fitdash --html [PATH]        write the dashboard as one HTML page (default ~/.fitbit-mcp/web/index.html)
-    fitdash web --install        refresh the page every 30 min and serve it on 127.0.0.1:8787
+    fitdash web --install        run the phone app on 127.0.0.1:8787 and refresh the terminal page every 30 min
     fitdash web --status | --uninstall
 
 The server listens on 127.0.0.1 only, so nothing on your Wi-Fi or the internet can reach it.
@@ -137,11 +138,11 @@ def install(home: Path, every_min: int = 30) -> int:
     web = default_path(home).parent
     web.mkdir(parents=True, exist_ok=True)
     log = str(home / "web.log")
-    py = shutil.which("python3") or "/usr/bin/python3"
     ok = _load(LABELS["server"], {
         "Label": LABELS["server"],
-        "ProgramArguments": [py, "-m", "http.server", str(PORT), "--bind", "127.0.0.1", "--directory", str(web)],
-        "KeepAlive": True, "RunAtLoad": True, "StandardOutPath": log, "StandardErrorPath": log,
+        "ProgramArguments": _fitdash() + ["app", "--port", str(PORT)],    # the phone app (appserver.py)
+        "KeepAlive": True, "RunAtLoad": True, "EnvironmentVariables": {"PATH": _path_env()},
+        "StandardOutPath": log, "StandardErrorPath": log,
     })
     ok = _load(LABELS["refresh"], {
         "Label": LABELS["refresh"],
@@ -152,7 +153,7 @@ def install(home: Path, every_min: int = 30) -> int:
     if not ok:
         return 1
     print("page refreshes every {} min → {}".format(every_min, default_path(home)))
-    print("served on http://127.0.0.1:{} (this Mac only)".format(PORT))
+    print("phone app on http://127.0.0.1:{} (this Mac only); the terminal page is at /terminal".format(PORT))
     ts = tailscale_bin()
     if ts:
         print("for your phone, run once:  {} serve --bg {}".format(ts, PORT))

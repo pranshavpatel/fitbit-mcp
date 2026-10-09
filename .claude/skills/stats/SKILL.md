@@ -53,7 +53,7 @@ uv run --quiet --script <skill>/scripts/dashboard.py --no-color --width 80 [flag
 | sets per muscle, "am I doing enough volume", lift progress | `--section lifting` |
 | "what affects my recovery", "why is my recovery low" | `--section insights` |
 | "I had two beers", "stretched tonight", "knee hurts", a journal note | run `<script> journal +alcohol` / `+stretch` / `+knee-pain` / `note "…"` (`yesterday` or a date first for another day; before noon the default is yesterday), then `--section journal`. `<script> journal habits` lists the keys |
-| "fitdash on my phone", phone access | the page is set up with `<script> web --install` (status: `web --status`); the user reaches it over Tailscale (`tailscale serve --bg 8787`) or SSHes in and runs `fitdash`. The user is fine with their data being public, so publishing it elsewhere is OK if they ask |
+| "fitdash on my phone", phone app | the phone app runs via `<script> web --install` (status: `web --status`; foreground: `<script> app`); the user opens it over Tailscale (`tailscale serve --bg 8787`). It shows everything and logs habits and lifts. Their data may be public if they ask, but never expose the app with `tailscale funnel` without authentication: it has write endpoints |
 | "coach me", "write my coach note", a note for the Today box | `<script> coach run --kind morning\|activity\|evening --force`, or write it yourself and save it with `<script> coach set <kind> "text"` |
 | morning notification / "brief me every morning" | `<script> brief --install [HH:MM]` (status: `brief --status`, remove: `brief --uninstall`) |
 | this week / month, trends, "how did I do" | `--period week` or `--period month` |
@@ -167,25 +167,10 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   `--install` adds a launchd agent (`~/Library/LaunchAgents/com.fitdash.brief.plist`), by default
   30 min after `wake_anchor` (override with `brief_time` in stats.json); output goes to
   `~/.fitbit-mcp/brief.log`. Only install or uninstall it when the user asks.
-- **Phone page.** `fitdash --html` writes the dashboard (64 columns, single column) as one
-  self-contained page in `~/.fitbit-mcp/web/index.html`: inline colors, no scripts, nothing
-  loaded from the internet. `fitdash web --install` adds two launchd agents: one refreshes the page
-  every 30 min (syncing first when the data is over 30 min old), and one serves it with
-  `python -m http.server` bound to 127.0.0.1:8787, so nothing on the LAN can reach it. Tailscale
-  (`tailscale serve --bg 8787`) makes it reachable from the user's own devices only. The user
-  has said they don't mind their health data being public, so a public page (e.g. Tailscale
-  Funnel or an artifact) is fine if they ask for one; credentials never go anywhere.
-- **Coach note.** The Today box shows a COACH note under the verdict: the newest note for today
-  from `~/.fitbit-mcp/coaching/notes.json`, else a rule-based one marked "auto". A launchd agent
-  (`fitdash coach --install`, every 30 min) writes one when due: **morning** 05:00–12:00 once last
-  night's sleep is in (or from 10:30), **activity** for a workout of 10+ min that ended in the last
-  4 h with no note written since, **evening** from 21:00 (or 90 min before tonight's asleep-by, not
-  before 20:00). Until 04:00 it's still the previous day. Notes are written by `claude -p` with
-  no tools, no MCP servers and no saved session: it gets a compact JSON summary (scores, sleep,
-  workouts, training, journal, personal patterns, profile.md) and returns ≤ 75 words. The 9:00 brief
-  writes the morning note first and sends it as the notification. Notes you write in a chat follow
-  the same rules: lead with what matters, cite 1–2 numbers, 1–2 concrete actions, no filler, the
-  knee rule, not medical advice.
+- **Phone app.** `appserver.py` (stdlib HTTP on 127.0.0.1:8787) serves `app/` (plain HTML/CSS/JS,
+  five tabs: Today, Sleep, Training, Log, Trends), `/api/model` (the same model as `--json`) and
+  writes to the journal and lift log (JSON + `X-Fitdash: 1` header, no CORS). The launchd agent
+  from `web --install` runs it; the terminal-style page stays at `/terminal`.
 - **Stress 0–3.** Needs all-day heart rate. With workout-window HR only, it shows "—" and says
   why.
 

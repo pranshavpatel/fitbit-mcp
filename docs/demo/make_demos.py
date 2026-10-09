@@ -5,7 +5,7 @@
 # ///
 """Regenerate the screenshots in docs/demo from SYNTHETIC data.
 
-    uv run --script docs/demo/make_demos.py            # SVGs (+ phone.png if Google Chrome is installed)
+    uv run --script docs/demo/make_demos.py            # terminal SVGs (phone app: make_app_demos.py)
 
 Nothing here reads your own ~/.fitbit-mcp: it builds a throwaway data home with the test suite's
 synthetic Fitbit history (fixture_db.py), a made-up lift log, journal and coach note, then renders
@@ -17,7 +17,6 @@ import json
 import os
 import random
 import shutil
-import subprocess
 import sys
 import tempfile
 from datetime import date, datetime, timedelta
@@ -55,10 +54,9 @@ LIFTS = {
     -3: "bench 4x8@62.5 incline db press 3x10@22 ohp 3x8@37.5 pushdown 3x12@27.5 lateral raise 3x15@8",
     -1: "row 4x10@52.5 pullups 4x8 curls 3x12@14 hammer curl 3x12@12",
 }
-COACH = ("Recovery is yellow at 45%: HRV is 7 ms under your average and you've averaged 1h22 short of "
-         "your sleep need for three nights. Chest/tri is 73% fresh, so lift as planned but cap strain near 12, "
-         "no extra conditioning. The bigger win is tonight: asleep by 11:39 for experiment night 9 of 14, "
-         "phone charging outside the bedroom.")
+COACH = ("Recovery is {band} at {rec}%: HRV is {hrv_gap} ms under your average after {asleep} asleep, and "
+         "you're carrying {debt} of sleep debt. {split} is {fresh}% fresh, so lift as planned but cap strain "
+         "near 12, no extra conditioning. The bigger win is tonight: asleep by {by} to start paying the debt back.")
 
 
 def make_home() -> None:
@@ -87,8 +85,17 @@ def make_home() -> None:
                      "note": ""}
     jd[(DAY - timedelta(days=1)).isoformat()]["note"] = "Good pull session, slept with the phone outside the room."
     J.save(HOME, jd)
+    # the sample coach note quotes the synthetic day's real numbers, so it can't drift from the rings
+    m = model()
+    sp, tn = m["training"]["split"], m["sleep"]["tonight"]
+    hrv_gap = round(m["baselines"]["hrv"]["mean"] - m["series"]["hrv"][-1])
+    by = int(tn["asleep_by"]) % 1440
+    text = COACH.format(band=m["recovery"]["band"], rec=m["recovery"]["score"], hrv_gap=hrv_gap,
+                        asleep=D._hm(m["sleep"]["asleep"]), debt=D._hm(tn["debt"]),
+                        split=sp["next"][0].upper() + sp["next"][1:], fresh=sp["fresh"][sp["next"]],
+                        by="{}:{:02d}".format((by // 60) % 12 or 12, by % 60) + (" am" if by < 720 else " pm"))
     CO.save(HOME, [{"date": DAY.isoformat(), "at": NOW.strftime("%Y-%m-%dT%H:%M"), "kind": "morning",
-                    "text": COACH, "source": "claude"}])
+                    "text": text, "source": "claude"}])
 
 
 def model() -> dict:
@@ -122,17 +129,6 @@ def main() -> int:
     ]
     for name, width, section, title in shots:
         svg(name, width, lambda con, w=width, s=section: dashboard.render(m, con, w, s), title)
-    page = HERE / "phone.html"
-    W.write(page, W.to_html(lambda con: dashboard.render(m, con, W.PHONE_WIDTH), W.PHONE_WIDTH,
-                            updated="Thu 8 Oct, 11:20 AM"))
-    chrome = next((c for c in ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-                               shutil.which("google-chrome") or "", shutil.which("chromium") or "") if c and Path(c).exists()), None)
-    if chrome:
-        subprocess.run([chrome, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=2",
-                        "--window-size=500,1300", "--screenshot=" + str(HERE / "phone.png"), page.as_uri()],
-                       capture_output=True, timeout=60)
-        print("wrote docs/demo/phone.png")
-    page.unlink()
     shutil.rmtree(HOME, ignore_errors=True)
     return 0
 

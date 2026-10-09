@@ -798,6 +798,7 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
 
     # ---- verdict
     model["verdict"] = _verdict(model)
+    model["attention"] = attention(model)
 
     # ---- coach note: the newest written note for today, else a rule-based one from the same numbers
     note = CO.pick(cfg.get("coach_notes") or [], d, now) if today_partial else \
@@ -1179,6 +1180,29 @@ def _verdict(m: dict) -> dict:
     else:
         headline, level = "Recover: keep it light (target strain under {:.0f})".format(target[1]), "flag"
     return {"headline": headline, "level": level, "reasons": reasons}
+
+
+def attention(m: dict) -> list[list[str]]:
+    """Only what needs action today, most important first."""
+    items = [(lvl, txt) for lvl, txt in m["verdict"]["reasons"] if lvl in ("flag", "watch")]
+    sl = m["sleep"]
+    debt = (sl.get("tonight") or {}).get("debt")
+    if debt and debt >= 60:
+        items.append(("watch", "Sleep debt of {} built up over the last week".format(_hm(debt))))
+    said = any("consistency" in txt for _, txt in items)        # the sleep-score line may already name it
+    if sl.get("consistency") is not None and sl["consistency"] < 50 and not said:
+        items.append(("watch", "Bed and wake times vary a lot (consistency {}%)".format(sl["consistency"])))
+    tr = m["training"]
+    day = date.fromisoformat(m["date"])
+    days_left = 7 - day.weekday()
+    need = tr["gym_goal"] - tr["gym_week"]
+    if need > 0 and need >= days_left - 1:
+        items.append(("watch", "Gym {}/{} with {} days left this week".format(tr["gym_week"], tr["gym_goal"], days_left)))
+    b = m["body"]
+    if b.get("pace_reliable") and b["trend"]["status"] in ("below pace", "above pace"):
+        items.append(("watch", "Weight {} for your lean bulk ({:+.2f} kg/wk)".format(b["trend"]["status"], b["trend"]["kg_per_week"])))
+    order = {"flag": 0, "watch": 1}
+    return [list(x) for x in sorted(items, key=lambda x: order[x[0]])]
 
 
 def _hm(minutes) -> str:

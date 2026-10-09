@@ -25,9 +25,11 @@ sync of the fitbit-mcp project; `tag` and `lift` write only your own logs in ~/.
                                         daily habits + note (`fitdash journal` alone asks each one;
                                         `fitdash journal habits` lists them)
   fitdash --html [PATH]                 the dashboard as a phone-friendly web page
+  fitdash app [--port 8787]             the phone app: view everything, log habits and lifts
   fitdash web --install | --status | --uninstall
-                                        refresh that page every 30 min and serve it to this Mac only
-                                        (reach it from your phone with: tailscale serve --bg 8787)
+                                        run the phone app in the background (this Mac only) and keep
+                                        the terminal-style page fresh; reach it from your phone with
+                                        Tailscale: tailscale serve --bg 8787
   fitdash coach run | show | set <kind> "text" | --install | --uninstall
                                         the coach note in the Today box: written by Claude in the
                                         morning, after workouts and in the evening
@@ -1204,26 +1206,8 @@ def _rings_only(m: dict, w: int) -> list[Text]:
 
 
 def _attention(m: dict) -> list[tuple[str, str]]:
-    """Only what needs action today, most important first."""
-    items = [(lvl, txt) for lvl, txt in m["verdict"]["reasons"] if lvl in ("flag", "watch")]
-    sl = m["sleep"]
-    debt = (sl.get("tonight") or {}).get("debt")
-    if debt and debt >= 60:
-        items.append(("watch", "Sleep debt of {} built up over the last week".format(hm(debt))))
-    said = any("consistency" in txt for _, txt in items)        # the sleep-score line may already name it
-    if sl.get("consistency") is not None and sl["consistency"] < 50 and not said:
-        items.append(("watch", "Bed and wake times vary a lot (consistency {}%)".format(sl["consistency"])))
-    tr = m["training"]
-    day = date.fromisoformat(m["date"])
-    days_left = 7 - day.weekday()
-    need = tr["gym_goal"] - tr["gym_week"]
-    if need > 0 and need >= days_left - 1:
-        items.append(("watch", "Gym {}/{} with {} days left this week".format(tr["gym_week"], tr["gym_goal"], days_left)))
-    b = m["body"]
-    if b.get("pace_reliable") and b["trend"]["status"] in ("below pace", "above pace"):
-        items.append(("watch", "Weight {} for your lean bulk ({:+.2f} kg/wk)".format(b["trend"]["status"], b["trend"]["kg_per_week"])))
-    order = {"flag": 0, "watch": 1}
-    return sorted(items, key=lambda x: order[x[0]])
+    """Only what needs action today, most important first (computed in data.attention)."""
+    return [tuple(x) for x in m.get("attention") or []]
 
 
 def _coach_lines(m: dict, w: int) -> list[Text]:
@@ -1876,6 +1860,20 @@ def _refresh_page() -> None:
     W.write(page, W.to_html(lambda con: render(m, con, W.PHONE_WIDTH), W.PHONE_WIDTH))
 
 
+def app(argv: list[str]) -> int:
+    """fitdash app [--port N]: serve the phone app on 127.0.0.1 (see appserver.py)."""
+    import appserver as A
+    ap = argparse.ArgumentParser(prog="fitdash app", description=A.__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--port", type=int, default=8787)
+    args = ap.parse_args(argv)
+    sync_cmd = None
+    if (REPO / "pyproject.toml").exists():
+        sync_cmd = ["uv", "run", "--quiet", "--frozen", "--directory", str(REPO), "python",
+                    str(Path(__file__).with_name("sync_now.py"))]
+    return A.serve(D.data_home(), args.port, sync_cmd)
+
+
 def web(argv: list[str]) -> int:
     """fitdash web --install | --uninstall | --status: the phone page (see web.py)."""
     import web as W
@@ -1945,6 +1943,8 @@ def main(argv=None) -> int:
         return web(argv[1:])
     if argv[:1] == ["coach"]:
         return coach(argv[1:])
+    if argv[:1] == ["app"]:
+        return app(argv[1:])
     ap = argparse.ArgumentParser(prog="fitdash", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--section", choices=SECTIONS)
     ap.add_argument("--period", choices=("day", "week", "month"), default="day")

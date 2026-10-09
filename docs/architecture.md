@@ -13,7 +13,7 @@
      ~/.fitbit-mcp/fitbit.sqlite3  ──── read-only ───▶  fitdash (.claude/skills/stats/scripts)
      + your logs (lifts, journal, notes)                 │
                                                          ├─ terminal dashboard
-                                                         ├─ phone page (HTML)
+                                                         ├─ phone app (appserver.py + app/)
                                                          ├─ morning notification
                                                          └─ coach notes ◀── claude -p (no tools)
 ```
@@ -44,7 +44,9 @@ Details: [mcp-server.md](mcp-server.md).
 | `charts.py`, `muscle_icons.py` | Rings, sparklines, braille line charts, bars, half-block pixel icons |
 | `lifts.py`, `journal.py` | The lift log and journal: parsing and storage |
 | `coach.py` | When a note is due, the context sent to Claude, the rule-based fallback |
-| `brief.py`, `web.py` | Notification, phone page, launchd agents |
+| `appserver.py` | The phone app's server: static app, `/api/model`, journal/lift writes, sync |
+| `brief.py`, `web.py` | Notification, terminal-style HTML page, launchd agents |
+| `../app/` | The phone app: `index.html`, `app.css`, `app.js` (plain JS, SVG charts), manifest, icons |
 | `tz.py` | Display timezone |
 | `sync_now.py` | Runs one sync through the server's own code, for fitdash's auto-refresh |
 
@@ -77,12 +79,17 @@ to `EXERCISE_ALIASES`.
 
 **A new habit**: no code. Add it to `"habits"` in `stats.json`.
 
+**The phone app**: every screen is a `render*` function in `app/app.js` that turns the model into
+HTML. A new number in the model shows up in `/api/model` automatically. Check your change in
+iPhone mode with `uv run --script docs/demo/make_app_demos.py`.
+
 ## Tests
 
 ```sh
 uv run pytest                                                                     # server
 uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests   # fitdash
-uv run --script docs/demo/make_demos.py                                           # refresh screenshots
+uv run --script docs/demo/make_demos.py                                           # terminal screenshots
+uv run --script docs/demo/make_app_demos.py                                       # phone app screenshots
 ```
 
 Everything runs offline on synthetic data. The server tests use fakes of the Google and Fitbit

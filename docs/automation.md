@@ -1,6 +1,6 @@
-# Coach notes, morning brief and the phone page
+# Phone app, coach notes and morning brief
 
-Three optional background jobs. On macOS each is a per-user `launchd` agent in
+Optional background jobs. On macOS each is a per-user `launchd` agent in
 `~/Library/LaunchAgents/com.fitdash.*.plist`, installed and removed with one command, with logs in
 `~/.fitbit-mcp/*.log`. On Linux, run the same commands from cron or a systemd timer.
 
@@ -61,35 +61,54 @@ its freshness, tonight's asleep-by time, and muscles under 10 sets. A Mac that w
 scheduled time runs the brief when it wakes. macOS may ask you to allow notifications from Script
 Editor the first time.
 
-## Phone page
+## Phone app
 
 ```sh
-fitdash web --install            # refresh every 30 min + serve on 127.0.0.1:8787 (this Mac only)
-fitdash --html                   # write ~/.fitbit-mcp/web/index.html now
+fitdash web --install            # run the app on 127.0.0.1:8787 in the background (+ keep /terminal fresh)
+fitdash app                      # or run it in the foreground
 fitdash web --status | --uninstall
 ```
 
-<img src="demo/phone.png" width="320" alt="fitdash on a phone" align="right">
+| Today | Sleep | Training | Log | Trends |
+| --- | --- | --- | --- | --- |
+| <img src="demo/app_today.png" width="150"> | <img src="demo/app_sleep.png" width="150"> | <img src="demo/app_train.png" width="150"> | <img src="demo/app_log.png" width="150"> | <img src="demo/app_trends.png" width="150"> |
 
-The page is one self-contained HTML file with the dashboard at phone width: dark theme, inline
-colors, no scripts and no external requests. Every symbol is pinned to one character cell, so
-phones without a braille font still line up. The server binds to **127.0.0.1 only**, so nothing on
-your Wi-Fi can reach it.
+- **Today**: Recovery, Strain and Sleep rings, the verdict, the coach note, HRV, resting HR,
+  sleep and steps with 14-day trends, *Needs attention* and tonight's plan.
+- **Sleep**: score and its four parts, stages, need and debt, 14 nights of bed & wake times, and
+  the sleep experiment.
+- **Training**: split queue, muscle freshness (least recovered first), hard sets per muscle vs
+  10–20, 1RM progress, the last 7 days of workouts, training load and impact minutes.
+- **Log**: journal habits as *Done / Missed* and *Avoided / Slipped* buttons (tap again to clear),
+  a note, and a lift box that takes the same text as `fitdash lift` (`bench 3x8@60 row 4x10@50`),
+  with recent exercises as chips and an undo. Today or yesterday.
+- **Trends**: this week vs last, 28 days of recovery, HRV and resting HR against your normal
+  range, strain, sleep, what drives your recovery, and weight.
 
-To open it on your phone, use [Tailscale](https://tailscale.com) (free for personal use):
+The **Sync** pill at the top starts a Google sync. The app also refreshes whenever you open it or
+switch tabs after logging. The old terminal-style page is still at `/terminal`.
+
+**How it works.** `appserver.py` is a small standard-library HTTP server. It serves the app (plain
+HTML/CSS/JS in `.claude/skills/stats/app`, no build step and no external requests), the model as
+JSON (`/api/model`, the same numbers as `fitdash --json`), and a few write endpoints for the
+journal and lift log. It listens on **127.0.0.1 only**. Writes require a JSON body and an
+`X-Fitdash` header, which another website open on your phone can't send without a CORS preflight
+that the server never approves. A strict Content-Security-Policy blocks inline scripts. Only your
+own logs in `~/.fitbit-mcp` are ever written; the Fitbit database is opened read-only.
+
+**Opening it on your phone** with [Tailscale](https://tailscale.com) (free for personal use):
 
 1. Install Tailscale on the computer and the phone, signed in to the same account.
 2. `tailscale serve --bg 8787`. The first time, it gives you a link to enable Serve on your tailnet.
-3. Open `https://<computer-name>.<tailnet>.ts.net` on the phone and choose *Add to Home Screen*.
+3. Open `https://<computer-name>.<tailnet>.ts.net` in Safari and choose *Share → Add to Home
+   Screen*. It opens full-screen like an app.
 
-`tailscale serve` shares the page with your own devices only. If you want a public page,
-`tailscale funnel 8787` publishes it, but then anyone with the link can see your data.
+`tailscale serve` shares it with your own devices only. `tailscale funnel 8787` would make it
+public, and that includes the logging endpoints, so anyone with the link could see your data and
+write to your journal. Don't do that unless you add your own authentication in front of it.
 
-The page is read-only. To log lifts or the journal from your phone, SSH in (Remote Login on macOS,
-with the Tailscale name as the host) and run `fitdash` there. A narrow phone terminal works best
-with single sections, e.g. `fitdash --section today`.
-
-<br clear="right">
+The computer has to be awake for the app to load. On macOS, `sudo pmset -a womp 1` lets it wake
+for network access.
 
 ## Removing everything
 

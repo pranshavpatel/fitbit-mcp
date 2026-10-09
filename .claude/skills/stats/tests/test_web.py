@@ -44,7 +44,7 @@ def test_install_binds_localhost_only(tmp_path, monkeypatch, capsys):
     assert W.install(tmp_path / ".fitbit-mcp", every_min=30) == 0
     server = plistlib.loads(W._plist(W.LABELS["server"]).read_bytes())
     args = server["ProgramArguments"]
-    assert args[args.index("--bind") + 1] == "127.0.0.1" and str(W.PORT) in args
+    assert args[-3:] == ["app", "--port", str(W.PORT)]                      # appserver binds 127.0.0.1 itself
     refresh = plistlib.loads(W._plist(W.LABELS["refresh"]).read_bytes())
     assert refresh["StartInterval"] == 1800 and "--html" in refresh["ProgramArguments"]
     assert "tailscale serve --bg 8787" in capsys.readouterr().out
