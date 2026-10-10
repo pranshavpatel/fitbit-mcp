@@ -58,6 +58,9 @@ Rules:
 - Not medical advice: for anything worrying or persistent, suggest a clinician in a few words.
 - Use the 7-day trends and earlier notes: point out a pattern when it matters, and don't repeat
   what an earlier note today already said.
+- If `sleep_sync_note` is present, last night may not have finished uploading: don't judge the
+  night or the recovery score from it; say it may still be syncing and ask them to open the Fitbit
+  app, then check again.
 - The user's top 3 priorities for the day (`priorities`) are the point of the day; health serves
   them. Help them be intentional: name a priority by its words, link it to their energy, and be
   encouraging but honest. Never guilt-trip. If none are set, ask them to pick 3
@@ -309,6 +312,8 @@ def context(m: dict, kind: str, workout: dict | None, now: datetime, profile: st
     wk = m.get("week_review") or {}
     if wk.get("rows"):
         ctx["this_week_vs_last"] = {r["metric"]: {"now": r["avg"], "prev": r["prev"]} for r in wk["rows"] if r["avg"] is not None}
+    if sl.get("sync_note"):
+        ctx["sleep_sync_note"] = sl["sync_note"]["text"]
     pr = m.get("priorities") or {}
     today_pr = pr.get("today") or {}
     ctx["priorities"] = {

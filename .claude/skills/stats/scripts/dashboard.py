@@ -316,11 +316,15 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
     out: list[Text] = []
     if not sl.get("has_night"):
         out += headline(w, "none", ("—", "no night recorded for {}".format(sdate(m["date"]))))
+        if sl.get("sync_note"):
+            out += K.status_lines("watch", sl["sync_note"]["text"], w)
     else:
         sc = sl.get("score") or {}
         out += headline(w, SLEEP_BAND_LEVEL[sc.get("band")], (str(sc.get("score", "—")), "sleep score"),
                         (sc.get("band") or "—", ""), (hm(sl["asleep"]), "asleep"),
                         ("{} → {}".format(clock(sl["start"]), clock(sl["end"])), ""))
+        if sl.get("sync_note"):
+            out += K.status_lines("watch", sl["sync_note"]["text"], w)
         out.append(blank())
         out.append(section_title("Score breakdown", w, "out of 100"))
         out += _sleep_breakdown(sl, w)

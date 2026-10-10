@@ -663,6 +663,7 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
     debt_tonight = S.sleep_debt([asleep.get(y) for y in span(day, S.DEBT_NIGHTS)], base_tonight)
     need_tonight = S.sleep_need(base_tonight, strain_by_day.get(d), debt_tonight, nap_min.get(d, 0))
     wake = hhmm(cfg.get("wake_anchor")) if cfg.get("wake_anchor") else None
+    sleep_model["sync_note"] = _night_sync_note(nights, asleep, day, now, today_partial)
     sleep_model["tonight"] = {"need": asdict(need_tonight), "debt": round(debt_tonight),
                               "asleep_by": None if wake is None else S.asleep_by(wake, need_tonight.total),
                               "wake": wake, "strain_partial": today_partial}
@@ -1298,9 +1299,44 @@ def _verdict(m: dict) -> dict:
     return {"headline": headline, "level": level, "reasons": reasons}
 
 
+INCOMPLETE_SHARE = 0.6        # a night under 60 % of your usual…
+EARLY_END_MIN = 90            # …that ended at least 90 min before your usual wake may still be uploading
+
+
+def _night_sync_note(nights: dict, asleep: dict, day: date, now: datetime, today_partial: bool) -> dict | None:
+    """Today only: say when last night looks unfinished. The watch uploads a night to Google in pieces
+    after you wake, so an early sync can catch only its start: a much shorter night than usual that
+    also ended well before your usual wake time. Also says when there's no night at all yet."""
+    if not today_partial:
+        return None
+    d = iso(day)
+    main_ = (nights.get(d) or {}).get("main")
+    if not main_:
+        if now.hour < 14:
+            return {"kind": "missing", "text": "Last night isn't synced yet: open the Fitbit app on your phone, "
+                                               "then run fitdash --sync."}
+        return None
+    past = [asleep[x] for x in span(day - timedelta(days=1), BASELINE_DAYS) if asleep.get(x)]
+    ends = [mins_of_day((nights[x]["main"] or {}).get("end")) for x in span(day - timedelta(days=1), 14)
+            if (nights.get(x) or {}).get("main")]
+    ends = [e for e in ends if e is not None]
+    if len(past) < 7 or len(ends) < 5 or not main_.get("minutes_asleep"):
+        return None
+    usual, usual_end = statistics.median(past), statistics.median(ends)
+    end = mins_of_day(main_["end"])
+    if main_["minutes_asleep"] < INCOMPLETE_SHARE * usual and end is not None and end < usual_end - EARLY_END_MIN:
+        return {"kind": "partial", "text": "Last night may still be syncing: only {} recorded, ending at {} (you usually sleep {}). "
+                "Open the Fitbit app on your phone, then run fitdash --sync. If you really slept this little, ignore this."
+                .format(_hm(main_["minutes_asleep"]), "{}:{:02d}".format(int(end) // 60, int(end) % 60), _hm(usual))}
+    return None
+
+
 def attention(m: dict) -> list[list[str]]:
     """Only what needs action today, most important first."""
     items = [(lvl, txt) for lvl, txt in m["verdict"]["reasons"] if lvl in ("flag", "watch")]
+    note = (m.get("sleep") or {}).get("sync_note")
+    if note:
+        items.insert(0, ("watch", note["text"]))
     sl = m["sleep"]
     debt = (sl.get("tonight") or {}).get("debt")
     if debt and debt >= 60:
@@ -1318,6 +1354,9 @@ def attention(m: dict) -> list[list[str]]:
     if b.get("pace_reliable") and b["trend"]["status"] in ("below pace", "above pace"):
         items.append(("watch", "Weight {} for your lean bulk ({:+.2f} kg/wk)".format(b["trend"]["status"], b["trend"]["kg_per_week"])))
     order = {"flag": 0, "watch": 1}
+    if note:                                           # the sync warning stays on top: everything else depends on it
+        rest = [x for x in items if x[1] != note["text"]]
+        return [["watch", note["text"]]] + [list(x) for x in sorted(rest, key=lambda x: order[x[0]])]
     return [list(x) for x in sorted(items, key=lambda x: order[x[0]])]
 
 

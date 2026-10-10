@@ -246,8 +246,9 @@ function renderSleep(m) {
   const names = { sufficiency: "Hours vs need", efficiency: "Efficiency", consistency: "Consistency", stress: "Sleep stress" };
   const stg = sl.stages || {};
   const ex = m.experiment;
-  if (!sl.has_night) return `<section class="card"><h2>Last night</h2><p class="empty">No sleep recorded for last night yet. Sync after your watch has synced to the Fitbit app.</p></section>`;
-  return `
+  const syncNote = sl.sync_note ? `<section class="card verdict watch"><b>Last night may be incomplete</b><p>${esc(sl.sync_note.text)}</p></section>` : "";
+  if (!sl.has_night) return syncNote || `<section class="card"><h2>Last night</h2><p class="empty">No sleep recorded for last night yet. Sync after your watch has synced to the Fitbit app.</p></section>`;
+  return syncNote + `
   <section class="card">
     <div class="between"><div class="head"><span class="big num">${sc.score ?? "—"}</span><span class="pill ${sc.band === "optimal" ? "good" : sc.band === "sufficient" ? "watch" : "flag"}">${esc(sc.band || "")}</span></div>
     <div class="sub num">${hm(sl.asleep)} asleep</div></div>
