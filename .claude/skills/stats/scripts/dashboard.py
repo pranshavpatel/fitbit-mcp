@@ -1755,6 +1755,49 @@ def _habit_row(r: dict, ndays: int, label_w: int, col: str, w: int) -> Text:
     return K.fit_parts(w, line)
 
 
+def _journal_trend(m: dict, w: int) -> list[Text]:
+    """ON TRACK · 30 DAYS: one column per day, the share of habits that went the right way (did a habit
+    to do, skipped one to avoid), colored red → amber → green; days not logged are dots."""
+    hs = (m.get("deep") or {}).get("habits30") or []
+    days30 = (m.get("deep") or {}).get("days30") or []
+    if not hs or not days30:
+        return []
+    vals = []
+    for i in range(len(days30)):
+        outcomes = [(h["cells"][i] if h["good"] else not h["cells"][i]) for h in hs
+                    if h["good"] is not None and h["cells"][i] is not None]
+        vals.append(None if not outcomes else 100 * sum(outcomes) / len(outcomes))
+    logged = [v for v in vals if v is not None]
+    if not logged:
+        return []
+    gap = 1 if 2 * len(vals) + 9 <= w else 0
+    note = "% of habits that went the right way each day" if w >= 66 else "% of habits on track per day"
+    out = [section_title("On track · 30 days", w, note)]
+    height = 4
+    for r in range(height - 1, -1, -1):                 # fixed 0–100 % scale, so days compare honestly
+        axis = "100% ┤" if r == height - 1 else "  0% ┤" if r == 0 else "     │"
+        line = T(("  " + axis, C["muted"]))
+        for i, v in enumerate(vals):
+            if v is None:
+                line.append("·" if r == 0 else " ", style=C["faint"])
+            else:
+                level = v / 100 * height * 8 - r * 8
+                ch = "█" if level >= 8 else K.EIGHTHS[int(level)] if level >= 1 else ("▁" if r == 0 and v > 0 else " ")
+                line.append(ch, style=K.ramp([C["flag"], C["watch"], C["good"]], v / 100))
+            if gap and i < len(vals) - 1:
+                line.append(" ")
+        out.append(fit(line, w))
+    span_w = len(vals) + (len(vals) - 1) * gap
+    out.append(fit(T(("        " + sdate(days30[0])[4:], C["muted"]),
+                     (" " * max(1, span_w - len(sdate(days30[0])[4:]) - 5), ""), ("today", C["muted"])), w))
+    avg = sum(logged) / len(logged)
+    best = max(logged)
+    out += details([("Average", "{:.0f}% on logged days".format(avg)), ("Best", "{:.0f}%".format(best)),
+                    ("Logged", "{} of {} days".format(len(logged), len(vals)))], w)
+    out.append(blank())
+    return out
+
+
 def sec_journal(m: dict, w: int) -> list[Text]:
     """14-day habit grid (● did it, ○ didn't, · not logged), 7-day counts, and each habit's link to the
     next morning's Recovery once there's enough data."""
@@ -1788,6 +1831,7 @@ def sec_journal(m: dict, w: int) -> list[Text]:
     if not j["today_logged"] and not j["yesterday_logged"]:
         out += takeaway("Yesterday isn't logged yet: fitdash journal yesterday", w)
     out.append(blank())
+    out += _journal_trend(m, w)
     label_w = min(22, max(12, max(len(r["label"]) for r in rows) + 1))
     n = len(days) if w >= label_w + 2 + 2 * len(days) + 10 else 7
     head = T(("  " + " " * label_w, ""))

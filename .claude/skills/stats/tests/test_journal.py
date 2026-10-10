@@ -143,3 +143,10 @@ def test_ask_prints_group_headers(tmp_path):
     out = io.StringIO()
     J.ask(J.DEFAULT_HABITS, {}, inp=lambda _: "", out=out)
     assert out.getvalue().index("TO DO") < out.getvalue().index("TO AVOID")
+
+
+def test_on_track_chart_uses_a_fixed_scale(journaled):
+    buf = io.StringIO()
+    dashboard.render(journaled, dashboard.make_console(100, no_color=True, file=buf), 100, "journal")
+    text = buf.getvalue()
+    assert "ON TRACK · 30 DAYS" in text and "100% ┤" in text and "  0% ┤" in text and "on logged days" in text
