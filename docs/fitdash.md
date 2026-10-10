@@ -42,18 +42,18 @@ extra boxes you don't get in the full dashboard:
 
 | Section | Shows |
 | --- | --- |
-| `today` | Rings (Recovery, Strain, Sleep), the verdict, the coach note, key numbers with 14-day trends, *Needs attention* and *Plan* |
+| `today` | Rings (Recovery, Strain, Sleep), the verdict, the coach note, your priorities, key numbers with 14-day trends, *Needs attention* and *Today's plan* (a checklist: bedtime, next lift, steps, strain) |
 | `sleep` | Sleep score and its four parts, stage timeline, need and debt, 14 nights of bed & wake times, plus the sleep experiment |
 | `recovery` | What moved today's Recovery, HRV and resting-HR trends, respiration, SpO₂, skin temperature, VO₂ max |
 | `insights` | What drives *your* recovery: habits vs next-morning Recovery |
-| `journal` | Habit grid for 14 days (to do / to avoid), streak, latest note |
-| `freshness` | Muscle cards with pixel icons (`--sort freshness` puts the least recovered first) |
+| `journal` | A day-score row, then a 14-day grid per habit where green means on track (did a habit to do, skipped one to avoid) and red off track; weekly totals per group; the latest note |
+| `freshness` | Muscle cards with pixel icons, most recovered first (`--sort freshness`: least recovered first), each with when it's ready again |
 | `lifting` | Hard sets per muscle vs 10–20/week, per-lift 1RM progress and PRs |
-| `training` | Split queue, gym days this week, load ratio, running/impact minutes per week |
-| `workouts` | Last 7 days, one row per day with zone bars, key sessions, records |
-| `strain` | Strain vs target, 28-day strain, steps and activity by hour |
-| `week` | This week vs last for 10 metrics |
-| `body` | Weight vs lean-bulk corridor, calories and macros |
+| `training` | Split queue as readiness bars, the training-load gauge (your zone drawn thick), running/impact minutes per week against your limit |
+| `workouts` | A 7-day timeline of when you trained, textured by intensity; time by activity; key sessions, records and your HR zones |
+| `strain` | Strain vs target, 28 days of strain colored in range / below / above each day's target, steps and activity by hour |
+| `week` | This week vs last for 10 metrics: a % change bar from a shared center line, green better / amber worse |
+| `body` | A lean-bulk pace gauge, weigh-ins against the lean-bulk corridor |
 | `logs` | Symptom/mood logs status |
 
 ![Training plan](demo/training.svg)
