@@ -1755,45 +1755,76 @@ def _habit_row(r: dict, ndays: int, label_w: int, col: str, w: int) -> Text:
     return K.fit_parts(w, line)
 
 
+def _habit_rates(hs: list[dict], good: bool, n: int) -> list[float | None]:
+    """Per day: % of that day's logged habits in the group that were done (to do) or slipped (to avoid)."""
+    out = []
+    group = [h for h in hs if h["good"] is good]
+    for i in range(n):
+        cells = [h["cells"][i] for h in group if h["cells"][i] is not None]
+        out.append(None if not cells else 100 * sum(1 for c in cells if c) / len(cells))
+    return out
+
+
+def _week_change(vals: list[float | None]) -> tuple[float | None, float | None, int, int]:
+    """Average of the last 7 days vs the 7 before (logged days only) and how many days each had."""
+    cur = [v for v in vals[-7:] if v is not None]
+    prev = [v for v in vals[-14:-7] if v is not None]
+    avg = lambda xs: sum(xs) / len(xs) if xs else None  # noqa: E731
+    return avg(cur), avg(prev), len(cur), len(prev)
+
+
 def _journal_trend(m: dict, w: int) -> list[Text]:
-    """ON TRACK · 30 DAYS: one column per day, the share of habits that went the right way (did a habit
-    to do, skipped one to avoid), colored red → amber → green; days not logged are dots."""
+    """HABITS · 30 DAYS: two curves on one 0–100 % scale, habits to do that you did (green, higher is
+    better) and habits to avoid that slipped (red, lower is better), then each one's last 7 days vs
+    the 7 before, called a real change only when it's big enough and backed by enough logged days."""
     hs = (m.get("deep") or {}).get("habits30") or []
     days30 = (m.get("deep") or {}).get("days30") or []
     if not hs or not days30:
         return []
-    vals = []
-    for i in range(len(days30)):
-        outcomes = [(h["cells"][i] if h["good"] else not h["cells"][i]) for h in hs
-                    if h["good"] is not None and h["cells"][i] is not None]
-        vals.append(None if not outcomes else 100 * sum(outcomes) / len(outcomes))
-    logged = [v for v in vals if v is not None]
+    done = _habit_rates(hs, True, len(days30))
+    slip = _habit_rates(hs, False, len(days30))
+    logged = [i for i in range(len(days30)) if done[i] is not None or slip[i] is not None]
     if not logged:
         return []
-    gap = 1 if 2 * len(vals) + 9 <= w else 0
-    note = "% of habits that went the right way each day" if w >= 66 else "% of habits on track per day"
-    out = [section_title("On track · 30 days", w, note)]
-    height = 4
-    for r in range(height - 1, -1, -1):                 # fixed 0–100 % scale, so days compare honestly
-        axis = "100% ┤" if r == height - 1 else "  0% ┤" if r == 0 else "     │"
-        line = T(("  " + axis, C["muted"]))
-        for i, v in enumerate(vals):
-            if v is None:
-                line.append("·" if r == 0 else " ", style=C["faint"])
+    start = min(logged[0], len(days30) - 7)          # until there's a month of journal, start at the first entry
+    days_, done_c, slip_c = days30[start:], done[start:], slip[start:]
+    title = "Habits · {} days".format(len(days_))
+    note = "to do: higher is better · to avoid: lower is better" if w >= 76 else "to do ↑ better · avoid ↓ better"
+    out = [section_title(title, w, note)]
+    plot_w = max(20, w - 8)
+    chart = K.braille_lines([(done_c, C["good"]), (slip_c, C["flag"])], plot_w, 5, 0, 100)
+    for i, row in enumerate(chart):
+        axis = "100% ┤" if i == 0 else "  0% ┤" if i == len(chart) - 1 else " 50% ┤" if i == len(chart) // 2 else "     │"
+        out.append(fit(T(("  " + axis, C["muted"])) + row, w))
+    first = sdate(days_[0])[4:]
+    out.append(fit(T(("        " + first, C["muted"]), (" " * max(1, plot_w - len(first) - 5), ""), ("today", C["muted"])), w))
+    out += _flow([T(("⠒⠒", C["good"]), (" to-do habits done", C["muted"])), T(("⠒⠒", C["flag"]), (" avoid habits slipped", C["muted"])),
+                  T(("⠒⠒", "bold " + C["ink"]), (" both", C["muted"]))], w, gap=3, indent=2)
+    out.append(blank())
+    MIN_DAYS, MIN_POINTS = 4, 10          # a change counts only with 4+ logged days in each week and 10+ points
+
+    for name, vals, higher_good, col in (("To do · done", done, True, C["good"]), ("Avoid · slipped", slip, False, C["flag"])):
+        cur, prev, nc, np_ = _week_change(vals)
+        wide = w >= 82
+        line = T(("  {:<16}".format(name), "bold " + col), ("{:>5}".format("{:.0f}%".format(cur) if cur is not None else "—"), "bold " + C["ink"]),
+                 (" last 7 days" if wide else " 7d", C["muted"]))
+        if cur is None:
+            line.append("  not logged this week", style=C["muted"])
+        elif prev is None:
+            line.append("  · nothing to compare with yet" if wide else "  · no comparison yet", style=C["muted"])
+        else:
+            diff = cur - prev
+            better = (diff > 0) == higher_good
+            line.append("  {} from {:.0f}%".format("▲" if diff > 0 else "▼" if diff < 0 else "=", prev),
+                        style=("bold " + (C["good"] if better else C["watch"])) if diff else C["ink2"])
+            if nc < MIN_DAYS or np_ < MIN_DAYS:
+                line.append(" · too few logged days to tell" if wide else " · too few days", style=C["muted"])
+            elif abs(diff) < MIN_POINTS:
+                line.append(" · within normal day-to-day noise" if wide else " · just noise", style=C["muted"])
             else:
-                level = v / 100 * height * 8 - r * 8
-                ch = "█" if level >= 8 else K.EIGHTHS[int(level)] if level >= 1 else ("▁" if r == 0 and v > 0 else " ")
-                line.append(ch, style=K.ramp([C["flag"], C["watch"], C["good"]], v / 100))
-            if gap and i < len(vals) - 1:
-                line.append(" ")
-        out.append(fit(line, w))
-    span_w = len(vals) + (len(vals) - 1) * gap
-    out.append(fit(T(("        " + sdate(days30[0])[4:], C["muted"]),
-                     (" " * max(1, span_w - len(sdate(days30[0])[4:]) - 5), ""), ("today", C["muted"])), w))
-    avg = sum(logged) / len(logged)
-    best = max(logged)
-    out += details([("Average", "{:.0f}% on logged days".format(avg)), ("Best", "{:.0f}%".format(best)),
-                    ("Logged", "{} of {} days".format(len(logged), len(vals)))], w)
+                line.append((" · a real improvement" if better else " · a real slip") if wide else (" · real gain" if better else " · real slip"),
+                            style="bold " + (C["good"] if better else C["watch"]))
+        out.append(K.fit_parts(w, line))
     out.append(blank())
     return out
 

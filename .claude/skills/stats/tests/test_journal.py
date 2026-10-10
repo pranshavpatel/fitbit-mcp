@@ -145,8 +145,15 @@ def test_ask_prints_group_headers(tmp_path):
     assert out.getvalue().index("TO DO") < out.getvalue().index("TO AVOID")
 
 
-def test_on_track_chart_uses_a_fixed_scale(journaled):
+def test_habit_curves_use_a_fixed_scale(journaled):
     buf = io.StringIO()
     dashboard.render(journaled, dashboard.make_console(100, no_color=True, file=buf), 100, "journal")
     text = buf.getvalue()
-    assert "ON TRACK · 30 DAYS" in text and "100% ┤" in text and "  0% ┤" in text and "on logged days" in text
+    assert "HABITS ·" in text and "100% ┤" in text and "  0% ┤" in text and "to-do habits done" in text
+    assert "To do · done" in text and "Avoid · slipped" in text
+
+
+def test_week_change_needs_enough_days():
+    vals = [None] * 16 + [80, 90, 85, 80] + [None] * 3 + [50, 60, 55, 50, 60, 55, 50]
+    cur, prev, nc, np_ = dashboard._week_change(vals)
+    assert nc == 7 and np_ == 4 and round(cur) == 54 and round(prev) == 84

@@ -336,6 +336,55 @@ def columns(values: Sequence[float | None], height: int, col_w: int, gap: int,
 
 # ---------------------------------------------------------------- braille line chart
 
+def braille_lines(series: Sequence[tuple[Sequence[float | None], str]], w: int, h: int,
+                  lo: float, hi: float) -> list[Text]:
+    """Several Braille polylines on one shared scale (same unit only, never two y-axes). Each series
+    keeps its own color; a cell both lines pass through is drawn in bold ink. Gaps break a line, and
+    a lone point (a day with no neighbors) is drawn as a small dot."""
+    dw, dh = w * 2, h * 4
+    grids = [[[0] * w for _ in range(h)] for _ in series]
+
+    def put(grid, x, y):
+        if 0 <= x < dw and 0 <= y < dh:
+            grid[y // 4][x // 2] |= _BRAILLE_BITS[y % 4][x % 2]
+
+    for (values, _), grid in zip(series, grids):
+        n = len(values)
+        pts = [None if v is None else (int(round((i / (n - 1) if n > 1 else 1.0) * (dw - 1))),
+                                       int(round((hi - max(lo, min(hi, v))) / (hi - lo) * (dh - 1))))
+               for i, v in enumerate(values)]
+        for i, c in enumerate(pts):
+            if c is None:
+                continue
+            nxt = pts[i + 1] if i + 1 < n else None
+            prv = pts[i - 1] if i > 0 else None
+            if nxt is not None:
+                (x0, y0), (x1, y1) = c, nxt
+                steps = max(abs(x1 - x0), abs(y1 - y0), 1)
+                for k in range(steps + 1):
+                    put(grid, int(round(x0 + (x1 - x0) * k / steps)), int(round(y0 + (y1 - y0) * k / steps)))
+            elif prv is None:                          # isolated day: a 2×2 dot so it's visible
+                for dx in (0, 1):
+                    for dy in (0, 1):
+                        put(grid, c[0] - dx, c[1] - dy)
+            else:
+                put(grid, *c)
+    out = []
+    for r in range(h):
+        t = Text(no_wrap=True)
+        for x in range(w):
+            hits = [(g[r][x], col) for g, (_, col) in zip(grids, series) if g[r][x]]
+            if not hits:
+                t.append(" ")
+                continue
+            bits = 0
+            for b, _ in hits:
+                bits |= b
+            t.append(chr(0x2800 + bits), style=hits[0][1] if len(hits) == 1 else "bold " + C["ink"])
+        out.append(t)
+    return out
+
+
 def braille_line(values: Sequence[float | None], w: int, h: int, color: str,
                  band: tuple[float, float] | None = None, lo: float | None = None, hi: float | None = None,
                  zone_color: Callable[[float], str] | None = None, xs: Sequence[float] | None = None) -> list[Text]:
