@@ -1219,65 +1219,90 @@ WEEK_ROWS = [  # (metric, label, value format, unit for the change, weekly total
 ]
 
 
+WEEK_SPAN = 50.0          # the change bars run from −50 % to +50 %; bigger changes hit the edge (▸/◂)
+
+
+def _delta_text(key: str, delta: float, total: bool, unit: str) -> str:
+    if delta == 0:
+        return "same"
+    sign = "+" if delta > 0 else "−"
+    if total:
+        return sign + hm(abs(delta))
+    if key == "Asleep h":
+        return sign + hm(abs(delta) * 60)
+    if key == "Steps":
+        return "{}{:,.0f}".format(sign, abs(delta))
+    return "{}{:.1f}{}".format(sign, abs(delta), (" " + unit) if unit and unit != "pts" else "")
+
+
 def sec_week(m: dict, w: int) -> list[Text]:
-    """The last 7 days vs the 7 before: averages (totals for training time), the change, a 7-day
-    trend and the best day. Today is left out of totals while it's still in progress."""
+    """The last 7 days vs the 7 before. Each row: last week's value, a textured bar of the % change
+    growing left or right from a shared center line, this week's value, and the change. Green is
+    better for you, amber worse, gray within day-to-day noise. Today counts once it's over."""
     p = m.get("week_review")
-    out: list[Text] = []
     if not p:
         return [nodata(w, "  Not enough history for a week-over-week comparison.")]
     rows = {r["metric"]: r for r in p["rows"]}
+    label_w, val_w, chg_w = (11, 9, 11) if w >= 70 else (11, 7, 9)
+    fixed = 2 + label_w + val_w + 2 + 2 + val_w + chg_w + 2       # everything but the bar
+    half = max(4, min(18, (w - fixed - 1) // 2))
+    plot_w = 2 * half + 1
     better = worse = 0
     lines = []
-    spark_w = 7
     for key, label, fmt, unit, total, noise in WEEK_ROWS:
         r = rows.get(key)
         if not r or r["avg"] is None:
-            lines.append(fit(T(("  {:<11}".format(label), C["ink2"]), ("{:>9}".format("—"), C["muted"]),
-                               ("   no data this week", C["muted"])), w))
             continue
-        # totals compare the same number of days: this week's completed days vs as many from last week
         cur = r["avg"] * (r["n"] if total else 1)
         prev = None if r["prev"] is None else r["prev"] * (r["n"] if total else 1)
-        delta = None if prev is None else cur - prev
         hb = r.get("higher_better")
-        verdict, vstyle = "", C["ink2"]
+        delta = None if prev is None else cur - prev
         if delta is not None and abs(delta) < noise:
-            delta = 0.0                                   # too small to mean anything: no ✓ or !
-        if delta is not None and hb is not None and abs(delta) > 1e-9:
-            good = (delta > 0) == hb
-            verdict, vstyle = (" ✓", C["good"]) if good else (" !", C["watch"])
+            delta = 0.0
+        pct = None if delta is None or not prev else 100 * delta / abs(prev)
+        good = None if delta in (None, 0.0) or hb is None else (delta > 0) == hb
+        col = C["rule"] if good is None else C["good"] if good else C["watch"]
+        if good is not None:
             better += good
             worse += not good
-        if delta is None:
-            dtxt = "—"
-        elif delta == 0:
-            dtxt = "same"
-        elif total:
-            dtxt = ("+" if delta >= 0 else "−") + hm(abs(delta))
-        elif key == "Asleep h":
-            dtxt = ("+" if delta >= 0 else "−") + hm(abs(delta) * 60)
-        elif key == "Steps":
-            dtxt = "{:+,.0f}".format(delta)
-        else:
-            dtxt = "{:+.1f}".format(delta) + (" " + unit if unit and unit not in ("pts",) else "")
-        line = T(("  {:<11}".format(label), C["ink2"]), ("{:>9}".format(fmt(cur)), "bold " + C["ink"]),
-                 ("{:>11}".format(dtxt), C["ink2"]), (verdict.ljust(2), "bold " + vstyle), "  ",
-                 K.spark(r["series"][-spark_w:], C["strain"][4]))
-        if r.get("best") and hb is not None and w >= 62:
-            line.append("  best {} {}".format(sdate(r["best"][0])[:3], fmt(r["best"][1])), style=C["muted"])
-        lines.append(K.fit_parts(w, line))
-    lvl = "good" if better > worse else "watch" if worse > better else "none"
-    out += headline(w, lvl, ("{} better".format(better), ""), ("{} worse".format(worse), "than the week before"))
+        bar = [(" ", "")] * plot_w
+        bar[half] = ("│", C["rule"])
+        if pct:
+            n = max(1, int(round(min(abs(pct), WEEK_SPAN) / WEEK_SPAN * half)))
+            for k in range(1, n + 1):
+                bar[half + k if pct > 0 else half - k] = ("▓", col)
+            if abs(pct) > WEEK_SPAN:
+                bar[plot_w - 1 if pct > 0 else 0] = ("▸" if pct > 0 else "◂", col)
+        t = T(("  {:<{}}".format(label, label_w), C["ink2"]),
+              ("{:>{}}".format(fmt(prev) if prev is not None else "—", val_w), C["muted"]), "  ")
+        for g, c in bar:
+            t.append(g, style=c)
+        t.append("  {:<{}}".format(fmt(cur), val_w), style="bold " + C["ink"])
+        dtxt = "—" if delta is None else _delta_text(key, delta, total, unit)
+        t.append("{:>{}}".format(dtxt, chg_w), style=C["ink2"] if good is None else ("bold " + col))
+        t.append(" " + ("✓" if good else "!" if good is False else " "), style="bold " + col)
+        lines.append(fit(t, w))
+
+    out = headline(w, "good" if better > worse else "watch" if worse > better else "none",
+                   ("{} better".format(better), ""), ("{} worse".format(worse), "than the week before"))
     out.append(fit(T(("  {} → {}  vs  {} → {}".format(sdate(p["days"][0]), sdate(p["days"][-1]),
-                                                     sdate(p["prev_days"][0]), sdate(p["prev_days"][1])), C["muted"])), w))
+                                                    sdate(p["prev_days"][0]), sdate(p["prev_days"][1])), C["muted"])), w))
     out.append(blank())
-    out.append(fit(T(("  {:<11}{:>9}{:>11}    {}".format("", "this week", "vs last", "7 days"), C["muted"])), w))
+    axis = [" "] * plot_w
+    for pos, lab in ((0, "−{:.0f}%".format(WEEK_SPAN)), (half, "0"), (plot_w - 1, "+{:.0f}%".format(WEEK_SPAN))):
+        i = 0 if pos == 0 else plot_w - len(lab) if pos == plot_w - 1 else pos
+        axis[i:i + len(lab)] = list(lab)
+    last_h, this_h = ("last week", "this week") if val_w >= 9 else ("last", "this")
+    out.append(fit(T(("  {:<{}}{:>{}}  ".format("", label_w, last_h, val_w), C["muted"]), ("".join(axis), C["muted"]),
+                     ("  {:<{}}{:>{}}".format(this_h, val_w, "change", chg_w), C["muted"])), w))
     out += lines
     out.append(blank())
-    out += K.para("Averages per day. Training and Lifting are totals, compared with the same number of days "
-                  "last week; today counts once it's over. ✓ better · ! worse · same = within normal day-to-day noise.",
-                  w, C["muted"], indent=2, prefix=Text("  "))
+    out += _flow([T(("▓", C["good"]), (" better", C["muted"])), T(("▓", C["watch"]), (" worse", C["muted"])),
+                  T(("▓", C["rule"]), (" about the same", C["muted"])), T(("", ""), ("bar = % change from last week", C["muted"]))],
+                 w, gap=3, indent=2)
+    out += K.para("Averages per day; Training and Lifting are totals over the same number of days. Today counts once "
+                  "it's over. Changes smaller than normal day-to-day noise count as the same.", w, C["muted"], indent=2,
+                  prefix=Text("  "))
     return out
 
 
