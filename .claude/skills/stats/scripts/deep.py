@@ -404,7 +404,7 @@ def deep_fresh(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
     now = datetime.fromisoformat(m["now"]) if m.get("now") else datetime.now()
     waiting = [r for r in rows if r.get("ready_in_h")]
     lines = headline(w, "good" if not waiting else "watch",
-                     ("{}/{}".format(len(rows) - len(waiting), len(rows)), "muscles at 90 %+ now"))
+                     ("{}/{}".format(len(rows) - len(waiting), len(rows)), "muscles at {} %+ now".format(S.READY_PCT)))
     lines.append(blank())
     bar_w = max(8, w - 44)
     horizon = max([r["ready_in_h"] or 0 for r in rows] + [24])
@@ -416,8 +416,9 @@ def deep_fresh(m: dict, w: int) -> list[tuple[str, list[Text], str]]:
                            "  ", K.hbar(h / horizon if h else 0, bar_w, col, track="·"),
                            ("  {:<11}".format(when if h <= 0 else "in " + _dur(h)), C["ink"] if h else C["good"]),
                            (when if h > 0 else "", C["muted"])), w))
-    lines += K.para("When each muscle is back to 90 % if you don't train it again, from its half-life (48 h big, "
-                    "36 h small) and today's recovery.", w, C["muted"], indent=2, prefix=Text("  "))
+    lines += K.para("When each muscle is back to {} % if you don't train it again, from its half-life ({} h big, "
+                    "{} h small) and today's recovery.".format(S.READY_PCT, S.HALF_LIFE_H["lats"], S.HALF_LIFE_H["biceps"]),
+                    w, C["muted"], indent=2, prefix=Text("  "))
     return [("Ready when", lines, "activity")]
 
 

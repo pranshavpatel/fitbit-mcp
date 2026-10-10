@@ -12,7 +12,7 @@ import statistics
 from dataclasses import dataclass, field
 from typing import Iterable, Sequence
 
-FORMULA_VERSION = "stats-scores v1.1"
+FORMULA_VERSION = "stats-scores v1.2"
 
 # ---------------------------------------------------------------- baselines
 
@@ -540,15 +540,16 @@ def dominant_zone(minutes: dict[int, float] | None) -> int | None:
 # from session duration and heart-rate strain; it is an estimate, and the panel says so.
 
 MUSCLES = ("chest", "shoulders", "lats", "biceps", "triceps", "abs", "quads", "hamstrings", "glutes", "calves")
-HALF_LIFE_H = {"chest": 48, "lats": 48, "quads": 48, "hamstrings": 48, "glutes": 48,
-               "shoulders": 36, "biceps": 36, "triceps": 36, "abs": 36, "calves": 36}
+HALF_LIFE_H = {"chest": 30, "lats": 30, "quads": 30, "hamstrings": 30, "glutes": 30,      # big muscles
+               "shoulders": 24, "biceps": 24, "triceps": 24, "abs": 24, "calves": 24}  # small muscles
+READY_PCT = 80                      # "ready to train again": a normal session clears in about 2–3 days
 SECONDARY_SHARE = 0.5
 MINOR_SHARE = 0.25                  # e.g. rear delts on a pull day
 DOSE_REF = 70.0                     # fatigue a 60-minute session at strain 8 leaves on its primary muscles
 FRESH_WINDOW_H = 7 * 24             # sessions older than this no longer count
 LEGS = ("quads", "hamstrings", "glutes", "calves")
-IMPACT_SHARE = {"RUNNING": 0.6, "TREADMILL_RUNNING": 0.6, "TRAIL_RUN": 0.7, "SOCCER": 0.7,
-                "PLYOMETRICS": 0.8, "JUMP_ROPE": 0.6}
+IMPACT_SHARE = {"RUNNING": 0.3, "TREADMILL_RUNNING": 0.3, "TRAIL_RUN": 0.35, "SOCCER": 0.35,   # running tires legs
+                "PLYOMETRICS": 0.5, "JUMP_ROPE": 0.3}                                         # far less than squats
 
 
 def split_targets(day_name: str | None) -> dict[str, float]:
@@ -623,7 +624,7 @@ def muscle_freshness(sessions: Sequence[dict], rate: float = 1.0) -> dict[str, i
     return {mu: int(max(0, min(100, math.floor(100 - f + 0.5)))) for mu, f in fatigue.items()}
 
 
-def hours_until_fresh(fresh_pct: int, muscle: str, rate: float = 1.0, target: int = 90) -> float:
+def hours_until_fresh(fresh_pct: int, muscle: str, rate: float = 1.0, target: int = READY_PCT) -> float:
     """Hours until a muscle is back to `target` % if nothing new is done: all its fatigue shares one
     half-life, so the total decays as one exponential. 0 if it's already there."""
     fatigue, allowed = 100.0 - fresh_pct, 100.0 - target

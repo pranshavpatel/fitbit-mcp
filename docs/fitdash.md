@@ -33,7 +33,7 @@ extra boxes you don't get in the full dashboard:
 | `recovery` | A recovery calendar (weeks × days), recovery vs the previous day's strain as a scatter plot |
 | `strain` | Activity by hour for 7 days (heatmap), HR zones per day for 14 days, weekly totals for 8 weeks |
 | `workouts` | An 8-week workout calendar, totals per activity type |
-| `freshness` | *Ready when*: when each muscle is back to 90 % |
+| `freshness` | *Ready when*: when each muscle is back to 80 % |
 | `lifting` | Hard sets per muscle for 6 weeks (heat table), 1RM progress chart per lift |
 | `training` | Weekly totals and *Ready when* |
 | `journal` | 30-day rate, current and best streak per habit |

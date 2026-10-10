@@ -395,10 +395,12 @@ def test_deep_model_shapes(model):
 
 def test_hours_until_fresh():
     import scores as S
-    assert S.hours_until_fresh(95, "chest") == 0
-    assert S.hours_until_fresh(80, "chest") == pytest.approx(48.0)               # 20 → 10 fatigue: one half-life
-    assert S.hours_until_fresh(80, "chest", rate=1.25) == pytest.approx(48 / 1.25)
-    assert S.hours_until_fresh(80, "biceps") == pytest.approx(36.0)
+    assert S.READY_PCT == 80
+    assert S.hours_until_fresh(85, "chest") == 0                                    # already past 80 %
+    assert S.hours_until_fresh(60, "chest") == pytest.approx(30.0)               # 40 → 20 fatigue: one half-life
+    assert S.hours_until_fresh(60, "chest", rate=1.25) == pytest.approx(30 / 1.25)
+    assert S.hours_until_fresh(60, "biceps") == pytest.approx(24.0)
+    assert S.hours_until_fresh(80, "chest", target=90) == pytest.approx(30.0)     # the target is configurable
 
 
 def test_single_column_draws_each_box_once(model):

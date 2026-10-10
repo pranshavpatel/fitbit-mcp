@@ -851,7 +851,7 @@ def _card(row: dict, color: bool, now: datetime | None = None) -> list[Text]:
 
 def sec_freshness(m: dict, w: int, color: bool = True, sort: str = "default") -> list[Text]:
     """The Muscle Freshness card grid, most recovered first (`--sort freshness`: least recovered first),
-    each card with when that muscle is back to 90 %."""
+    each card with when that muscle is back to READY_PCT (80 %)."""
     mu = m["muscles"]
     out: list[Text] = []
     order_note = "least recovered first" if sort == "freshness" else "most recovered first"
@@ -863,7 +863,7 @@ def sec_freshness(m: dict, w: int, color: bool = True, sort: str = "default") ->
                       "fitdash tag <date> <split day>)", w, MF["dim"])
         return out
     rows = list(mu["rows"])
-    ready = sum(1 for r in rows if r["fresh"] >= 90)
+    ready = sum(1 for r in rows if r["fresh"] >= S.READY_PCT)
     nxt = (m["training"]["split"] or {}).get("next")
     line = T(("{}/{}".format(ready, len(rows)), "bold " + MF["title"]), (" muscles ready now", MF["dim"]))
     if nxt:
@@ -891,7 +891,7 @@ def sec_freshness(m: dict, w: int, color: bool = True, sort: str = "default") ->
     out.append(blank())
     assumed = [x for x in mu["sessions"] if x["source"] == "assumed"]
     from_sets = [x for x in mu["sessions"] if x["source"] == "sets"]
-    note = "ready = back to 90 %, if you don't train it again"
+    note = "ready = back to {} %, if you don't train it again".format(S.READY_PCT)
     if from_sets:
         note += " · from your logged sets: " + ", ".join(sdate(x["date"])[:3] for x in from_sets)
     if assumed:

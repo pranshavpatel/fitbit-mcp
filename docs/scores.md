@@ -83,11 +83,13 @@ glutes, calves):
 - **From logged sets** (`fitdash lift`): dose per muscle = 70 · √(sets / 8), capped at 100. A hard
   set counts 1 for the exercise's primary muscles and ½ for secondary ones.
 - **From a Fitbit session without a log**: dose = 70 · √(minutes/60) · √(strain/8). The split day
-  decides the muscles (primary full, secondary ½, minor ¼). Runs and soccer load the legs at 0.6–0.8.
-- **Decay**: fatigue halves every 48 h for big muscles and every 36 h for small ones. It decays
+  decides the muscles (primary full, secondary ½, minor ¼). Runs and soccer load the legs at 0.3–0.35,
+  since running tires legs far less than heavy lifting.
+- **Decay**: fatigue halves every 30 h for big muscles and every 24 h for small ones. It decays
   ×1.25 faster after a green Recovery and ×0.75 slower after a red one. Sessions older than 7 days
   don't count.
-- **Freshness** = 100 − remaining fatigue.
+- **Freshness** = 100 − remaining fatigue. A muscle counts as **ready** at 80 %: a normal session clears in about
+  2–3 days, in line with studies of recovery after typical training, so each muscle can be trained about twice a week.
 
 ## Lifting
 

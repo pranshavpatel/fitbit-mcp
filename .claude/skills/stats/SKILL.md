@@ -128,8 +128,8 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   muscles it worked: dose = 70 · √(minutes/60) · √(strain/8), capped at 100. Primary muscles take
   the full dose and secondary muscles half (push → chest; shoulders and triceps secondary; pull →
   lats; biceps secondary, rear delts ¼). Runs, soccer and plyometrics load quads, hamstrings,
-  glutes and calves at 0.6–0.8. Fatigue halves every 48 h for big muscles (chest, lats, quads,
-  hamstrings, glutes) and 36 h for small ones, ×1.25 faster after a green Recovery and ×0.75
+  glutes and calves at 0.3–0.5. Fatigue halves every 30 h for big muscles (chest, lats, quads,
+  hamstrings, glutes) and 24 h for small ones, ×1.25 faster after a green Recovery and ×0.75
   slower after a red one. Freshness = 100 − remaining fatigue. Sessions older than 7 days don't
   count. With no strength session in 30 days the panel says "no strength sessions logged"
   instead of showing percentages.
