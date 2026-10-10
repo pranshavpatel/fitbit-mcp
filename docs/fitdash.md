@@ -98,6 +98,18 @@ fitdash journal habits                            # the list and keys
 `+` = did it, `-` = didn't, and the start of a key is enough. Define habits in `stats.json`
 (`good: true` to do, `false` to avoid, `null` to just track).
 
+### Food
+
+```sh
+fitdash food add "southwest veggie wrap" 500 p=20 c=69 f=17 meal=lunch at=12:30
+fitdash food                         # today's entries and totals
+fitdash food undo                    # remove the last one
+```
+
+kcal comes first, then grams of protein (p), carbs (c) and fat (f), usually estimates. Body & nutrition shows
+**Food today**: calories eaten vs burned (│ marks a lean-bulk day, burned + 250 kcal) and protein vs
+1.6–2.2 g per kg of body weight. Claude can estimate and log a meal you describe.
+
 ### Priorities
 
 ```sh

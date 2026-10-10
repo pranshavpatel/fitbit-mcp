@@ -30,6 +30,8 @@ sync of the fitbit-mcp project; `tag` and `lift` write only your own logs in ~/.
                                         run the phone app in the background (this Mac only) and keep
                                         the terminal-style page fresh; reach it from your phone with
                                         Tailscale: tailscale serve --bg 8787
+  fitdash food add "veggie wrap" 500 p=20 c=69 f=17 [meal=lunch] | food | food undo
+                                        log what you ate (kcal + macros, usually estimates)
   fitdash priorities [set "…" "…" "…" | done 1 | some 2 | missed 3 | reflect "…" | show]
                                         today's top 3: asked in the morning, reviewed in the evening
   fitdash coach run | show | set <kind> "text" | --install | --uninstall
@@ -1100,6 +1102,40 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 7) -> list[Text]:
 
 # ---------------------------------------------------------------- body & nutrition
 
+def _food_today(m: dict, w: int) -> list[Text]:
+    """FOOD TODAY: calories eaten vs burned (with the lean-bulk surplus marked) and protein vs target,
+    as textured bars. Only when food is logged for today."""
+    b = m["body"]
+    cin, cout = b.get("cal_in_today"), b.get("cal_out_today")
+    if cin is None:
+        return []
+    p_ = (b.get("macros") or {}).get("protein")
+    out = [section_title("Food today", w, "from your food log (estimates)" if b.get("food_source") == "food log" else "from Fitbit")]
+    bar_w = max(16, w - 34)
+    if cout:
+        goal = cout + 250                                   # a lean bulk eats ~250 kcal over what it burns
+        top = max(cin, goal) * 1.05
+        col = C["good"] if cin >= cout else C["watch"]
+        out.append(fit(T(("  {:<9}".format("calories"), C["ink2"]), tex_bar(cin / top, bar_w, col, marker=goal / top),
+                         ("  {:,.0f} / {:,.0f}".format(cin, goal), "bold " + C["ink"])), w))
+    tgt = b.get("protein_target_g")
+    if p_ is not None and tgt:
+        top = tgt[1] * 1.1
+        col = C["good"] if p_ >= tgt[0] else C["watch"]
+        out.append(fit(T(("  {:<9}".format("protein"), C["ink2"]), tex_bar(p_ / top, bar_w, col, marker=tgt[0] / top),
+                         ("  {:.0f} / {}–{} g".format(p_, *tgt), "bold " + C["ink"])), w))
+    note = []
+    if cout:
+        gap = cout - cin
+        note.append("{:,.0f} kcal {} what you've burned so far".format(abs(gap), "under" if gap > 0 else "over"))
+    if p_ is not None and tgt and p_ < tgt[0]:
+        note.append("{:.0f} g protein to reach {} g".format(tgt[0] - p_, tgt[0]))
+    if note:
+        out += takeaway("; ".join(note) + ". │ marks a lean-bulk day (burned + 250 kcal; 1.6 g protein per kg).", w)
+    out.append(blank())
+    return out
+
+
 def sec_body(m: dict, w: int) -> list[Text]:
     """Weight trend as a lean-bulk pace gauge, the weigh-ins against the lean-bulk corridor, and a
     few quiet details."""
@@ -1148,6 +1184,7 @@ def sec_body(m: dict, w: int) -> list[Text]:
     out.append(blank())
     out += _weight_corridor(b, date.fromisoformat(m["date"]), w)
     out.append(blank())
+    out += _food_today(m, w)
     stale = b.get("days_since_weigh_in")
     out += details([("Weigh-in", "today" if stale == 0 else "{} days ago".format(stale) if stale is not None else "—"),
                     ("Food", "not logged" if b.get("cal_in_today") is None else "{:,.0f} kcal".format(b["cal_in_today"])),
@@ -2250,7 +2287,7 @@ def brief(argv: list[str]) -> int:
     return 0
 
 
-SUBCOMMANDS = ("tag", "lift", "journal", "j", "brief", "web", "coach", "app", "priorities", "p")
+SUBCOMMANDS = ("tag", "lift", "journal", "j", "brief", "web", "coach", "app", "priorities", "p", "food")
 
 
 def main(argv=None) -> int:
@@ -2271,6 +2308,9 @@ def main(argv=None) -> int:
         return coach(argv[1:])
     if argv[:1] == ["app"]:
         return app(argv[1:])
+    if argv[:1] == ["food"]:
+        import food as F
+        return F.cli(argv[1:], D.data_home(), datetime.now(D.NY))
     if argv[:1] in (["priorities"], ["p"]):
         import priorities as PR
         if argv[1:2] in (["-h"], ["--help"]):

@@ -54,6 +54,7 @@ uv run --quiet --script <skill>/scripts/dashboard.py --no-color --width 80 [flag
 | "what affects my recovery", "why is my recovery low" | `--section insights` |
 | "I had two beers", "stretched tonight", "knee hurts", a journal note | run `<script> journal +alcohol` / `+stretch` / `+knee-pain` / `note "…"` (`yesterday` or a date first for another day; before noon the default is yesterday), then `--section journal`. `<script> journal habits` lists the keys |
 | "fitdash on my phone", phone app | the phone app runs via `<script> web --install` (status: `web --status`; foreground: `<script> app`); the user opens it over Tailscale (`tailscale serve --bg 8787`). It shows everything and logs habits and lifts. Their data may be public if they ask, but never expose the app with `tailscale funnel` without authentication: it has write endpoints |
+| "log my meal", "I had a wrap and a latte", anything they ate or drank | estimate each item (use published numbers for chain items, typical portions otherwise; say what you assumed) and log it with `<script> food add "<item>" <kcal> p=<g> c=<g> f=<g> meal=<…> at=<HH:MM>`; check with `<script> food`. Tell the user these are estimates |
 | "my priorities today are …", "I finished X", "how did my priorities go" | `<script> priorities set "…" "…" "…"` / `priorities done 1` (`some`, `missed`) / `priorities reflect "…"`, then `--section today`. Only record what the user said. Never mark a priority done on their behalf without being told |
 | "coach me", "write my coach note", a note for the Today box | `<script> coach run --kind morning\|activity\|evening --force`, or write it yourself and save it with `<script> coach set <kind> "text"` |
 | morning notification / "brief me every morning" | `<script> brief --install [HH:MM]` (status: `brief --status`, remove: `brief --uninstall`) |
@@ -172,6 +173,10 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   five tabs: Today, Sleep, Training, Log, Trends), `/api/model` (the same model as `--json`) and
   writes to the journal and lift log (JSON + `X-Fitdash: 1` header, no CORS). The launchd agent
   from `web --install` runs it; the terminal-style page stays at `/terminal`.
+- **Food log.** `fitdash food add "<item>" <kcal> p= c= f= [meal=] [at=] [day=]` writes
+  `~/.fitbit-mcp/food_log.json` (never Fitbit or Google). When Fitbit has no food for a day, the log
+  fills calories in and macros: Body & nutrition shows FOOD TODAY (calories vs burned + 250 for a
+  lean bulk, protein vs 1.6–2.2 g/kg) and the coach sees it.
 - **Priorities.** Up to 3 a day in `~/.fitbit-mcp/priorities.json` (until 04:00 it's still the day
   before). `fitdash` asks for them in a terminal in the morning (04:00–14:00) and for a review in
   the evening (from 19:00); skipping once silences it for the day. The Today box and the app

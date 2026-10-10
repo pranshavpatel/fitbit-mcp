@@ -23,6 +23,7 @@ from tz import local_zone
 
 import coach as CO
 import journal as J
+import food as F
 import lifts as L
 import priorities as PR
 import scores as S
@@ -83,6 +84,7 @@ def load_config(home: Path | None = None) -> dict:
     cfg["habit_list"] = J.habits(cfg)
     cfg["coach_notes"] = CO.load(home or data_home())
     cfg["priorities_log"] = PR.load(home or data_home())
+    cfg["food_log"] = F.load(home or data_home())
     return cfg
 
 
@@ -780,6 +782,16 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
         weekly[iso(xd - timedelta(days=xd.weekday()))].append(kg)
     cal_in = store.interval_sum("nutrition", "calories_in", lo, d)
     macros = {m: store.interval_sum("nutrition", m, d, d).get(d) for m in ("protein", "carbohydrate", "fat")}
+    # the local food log (fitdash food) fills days Fitbit has no food for
+    food_log = cfg.get("food_log") or {}
+    food_source = "fitbit" if d in cal_in else None
+    for x, entries in food_log.items():
+        if lo <= x <= d and x not in cal_in:
+            cal_in[x] = F.totals(entries)["kcal"]
+    if food_source is None and food_log.get(d):
+        t = F.totals(food_log[d])
+        macros = {"protein": t["protein"], "carbohydrate": t["carbs"], "fat": t["fat"]}
+        food_source = "food log"
     water = store.interval_sum("nutrition", "water", d, d).get(d)
     stale_weight = (day - date.fromisoformat(w_pts[-1][0])).days if w_pts else None
     model["body"] = {
@@ -790,6 +802,8 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
         "pace_target_kg": [round(latest_kg * p / 100, 2) for p in S.BULK_PACE] if latest_kg else None,
         "body_fat": store.latest_value("body", "body_fat"),
         "cal_in_today": cal_in.get(d), "cal_out_today": cal_out.get(d), "macros": macros, "water_ml": water,
+        "food_source": food_source, "food_today": food_log.get(d) or [],
+        "protein_target_g": [round(1.6 * latest_kg), round(2.2 * latest_kg)] if latest_kg else None,
         "last_food_log": max(cal_in) if cal_in else None,
         "cal_in_14": [cal_in.get(x) for x in span(day, 14)], "cal_out_14": [cal_out.get(x) for x in span(day, 14)],
     }
