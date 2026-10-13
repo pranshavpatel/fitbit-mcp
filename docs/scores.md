@@ -18,9 +18,14 @@ filled in with a guess.
 
 Each input becomes a z-score against your 28-day baseline (with small floors on the standard
 deviation so a very steady week doesn't blow up the scale). The weighted sum goes through a
-logistic curve, so every input exactly at baseline gives about 56 %. Respiratory rate or skin
-temperature more than 1.5 SD off baseline subtracts a penalty, which often shows up before
-illness.
+logistic curve, so every input exactly at baseline gives about 72 %. Respiratory rate more than
+1.5 SD off baseline subtracts a penalty, which often shows up before illness. Skin temperature is
+not an input (WHOOP says the same of its Recovery); a big shift is flagged in Needs attention.
+
+The curve's centre is the one constant fitted to WHOOP itself: on 26 days of a WHOOP user's own
+inputs, fitdash ranked days almost exactly like WHOOP (r 0.97) but read ~16 points low every day.
+Moving only the centre cut the average error from 15.6 to 6.9 points and lifted green/yellow/red
+agreement from 46 % to 85 %. One person is a small sample, so treat absolute numbers as estimates.
 
 Bands: **green ≥ 67**, **yellow 34–66**, **red ≤ 33**. Without overnight HRV or resting HR the score
 is "—".
@@ -33,12 +38,14 @@ is "—".
    and HRmax is the 99.5th percentile of all your recorded heart rate.
 2. **Scale.** `21 · ln(1 + TRIMP/25) / ln(21)`, logarithmic like WHOOP's, so going from 18 to 20
    takes far more work than going from 8 to 10.
-3. **Target for today** depends on Recovery: green 14–18, yellow 10–14, red 4–10.
+3. **Bands** use WHOOP's names: Light < 10, Moderate 10–13, High 14–17, All out 18+.
+4. **Target for today** depends on Recovery: green 14–18, yellow 10–14, red 4–10.
 
 ## Sleep
 
-**Sleep need** = baseline + a strain adjustment for yesterday + ½ of your sleep debt (at most
-1 h) − credit for naps.
+**Sleep need** = baseline + a strain adjustment for yesterday + 0.9 × your sleep debt (at most
+2 h) − credit for naps. The 0.9 and the 2 h cap come from decomposing a WHOOP user's own sleep need
+(32 nights; base + debt + strain explained 91 % of it).
 
 - **Baseline**: the 75th percentile of the last 28 nights, which is roughly what you sleep when
   nothing cuts the night short, clamped to the 7–9 h adult range. Nights right after one under 6 h
@@ -47,7 +54,7 @@ is "—".
   `"sleep_need": "8:00"` in `stats.json`, which is worth doing until you have a few regular weeks.
 - **Sleep debt**: a running balance over the last 7 nights. A night under your baseline adds the
   shortfall, a night over it pays debt back, the balance never goes below zero, and older debt fades
-  15 % per night. Only half is added to tonight's need, because one night can't repay it all.
+  15 % per night.
 
 **Sleep score 0–100** has the four components WHOOP describes for its 2025 Sleep Performance. WHOOP
 doesn't publish the weights, so these are ours:
@@ -62,7 +69,7 @@ doesn't publish the weights, so these are ours:
 Missing parts are re-weighted. Bands: ≥ 90 optimal, 70–89 sufficient, < 70 poor.
 
 **Tonight's "asleep by"** = tonight's need counted back from your `wake_anchor`. Tonight's need
-includes today's strain and half of the debt balance, including last night.
+includes today's strain and 0.9 × the debt balance, including last night.
 
 ## Training load
 

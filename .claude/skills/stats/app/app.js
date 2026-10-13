@@ -262,7 +262,7 @@ function renderSleep(m) {
   </section>
   <section class="card"><h2>Sleep need <small>last night</small></h2>
     <div class="head"><span class="big num">${hm(nd.total)}</span></div>
-    <dl class="kv"><dt>Base</dt><dd>${hm(nd.base)}</dd><dt>½ of debt</dt><dd>${hm(nd.debt_adj)}</dd><dt>Strain</dt><dd>${hm(nd.strain_adj)}</dd>${nd.nap_credit ? `<dt>Naps</dt><dd>−${hm(nd.nap_credit)}</dd>` : ""}</dl>
+    <dl class="kv"><dt>Base</dt><dd>${hm(nd.base)}</dd><dt>Debt</dt><dd>${hm(nd.debt_adj)}</dd><dt>Strain</dt><dd>${hm(nd.strain_adj)}</dd>${nd.nap_credit ? `<dt>Naps</dt><dd>−${hm(nd.nap_credit)}</dd>` : ""}</dl>
     <div class="divider"></div>
     <div class="between"><span class="sub">Debt going into tonight</span><b class="num">${hm(tn.debt)}</b></div>
     <div class="between"><span class="sub">Asleep by tonight</span><b class="num">${clockMin(tn.asleep_by)}</b></div>

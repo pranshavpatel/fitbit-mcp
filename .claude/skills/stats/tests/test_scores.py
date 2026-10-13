@@ -39,10 +39,10 @@ def test_recovery_requires_overnight_hrv_and_rhr():
     assert S.recovery(80, None, 60, RHR_B).reason == "under 7 days of baseline"
 
 
-def test_recovery_at_baseline_is_neutral_yellow():
+def test_recovery_at_baseline_matches_whoop_calibration():
+    # WHOOP scored near-baseline days ~70 % in the calibration export, so an all-baseline day sits low green
     r = S.recovery(80, HRV_B, 60, RHR_B, S.SLEEP_Z_CENTER)
-    assert r.score == round(S.logistic(0)) and r.band == "yellow"
-    assert 50 <= r.score <= 60
+    assert r.score == round(S.logistic(0)) and 68 <= r.score <= 75 and r.band == "green"
 
 
 def test_recovery_direction_and_inverted_rhr():
@@ -64,10 +64,19 @@ def test_recovery_without_sleep_reweights_and_lists_contributions():
 def test_recovery_penalties_only_beyond_free_zone():
     base = S.recovery(80, HRV_B, 60, RHR_B, 85, resp=16.0, resp_base=S.Baseline(16, 0.3, 28)).score
     off = S.recovery(80, HRV_B, 60, RHR_B, 85, resp=17.5, resp_base=S.Baseline(16, 0.3, 28)).score
-    skin = S.recovery(80, HRV_B, 60, RHR_B, 85, skin_dev_c=1.5, skin_sd_c=0.5).score
-    assert off < base and skin < base
-    small = S.recovery(80, HRV_B, 60, RHR_B, 85, skin_dev_c=0.4, skin_sd_c=0.5)
-    assert next(c for c in small.contributions if c.label == "Skin temp").points == 0
+    assert off < base
+
+
+def test_skin_temp_is_not_a_recovery_input():
+    base = S.recovery(80, HRV_B, 60, RHR_B, 85)
+    hot = S.recovery(80, HRV_B, 60, RHR_B, 85, skin_dev_c=1.5, skin_sd_c=0.5)
+    assert hot.score == base.score and "Skin temp" not in [c.label for c in hot.contributions]
+
+
+@pytest.mark.parametrize("strain,band", [(0, "Light"), (9.9, "Light"), (10, "Moderate"), (13.9, "Moderate"),
+                                         (14, "High"), (17.9, "High"), (18, "All out"), (21, "All out"), (None, None)])
+def test_strain_bands(strain, band):
+    assert S.strain_band(strain) == band
 
 
 @pytest.mark.parametrize("score,band", [(100, "green"), (67, "green"), (66, "yellow"), (34, "yellow"), (33, "red"),
@@ -157,8 +166,8 @@ def test_sleep_debt_balance_repays_and_fades():
 
 def test_sleep_need_components():
     n = S.sleep_need(480, 15.0, 100, 30)
-    assert n.strain_adj == 20 and n.debt_adj == 50 and n.nap_credit == 30
-    assert n.total == 480 + 20 + 50 - 30
+    assert n.strain_adj == 20 and n.debt_adj == 90 and n.nap_credit == 30
+    assert n.total == 480 + 20 + 90 - 30
     assert S.sleep_need(480, None, 0, 0).total == 480
     assert S.sleep_need(480, 21, 1000, 0).debt_adj == S.DEBT_ADJ_CAP
 

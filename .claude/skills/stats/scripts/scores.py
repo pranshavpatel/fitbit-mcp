@@ -12,7 +12,7 @@ import statistics
 from dataclasses import dataclass, field
 from typing import Iterable, Sequence
 
-FORMULA_VERSION = "stats-scores v1.2"
+FORMULA_VERSION = "stats-scores v1.3"
 
 # ---------------------------------------------------------------- baselines
 
@@ -59,12 +59,17 @@ def clamp(x: float, lo: float, hi: float) -> float:
 RECOVERY_WEIGHTS = {"hrv": 0.45, "rhr": 0.30, "sleep": 0.25}
 RECOVERY_WEIGHTS_NO_SLEEP = {"hrv": 0.60, "rhr": 0.40}
 LOGISTIC_K = 1.5          # steepness of the 0-100 mapping
-LOGISTIC_X0 = -0.17       # x = 0 (every input exactly at baseline) maps to ~56 %
+# Curve centre fitted against WHOOP Recovery (one WHOOP user, 26 days, weights and k held fixed: MAE 15.6 -> 6.9,
+# band agreement 46 % -> 85 %). The gap did not shrink with longer baselines, so it is the curve, not the window.
+LOGISTIC_X0 = -0.63       # x = 0 (every input exactly at baseline) maps to ~72 %
 SLEEP_Z_CENTER, SLEEP_Z_SCALE = 85.0, 15.0   # Sleep Performance 85 % is neutral, 100 % is +1
 PENALTY_SLOPE, PENALTY_FREE_Z, PENALTY_CAP = 0.35, 1.5, 1.0
 HRV_MIN_SD_FRACTION = 0.05   # HRV SD floor: 5 % of its mean
 RHR_MIN_SD = 1.0             # bpm
 RESP_MIN_SD = 0.3            # breaths/min
+# WHOOP documents Recovery's inputs as HRV, resting HR, sleep and respiratory rate; skin temperature
+# is a Health Monitor metric only. It stays a "watch" flag in Needs attention, not a Recovery input.
+SKIN_TEMP_IN_RECOVERY = False
 
 
 def logistic(x: float) -> float:
@@ -104,7 +109,8 @@ def recovery(hrv: float | None, hrv_base: Baseline | None, rhr: float | None, rh
              sleep_performance: float | None = None, resp: float | None = None, resp_base: Baseline | None = None,
              skin_dev_c: float | None = None, skin_sd_c: float | None = None) -> RecoveryResult:
     """Recovery from overnight HRV and resting HR z-scores (RHR inverted), Sleep Performance, and
-    penalties when respiratory rate or skin temperature sit well outside their usual range.
+    a penalty when respiratory rate sits well outside its usual range (skin temperature only when
+    SKIN_TEMP_IN_RECOVERY is on).
 
     x = Σ wᵢ·zᵢ − penalties, score = logistic(x). HRV and RHR are required: without them there's
     nothing physiological to recover from, so the result is "—" with a reason, never a guess.
@@ -131,7 +137,7 @@ def recovery(hrv: float | None, hrv_base: Baseline | None, rhr: float | None, rh
     z_resp = zscore(resp, resp_base, RESP_MIN_SD)
     if z_resp is not None:
         terms.append(("Resp. rate", z_resp, -_penalty(z_resp)))
-    if skin_dev_c is not None and skin_sd_c:
+    if SKIN_TEMP_IN_RECOVERY and skin_dev_c is not None and skin_sd_c:
         z_skin = skin_dev_c / skin_sd_c
         terms.append(("Skin temp", z_skin, -_penalty(z_skin)))
 
@@ -221,6 +227,15 @@ def strain(trimp: float | None) -> float | None:
     return round(min(21.0, raw), 1)
 
 
+STRAIN_BANDS = ((18.0, "All out"), (14.0, "High"), (10.0, "Moderate"), (0.0, "Light"))   # WHOOP's published bands
+
+
+def strain_band(strain: float | None) -> str | None:
+    if strain is None:
+        return None
+    return next(name for lo, name in STRAIN_BANDS if strain >= lo)
+
+
 def strain_target(recovery_score: float | None) -> tuple[float, float] | None:
     """Suggested day-strain range for a recovery level."""
     if recovery_score is None:
@@ -240,7 +255,8 @@ REBOUND_AFTER_MIN = 360.0               # a night after one under 6 h is a rebou
 DEBT_NIGHTS = 7                         # the debt balance looks back a week
 DEBT_DECAY = 0.85                       # each night, older debt fades by 15 %
 DEBT_REPAY_RATE = 1.0                   # an hour over need pays back an hour of debt
-DEBT_ADJ_RATE, DEBT_ADJ_CAP = 0.5, 60.0
+# WHOOP's need decomposes as ~0.9 x its sleep debt (one WHOOP user, 32 nights, R2 0.91), adding up to ~2 h
+DEBT_ADJ_RATE, DEBT_ADJ_CAP = 0.9, 120.0
 STRAIN_ADJ_FREE, STRAIN_ADJ_PER_POINT, STRAIN_ADJ_CAP = 10.0, 4.0, 45.0
 NAP_CREDIT_CAP = 90.0
 
@@ -747,6 +763,14 @@ EXERCISES: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "leg curl": (("hamstrings",), ()),
     "hip thrust": (("glutes",), ("hamstrings",)),
     "calf raise": (("calves",), ()),
+    "goblet squat": (("quads", "glutes"), ("hamstrings",)),
+    "bulgarian split squat": (("quads", "glutes"), ("hamstrings",)),
+    "single leg romanian deadlift": (("hamstrings",), ("glutes",)),
+    "single leg extension": (("quads",), ()),
+    "single leg curl": (("hamstrings",), ()),
+    "seated calf raise": (("calves",), ()),
+    "tibialis raise": ((), ()),  # anterior shin is not a tracked muscle; don't credit calves
+    "box jump": ((), ()),       # jump sets are not hypertrophy hard sets
     "wide grip row": (("lats",), ("shoulders", "biceps")),
     "back extension": ((), ("glutes", "hamstrings")),          # mostly lower back, which isn't tracked
     "archer pull": (("shoulders",), ("lats",)),                 # cable/band archer pull: rear delts, upper back
@@ -783,8 +807,8 @@ EXERCISE_ALIASES = {
     "facepull": "face pull", "barbell row": "row", "cable row": "row", "seated row": "row", "bent over row": "row",
     "pullup": "pull up", "pullups": "pull up", "chinup": "chin up", "chinups": "chin up",
     "pulldown": "lat pulldown", "lat pull": "lat pulldown", "rdl": "romanian deadlift", "dl": "deadlift",
-    "back squat": "squat", "front squat": "squat", "goblet squat": "squat", "lunges": "lunge",
-    "split squat": "lunge", "bulgarian split squat": "lunge", "leg ext": "leg extension", "hamstring curl": "leg curl",
+    "back squat": "squat", "front squat": "squat", "lunges": "lunge",
+    "split squat": "lunge", "leg ext": "leg extension", "hamstring curl": "leg curl",
     "glute bridge": "hip thrust", "calf": "calf raise", "calves": "calf raise", "bicep curl": "curl",
     "biceps curl": "curl", "curls": "curl", "hammer": "hammer curl", "pushdown": "triceps pushdown",
     "tricep pushdown": "triceps pushdown", "tricep extension": "triceps extension", "overhead extension": "triceps extension",

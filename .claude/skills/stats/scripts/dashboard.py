@@ -343,7 +343,7 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
         out.append(blank())
         nd = sl.get("need") or {}
         out += details([
-            ("Need", "{} (base {} + ½ of debt {} + strain {}{})".format(
+            ("Need", "{} (base {} + debt {} + strain {}{})".format(
                 hm(nd.get("total")), hm(nd.get("base")), hm(nd.get("debt_adj")), hm(nd.get("strain_adj")),
                 " − naps {}".format(hm(nd.get("nap_credit"))) if nd.get("nap_credit") else "")),
             ("Sleep debt going into tonight", hm((sl.get("tonight") or {}).get("debt"))),
@@ -506,7 +506,7 @@ def sec_strain(m: dict, w: int) -> list[Text]:
         lvl = "watch"
     else:
         lvl = "none" if so_far else "watch"
-    out += headline(w, lvl, ("{:.1f}".format(st["day"]) if st["day"] is not None else "—", "strain" + (" so far" if so_far else "")),
+    out += headline(w, lvl, ("{:.1f}".format(st["day"]) if st["day"] is not None else "—", "strain" + (" so far" if so_far else "") + (" · " + S.strain_band(st["day"]) if st["day"] is not None else "")),
                     ("{:.0f}–{:.0f}".format(*tgt) if tgt else "—", "target"))
     bw = max(12, min(48, w - 12))
     filled = 0 if st["day"] is None else int(st["day"] / 21 * bw)

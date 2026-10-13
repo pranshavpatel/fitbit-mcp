@@ -97,21 +97,23 @@ All formulas live in `scripts/scores.py`, and the footer shows the version. Thes
 on WHOOP-style scales calibrated on the user's own history, **not WHOOP's proprietary algorithm**.
 
 - **Recovery 0–100 %.** Weighted z-scores against the prior 28 days: overnight HRV 45 %, resting
-  HR inverted 30 %, sleep score 25 %. Penalties apply when respiratory rate or skin
-  temperature sits more than 1.5 SD off baseline. The total goes through a logistic curve, so
-  every input at baseline gives about 56 %. Bands: green ≥ 67, yellow 34–66, red ≤ 33. Without
+  HR inverted 30 %, sleep score 25 %. A penalty applies when respiratory rate sits more
+  than 1.5 SD off baseline. Skin temperature is not an input (WHOOP documents it isn't); it shows
+  in Needs attention instead. The total goes through a logistic curve whose centre was fitted
+  against real WHOOP scores (one WHOOP user, 26 days), so every input at baseline gives about 72 %. Bands: green ≥ 67, yellow 34–66, red ≤ 33. Without
   overnight HRV or resting HR the score is "—", never a guess.
 - **Strain 0–21.** Banister TRIMP on heart-rate reserve. It uses all-day HR when that covers
   18 h, otherwise Active Zone Minutes. Zone intensities are calibrated from the user's own Fitbit
   zone limits, and HRmax is the 99.5th percentile of recorded HR. The scale is logarithmic:
-  21 · ln(1 + T/25) / ln(21). Target ranges: green 14–18, yellow 10–14, red 4–10.
+  21 · ln(1 + T/25) / ln(21). Bands as WHOOP names them: Light < 10, Moderate 10–13,
+  High 14–17, All out 18+. Target ranges: green 14–18, yellow 10–14, red 4–10.
 - **Sleep score 0–100** (shown on the Sleep ring, the Today row and the Sleep box). Modeled on
   WHOOP's 2025 Sleep Performance, which has four components; WHOOP doesn't publish weights, so
   these are ours: hours vs need 50 % (asleep ÷ need, capped at 100), efficiency 20 % (asleep ÷ in
   bed), consistency 15 % (bed/wake regularity over the last 4 nights) and sleep stress 15 %
   (100 − % of the night's 5-minute HRV readings below the user's own 20th percentile from the
   previous 28 nights). Missing parts are re-weighted. Bands: ≥ 90 optimal, 70–89 sufficient,
-  < 70 poor. Need = personal baseline + strain adjustment + ½ of sleep debt (max 1 h) − nap
+  < 70 poor. Need = personal baseline + strain adjustment + 0.9 × sleep debt (max 2 h, fitted to WHOOP) − nap
   credit. Baseline = 75th percentile of the last 28 nights, clamped to 7–9 h, leaving out rebound
   nights (any night after one under 6 h), or `"sleep_need": "8:00"` in stats.json when set. Sleep
   debt is a running 7-night balance: short nights add, long nights pay back, older debt fades 15 %
@@ -120,7 +122,7 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   above 1.5 is a warning.
 - **Impact spike.** A week of running + soccer more than 1.3× the previous 4-week average
   (and ≥ 60 min).
-- **Tonight's bedtime.** Sleep need going into tonight (baseline + today's strain + ½ of the
+- **Tonight's bedtime.** Sleep need going into tonight (baseline + today's strain + 0.9 × the
   sleep-debt balance including last night) counted back from the wake anchor. The experiment's lights-out time is shown as the latest limit.
 - **Wear coverage.** A day with under 10 h of activity-level plus sleep minutes counts as not
   worn: its strain is a gap (·), never a rest day, so it can't drag down the load ratio.
