@@ -161,7 +161,8 @@ def test_habit_columns_counts_and_gaps():
           {"good": False, "cells": [True, False, None, False, False, None, True]}]
     lines = [t.plain for t in dashboard._habit_columns(hs, days, 80)]
     axis = next(l for l in lines if "┼" in l)
-    assert axis.count("·") == 2                               # the two unlogged days sit on the line
+    assert axis.split("┼")[1].rstrip().strip("─") == ""             # the zero line is unbroken
+    assert sum(l.count("░") for l in lines) > 0                     # and shaded through the chart
     assert any(l.split("│")[-1].strip().startswith("2") for l in lines if "done ▲" in l)   # day 1: 2 done, on top
     assert sum(l.count("▓") for l in lines) > 0 and sum(l.count("█") for l in lines) > 0
 

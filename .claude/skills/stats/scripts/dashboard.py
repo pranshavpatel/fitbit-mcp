@@ -1888,7 +1888,7 @@ def _week_change(vals: list[float | None]) -> tuple[float | None, float | None, 
 def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
     """One column per day around a zero line: up = to-do habits done (█, green), down = avoid habits
     slipped (▓, red), each bar topped with its count. Counts, not percentages, so a day reads as
-    "did 4, slipped 1". Days not logged sit on the line as ·. Shape (█ vs ▓, up vs down) carries the
+    "did 4, slipped 1". A day not logged is a shaded, empty column with a dimmed date; the zero line runs unbroken. Shape (█ vs ▓, up vs down) carries the
     meaning without color."""
     good = [h for h in hs if h["good"] is True]
     bad = [h for h in hs if h["good"] is False]
@@ -1924,7 +1924,9 @@ def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
             line = Text(no_wrap=True)
             for v in vals:
                 hgt = 0 if not v else max(1, round(v * scale))
-                if v and lvl <= hgt:
+                if v is None and gap_day[len(line.plain) // col_w]:
+                    line.append(("░" * bw).ljust(col_w), style=C["faint"])        # no log: a shaded, empty column
+                elif v and lvl <= hgt:
                     line.append((glyph * bw).ljust(col_w), style=col)
                 elif v is not None and lvl == hgt + 1:
                     line.append(str(v).center(bw).ljust(col_w), style="bold " + (col if v else C["muted"]))
@@ -1933,16 +1935,13 @@ def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
             rows.append(line)
         return rows
 
+    gap_day = [u is None and d is None for u, d in zip(up, down)]
     ups = bar_rows(up, h_up, scale_up, "█", C["good"], True)
     dns = bar_rows(down, h_dn, scale_dn, "▓", C["flag"], False) if bad else []
     for i, r in enumerate(ups):
         label = "done ▲" if i == 0 else ""
         out.append(fit(T(("  {:>{}} ".format(label, lab_w - 2), C["good"] if label else ""), ("│", C["rule"])) + r, w))
-    axis = Text(no_wrap=True)
-    for u, d in zip(up, down):
-        off = u is None and d is None
-        axis.append(("·".center(bw) if off else "─" * bw).ljust(col_w, " " if off else "─"),
-                    style=C["faint"] if off else C["rule"])
+    axis = Text("─" * col_w * len(up), style=C["rule"], no_wrap=True)    # unbroken: the shaded column says "no log"
     out.append(fit(T(("  {:>{}} ".format("", lab_w - 2), ""), ("┼", C["rule"])) + axis, w))
     for i, r in enumerate(dns):
         label = "slips ▼" if i == len(dns) - 1 else ""
@@ -1951,13 +1950,15 @@ def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
     for k, i in enumerate(idx):
         d = date.fromisoformat(days[i])
         last = k == len(idx) - 1
-        wd.append(d.strftime("%a")[:2].center(bw).ljust(col_w), style="bold " + C["ink"] if last else C["muted"])
-        dn.append(str(d.day).center(bw).ljust(col_w), style="bold " + C["ink"] if last else C["muted"])
+        off = up[k] is None and down[k] is None
+        st = "bold " + C["ink"] if last else C["faint"] if off else C["muted"]
+        wd.append(d.strftime("%a")[:2].center(bw).ljust(col_w), style=st)
+        dn.append(str(d.day).center(bw).ljust(col_w), style=st)
     pad = " " * (lab_w + 2)                                        # under the "│" axis
     out.append(fit(T((pad, "")) + wd, w))
     out.append(fit(T((pad, "")) + dn, w))
     out += _flow([T(("██", C["good"]), (" to-do habits done", C["muted"])), T(("▓▓", C["flag"]), (" avoid habits slipped", C["muted"])),
-                  T(("·", C["faint"]), (" not logged", C["muted"]))], w, gap=3, indent=2)
+                  T(("░░", C["faint"]), (" no log that day", C["muted"]))], w, gap=3, indent=2)
     out.append(blank())
     return out
 
