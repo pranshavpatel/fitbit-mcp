@@ -1052,24 +1052,28 @@ def _split_track(sp: dict, w: int) -> list[Text]:
 
 
 def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
-    """Weigh-ins against the lean-bulk corridor (+0.25–0.5 %/week compounding from the first
-    weigh-in), drawn in Braille (2×4 dots a cell) out to today: the corridor is a stippled band with
+    """Weigh-ins against the lean-bulk corridor (+0.25–0.5 %/week compounding from your weight four
+    weeks ago, S.bulk_anchor, so a missed month doesn't count against you forever), drawn in Braille (2×4 dots a cell) out to today: the corridor is a stippled band with
     solid edges, each weigh-in a ● (no line between them: weeks without a weigh-in aren't data;
     the pace gauge above carries the trend). Where the corridor ends and where you are
     now are labelled in a right-hand gutter, so labels never collide with the data."""
-    pts = [(date.fromisoformat(d), kg) for d, kg in b["weights"]]
-    d0, kg0 = pts[0]
-    end = max(today, pts[-1][0])
+    allpts = [(date.fromisoformat(d), kg) for d, kg in b["weights"]]
+    end = max(today, allpts[-1][0])
+    a_day, a_kg = S.bulk_anchor(allpts, end)
+    pts = [p for p in allpts if (end - p[0]).days <= 16 * 7] or allpts[-1:]    # the chart shows ≤ 16 weeks
+    d0 = min(pts[0][0], a_day)
     span = max(1, (end - d0).days)
     lab_w, gut_w = 6, 12
     plot_w = max(16, w - lab_w - 1 - gut_w)
     dw, dh = plot_w * 2, h * 4
 
-    def band(days: float) -> tuple[float, float]:
-        return kg0 * (1 + S.BULK_PACE[0] / 100) ** (days / 7), kg0 * (1 + S.BULK_PACE[1] / 100) ** (days / 7)
+    lead = (a_day - d0).days                                   # days of chart before the corridor starts
 
-    lo_end, hi_end = band(span)
-    lo = math.floor((min([kg for _, kg in pts] + [kg0]) - 0.3) * 2) / 2
+    def band(days: float) -> tuple[float, float]:              # corridor `days` after its start
+        return a_kg * (1 + S.BULK_PACE[0] / 100) ** (days / 7), a_kg * (1 + S.BULK_PACE[1] / 100) ** (days / 7)
+
+    lo_end, hi_end = band((end - a_day).days)
+    lo = math.floor((min([kg for _, kg in pts] + [a_kg]) - 0.3) * 2) / 2
     hi = math.ceil((max([kg for _, kg in pts] + [hi_end]) + 0.3) * 2) / 2
 
     def yd(v: float) -> int:                       # value -> dot row (0 = top)
@@ -1084,8 +1088,8 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
         if 0 <= x < dw and 0 <= y < dh:
             g[y // 4][x // 2] |= K._BRAILLE_BITS[y % 4][x % 2]
 
-    for x in range(dw):
-        blo, bhi = band(x / (dw - 1) * span)
+    for x in range(int(round(lead / span * (dw - 1))), dw):
+        blo, bhi = band(x / (dw - 1) * span - lead)
         top, bot = yd(bhi), yd(blo)
         put(edge, x, top)
         put(edge, x, bot)
@@ -1149,13 +1153,16 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
         axis.append(" " * (c - pos) + lab, style="bold " + C["ink2"] if lab == "today" else C["muted"])
         pos = c + len(lab)
     out.append(fit(axis, w))
-    out += _flow([T(("⢕", C["body_grain"]), (" lean-bulk corridor (+0.25–0.5 %/wk)", C["muted"])),
+    out += _flow([T(("⢕", C["body_grain"]), (" lean-bulk corridor from 4 weeks ago ({:.1f} kg)".format(a_kg), C["muted"])),
                   T(("●", C["ink2"]), (" weigh-in", C["muted"]))], w, 3, 2)
     now = pts[-1][1]
     where = ("{:.1f} kg under today's floor ({:.1f} kg)".format(lo_end - now, lo_end) if now < lo_end else
              "{:.1f} kg over today's ceiling ({:.1f} kg)".format(now - hi_end, hi_end) if now > hi_end else
              "inside today's corridor ({:.1f}–{:.1f} kg)".format(lo_end, hi_end))
     note = "You're " + where + "."
+    if allpts[0][0] < a_day:
+        gain = allpts[-1][1] - allpts[0][1]
+        note += " Since {}: {:+.1f} kg.".format(allpts[0][0].strftime("%b %-d"), gain)
     swings = [abs(k1 - k0) for (a0, k0), (a1, k1) in zip(pts, pts[1:]) if (a1 - a0).days <= 3]
     if swings and max(swings) >= 1.0:
         note += (" Weigh-ins days apart differ by up to {:.1f} kg (water and food), so weigh each morning "

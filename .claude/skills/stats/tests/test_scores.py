@@ -305,3 +305,16 @@ def test_sleep_stress_pct():
     assert S.sleep_stress_pct([100] * 10, base) == 0
     assert S.sleep_stress_pct([50] * 3, base) is None      # under 30 minutes of readings
     assert S.sleep_stress_pct([50] * 10, base[:20]) is None  # no usable baseline yet
+
+
+def test_bulk_anchor_rolls_forward_and_damps_noise():
+    from datetime import date, timedelta
+    d = date(2026, 7, 1)
+    w = [(d, 60.0), (d + timedelta(days=40), 62.0), (d + timedelta(days=70), 63.0), (d + timedelta(days=72), 61.0)]
+    end = d + timedelta(days=75)
+    day, kg = S.bulk_anchor(w, end)
+    assert day == end - timedelta(days=S.BULK_WINDOW_DAYS)                 # 4 weeks back, not the first weigh-in
+    # between 62.0 (day 40) and the day-70 cluster averaged with day 72 (62.0): one noisy reading can't move it
+    assert kg == pytest.approx(62.0)
+    assert S.bulk_anchor(w, d + timedelta(days=20)) == w[0]               # less history than the window
+    assert S.bulk_anchor(w[:2], d + timedelta(days=90)) == (d + timedelta(days=62), 62.0)   # nothing after: last before

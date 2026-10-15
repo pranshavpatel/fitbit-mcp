@@ -71,6 +71,16 @@ Missing parts are re-weighted. Bands: ≥ 90 optimal, 70–89 sufficient, < 70 p
 **Tonight's "asleep by"** = tonight's need counted back from your `wake_anchor`. Tonight's need
 includes today's strain and 0.9 × the debt balance, including last night.
 
+## Lean bulk
+
+- **Pace** = the trend through your weigh-ins in kg/week, against 0.25–0.5 % of your current
+  body weight a week.
+- **Corridor** = that pace compounding from your weight **4 weeks ago**, so a missed month
+  doesn't follow you forever: the start rolls forward every day. Its weight is interpolated
+  between the weigh-ins either side of that day, each averaged with weigh-ins within a week of it,
+  so one water-heavy reading can't move it. With less than 4 weeks of weigh-ins it starts at the
+  first one. Your total since the first weigh-in is still shown underneath.
+
 ## Training load
 
 - **Load ratio (ACWR).** Mean daily TRIMP over 7 days ÷ over 28 days. 0.8–1.3 is the sweet spot;

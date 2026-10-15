@@ -53,7 +53,7 @@ extra boxes you don't get in the full dashboard:
 | `workouts` | A 7-day timeline of when you trained, textured by intensity; time by activity; key sessions, records and your HR zones |
 | `strain` | Strain vs target, 28 days of strain colored in range / below / above each day's target, steps and activity by hour |
 | `week` | This week vs last for 10 metrics: a % change bar from a shared center line, green better / amber worse |
-| `body` | A lean-bulk pace gauge, weigh-ins against the lean-bulk corridor |
+| `body` | A lean-bulk pace gauge, weigh-ins against a lean-bulk corridor that starts from your weight 4 weeks ago |
 | `logs` | Symptom/mood logs status |
 
 ![Training plan](demo/training.svg)

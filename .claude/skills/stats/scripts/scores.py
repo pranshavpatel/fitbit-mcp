@@ -10,6 +10,7 @@ from __future__ import annotations
 import math
 import statistics
 from dataclasses import dataclass, field
+from datetime import date, timedelta
 from typing import Iterable, Sequence
 
 FORMULA_VERSION = "stats-scores v1.3"
@@ -408,6 +409,31 @@ def stress_level(hr_values: Sequence[float], hr_rest: float | None, hr_max: floa
 
 BULK_PACE = (0.25, 0.5)   # % of body weight per week
 PACE_TOLERANCE = 0.05     # within 0.05 %/wk of an edge counts as "at the edge", not off pace
+BULK_WINDOW_DAYS = 28     # the lean-bulk corridor starts from where you were 4 weeks ago, and moves with time
+CLUSTER_DAYS = 7          # weigh-ins this close together are averaged, so one noisy reading can't set the start
+
+
+def bulk_anchor(weights: Sequence[tuple[date, float]], end: date) -> tuple[date, float]:
+    """Where the lean-bulk corridor starts: your weight BULK_WINDOW_DAYS before `end`.
+
+    Missing a target shouldn't follow you forever, so the start rolls forward. Its weight is
+    interpolated between the weigh-ins either side of that day (each the average of the weigh-ins
+    within CLUSTER_DAYS of it, to damp water swings). With nothing after it, the last weigh-in
+    before it is used as is; with less history than the window, the first weigh-in is the start.
+    `weights` is (date, kg), oldest first."""
+    start = end - timedelta(days=BULK_WINDOW_DAYS)
+    if start <= weights[0][0]:
+        return weights[0]
+    before = [p for p in weights if p[0] <= start]
+    after = [p for p in weights if p[0] > start]
+    b_day = before[-1][0]
+    b_kg = statistics.fmean(kg for d, kg in before if (b_day - d).days <= CLUSTER_DAYS)
+    if not after:
+        return start, b_kg
+    a_day = after[0][0]
+    a_kg = statistics.fmean(kg for d, kg in after if (d - a_day).days <= CLUSTER_DAYS)
+    frac = (start - b_day).days / max(1, (a_day - b_day).days)
+    return start, b_kg + (a_kg - b_kg) * frac
 
 
 @dataclass
