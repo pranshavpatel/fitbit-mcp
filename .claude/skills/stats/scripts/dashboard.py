@@ -1051,6 +1051,10 @@ def _split_track(sp: dict, w: int) -> list[Text]:
     return [fit(r, w) for r in rows]
 
 
+WEIGHT_OVER = C["zone"]["cardio"]      # over the lean-bulk corridor: gaining faster than muscle can be built
+WEIGHT_EDGE_KG = 0.05                  # a scale reads to 0.1 kg: this close to an edge counts as inside
+
+
 def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
     """Weigh-ins against the lean-bulk corridor (+0.25–0.5 %/week compounding from your weight four
     weeks ago, S.bulk_anchor, so a missed month doesn't count against you forever), drawn in Braille (2×4 dots a cell) out to today: the corridor is a stippled band with
@@ -1097,12 +1101,26 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
             if y % 4 == 2 and (x + y // 4 * 2) % 4 == 0:     # a light grain, not a fill
                 put(stip, x, y)
     xy = [(xd(d), yd(kg)) for d, kg in pts]
-    marks = {(y // 4, x // 2): i == len(xy) - 1 for i, (x, y) in enumerate(xy)}
+
+    def status(d: date, kg: float) -> tuple[str, str, str]:
+        """A weigh-in against the corridor on its own day: glyph, color, word. Shape and color both
+        carry it, so it reads without color too."""
+        if d < a_day:
+            return "○", C["body"], "before"     # hollow: no corridor yet that day
+        blo, bhi = band((d - a_day).days)
+        if kg < blo - WEIGHT_EDGE_KG:
+            return "▼", C["watch"], "under"
+        if kg > bhi + WEIGHT_EDGE_KG:
+            return "▲", WEIGHT_OVER, "over"
+        return "●", C["good"], "inside"
+
+    looks = [status(d, kg) for d, kg in pts]
+    marks = {(y // 4, x // 2): i for i, (x, y) in enumerate(xy)}       # a later weigh-in wins a shared cell
 
     # right gutter: corridor top and floor at today, and you; nudged apart so no two share a row
     want = sorted([(yd(hi_end) // 4, "{:.1f} top".format(hi_end), C["body"]),
                    (yd(lo_end) // 4, "{:.1f} floor".format(lo_end), C["body"]),
-                   (xy[-1][1] // 4, "{:.1f} you".format(pts[-1][1]), "bold " + C["ink"])])
+                   (xy[-1][1] // 4, "{:.1f} you".format(pts[-1][1]), "bold " + looks[-1][1])])
     gutter: dict[int, tuple[str, str]] = {}
     for r, text, style in want:
         while r in gutter and r < h - 1:
@@ -1126,7 +1144,8 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
               ("┤" if r in ticks else "│", C["rule"]))
         for c in range(plot_w):
             if (r, c) in marks:
-                t.append("●", style="bold " + (C["ink"] if marks[(r, c)] else C["ink2"]))
+                glyph, col, _ = looks[marks[(r, c)]]
+                t.append(glyph, style="bold " + col)
             elif edge[r][c]:
                 t.append(chr(0x2800 | edge[r][c]), style=C["body"])
             elif stip[r][c]:
@@ -1153,8 +1172,30 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
         axis.append(" " * (c - pos) + lab, style="bold " + C["ink2"] if lab == "today" else C["muted"])
         pos = c + len(lab)
     out.append(fit(axis, w))
-    out += _flow([T(("⢕", C["body_grain"]), (" lean-bulk corridor from 4 weeks ago ({:.1f} kg)".format(a_kg), C["muted"])),
-                  T(("●", C["ink2"]), (" weigh-in", C["muted"]))], w, 3, 2)
+    legend = [T(("⢕", C["body_grain"]), (" lean-bulk corridor from 4 weeks ago ({:.1f} kg)".format(a_kg), C["muted"]))]
+    seen = {lk[2] for lk in looks}
+    for glyph, col, word in (("●", C["good"], "inside"), ("▼", C["watch"], "under"), ("▲", WEIGHT_OVER, "over"),
+                             ("○", C["body"], "before")):
+        if word in seen:
+            legend.append(T((glyph, "bold " + col), (" " + word, C["muted"])))
+    out += _flow(legend, w, 3, 2)
+    out.append(blank())
+    # the weigh-ins themselves, newest first: what you actually logged, with the change since the one before
+    out.append(section_title("Weigh-ins", w, "newest first"))
+    cell_w = 23                                            # "▼ 64.0  −1.4  Oct 11" + 3 spaces
+    per_row = max(1, (w - 2) // cell_w)
+    shown = list(range(len(pts) - 1, -1, -1))[:per_row * 2]
+    for k in range(0, len(shown), per_row):
+        row = Text("  ", no_wrap=True)
+        for i in shown[k:k + per_row]:
+            (d, kg), (glyph, col, _) = pts[i], looks[i]
+            delta = "" if i == 0 else "{}{:.1f}".format("+" if kg >= pts[i - 1][1] else "−", abs(kg - pts[i - 1][1]))
+            row.append(glyph, style="bold " + col)
+            row.append(" {:.1f}".format(kg), style="bold " + C["ink"])
+            row.append(" {:>5}".format(delta), style=C["ink2"])
+            row.append("  {:<6}".format(d.strftime("%b %-d")), style=C["muted"])
+            row.append(" " * (cell_w - 20))
+        out.append(fit(row, w))
     now = pts[-1][1]
     where = ("{:.1f} kg under today's floor ({:.1f} kg)".format(lo_end - now, lo_end) if now < lo_end else
              "{:.1f} kg over today's ceiling ({:.1f} kg)".format(now - hi_end, hi_end) if now > hi_end else
