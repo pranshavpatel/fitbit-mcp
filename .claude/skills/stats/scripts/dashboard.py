@@ -1885,34 +1885,96 @@ def _week_change(vals: list[float | None]) -> tuple[float | None, float | None, 
     return avg(cur), avg(prev), len(cur), len(prev)
 
 
+def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
+    """One column per day around a zero line: up = to-do habits done (█, green), down = avoid habits
+    slipped (▓, red), each bar topped with its count. Counts, not percentages, so a day reads as
+    "did 4, slipped 1". Days not logged sit on the line as ·. Shape (█ vs ▓, up vs down) carries the
+    meaning without color."""
+    good = [h for h in hs if h["good"] is True]
+    bad = [h for h in hs if h["good"] is False]
+    if not good and not bad:
+        return []
+    lab_w = 9
+    def count(group, i):
+        cells = [h["cells"][i] for h in group]
+        return None if all(c is None for c in cells) else sum(1 for c in cells if c)
+
+    logged = [i for i in range(len(days)) if count(good, i) is not None or count(bad, i) is not None]
+    since_first = len(days) - logged[0] if logged else 7          # don't spend columns before the first entry
+    n = max(7, min(since_first, 14, (w - lab_w - 2) // 3))
+    idx = list(range(len(days) - n, len(days)))
+    col_w = max(3, min(6, (w - lab_w - 4) // n))                   # wider bars when there are fewer days
+    bw = col_w - 1 if col_w < 5 else col_w - 2
+
+    up = [count(good, i) for i in idx]
+    down = [count(bad, i) for i in idx]
+    if all(u is None for u in up) and all(d is None for d in down):
+        return []
+    top = max([u or 0 for u in up] + [1])                                # as tall as the busiest day, not the habit count
+    bot = max([d or 0 for d in down] + [1])
+    scale_up, scale_dn = min(1.0, 5 / top), min(1.0, 4 / bot)          # at most 5 rows up, 4 down
+    h_up, h_dn = max(1, round(top * scale_up)), (max(1, round(bot * scale_dn)) if bad else 0)
+    out = [section_title("Habits · {} days".format(n), w, "up: to-do done (of {}) · down: slips (of {})".format(len(good), len(bad))
+                         if w >= 84 else "↑ done · ↓ slips")]
+
+    def bar_rows(vals, height, scale, glyph, col, upward):
+        rows = []
+        levels = range(height, 0, -1) if upward else range(1, height + 1)
+        for lvl in [height + 1] + list(levels) if upward else list(levels) + [height + 1]:
+            line = Text(no_wrap=True)
+            for v in vals:
+                hgt = 0 if not v else max(1, round(v * scale))
+                if v and lvl <= hgt:
+                    line.append((glyph * bw).ljust(col_w), style=col)
+                elif v is not None and lvl == hgt + 1:
+                    line.append(str(v).center(bw).ljust(col_w), style="bold " + (col if v else C["muted"]))
+                else:
+                    line.append(" " * col_w)
+            rows.append(line)
+        return rows
+
+    ups = bar_rows(up, h_up, scale_up, "█", C["good"], True)
+    dns = bar_rows(down, h_dn, scale_dn, "▓", C["flag"], False) if bad else []
+    for i, r in enumerate(ups):
+        label = "done ▲" if i == 0 else ""
+        out.append(fit(T(("  {:>{}} ".format(label, lab_w - 2), C["good"] if label else ""), ("│", C["rule"])) + r, w))
+    axis = Text(no_wrap=True)
+    for u, d in zip(up, down):
+        off = u is None and d is None
+        axis.append(("·".center(bw) if off else "─" * bw).ljust(col_w, " " if off else "─"),
+                    style=C["faint"] if off else C["rule"])
+    out.append(fit(T(("  {:>{}} ".format("", lab_w - 2), ""), ("┼", C["rule"])) + axis, w))
+    for i, r in enumerate(dns):
+        label = "slips ▼" if i == len(dns) - 1 else ""
+        out.append(fit(T(("  {:>{}} ".format(label, lab_w - 2), C["flag"] if label else ""), ("│", C["rule"])) + r, w))
+    wd, dn = Text(no_wrap=True), Text(no_wrap=True)
+    for k, i in enumerate(idx):
+        d = date.fromisoformat(days[i])
+        last = k == len(idx) - 1
+        wd.append(d.strftime("%a")[:2].center(bw).ljust(col_w), style="bold " + C["ink"] if last else C["muted"])
+        dn.append(str(d.day).center(bw).ljust(col_w), style="bold " + C["ink"] if last else C["muted"])
+    pad = " " * (lab_w + 2)                                        # under the "│" axis
+    out.append(fit(T((pad, "")) + wd, w))
+    out.append(fit(T((pad, "")) + dn, w))
+    out += _flow([T(("██", C["good"]), (" to-do habits done", C["muted"])), T(("▓▓", C["flag"]), (" avoid habits slipped", C["muted"])),
+                  T(("·", C["faint"]), (" not logged", C["muted"]))], w, gap=3, indent=2)
+    out.append(blank())
+    return out
+
+
 def _journal_trend(m: dict, w: int) -> list[Text]:
-    """HABITS · 30 DAYS: two curves on one 0–100 % scale, habits to do that you did (green, higher is
-    better) and habits to avoid that slipped (red, lower is better), then each one's last 7 days vs
-    the 7 before, called a real change only when it's big enough and backed by enough logged days."""
+    """HABITS: a diverging column per day (to-do habits done up in green, avoid habits slipped down in
+    red), then each group's last 7 days vs the 7 before, called a real change only when it's big
+    enough and backed by enough logged days."""
     hs = (m.get("deep") or {}).get("habits30") or []
     days30 = (m.get("deep") or {}).get("days30") or []
     if not hs or not days30:
         return []
     done = _habit_rates(hs, True, len(days30))
     slip = _habit_rates(hs, False, len(days30))
-    logged = [i for i in range(len(days30)) if done[i] is not None or slip[i] is not None]
-    if not logged:
+    out = _habit_columns(hs, days30, w)
+    if not out:
         return []
-    start = min(logged[0], len(days30) - 7)          # until there's a month of journal, start at the first entry
-    days_, done_c, slip_c = days30[start:], done[start:], slip[start:]
-    title = "Habits · {} days".format(len(days_))
-    note = "to do: higher is better · to avoid: lower is better" if w >= 76 else "to do ↑ better · avoid ↓ better"
-    out = [section_title(title, w, note)]
-    plot_w = max(20, w - 8)
-    chart = K.braille_lines([(done_c, C["good"]), (slip_c, C["flag"])], plot_w, 5, 0, 100)
-    for i, row in enumerate(chart):
-        axis = "100% ┤" if i == 0 else "  0% ┤" if i == len(chart) - 1 else " 50% ┤" if i == len(chart) // 2 else "     │"
-        out.append(fit(T(("  " + axis, C["muted"])) + row, w))
-    first = sdate(days_[0])[4:]
-    out.append(fit(T(("        " + first, C["muted"]), (" " * max(1, plot_w - len(first) - 5), ""), ("today", C["muted"])), w))
-    out += _flow([T(("⠒⠒", C["good"]), (" to-do habits done", C["muted"])), T(("⠒⠒", C["flag"]), (" avoid habits slipped", C["muted"])),
-                  T(("⠒⠒", "bold " + C["ink"]), (" both", C["muted"]))], w, gap=3, indent=2)
-    out.append(blank())
     MIN_DAYS, MIN_POINTS = 4, 10          # a change counts only with 4+ logged days in each week and 10+ points
 
     for name, vals, higher_good, col in (("To do · done", done, True, C["good"]), ("Avoid · slipped", slip, False, C["flag"])):
