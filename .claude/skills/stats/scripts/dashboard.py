@@ -1051,56 +1051,115 @@ def _split_track(sp: dict, w: int) -> list[Text]:
     return [fit(r, w) for r in rows]
 
 
-def _weight_corridor(b: dict, today: date, w: int, h: int = 7) -> list[Text]:
-    """Weigh-ins (●) against the lean-bulk corridor: +0.25–0.5 %/week compounding from the first
-    weigh-in, drawn out to today so the gap since the last weigh-in is visible."""
+def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
+    """Weigh-ins against the lean-bulk corridor (+0.25–0.5 %/week compounding from the first
+    weigh-in), drawn in Braille (2×4 dots a cell) out to today: the corridor is a stippled band with
+    solid edges, each weigh-in a ● (no line between them: weeks without a weigh-in aren't data;
+    the pace gauge above carries the trend). Where the corridor ends and where you are
+    now are labelled in a right-hand gutter, so labels never collide with the data."""
     pts = [(date.fromisoformat(d), kg) for d, kg in b["weights"]]
     d0, kg0 = pts[0]
     end = max(today, pts[-1][0])
-    span_days = max(1, (end - d0).days)
-    lab_w = 6
-    plot_w = max(16, w - lab_w - 1)
+    span = max(1, (end - d0).days)
+    lab_w, gut_w = 6, 12
+    plot_w = max(16, w - lab_w - 1 - gut_w)
+    dw, dh = plot_w * 2, h * 4
 
-    def band(day_offset: float) -> tuple[float, float]:
-        weeks = day_offset / 7
-        return kg0 * (1 + S.BULK_PACE[0] / 100) ** weeks, kg0 * (1 + S.BULK_PACE[1] / 100) ** weeks
+    def band(days: float) -> tuple[float, float]:
+        return kg0 * (1 + S.BULK_PACE[0] / 100) ** (days / 7), kg0 * (1 + S.BULK_PACE[1] / 100) ** (days / 7)
 
-    lo_end, hi_end = band(span_days)
-    lo = min([kg for _, kg in pts] + [kg0]) - 0.3
-    hi = max([kg for _, kg in pts] + [hi_end]) + 0.3
+    lo_end, hi_end = band(span)
+    lo = math.floor((min([kg for _, kg in pts] + [kg0]) - 0.3) * 2) / 2
+    hi = math.ceil((max([kg for _, kg in pts] + [hi_end]) + 0.3) * 2) / 2
 
-    def row(v: float) -> int:
-        return int(round((hi - v) / (hi - lo) * (h - 1)))
+    def yd(v: float) -> int:                       # value -> dot row (0 = top)
+        return int(round((hi - v) / (hi - lo) * (dh - 1)))
 
-    grid = [[(" ", "")] * plot_w for _ in range(h)]
-    for c in range(plot_w):
-        blo, bhi = band(c / (plot_w - 1) * span_days)
-        for r in range(row(bhi), row(blo) + 1):
-            grid[r][c] = ("░", C["body"])
-    for d, kg in pts:
-        c = int(round((d - d0).days / span_days * (plot_w - 1)))
-        r = row(kg)
-        grid[r][c] = ("●", "bold " + C["ink"])
-        lab = " {:.1f}".format(kg)
-        start = c + 1 if c + 1 + len(lab) <= plot_w else c - len(lab)
-        for j, ch in enumerate(lab):
-            if 0 <= start + j < plot_w and grid[r][start + j][0] in (" ", "░"):
-                grid[r][start + j] = (ch, "bold " + C["ink"])
+    def xd(d: date) -> int:
+        return int(round((d - d0).days / span * (dw - 1)))
+
+    edge, stip = ([[0] * plot_w for _ in range(h)] for _ in range(2))
+
+    def put(g, x, y):
+        if 0 <= x < dw and 0 <= y < dh:
+            g[y // 4][x // 2] |= K._BRAILLE_BITS[y % 4][x % 2]
+
+    for x in range(dw):
+        blo, bhi = band(x / (dw - 1) * span)
+        top, bot = yd(bhi), yd(blo)
+        put(edge, x, top)
+        put(edge, x, bot)
+        for y in range(top + 1, bot):
+            if y % 4 == 2 and (x + y // 4 * 2) % 4 == 0:     # a light grain, not a fill
+                put(stip, x, y)
+    xy = [(xd(d), yd(kg)) for d, kg in pts]
+    marks = {(y // 4, x // 2): i == len(xy) - 1 for i, (x, y) in enumerate(xy)}
+
+    # right gutter: corridor top and floor at today, and you; nudged apart so no two share a row
+    want = sorted([(yd(hi_end) // 4, "{:.1f} top".format(hi_end), C["body"]),
+                   (yd(lo_end) // 4, "{:.1f} floor".format(lo_end), C["body"]),
+                   (xy[-1][1] // 4, "{:.1f} you".format(pts[-1][1]), "bold " + C["ink"])])
+    gutter: dict[int, tuple[str, str]] = {}
+    for r, text, style in want:
+        while r in gutter and r < h - 1:
+            r += 1
+        while r in gutter:
+            r -= 1
+        gutter[r] = (text, style)
+    # y ticks on round values
+    step = 1.0 if hi - lo > 3 else 0.5
+    ticks: dict[int, float] = {}
+    v = math.ceil(lo / step) * step
+    while v <= hi + 1e-9:
+        r = yd(v) // 4
+        if r not in ticks and r - 1 not in ticks and r + 1 not in ticks:
+            ticks[r] = v
+        v += step
+
     out = []
     for r in range(h):
-        v = hi - r / (h - 1) * (hi - lo)
-        lab = "{:.1f}".format(v) if r in (0, h - 1) else ""
-        t = T(("{:>{w}} ".format(lab, w=lab_w - 1), C["muted"]), ("┤" if lab else "│", C["rule"]))
-        for ch, st in grid[r]:
-            t.append(ch, style=st)
+        t = T(("{:>{n}} ".format("{:.1f}".format(ticks[r]) if r in ticks else "", n=lab_w - 1), C["muted"]),
+              ("┤" if r in ticks else "│", C["rule"]))
+        for c in range(plot_w):
+            if (r, c) in marks:
+                t.append("●", style="bold " + (C["ink"] if marks[(r, c)] else C["ink2"]))
+            elif edge[r][c]:
+                t.append(chr(0x2800 | edge[r][c]), style=C["body"])
+            elif stip[r][c]:
+                t.append(chr(0x2800 | stip[r][c]), style=C["body_grain"])
+            else:
+                t.append(" ")
+        text, style = gutter.get(r, ("", ""))
+        t.append(" " + text, style=style)
         out.append(fit(t, w))
-    first, last = d0.strftime("%b %-d"), "today" if end == today else end.strftime("%b %-d")
-    out.append(fit(T(" " * (lab_w + 1), (first, C["muted"]),
-                     " " * max(1, plot_w - len(first) - len(last)), (last, "bold " + C["ink2"])), w))
-    out += _flow([T(("░", C["body"]), (" lean-bulk corridor (+0.25–0.5 %/wk from {:.1f} kg)".format(kg0), C["muted"])),
-                  T(("● weigh-in", C["muted"]))], w, 3, 2)
-    out += takeaway("Target by today: {:.1f}–{:.1f} kg. Last weigh-in {:.1f} kg on {}.".format(
-        lo_end, hi_end, pts[-1][1], pts[-1][0].strftime("%b %-d")), w)
+    # x axis: first weigh-in, then month starts, then "today"
+    axis, pos = Text(" " * (lab_w + 1), no_wrap=True), 0
+    marks_x = [(0, d0.strftime("%b %-d"))]
+    m = date(d0.year + (d0.month == 12), d0.month % 12 + 1, 1)
+    while m <= end:
+        marks_x.append((xd(m) // 2, m.strftime("%b")))
+        m = date(m.year + (m.month == 12), m.month % 12 + 1, 1)
+    last = "today" if end == today else end.strftime("%b %-d")
+    marks_x.append((plot_w - len(last), last))
+    for i, (c, lab) in enumerate(marks_x):
+        nxt = marks_x[i + 1][0] if i + 1 < len(marks_x) else plot_w + 1
+        if c < pos or c + len(lab) >= nxt and i + 1 < len(marks_x):
+            continue
+        axis.append(" " * (c - pos) + lab, style="bold " + C["ink2"] if lab == "today" else C["muted"])
+        pos = c + len(lab)
+    out.append(fit(axis, w))
+    out += _flow([T(("⢕", C["body_grain"]), (" lean-bulk corridor (+0.25–0.5 %/wk)", C["muted"])),
+                  T(("●", C["ink2"]), (" weigh-in", C["muted"]))], w, 3, 2)
+    now = pts[-1][1]
+    where = ("{:.1f} kg under today's floor ({:.1f} kg)".format(lo_end - now, lo_end) if now < lo_end else
+             "{:.1f} kg over today's ceiling ({:.1f} kg)".format(now - hi_end, hi_end) if now > hi_end else
+             "inside today's corridor ({:.1f}–{:.1f} kg)".format(lo_end, hi_end))
+    note = "You're " + where + "."
+    swings = [abs(k1 - k0) for (a0, k0), (a1, k1) in zip(pts, pts[1:]) if (a1 - a0).days <= 3]
+    if swings and max(swings) >= 1.0:
+        note += (" Weigh-ins days apart differ by up to {:.1f} kg (water and food), so weigh each morning "
+                 "before eating, 3+ times a week.".format(max(swings)))
+    out += takeaway(note, w)
     return out
 
 

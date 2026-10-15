@@ -23,7 +23,7 @@ C = {
     "strain": ["#1c5cab", "#256abf", "#2a78d6", "#3987e5", "#5598e7", "#6da7ec", "#86b6ef", "#9ec5f4"],
     "sleep": "#9085e9", "deep": "#5b4fd1", "rem": "#9085e9", "light": "#c4bdf6", "awake": "#e8a33d",
     "activity": "#eda100", "heat": ["#3a3018", "#5a4614", "#86640e", "#b58304", "#e0a000", "#fab219"],
-    "body": "#c27ce6", "heart": "#e66767",
+    "body": "#c27ce6", "body_grain": "#7a5293", "heart": "#e66767",
     "zone": {"light": "#5598e7", "fat_burn": "#eda100", "cardio": "#d95926", "peak": "#d03b3b"},
     "chip": {"STRENGTH_TRAINING": "#3987e5", "CARDIO_WORKOUT": "#d95926", "RUNNING": "#199e70",
              "TRAIL_RUN": "#199e70", "TREADMILL_RUNNING": "#199e70", "SOCCER": "#c98500", "WALKING": "#898781",

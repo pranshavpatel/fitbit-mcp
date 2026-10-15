@@ -153,7 +153,7 @@ def test_visual_workouts_training_body(model, width):
     assert "SPLIT QUEUE" in training and "▶ next" in training and "% ready" in training   # readiness bars
     assert "TRAINING LOAD" in training and "▲" in training and "▓" in training           # textured gauge
     body = "\n".join(_render(model, width, section="body"))
-    assert "lean-bulk corridor" in body and "Target by today" in body and "●" in body
+    assert "lean-bulk corridor" in body and "today's" in body and "●" in body
 
 
 @pytest.mark.parametrize("width", (140, 160, 200))
