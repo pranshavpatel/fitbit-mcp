@@ -1143,7 +1143,7 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
     marks_x.append((plot_w - len(last), last))
     for i, (c, lab) in enumerate(marks_x):
         nxt = marks_x[i + 1][0] if i + 1 < len(marks_x) else plot_w + 1
-        if c < pos or c + len(lab) >= nxt and i + 1 < len(marks_x):
+        if c < pos + (2 if pos else 0) or c + len(lab) + 2 > nxt and i + 1 < len(marks_x):
             continue
         axis.append(" " * (c - pos) + lab, style="bold " + C["ink2"] if lab == "today" else C["muted"])
         pos = c + len(lab)
