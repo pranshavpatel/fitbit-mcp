@@ -1137,7 +1137,8 @@ def _weight_corridor(b: dict, today: date, w: int, h: int = 8) -> list[Text]:
     marks_x = [(0, d0.strftime("%b %-d"))]
     m = date(d0.year + (d0.month == 12), d0.month % 12 + 1, 1)
     while m <= end:
-        marks_x.append((xd(m) // 2, m.strftime("%b")))
+        if xd(m) // 2 >= len(marks_x[0][1]) + 2:       # the start date wins over a crowded month
+            marks_x.append((xd(m) // 2, m.strftime("%b")))
         m = date(m.year + (m.month == 12), m.month % 12 + 1, 1)
     last = "today" if end == today else end.strftime("%b %-d")
     marks_x.append((plot_w - len(last), last))
