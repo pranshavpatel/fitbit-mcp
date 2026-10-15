@@ -165,6 +165,8 @@ def test_habit_columns_counts_and_gaps():
     assert sum(l.count("░") for l in lines) > 0                     # and shaded through the chart
     assert any(l.split("│")[-1].strip().startswith("2") for l in lines if "done ▲" in l)   # day 1: 2 done, on top
     assert sum(l.count("▓") for l in lines) > 0 and sum(l.count("█") for l in lines) > 0
+    braille = [ch for l in lines[1:-3] for ch in l if 0x2801 <= ord(ch) <= 0x28FF]
+    assert braille                                                     # the curves joining the day counts
 
 
 def test_week_change_needs_enough_days():

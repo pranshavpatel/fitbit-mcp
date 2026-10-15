@@ -1888,7 +1888,8 @@ def _week_change(vals: list[float | None]) -> tuple[float | None, float | None, 
 def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
     """One column per day around a zero line: up = to-do habits done (█, green), down = avoid habits
     slipped (▓, red), each bar topped with its count. Counts, not percentages, so a day reads as
-    "did 4, slipped 1". A day not logged is a shaded, empty column with a dimmed date; the zero line runs unbroken. Shape (█ vs ▓, up vs down) carries the
+    "did 4, slipped 1". A smooth Braille curve joins each half's counts, so the
+    trend reads at a glance. A day not logged is a shaded, empty column with a dimmed date; the zero line runs unbroken. Shape (█ vs ▓, up vs down) carries the
     meaning without color."""
     good = [h for h in hs if h["good"] is True]
     bad = [h for h in hs if h["good"] is False]
@@ -1917,27 +1918,75 @@ def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
     out = [section_title("Habits · {} days".format(n), w, "up: to-do done (of {}) · down: slips (of {})".format(len(good), len(bad))
                          if w >= 84 else "↑ done · ↓ slips")]
 
-    def bar_rows(vals, height, scale, glyph, col, upward):
-        rows = []
-        levels = range(height, 0, -1) if upward else range(1, height + 1)
-        for lvl in [height + 1] + list(levels) if upward else list(levels) + [height + 1]:
-            line = Text(no_wrap=True)
-            for v in vals:
-                hgt = 0 if not v else max(1, round(v * scale))
-                if v is None and gap_day[len(line.plain) // col_w]:
-                    line.append(("░" * bw).ljust(col_w), style=C["faint"])        # no log: a shaded, empty column
-                elif v and lvl <= hgt:
-                    line.append((glyph * bw).ljust(col_w), style=col)
-                elif v is not None and lvl == hgt + 1:
-                    line.append(str(v).center(bw).ljust(col_w), style="bold " + (col if v else C["muted"]))
-                else:
-                    line.append(" " * col_w)
-            rows.append(line)
-        return rows
-
     gap_day = [u is None and d is None for u, d in zip(up, down)]
-    ups = bar_rows(up, h_up, scale_up, "█", C["good"], True)
-    dns = bar_rows(down, h_dn, scale_dn, "▓", C["flag"], False) if bad else []
+
+    def section(vals, height, scale, glyph, col, upward):
+        """Cells [char, style, kind] for one half, rows top to bottom (a label row beyond the bars), and
+        the curve point for each day: the centre of its count label, so the numbers sit on the line."""
+        levels = list(range(height, 0, -1)) if upward else list(range(1, height + 1))
+        levels = [height + 1] + levels if upward else levels + [height + 1]
+        grid = [[[" ", "", "blank"] for _ in range(col_w * len(vals))] for _ in levels]
+        pts = []
+        for k, v in enumerate(vals):
+            x0 = k * col_w
+            hgt = 0 if not v else max(1, round(v * scale))
+            for r, lvl in enumerate(levels):
+                if v is None and gap_day[k]:
+                    for j in range(bw):
+                        grid[r][x0 + j] = ["░", C["faint"], "shade"]       # no log: a shaded, empty column
+                elif v and lvl <= hgt:
+                    for j in range(bw):
+                        grid[r][x0 + j] = [glyph, col, "bar"]
+                elif v is not None and lvl == hgt + 1:
+                    lab = str(v).center(bw)
+                    for j, ch in enumerate(lab):
+                        if ch != " ":
+                            grid[r][x0 + j] = [ch, "bold " + (col if v else C["muted"]), "label"]
+                    j0, n_ch = len(lab) - len(lab.lstrip()), len(lab.strip())
+                    pts.append((2 * (x0 + j0) + n_ch - 1, r * 4 + 2))      # the middle of the number itself
+            if v is None:
+                pts.append(None)
+        return grid, pts
+
+    def curve(grid, pts, col):
+        """A smooth line through the day points (cosine easing between neighbours, no overshoot),
+        drawn in Braille only where the cell is empty or shaded: bars and numbers stay intact."""
+        h, wd = len(grid), len(grid[0]) if grid else 0
+        bits = [[0] * wd for _ in range(h)]
+
+        def put(x, y):
+            if 0 <= x < wd * 2 and 0 <= y < h * 4:
+                bits[y // 4][x // 2] |= K._BRAILLE_BITS[y % 4][x % 2]
+
+        seq = [p for p in pts if p is not None]
+        for (x0, y0), (x1, y1) in zip(seq, seq[1:]):
+            prev = y0
+            for x in range(x0, x1 + 1):
+                t = (x - x0) / max(1, x1 - x0)
+                y = int(round(y0 + (y1 - y0) * (1 - math.cos(math.pi * t)) / 2))
+                for yy in range(min(prev, y), max(prev, y) + 1):      # fill steep steps so the line never breaks
+                    put(x, yy)
+                prev = y
+        for r in range(h):
+            for c in range(wd):
+                if bits[r][c] and grid[r][c][2] in ("blank", "shade"):
+                    grid[r][c] = [chr(0x2800 | bits[r][c]), "bold " + col, "curve"]
+
+    def to_text(row):
+        t = Text(no_wrap=True)
+        for ch, st, _ in row:
+            t.append(ch, style=st)
+        return t
+
+    g_up, p_up = section(up, h_up, scale_up, "█", C["good"], True)
+    curve(g_up, p_up, C["good"])
+    ups = [to_text(r) for r in g_up]
+    if bad:
+        g_dn, p_dn = section(down, h_dn, scale_dn, "▓", C["flag"], False)
+        curve(g_dn, p_dn, C["flag"])
+        dns = [to_text(r) for r in g_dn]
+    else:
+        dns = []
     for i, r in enumerate(ups):
         label = "done ▲" if i == 0 else ""
         out.append(fit(T(("  {:>{}} ".format(label, lab_w - 2), C["good"] if label else ""), ("│", C["rule"])) + r, w))
@@ -1958,6 +2007,7 @@ def _habit_columns(hs: list[dict], days: list[str], w: int) -> list[Text]:
     out.append(fit(T((pad, "")) + wd, w))
     out.append(fit(T((pad, "")) + dn, w))
     out += _flow([T(("██", C["good"]), (" to-do habits done", C["muted"])), T(("▓▓", C["flag"]), (" avoid habits slipped", C["muted"])),
+                  T(("⠤⠒", "bold " + C["ink2"]), (" day-to-day curve", C["muted"])),
                   T(("░░", C["faint"]), (" no log that day", C["muted"]))], w, gap=3, indent=2)
     out.append(blank())
     return out
