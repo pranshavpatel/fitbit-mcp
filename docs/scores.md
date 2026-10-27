@@ -25,7 +25,7 @@ not an input (WHOOP says the same of its Recovery); a big shift is flagged in Ne
 The curve's centre is the one constant fitted to WHOOP itself: on 25 days of a WHOOP user's own
 inputs, fitdash ranked days almost exactly like WHOOP (r 0.97) but read ~21 points low every day.
 Moving only the centre cut the average error from 21.4 to 7.0 points (8.2 out of sample, fitting
-only on earlier days) and lifted green/yellow/red agreement from 32 % to 84 %. One person is a small sample, so treat absolute numbers
+only on earlier days) and lifted green/yellow/red agreement from 32 % to 84 % (73 % out of sample). One person is a small sample, so treat absolute numbers
 as estimates. The method and how to re-run it are in [validation.md](validation.md).
 
 **Resting HR is measured while asleep**, as WHOOP measures it: the lowest 30-minute average of

@@ -544,11 +544,34 @@ FALLBACK_ACTIONS = {
 FALLBACK_FAMILY = {"Recovery %": "recovery", "Sleep score": "sleep", "Sleep perf %": "sleep", "Asleep h": "sleep",
                    "HRV ms": "heart", "Resting HR": "heart", "Resp. rate": "heart", "Steps": "activity",
                    "Active kcal": "activity", "AZM": "activity", "Lifting min": "lifting"}
-ATTENTION_ACTIONS = (("recovery", "Keep today's training easy and aim for a full night."),
-                     ("load ratio", "Add one more session than last week, building gradually."),
-                     ("sleep", "Get to bed by tonight's asleep-by time."),
-                     ("weight", "Add a 300-400 kcal snack with protein each day this week."),
-                     ("impact", "Swap the next run for a low-impact session this week."))
+def attention_action(text: str, m: dict) -> str:
+    """A next step for one Needs-attention item. Keyed on the fixed item formats in data.attention()
+    and _verdict(), and on the model's own state where the right direction depends on it."""
+    t = text.lower()
+    if text == ((m.get("sleep") or {}).get("sync_note") or {}).get("text"):
+        return "Open the Fitbit app on your phone, then run fitdash --sync."
+    if t.startswith("recovery"):
+        return "Keep today's training easy and aim for a full night."
+    if t.startswith("sleep score") or t.startswith("sleep debt") or t.startswith("no sleep recorded"):
+        return "Get to bed by tonight's asleep-by time."
+    if t.startswith("load ratio"):
+        zone = (((m.get("training") or {}).get("acwr")) or {}).get("zone")
+        if zone == "low":
+            return "Add one session this week and build back gradually."
+        return "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+    if "spike" in t:
+        return "Swap the next run or game for lifting or a low-impact session."
+    if t.startswith("bed and wake times"):
+        return "Keep lights-out and wake-up within 30 minutes of the same time every day this week."
+    if t.startswith("gym"):
+        return "Put this week's remaining gym sessions in your calendar now."
+    if t.startswith("weight below pace"):
+        return "Add a 300-400 kcal snack with protein each day this week."
+    if t.startswith("weight above pace"):
+        return "Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same."
+    if t.startswith("skin temp"):
+        return "Take it easy today; if you feel unwell, rest and check again tomorrow."
+    return "Check this again tomorrow morning."
 
 
 def fallback_insights(m: dict, now: datetime) -> dict:
@@ -556,8 +579,7 @@ def fallback_insights(m: dict, now: datetime) -> dict:
     Claude's (levels good / watch / flag, every insight with an action)."""
     today = []
     for lvl, t in (m.get("attention") or [])[:4]:
-        act = next((a for k, a in ATTENTION_ACTIONS if k in t.lower()), "Check this again tomorrow morning.")
-        today.append({"level": lvl if lvl in INSIGHT_LEVELS else "watch", "finding": t, "action": act})
+        today.append({"level": lvl if lvl in INSIGHT_LEVELS else "watch", "finding": t, "action": attention_action(t, m)})
     note = fallback(m, now)
     head = ((m.get("verdict") or {}).get("headline") or "").rstrip(".")
     if note and not (head and head in note):

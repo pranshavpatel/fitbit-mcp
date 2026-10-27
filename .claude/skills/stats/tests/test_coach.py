@@ -186,3 +186,24 @@ def test_insights_command_renders_claude_and_fallback(tmp_path, monkeypatch, cap
     assert CO.load_insights(tmp_path)["source"] == "claude"
     assert dashboard.main(["coach", "insights", "--last", "--no-color", "--width", str(width)]) == 0
     assert "In bed by 22:15." in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("text, state, expect", [
+    ("Recovery 50% (Resting HR -20, HRV -6)", {}, "easy"),
+    ("Sleep score 60 (poor), 5h10 asleep; weakest: hours vs need 70", {}, "asleep-by"),
+    ("Load ratio 0.55 (low)", {"zone": "low"}, "Add one session"),
+    ("Load ratio 1.42 (caution)", {"zone": "caution"}, "hold off"),
+    ("Load ratio 1.70 (high)", {"zone": "high"}, "hold off"),
+    ("Running/soccer spike this or last week (knee)", {}, "low-impact"),
+    ("Sleep debt of 2h10 built up over the last week", {}, "asleep-by"),
+    ("Bed and wake times vary a lot (consistency 40%)", {}, "30 minutes"),
+    ("Gym 1/4 with 3 days left this week", {}, "calendar"),
+    ("Weight below pace for your lean bulk (+0.02 kg/wk)", {}, "snack"),
+    ("Weight above pace for your lean bulk (+0.60 kg/wk)", {}, "Trim"),
+    ("Skin temp +0.9 °C off baseline", {}, "easy"),
+    ("SYNC", {}, "fitdash --sync"),
+])
+def test_fallback_actions_fit_each_attention_item(text, state, expect):
+    note = "Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync."
+    m = {"training": {"acwr": state}, "sleep": {"sync_note": {"text": note}}}
+    assert expect in CO.attention_action(note if text == "SYNC" else text, m)

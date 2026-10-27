@@ -91,6 +91,8 @@ def main() -> None:
     ap.add_argument("csv", type=Path)
     ap.add_argument("--min-train", type=int, default=10, help="earlier days needed before a day is scored out of sample")
     args = ap.parse_args()
+    if args.min_train < 1:
+        ap.error("--min-train must be at least 1")
     rows = load(args.csv)
     xs_all = [raw_x(rows, i) for i in range(len(rows))]
     no_base = sum(x is None and all(rows[i][k] is not None for k in ("hrv", "rhr")) for i, x in enumerate(xs_all))
@@ -109,9 +111,10 @@ def main() -> None:
     k = args.min_train
     test_x, test_w = xs[k:], whoop[k:]
     fwd = [score(x, fit_x0(pairs[:k + j])) for j, x in enumerate(test_x)]
-    print("\nOut of sample: the last {} days, each scored with a centre fitted on earlier days only:".format(len(test_x)))
+    print("\nThe last {} days. Only the first row is out of sample (centre fitted on earlier days only);"
+          "\nthe others are reference points on the same days:".format(len(test_x)))
     report("walk-forward refit centre", fwd, test_w)
-    report("shipped curve, same days", [score(x, S.LOGISTIC_X0) for x in test_x], test_w)
+    report("shipped curve (in-sample centre)", [score(x, S.LOGISTIC_X0) for x in test_x], test_w)
     mean_only = [st.fmean(whoop[:k + j]) for j in range(len(test_w))]
     print("  {:<34} MAE {:5.1f}".format("baseline: mean of earlier days", st.fmean(abs(p - w) for p, w in zip(mean_only, test_w))))
 
