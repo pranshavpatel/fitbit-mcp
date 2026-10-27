@@ -142,3 +142,47 @@ def test_cli_set_show_and_run_without_claude(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(CO, "generate", lambda ctx: "Sleep was short; keep strain under 10 today.")
     assert dashboard.main(["coach", "run", "--kind", "morning", "--force", "--no-sync"]) == 0
     assert CO.load(tmp_path)[-1]["source"] == "claude"
+
+
+def test_parse_insights_accepts_fenced_json_and_rejects_junk():
+    raw = 'Here you go:\n```json\n{"today": {"headline": "Train arms", "insights": [{"level": "good", "finding": "Recovery 82.", ' \
+          '"action": "Lift by 18:00."}]}, "week": {"headline": "Sleep more", "insights": [{"level": "odd", "finding": "5.8 h avg."}]}}\n```'
+    got = CO.parse_insights(raw)
+    assert got["today"]["insights"][0] == {"level": "good", "finding": "Recovery 82.", "action": "Lift by 18:00."}
+    assert got["week"]["insights"][0]["level"] == "watch" and got["week"]["insights"][0]["action"] == ""
+    assert CO.parse_insights("no json here") is None
+    assert CO.parse_insights('{"today": {"insights": []}, "week": {}}') is None
+
+
+def test_insights_context_covers_today_and_the_week(m, tmp_path):
+    ctx = CO.insights_context(m, at(12), "Goal: lean bulk", [], {"2026-10-08": [{"name": "wrap", "kcal": 500, "protein": 20}]})
+    for key in ("recovery", "last_night", "strain_today", "activity_today", "tonight", "last_7_days", "workouts_7d",
+                "this_week", "needs_attention", "weights_recent", "priorities", "profile"):
+        assert key in ctx, key
+    assert {"avg", "prev_week_avg", "daily"} <= set(ctx["this_week"]["metrics"][0])
+    assert len(json.dumps(ctx, default=str)) < 30000
+
+
+@pytest.mark.parametrize("width", WIDTHS)
+def test_insights_command_renders_claude_and_fallback(tmp_path, monkeypatch, capsys, width):
+    import fixture_db
+    fixture_db.create(tmp_path / "fitbit.sqlite3")
+    monkeypatch.setenv("FITBIT_MCP_HOME", str(tmp_path))
+    monkeypatch.setattr(CO, "ask", lambda *a, **k: None)
+    assert dashboard.main(["insights", "--no-sync", "--no-color", "--width", str(width)]) == 0
+    out = capsys.readouterr().out
+    assert "Today ·" in out and "Past 7 days" in out and "auto: Claude unavailable" in out
+    assert CO.load_insights(tmp_path) is None                                  # fallbacks aren't saved
+    reply = json.dumps({"today": {"headline": "Arms today, asleep by 22:30.", "insights": [
+        {"level": "flag", "finding": "Sleep debt 7h48; need 10h00 tonight.", "action": "In bed by 22:15."}]},
+        "week": {"headline": "Sleep ran short.", "insights": [{"level": "watch", "finding": "5.8 h a night vs 7.1 h.",
+                                                               "action": "Lights out 23:30 all week."}]}})
+    monkeypatch.setattr(CO, "ask", lambda *a, **k: reply)
+    assert dashboard.main(["insights", "--no-sync", "--no-color", "--width", str(width)]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    _check(lines, min(width, 100))
+    text = "\n".join(lines)
+    assert "✕ Sleep debt 7h48" in text and "→ In bed by 22:15." in text and "written by Claude" in text
+    assert CO.load_insights(tmp_path)["source"] == "claude"
+    assert dashboard.main(["coach", "insights", "--last", "--no-color", "--width", str(width)]) == 0
+    assert "In bed by 22:15." in capsys.readouterr().out

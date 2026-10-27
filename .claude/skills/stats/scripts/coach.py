@@ -6,6 +6,13 @@
     fitdash coach set <kind> "text"   save a note you (or Claude in a chat) wrote
     fitdash coach show                today's notes
     fitdash coach --install | --uninstall         check every 30 min (launchd)
+    fitdash insights [--no-sync] [--dry-run] [--last] [--json]
+                                      on demand: actionable insights on today and on the past week
+
+`fitdash insights` (also `fitdash coach insights`) reads every stat fitdash has and returns two
+sets of insights, each a finding with the numbers behind it plus one concrete action: TODAY (this
+day's recovery, sleep, strain, steps, food and priorities) and PAST 7 DAYS (trends, patterns and
+what to change next week). The last result is kept in ~/.fitbit-mcp/coaching/insights.json.
 
 When a note is due:
   morning   05:00-12:00, once last night's sleep is in (or from 10:30 regardless), once a day
@@ -341,21 +348,25 @@ def claude_bin() -> str | None:
     return None
 
 
-def generate(ctx: dict, timeout: float = 150) -> str | None:
-    """Ask Claude for the note: print mode, no tools, no MCP servers, no session saved. Returns the
-    text, or None if the CLI isn't there or fails."""
+def ask(system: str, user: str, timeout: float = 150) -> str | None:
+    """One Claude call: print mode, no tools, no MCP servers, no session saved. Returns stdout, or
+    None if the CLI isn't there or fails."""
     exe = claude_bin()
     if not exe:
         return None
     cmd = [exe, "-p", "--tools", "", "--strict-mcp-config", "--no-session-persistence", "--setting-sources", "user",
-           "--output-format", "text", "--system-prompt", SYSTEM.format(max_words=MAX_WORDS)]
+           "--output-format", "text", "--system-prompt", system]
     try:
-        r = subprocess.run(cmd, input=prompt(ctx), capture_output=True, text=True, timeout=timeout,
-                           cwd=str(Path.home()))
+        r = subprocess.run(cmd, input=user, capture_output=True, text=True, timeout=timeout, cwd=str(Path.home()))
     except (OSError, subprocess.TimeoutExpired):
         return None
-    text = clean(r.stdout)
-    return text if r.returncode == 0 and len(text.split()) >= 5 else None
+    return r.stdout if r.returncode == 0 else None
+
+
+def generate(ctx: dict, timeout: float = 150) -> str | None:
+    """Ask Claude for the note. Returns the text, or None if the CLI isn't there or fails."""
+    text = clean(ask(SYSTEM.format(max_words=MAX_WORDS), prompt(ctx), timeout) or "")
+    return text if len(text.split()) >= 5 else None
 
 
 # ---------------------------------------------------------------- what the Today box shows
@@ -415,6 +426,151 @@ def fallback(m: dict, now: datetime) -> str:
         if nxt:
             parts.append("Next up: {}.".format(nxt))
     return " ".join(parts) or "Not enough data for a note yet."
+
+
+# ---------------------------------------------------------------- on-demand insights
+
+INSIGHTS_SYSTEM = """You are the user's personal health and training coach. They asked for insights on
+their day and their week. You get every stat their dashboard has (JSON). Reply with JSON only, no
+prose around it, in exactly this shape:
+
+{"today": {"headline": "...", "insights": [{"level": "good|watch|flag", "finding": "...", "action": "..."}]},
+ "week":  {"headline": "...", "insights": [{"level": "good|watch|flag", "finding": "...", "action": "..."}]}}
+
+- today: about the current day only (`now`, `last_night`, `recovery`, `strain_today`, `activity_today`,
+  `workouts_today`, `tonight`, `body` food today, `priorities.today`). 3-4 insights.
+- week: the past 7 days (`last_7_days`, `this_week`, `workouts_7d`, `sleep_timing_7`, `lifting_7d`,
+  `food_7d`, `weights_recent`, `journal_7d`, `priorities.last_7_days`, `personal_patterns`). 3-5
+  insights: trends vs the week before, what drove the good and bad days, and what to change next week.
+- headline: one sentence, at most 16 words, the single most important takeaway.
+- finding: what the data shows, citing the actual numbers (dates as weekdays). At most 30 words.
+  Explain why it matters when that isn't obvious (e.g. a pattern from `personal_patterns`).
+- action: one concrete thing to do, with an amount and a time (e.g. "In bed by 22:30 tonight: you
+  need 10h00"). At most 25 words. Prefer the few changes that would move the most.
+- level: good = going well, keep it; watch = drifting; flag = needs action now. Order by importance.
+- Use the profile (goals, split, bedtime goal, knee note). If an impact spike or knee pain is
+  flagged, never suggest running or jumping.
+- Only state what the data supports. Missing data is missing, not zero; if a day looks partially
+  synced (e.g. very few steps, `sleep_sync_note`), say so instead of judging it. Today is still in
+  progress: judge strain and steps so far against the time of day. Recovery, Strain and Sleep scores
+  are estimates on WHOOP-like scales, not WHOOP's own.
+- Don't repeat the same point in both sections. Plain text in the strings, no markdown, no emoji.
+- Not medical advice: for anything worrying or persistent, suggest a clinician in a few words.
+"""
+
+INSIGHT_LEVELS = ("good", "watch", "flag")
+
+
+def insights_context(m: dict, now: datetime, profile: str = "", earlier: list[dict] | None = None,
+                     food_days: dict | None = None) -> dict:
+    """The note context plus the whole week: the week-vs-last table, attention items, muscle
+    freshness, recent weigh-ins and the food log."""
+    ctx = context(m, "insights", None, now, profile, earlier)
+    ctx.pop("note_type", None)
+    wk = m.get("week_review") or {}
+    if wk.get("rows"):
+        ctx.pop("this_week_vs_last", None)
+        ctx["this_week"] = {"days": wk.get("days"), "today_excluded_from_avg": wk.get("excluded_today"), "metrics": [
+            {"metric": r["metric"], "avg": None if r["avg"] is None else round(r["avg"], 1),
+             "prev_week_avg": None if r["prev"] is None else round(r["prev"], 1),
+             "daily": [None if v is None else round(v, 1) for v in r.get("series") or []],
+             "best": r.get("best"), "worst": r.get("worst")} for r in wk["rows"]]}
+    ctx["needs_attention"] = [t for lvl, t in (m.get("attention") or []) if lvl in ("watch", "flag")] or ctx["needs_attention"]
+    mus = (m.get("muscles") or {}).get("rows") or []
+    if any(r.get("last") for r in mus):
+        ctx["muscle_freshness_pct"] = {r["muscle"]: r["fresh"] for r in mus}
+    b = m.get("body") or {}
+    ctx["weights_recent"] = [w for w in (b.get("weights") or [])[-6:]]
+    ctx["body"]["protein_target_g"] = b.get("protein_target_g")
+    if food_days:
+        days = set((wk.get("days") or [])) or {(now.date() - timedelta(days=i)).isoformat() for i in range(7)}
+        import food as F
+        ctx["food_7d"] = {d_: F.totals(e) for d_, e in sorted(food_days.items()) if d_ in days} or None
+    tr = m.get("training") or {}
+    ctx["training"]["split_queue"] = (tr.get("split") or {}).get("queue")
+    ctx["training"]["last_split_done"] = [(tr.get("split") or {}).get("last_done"), (tr.get("split") or {}).get("last_done_date")]
+    ctx["sleep_debt_now"] = _hm(((m.get("sleep") or {}).get("tonight") or {}).get("debt"))
+    return ctx
+
+
+def parse_insights(raw: str | None) -> dict | None:
+    """The {"today": …, "week": …} object out of Claude's reply, cleaned; None if it isn't there."""
+    if not raw:
+        return None
+    a, b = raw.find("{"), raw.rfind("}")
+    try:
+        data = json.loads(raw[a:b + 1]) if 0 <= a < b else None
+    except ValueError:
+        return None
+    if not isinstance(data, dict):
+        return None
+    out = {}
+    for part in ("today", "week"):
+        sec = data.get(part)
+        if not isinstance(sec, dict):
+            return None
+        items = []
+        for it in sec.get("insights") or []:
+            if not isinstance(it, dict) or not str(it.get("finding") or "").strip():
+                continue
+            lvl = it.get("level") if it.get("level") in INSIGHT_LEVELS else "watch"
+            items.append({"level": lvl, "finding": " ".join(str(it["finding"]).split()),
+                          "action": " ".join(str(it.get("action") or "").split())})
+        if not items:
+            return None
+        out[part] = {"headline": " ".join(str(sec.get("headline") or "").split()), "insights": items[:6]}
+    return out
+
+
+def generate_insights(ctx: dict, timeout: float = 240) -> dict | None:
+    raw = ask(INSIGHTS_SYSTEM, "Today's and this week's data (JSON):\n" + json.dumps(ctx, default=str), timeout)
+    return parse_insights(raw)
+
+
+def fallback_insights(m: dict, now: datetime) -> dict:
+    """Rule-based insights from the same numbers, for when Claude isn't available."""
+    lvl_of = {"good": "good", "watch": "watch", "flag": "flag"}
+    today = [{"level": lvl_of.get(lvl, "watch"), "finding": t, "action": ""}
+             for lvl, t in (m.get("attention") or [])][:4]
+    note = fallback(m, now)
+    head = ((m.get("verdict") or {}).get("headline") or "").rstrip(".")
+    if note and not (head and head in note):
+        today.insert(0, {"level": "none", "finding": note, "action": ""})
+    week = []
+    for r in (m.get("week_review") or {}).get("rows") or []:
+        if r.get("avg") is None or r.get("prev") in (None, 0) or r.get("higher_better") is None:
+            continue
+        ch = (r["avg"] - r["prev"]) / abs(r["prev"])
+        if abs(ch) < 0.08:
+            continue
+        better = (ch > 0) == r["higher_better"]
+        week.append((abs(ch), {"level": "good" if better else "watch",
+                               "finding": "{} averaged {:.1f} this week vs {:.1f} the week before ({:+.0%}).".format(
+                                   r["metric"], r["avg"], r["prev"], ch), "action": ""}))
+    week = [w for _, w in sorted(week, key=lambda x: -x[0])][:5]
+    return {"today": {"headline": (m.get("verdict") or {}).get("headline") or "", "insights": today[:5]},
+            "week": {"headline": "This week vs the week before", "insights": week or [
+                {"level": "watch", "finding": "Not enough data for a week-on-week comparison yet.", "action": ""}]}}
+
+
+def insights_path(home: Path) -> Path:
+    return home / "coaching" / "insights.json"
+
+
+def save_insights(home: Path, result: dict) -> None:
+    p = insights_path(home)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    tmp = p.with_suffix(".tmp")
+    tmp.write_text(json.dumps(result, indent=1) + "\n")
+    tmp.replace(p)
+
+
+def load_insights(home: Path) -> dict | None:
+    try:
+        data = json.loads(insights_path(home).read_text())
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) and isinstance(data.get("today"), dict) else None
 
 
 # ---------------------------------------------------------------- launchd

@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Iterable, Sequence
 
-FORMULA_VERSION = "stats-scores v1.3"
+FORMULA_VERSION = "stats-scores v1.5"
 
 # ---------------------------------------------------------------- baselines
 
@@ -71,6 +71,33 @@ RESP_MIN_SD = 0.3            # breaths/min
 # WHOOP documents Recovery's inputs as HRV, resting HR, sleep and respiratory rate; skin temperature
 # is a Health Monitor metric only. It stays a "watch" flag in Needs attention, not a Recovery input.
 SKIN_TEMP_IN_RECOVERY = False
+
+
+# Resting HR for Recovery is measured while asleep, as WHOOP does: the lowest 30-minute average of
+# per-minute heart rate over the main sleep. Fitbit's daily resting HR also counts daytime rest and is
+# smoothed across days (58 -> 59 -> 60 -> 61 over four days while sleeping HR barely moved), so a slow
+# drift looked like a 2-SD spike. The daily value is only the fallback when a night's samples are missing.
+SLEEPING_RHR_WINDOW_MIN = 30
+SLEEPING_RHR_MIN_COVERAGE = 0.6   # share of the night's minutes that need a heart-rate sample
+
+
+def sleeping_rhr(samples: Sequence[tuple[str, float]], night_minutes: float | None) -> float | None:
+    """Lowest SLEEPING_RHR_WINDOW_MIN-minute average of per-minute heart rate. `samples` are
+    (local ISO time, bpm) inside the main sleep. None when they cover too little of the night
+    (only workout windows synced) or the night is shorter than the window."""
+    per: dict[str, list[float]] = {}
+    for t, v in samples:
+        per.setdefault(t[:16], []).append(v)
+    n, w = len(per), SLEEPING_RHR_WINDOW_MIN
+    if not night_minutes or n < w or n < SLEEPING_RHR_MIN_COVERAGE * night_minutes:
+        return None
+    mins = [statistics.fmean(per[k]) for k in sorted(per)]
+    run = sum(mins[:w])
+    low = run
+    for i in range(w, n):
+        run += mins[i] - mins[i - w]
+        low = min(low, run)
+    return round(low / w, 1)
 
 
 def logistic(x: float) -> float:
@@ -160,6 +187,12 @@ ZONE_HRR = {"FAT_BURN": 0.50, "CARDIO": 0.72, "PEAK": 0.90,
 STRAIN_TAU = 25.0        # TRIMP where the curve starts bending
 STRAIN_CAP_TRIMP = 500.0  # TRIMP that would reach 21
 MAX_SAMPLE_GAP_S = 60.0   # a gap longer than this between HR samples isn't credited
+# All-day strain only counts heart rate at or above 30 % of heart-rate reserve (about 50 % of HRmax,
+# where training zone 1 starts). Without it, 16 waking hours at 65-90 bpm add up to strain ~12 on a
+# day with no exercise. 0.30 was chosen so a Fitbit user's 56 days (p25 7.4, median 10.2, p90 16.3)
+# fall in the range of one WHOOP user's 33 days of Day Strain (p25 7.4, median 9.6, p90 15.0):
+# a calibration, not WHOOP's formula. Workout strain (HR over the session only) has no floor.
+ALL_DAY_HRR_FLOOR = 0.30
 
 
 def trimp_minutes(minutes: float, hrr: float) -> float:
@@ -207,16 +240,19 @@ def trimp_from_zones(zone_minutes: dict[str, float | None], zone_hrr: dict[str, 
 
 
 def trimp_from_samples(samples: Sequence[tuple[float, float]], hr_rest: float | None,
-                       hr_max: float | None) -> float | None:
+                       hr_max: float | None, hrr_floor: float = 0.0) -> float | None:
     """Banister TRIMP from (seconds, bpm) samples using heart-rate reserve. Each sample is credited
-    until the next one, capped at MAX_SAMPLE_GAP_S so dropouts aren't counted as effort."""
+    until the next one, capped at MAX_SAMPLE_GAP_S so dropouts aren't counted as effort; samples below
+    `hrr_floor` (a fraction of heart-rate reserve) add nothing."""
     if not samples or hr_rest is None or hr_max is None or hr_max <= hr_rest:
         return None
     pts = sorted(samples)
     total = 0.0
     for (t1, bpm), (t2, _) in zip(pts, pts[1:]):
         dt = min(max(t2 - t1, 0.0), MAX_SAMPLE_GAP_S) / 60.0
-        total += trimp_minutes(dt, (bpm - hr_rest) / (hr_max - hr_rest))
+        hrr = (bpm - hr_rest) / (hr_max - hr_rest)
+        if hrr >= hrr_floor:
+            total += trimp_minutes(dt, hrr)
     return total
 
 
@@ -798,6 +834,8 @@ EXERCISES: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "tibialis raise": ((), ()),  # anterior shin is not a tracked muscle; don't credit calves
     "box jump": ((), ()),       # jump sets are not hypertrophy hard sets
     "wide grip row": (("lats",), ("shoulders", "biceps")),
+    "single arm row": (("lats",), ("biceps", "shoulders")),
+    "lat pullover": (("lats",), ()),
     "back extension": ((), ("glutes", "hamstrings")),          # mostly lower back, which isn't tracked
     "archer pull": (("shoulders",), ("lats",)),                 # cable/band archer pull: rear delts, upper back
     "curl": (("biceps",), ()),
@@ -830,7 +868,12 @@ EXERCISE_ALIASES = {
     "dips": "dip", "pushup": "push up", "pushups": "push up", "ohp": "overhead press",
     "shoulder press": "overhead press", "military press": "overhead press", "lateral": "lateral raise",
     "laterals": "lateral raise", "side raise": "lateral raise", "rear delt": "rear delt fly",
-    "facepull": "face pull", "barbell row": "row", "cable row": "row", "seated row": "row", "bent over row": "row",
+    "facepull": "face pull", "barbell row": "row", "bent over barbell row": "row", "bent over barbell rows": "row",
+    "single arm cable row": "single arm row", "single arm row": "single arm row", "one arm row": "single arm row",
+    "single arm cable rows": "single arm row", "single hand cable row": "single arm row", "db row": "single arm row",
+    "cable lat pullover": "lat pullover", "pullover": "lat pullover", "straight arm pulldown": "lat pullover",
+    "widegrip cable row": "wide grip row", "wide grip cable row": "wide grip row",
+    "single hand preacher curl": "preacher curl", "single arm preacher curl": "preacher curl", "cable row": "row", "seated row": "row", "bent over row": "row",
     "pullup": "pull up", "pullups": "pull up", "chinup": "chin up", "chinups": "chin up",
     "pulldown": "lat pulldown", "lat pull": "lat pulldown", "rdl": "romanian deadlift", "dl": "deadlift",
     "back squat": "squat", "front squat": "squat", "lunges": "lunge",

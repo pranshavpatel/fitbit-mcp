@@ -422,3 +422,52 @@ def test_strain_box_legend_counts_days(model):
     buf = io.StringIO()
     dashboard.render(model, dashboard.make_console(100, no_color=True, file=buf), 100, "strain")
     assert "in range" in buf.getvalue() and "below" in buf.getvalue() and "above" in buf.getvalue()
+
+
+def test_finished_experiment_shows_the_result(tmp_path, monkeypatch):
+    m = _model(tmp_path, monkeypatch)
+    ex = m["experiment"]
+    for i, r in enumerate(ex["nights"]):
+        r.update(state="hit" if i % 3 == 0 else "miss", start="2026-10-01T00:30:00", asleep=480 if i % 3 == 0 else 360,
+                 recovery=80 if i % 3 == 0 else 50, hrv=90 if i % 3 == 0 else 70)
+    ex["finished"] = True
+    ex["outcome"] = {"hit": {"n": 5, "asleep": 480, "recovery": 80, "hrv": 90},
+                     "miss": {"n": 9, "asleep": 360, "recovery": 50, "hrv": 70}}
+    for w in (60, 80, 120):
+        lines = dashboard.sec_experiment(m, w - 4)
+        text = "\n".join(t.plain for t in lines)
+        assert all(t.cell_len <= w - 4 for t in lines)
+        assert "finished" in text and "NEXT MORNING" in text and "+30 recovery points" in text and "to come" not in text
+
+
+def test_experiment_outcome_groups_nights(tmp_path, monkeypatch):
+    m = _model(tmp_path, monkeypatch)
+    ex = m["experiment"]
+    assert "outcome" in ex and "finished" in ex
+    D._experiment_outcome(ex, m)
+    if ex["outcome"]:
+        assert ex["outcome"]["hit"]["n"] + ex["outcome"]["miss"]["n"] <= len(ex["nights"])
+
+
+def test_auto_sync_asks_for_full_heart_rate_at_most_hourly(sync_env, monkeypatch):
+    seen = []
+
+    class R:
+        returncode = 0
+
+    import subprocess
+    monkeypatch.setattr(subprocess, "run", lambda cmd, **kw: seen.append(cmd) or R())
+    dashboard.auto_sync(force=True)
+    dashboard.auto_sync(force=False)
+    assert "--full-heart-rate" in seen[0] and "--full-heart-rate" not in seen[1]
+
+
+def test_all_day_trimp_cache_round_trips_and_checks_its_key(tmp_path):
+    c = D._TrimpCache(tmp_path / "cache" / "t.json")
+    c.put("2026-10-01", "2026-10-01|1300|58|194|v", 120.5)
+    c.save()
+    c2 = D._TrimpCache(tmp_path / "cache" / "t.json")
+    assert c2.get("2026-10-01|1300|58|194|v") == 120.5
+    assert c2.get("2026-10-01|1310|58|194|v") is None              # more samples arrived: recompute
+    (tmp_path / "cache" / "t.json").write_text("not json")
+    assert D._TrimpCache(tmp_path / "cache" / "t.json").get("2026-10-01|1300|58|194|v") is None
