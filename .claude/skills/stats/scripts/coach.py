@@ -12,7 +12,8 @@
 `fitdash insights` (also `fitdash coach insights`) reads every stat fitdash has and returns two
 sets of insights, each a finding with the numbers behind it plus one concrete action: TODAY (this
 day's recovery, sleep, strain, steps, food and priorities) and PAST 7 DAYS (trends, patterns and
-what to change next week). The last result is kept in ~/.fitbit-mcp/coaching/insights.json.
+what to change next week). The last Claude-written result is kept in
+~/.fitbit-mcp/coaching/insights.json (`--last` shows it); rule-based fallbacks are not saved.
 
 When a note is due:
   morning   05:00-12:00, once last night's sleep is in (or from 10:30 regardless), once a day
@@ -527,15 +528,42 @@ def generate_insights(ctx: dict, timeout: float = 240) -> dict | None:
     return parse_insights(raw)
 
 
+# Fixed next steps for the rule-based insights: (when it got better, when it got worse), by metric
+# family. Claude's insights are specific to the numbers; these only have to be safe and concrete.
+FALLBACK_ACTIONS = {
+    "recovery": ("Keep sleep and training as they are this week.",
+                 "Plan two easy days and protect a full night before each hard session."),
+    "sleep": ("Keep the same lights-out time next week.",
+              "Move lights-out 30 minutes earlier on at least four nights next week."),
+    "heart": ("Keep the current balance of hard and easy days.",
+              "Swap one hard session for an easy one and cut late meals and alcohol for a few days."),
+    "activity": ("Keep the daily movement habit going.",
+                 "Add a 20-minute walk on the days you don't train."),
+    "lifting": ("Keep the split on schedule.", "Book your lifting sessions in the calendar for next week."),
+}
+FALLBACK_FAMILY = {"Recovery %": "recovery", "Sleep score": "sleep", "Sleep perf %": "sleep", "Asleep h": "sleep",
+                   "HRV ms": "heart", "Resting HR": "heart", "Resp. rate": "heart", "Steps": "activity",
+                   "Active kcal": "activity", "AZM": "activity", "Lifting min": "lifting"}
+ATTENTION_ACTIONS = (("recovery", "Keep today's training easy and aim for a full night."),
+                     ("load ratio", "Add one more session than last week, building gradually."),
+                     ("sleep", "Get to bed by tonight's asleep-by time."),
+                     ("weight", "Add a 300-400 kcal snack with protein each day this week."),
+                     ("impact", "Swap the next run for a low-impact session this week."))
+
+
 def fallback_insights(m: dict, now: datetime) -> dict:
-    """Rule-based insights from the same numbers, for when Claude isn't available."""
-    lvl_of = {"good": "good", "watch": "watch", "flag": "flag"}
-    today = [{"level": lvl_of.get(lvl, "watch"), "finding": t, "action": ""}
-             for lvl, t in (m.get("attention") or [])][:4]
+    """Rule-based insights from the same numbers, for when Claude isn't available. Same schema as
+    Claude's (levels good / watch / flag, every insight with an action)."""
+    today = []
+    for lvl, t in (m.get("attention") or [])[:4]:
+        act = next((a for k, a in ATTENTION_ACTIONS if k in t.lower()), "Check this again tomorrow morning.")
+        today.append({"level": lvl if lvl in INSIGHT_LEVELS else "watch", "finding": t, "action": act})
     note = fallback(m, now)
     head = ((m.get("verdict") or {}).get("headline") or "").rstrip(".")
     if note and not (head and head in note):
-        today.insert(0, {"level": "none", "finding": note, "action": ""})
+        band = (m.get("recovery") or {}).get("band")
+        today.insert(0, {"level": {"green": "good", "red": "flag"}.get(band, "watch"), "finding": note,
+                         "action": "Follow today's plan in the Today box."})
     week = []
     for r in (m.get("week_review") or {}).get("rows") or []:
         if r.get("avg") is None or r.get("prev") in (None, 0) or r.get("higher_better") is None:
@@ -544,13 +572,15 @@ def fallback_insights(m: dict, now: datetime) -> dict:
         if abs(ch) < 0.08:
             continue
         better = (ch > 0) == r["higher_better"]
+        keep, fix = FALLBACK_ACTIONS.get(FALLBACK_FAMILY.get(r["metric"], ""), ("Keep it up.", "Watch this next week."))
         week.append((abs(ch), {"level": "good" if better else "watch",
                                "finding": "{} averaged {:.1f} this week vs {:.1f} the week before ({:+.0%}).".format(
-                                   r["metric"], r["avg"], r["prev"], ch), "action": ""}))
+                                   r["metric"], r["avg"], r["prev"], ch), "action": keep if better else fix}))
     week = [w for _, w in sorted(week, key=lambda x: -x[0])][:5]
     return {"today": {"headline": (m.get("verdict") or {}).get("headline") or "", "insights": today[:5]},
             "week": {"headline": "This week vs the week before", "insights": week or [
-                {"level": "watch", "finding": "Not enough data for a week-on-week comparison yet.", "action": ""}]}}
+                {"level": "watch", "finding": "Not enough data for a week-on-week comparison yet.",
+                 "action": "Wear the watch day and night so next week has a full comparison."}]}}
 
 
 def insights_path(home: Path) -> Path:

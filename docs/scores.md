@@ -22,10 +22,10 @@ logistic curve, so every input exactly at baseline gives about 72 %. Respiratory
 1.5 SD off baseline subtracts a penalty, which often shows up before illness. Skin temperature is
 not an input (WHOOP says the same of its Recovery); a big shift is flagged in Needs attention.
 
-The curve's centre is the one constant fitted to WHOOP itself: on 26 days of a WHOOP user's own
+The curve's centre is the one constant fitted to WHOOP itself: on 25 days of a WHOOP user's own
 inputs, fitdash ranked days almost exactly like WHOOP (r 0.97) but read ~21 points low every day.
-Moving only the centre cut the average error from 20.8 to 6.9 points (7.8 leave-one-out) and lifted
-green/yellow/red agreement from 35 % to 85 %. One person is a small sample, so treat absolute numbers
+Moving only the centre cut the average error from 21.4 to 7.0 points (8.2 out of sample, fitting
+only on earlier days) and lifted green/yellow/red agreement from 32 % to 84 %. One person is a small sample, so treat absolute numbers
 as estimates. The method and how to re-run it are in [validation.md](validation.md).
 
 **Resting HR is measured while asleep**, as WHOOP measures it: the lowest 30-minute average of
@@ -42,10 +42,10 @@ is "—".
 ## Strain 0–21
 
 1. **Load (TRIMP).** Banister's training impulse on heart-rate reserve: minutes × intensity ×
-   e^(1.92 × intensity). It uses all-day heart rate when that covers 18 h of the day (today: 80 % of
-   the day up to the last uploaded sample), and otherwise Fitbit's Active Zone Minutes. Zone minutes
+   e^(1.92 × intensity). It uses all-day heart rate when that covers 18 h of the day (today: at least
+   6 h, and 80 % of the day up to the last uploaded sample), and otherwise Fitbit's Active Zone Minutes. Zone minutes
    miss everything below the fat-burn zone, so on a long, moderately active day they read several
-   points low (one real day: 6.5 from zone minutes vs 14.4 from all-day HR). fitdash's sync therefore
+   points low (one real day: 6.5 from zone minutes vs 14.4 from all-day HR before the floor below). fitdash's sync therefore
    fetches whole-day heart rate for yesterday and today, at most hourly, and only the samples newer
    than the last fetch (under 1 MB an hour; turn it off with `"full_heart_rate": false` in stats.json). Zone intensities come from **your** Fitbit zone limits,
    and HRmax is the median of your 5 highest daily maxima (a percentile of every sample would

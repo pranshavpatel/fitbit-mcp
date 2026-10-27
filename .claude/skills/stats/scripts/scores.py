@@ -10,7 +10,7 @@ from __future__ import annotations
 import math
 import statistics
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from typing import Iterable, Sequence
 
 FORMULA_VERSION = "stats-scores v1.5"
@@ -60,8 +60,9 @@ def clamp(x: float, lo: float, hi: float) -> float:
 RECOVERY_WEIGHTS = {"hrv": 0.45, "rhr": 0.30, "sleep": 0.25}
 RECOVERY_WEIGHTS_NO_SLEEP = {"hrv": 0.60, "rhr": 0.40}
 LOGISTIC_K = 1.5          # steepness of the 0-100 mapping
-# Curve centre fitted against WHOOP Recovery (one WHOOP user, 26 days, weights and k held fixed: MAE 15.6 -> 6.9,
-# band agreement 46 % -> 85 %). The gap did not shrink with longer baselines, so it is the curve, not the window.
+# Curve centre fitted against WHOOP Recovery (one WHOOP user, 25 scored days, weights and k held fixed): MAE
+# 21.4 -> 7.0 in sample, 8.2 walk-forward; see validate_whoop.py and docs/validation.md. The gap did not shrink
+# with longer baselines, so it is the curve, not the window.
 LOGISTIC_X0 = -0.63       # x = 0 (every input exactly at baseline) maps to ~72 %
 SLEEP_Z_CENTER, SLEEP_Z_SCALE = 85.0, 15.0   # Sleep Performance 85 % is neutral, 100 % is +1
 PENALTY_SLOPE, PENALTY_FREE_Z, PENALTY_CAP = 0.35, 1.5, 1.0
@@ -78,26 +79,38 @@ SKIN_TEMP_IN_RECOVERY = False
 # smoothed across days (58 -> 59 -> 60 -> 61 over four days while sleeping HR barely moved), so a slow
 # drift looked like a 2-SD spike. The daily value is only the fallback when a night's samples are missing.
 SLEEPING_RHR_WINDOW_MIN = 30
+SLEEPING_RHR_WINDOW_FILL = 0.8    # a window needs a sample in 80 % of its clock minutes
 SLEEPING_RHR_MIN_COVERAGE = 0.6   # share of the night's minutes that need a heart-rate sample
 
 
 def sleeping_rhr(samples: Sequence[tuple[str, float]], night_minutes: float | None) -> float | None:
-    """Lowest SLEEPING_RHR_WINDOW_MIN-minute average of per-minute heart rate. `samples` are
-    (local ISO time, bpm) inside the main sleep. None when they cover too little of the night
-    (only workout windows synced) or the night is shorter than the window."""
-    per: dict[str, list[float]] = {}
+    """Lowest average heart rate over SLEEPING_RHR_WINDOW_MIN consecutive clock minutes (each minute
+    is the mean of its samples). `samples` are (local ISO time, bpm) inside the main sleep. Windows
+    are clock time, not sample count, so a gap can't stretch one over hours; a window with under
+    80 % of its minutes covered is skipped. None when samples cover too little of the night (only
+    workout windows synced) or no window qualifies."""
+    per: dict[int, list[float]] = {}
     for t, v in samples:
-        per.setdefault(t[:16], []).append(v)
-    n, w = len(per), SLEEPING_RHR_WINDOW_MIN
-    if not night_minutes or n < w or n < SLEEPING_RHR_MIN_COVERAGE * night_minutes:
+        try:
+            m = int(datetime.fromisoformat(t[:16]).timestamp() // 60)
+        except ValueError:
+            continue
+        per.setdefault(m, []).append(v)
+    w = SLEEPING_RHR_WINDOW_MIN
+    if not night_minutes or len(per) < max(w * SLEEPING_RHR_WINDOW_FILL, SLEEPING_RHR_MIN_COVERAGE * night_minutes):
         return None
-    mins = [statistics.fmean(per[k]) for k in sorted(per)]
-    run = sum(mins[:w])
-    low = run
-    for i in range(w, n):
-        run += mins[i] - mins[i - w]
-        low = min(low, run)
-    return round(low / w, 1)
+    lo_m, hi_m = min(per), max(per)
+    mean = {m: statistics.fmean(v) for m, v in per.items()}
+    run_sum, run_n, low = 0.0, 0, None
+    for m in range(lo_m, hi_m + 1):           # window = the w minutes ending at m
+        if m in mean:
+            run_sum, run_n = run_sum + mean[m], run_n + 1
+        if m - w in mean:
+            run_sum, run_n = run_sum - mean[m - w], run_n - 1
+        if m - lo_m >= w - 1 and run_n >= w * SLEEPING_RHR_WINDOW_FILL:
+            avg = run_sum / run_n
+            low = avg if low is None else min(low, avg)
+    return None if low is None else round(low, 1)
 
 
 def logistic(x: float) -> float:

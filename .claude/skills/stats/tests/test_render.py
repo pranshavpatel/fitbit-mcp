@@ -437,16 +437,25 @@ def test_finished_experiment_shows_the_result(tmp_path, monkeypatch):
         lines = dashboard.sec_experiment(m, w - 4)
         text = "\n".join(t.plain for t in lines)
         assert all(t.cell_len <= w - 4 for t in lines)
-        assert "finished" in text and "NEXT MORNING" in text and "+30 recovery points" in text and "to come" not in text
+        assert "finished" in text and "NEXT MORNING" in text and "+30 points after on-target" in text and "to come" not in text
 
 
-def test_experiment_outcome_groups_nights(tmp_path, monkeypatch):
-    m = _model(tmp_path, monkeypatch)
-    ex = m["experiment"]
-    assert "outcome" in ex and "finished" in ex
+def test_experiment_outcome_groups_nights():
+    days = ["2026-10-0{}".format(i) for i in range(1, 6)]
+    m = {"days": days, "series": {"recovery": [80, 60, 70, None, 40], "hrv": [90, 70, 80, 60, 50]}}
+    nights = lambda *states: [{"date": d, "state": st, "asleep": 420 + 30 * i}
+                              for i, (d, st) in enumerate(zip(days, states))]
+    ex = {"nights": nights("hit", "miss", "hit", "missed_data", "miss")}
     D._experiment_outcome(ex, m)
-    if ex["outcome"]:
-        assert ex["outcome"]["hit"]["n"] + ex["outcome"]["miss"]["n"] <= len(ex["nights"])
+    hit, miss = ex["outcome"]["hit"], ex["outcome"]["miss"]
+    assert ex["finished"] is True
+    assert (hit["n"], hit["recovery"], hit["hrv"], hit["asleep"]) == (2, 75, 85, 450)
+    assert (miss["n"], miss["recovery"], miss["hrv"], miss["asleep"]) == (2, 50, 60, 495)
+    assert ex["nights"][3]["recovery"] is None and ex["nights"][3]["hrv"] == 60
+
+    ex = {"nights": nights("hit", "hit", "upcoming", "upcoming", "upcoming")}
+    D._experiment_outcome(ex, m)
+    assert ex["finished"] is False and ex["outcome"] is None       # no later nights to compare with yet
 
 
 def test_auto_sync_asks_for_full_heart_rate_at_most_hourly(sync_env, monkeypatch):

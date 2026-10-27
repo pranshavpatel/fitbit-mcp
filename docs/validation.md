@@ -11,28 +11,30 @@ fitdash's Recovery formula land where WHOOP's does?
 
 **Method.** A WHOOP user's data export (35 daily cycles) holds both WHOOP's inputs and its Recovery
 score. [`validate_whoop.py`](../.claude/skills/stats/scripts/validate_whoop.py) feeds those inputs
-into `scores.recovery` with the dashboard's 28-day baselines and compares the outputs. Using WHOOP's
-own inputs isolates the formula from sensor differences between a Fitbit and a WHOOP strap. Days
-with fewer than 7 earlier days have no baseline, which leaves 26 scored days.
+into `scores.recovery` with the dashboard's baselines (the previous 28 calendar days) and compares
+the outputs. Using WHOOP's own inputs isolates the formula from sensor differences between a Fitbit
+and a WHOOP strap. Of the 35 cycles, 8 have under 7 days of baseline and 2 lack WHOOP's HRV, resting
+HR or score, which leaves 25 scored days.
 
 ```text
 uv run --script .claude/skills/stats/scripts/validate_whoop.py <export>/physiological_cycles.csv
 ```
 
-| Curve | MAE (points) | Bias | Pearson r | Spearman | Same band (green / yellow / red) |
-| --- | --- | --- | --- | --- | --- |
-| Uncalibrated (centre 0) | 20.8 | −20.8 | 0.97 | 0.95 | 35 % |
-| **Shipped** (centre −0.63) | **6.9** | −2.5 | 0.95 | 0.95 | **85 %** |
-| Leave-one-out refit of the centre | 7.8 | −3.4 | 0.95 | 0.94 | 85 % |
-| Baseline: predict the mean | 15.4 | | | | |
+| Curve | Days | MAE (points) | Bias | Pearson r | Spearman | Same band (green / yellow / red) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Uncalibrated (centre 0) | 25 | 21.4 | −21.4 | 0.97 | 0.95 | 32 % |
+| Shipped (centre −0.63), in sample | 25 | 7.0 | −2.6 | 0.95 | 0.95 | 84 % |
+| **Walk-forward refit, out of sample** | 15 | **8.2** | −5.6 | 0.94 | 0.92 | **73 %** |
+| Baseline: mean of earlier days | 15 | 14.6 | | | | |
 
 **Reading it.**
 - The structure was right from the start: the uncalibrated curve ranks days almost exactly as WHOOP
   does (r 0.97) but reads about 21 points low on every day. Only the logistic curve's centre was
   then fitted; the input weights (HRV 45 %, resting HR 30 %, sleep 25 %) were never tuned to WHOOP.
-- The centre was fitted on these same 26 days, so 6.9 flatters it. Refitting it with each day left
-  out and scoring that day gives **7.8**, the honest out-of-sample error, about half that of
-  predicting the average every day.
+- The shipped centre was fitted on these same days, so 7.0 flatters it. The honest number is the
+  walk-forward one: each of the last 15 days is scored with a centre fitted only on the days before
+  it (at least 10), so nothing about that day reaches the fit. That gives **8.2**, a bit over half
+  the error of guessing the average, with the band right about three times in four.
 
 ## 2. Strain: matching WHOOP's distribution
 
@@ -82,7 +84,7 @@ synthetic database and fail on any line wider than its panel at 80, 120 and 160 
 
 ## Limits
 
-- One WHOOP user over 26 scored days, and one Fitbit user. Treat absolute numbers as estimates;
+- One WHOOP user over 25 scored days (15 out of sample), and one Fitbit user. Treat absolute numbers as estimates;
   rankings (which day was better) are the more reliable part.
 - WHOOP's algorithm is proprietary. The comparison measures agreement, not that the formulas match.
 - Not medical measurements.

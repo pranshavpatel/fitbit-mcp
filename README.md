@@ -107,9 +107,10 @@ not WHOOP's proprietary algorithm. Every formula is plain Python in
 - **Muscle freshness**: a fatigue model with per-muscle half-lives, fed by your logged sets.
 - **Insights**: next-morning recovery with vs without each habit (Welch's t). Correlation, not proof.
 
-**How well does it match WHOOP?** On a WHOOP user's own inputs, fitdash's Recovery is within
-6.9 points of WHOOP's on average (7.8 out of sample), agrees on green / yellow / red 85 % of the time
-and ranks days with r 0.95. Method, limits and a script to re-run it: [docs/validation.md](docs/validation.md).
+**How well does it match WHOOP?** Checked on one WHOOP user's export (25 scored days) by feeding
+WHOOP's own inputs into fitdash's formula: out of sample, fitdash's Recovery is within 8.2 points of
+WHOOP's on average (14.6 for always guessing the average), agrees on green / yellow / red 73 % of the
+time and ranks days with r 0.94. A small sample, so read it as a sanity check. Method, limits and a script to re-run it: [docs/validation.md](docs/validation.md).
 
 ## Design principles
 

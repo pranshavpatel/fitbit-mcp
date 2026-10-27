@@ -2,7 +2,8 @@
 
 Same access pattern as the daily-health-brief skill: the SQLite file in $FITBIT_MCP_HOME
 (~/.fitbit-mcp) is opened with mode=ro and only fixed, parameterized queries run. Nothing is
-written and nothing leaves the machine. Dates and clock times are in the local timezone (tz.py).
+written to the database and nothing leaves the machine; the only writes are two rebuildable caches
+of per-day results under cache/ (all_day_trimp.json, sleeping_rhr.json). Dates and clock times are in the local timezone (tz.py).
 
 `build_model()` returns plain dicts and lists (JSON-serializable) so the renderer and `--json`
 see exactly the same numbers.
@@ -255,9 +256,11 @@ class Store:
         return out
 
     def metrics(self) -> list[str]:
-        # every (category, metric) pair straight from the index; a pair whose rows were all deleted
-        # upstream still counts, which is harmless
-        return sorted({r["metric"] for r in self.q("SELECT DISTINCT category, metric FROM " + self.lookup_from)})
+        # the distinct pairs come straight from the index (a status filter there would read ~2 M sample
+        # rows); then one early-exit lookup per pair drops metrics whose rows were all deleted upstream
+        pairs = self.q("SELECT DISTINCT category, metric FROM " + self.lookup_from)
+        return sorted({r["metric"] for r in pairs if self.q(
+            "SELECT 1 FROM records WHERE category=? AND metric=? AND status='active' LIMIT 1", (r["category"], r["metric"]))})
 
     def zone_thresholds(self, day: str) -> dict[str, tuple[float, float]]:
         """The user's Fitbit heart-rate zone limits in effect on `day`."""

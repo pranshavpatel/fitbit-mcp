@@ -391,13 +391,19 @@ def _experiment_result(ex: dict, w: int) -> list[Text]:
            row("by {} ({})".format(lo, h["n"]), h, C["good"]), row("later ({})".format(mi["n"]), mi, C["flag"])]
     if ex.get("finished") and h["recovery"] is not None and mi["recovery"] is not None:
         diff = h["recovery"] - mi["recovery"]
+        more = h["asleep"] - mi["asleep"] if h["asleep"] and mi["asleep"] else 0
+        few = min(h["n"], mi["n"]) < 3
+        caveat = " With so few nights this is a hint, not proof." if few else ""
         if diff >= 5:
-            msg = ("On-target nights gave {:+.0f} recovery points{}. It works; the problem was sticking to it "
-                   "({} of {} nights). Start a follow-up: set a new \"experiment\" in stats.json.").format(
-                diff, "" if not (h["asleep"] and mi["asleep"]) else " and {} more sleep".format(hm(h["asleep"] - mi["asleep"])),
-                h["n"], h["n"] + mi["n"])
+            msg = ("Recovery averaged {:+.0f} points after on-target nights{}. You hit the target on {} of {} "
+                   "nights, so sticking to it is the next step: set a new \"experiment\" in stats.json.{}").format(
+                diff, " (with {} more sleep)".format(hm(more)) if more > 0 else "", h["n"], h["n"] + mi["n"], caveat)
+        elif diff <= -5:
+            msg = ("Recovery averaged {:+.0f} points after on-target nights, the opposite of what was expected: "
+                   "something other than lights-out drove these mornings.{}").format(diff, caveat)
         else:
-            msg = "No clear recovery difference ({:+.0f} points): the lights-out time wasn't what held you back.".format(diff)
+            msg = "No clear recovery difference ({:+.0f} points): the lights-out time wasn't what held you back.{}".format(
+                diff, caveat)
         out.append(blank())
         out += takeaway(msg, w)
     out.append(blank())

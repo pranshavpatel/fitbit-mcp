@@ -51,6 +51,7 @@ class Importer:
     def __init__(self, settings: Settings, store: Store, http=None, open_browser=None):
         self.settings, self.store, self.http, self.open_browser = settings, store, http, open_browser
         self.last_query: dict = {}
+        self._hr_newest: dict[str, str] = {}   # request key -> newest whole-day HR sample seen so far
 
     # ------------------------------------------------------------------ helpers
     def session(self, provider: str) -> OAuthSession:
@@ -558,6 +559,9 @@ class Importer:
             marked = self.store.reconcile_scopes(provider, {s: seen.get(s, set()) for s in scopes})
             totals["marked_deleted_upstream"] = totals.get("marked_deleted_upstream", 0) + marked
         self._update_request(ctx, key, status="ok", cursor=None)
+        newest = self._hr_newest.pop(key, None)
+        if newest and newest > (self.get_meta(FULL_HR_MARK) or ""):
+            self.set_meta(FULL_HR_MARK, newest)
         if row["category"] != "snapshot":
             self.store.set_category_status(provider, grp, row["category"], "ok" if n_records else "empty",
                                            None if n_records else "Request succeeded with no records", ctx.id)
@@ -575,9 +579,11 @@ class Importer:
             # the API only supports a lower bound for ECG; apply the upper bound here
             result.records = [r for r in result.records if not r.local_date or r.local_date <= row["window_end"]]
         if grp == "heart-rate" and json.loads(row["params"]).get("op") == "list":
+            # kept per request and stored only once every page of it is saved (see _execute), so a
+            # failed page can't leave a gap behind the high-water mark that later syncs would skip
             newest = max((r.start_utc for r in result.records if r.start_utc), default=None)
-            if newest and newest > (self.get_meta(FULL_HR_MARK) or ""):
-                self.set_meta(FULL_HR_MARK, newest)
+            if newest and newest > self._hr_newest.get(row["key"], ""):
+                self._hr_newest[row["key"]] = newest
         with self.store.transaction() as conn:
             counts = self.store.upsert(provider, self._parser_name(provider), result.records, raw_id, conn)
             for hint, reason in result.unsupported:

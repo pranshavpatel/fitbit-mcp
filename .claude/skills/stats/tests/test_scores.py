@@ -338,3 +338,13 @@ def test_sleeping_rhr_is_the_lowest_half_hour_asleep():
     assert S.sleeping_rhr(samples, 120) == 51.0
     assert S.sleeping_rhr(samples[:40], 120) is None             # a third of the night covered: workout windows only
     assert S.sleeping_rhr(samples, None) is None
+
+
+def test_sleeping_rhr_windows_are_clock_minutes_not_samples():
+    # 40 min at 60, a 2-hour gap, 40 min at 60: a sparse low stretch (one sample every 3 minutes at
+    # 40 bpm) must not count as a full window
+    def at(m):
+        return "2026-10-27T{:02d}:{:02d}:00".format(m // 60, m % 60)
+    samples = [(at(m), 60.0) for m in range(40)] + [(at(m), 40.0) for m in range(40, 160, 3)] + \
+              [(at(m), 60.0) for m in range(160, 200)]
+    assert S.sleeping_rhr(samples, 120) == 56.7    # 20 min at 60 + 4 sparse at 40; sample-count windows gave 40

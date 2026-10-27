@@ -12,17 +12,18 @@ feeds WHOOP's own overnight HRV, resting HR, sleep performance and respiratory r
 `scores.recovery` with the same 28-day baselines the dashboard uses. Comparing against WHOOP's
 Recovery on identical inputs isolates the formula from sensor differences (Fitbit vs WHOOP strap).
 
-LOGISTIC_X0 (the curve's centre) was fitted to this kind of data, so in-sample numbers flatter it.
-The script also refits the centre leaving each day out in turn and scores that day with it
-(leave-one-out), which is the honest out-of-sample estimate. Prints aggregates only, never a day.
+LOGISTIC_X0 (the curve's centre) was fitted on this export, so in-sample numbers flatter it. The
+script also walks forward: each later day is scored with a centre fitted only on the days before
+it, the honest out-of-sample estimate. Prints aggregates only, never a day.
 """
 from __future__ import annotations
 
 import argparse
-import math
 import csv
+import math
 import statistics as st
 import sys
+from datetime import date, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -48,8 +49,11 @@ def load(path: Path) -> list[dict]:
 
 
 def raw_x(rows: list[dict], i: int) -> float | None:
-    """fitdash's pre-logistic recovery total for cycle i, or None without enough baseline."""
-    win = rows[max(0, i - BASELINE_DAYS):i]
+    """fitdash's pre-logistic recovery total for cycle i, or None without enough baseline. The
+    baseline is the cycles of the previous 28 calendar days, like the dashboard's."""
+    day = date.fromisoformat(rows[i]["start"][:10])
+    lo, hi = (day - timedelta(days=BASELINE_DAYS)).isoformat(), (day - timedelta(days=1)).isoformat()
+    win = [w for w in rows[:i] if lo <= w["start"][:10] <= hi]
     r = rows[i]
     res = S.recovery(r["hrv"], S.baseline(w["hrv"] for w in win), r["rhr"], S.baseline(w["rhr"] for w in win),
                      r["sleep"], r["resp"], S.baseline(w["resp"] for w in win))
@@ -85,20 +89,31 @@ def report(name: str, pred: list[float], whoop: list[float]) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("csv", type=Path)
-    rows = load(ap.parse_args().csv)
-    pairs = [(x, rows[i]["rec"]) for i in range(len(rows))
-             if rows[i]["rec"] is not None and (x := raw_x(rows, i)) is not None]
-    if len(pairs) < 5:
-        sys.exit("need at least 5 scored cycles (7+ earlier cycles each); got {}".format(len(pairs)))
+    ap.add_argument("--min-train", type=int, default=10, help="earlier days needed before a day is scored out of sample")
+    args = ap.parse_args()
+    rows = load(args.csv)
+    xs_all = [raw_x(rows, i) for i in range(len(rows))]
+    no_base = sum(x is None and all(rows[i][k] is not None for k in ("hrv", "rhr")) for i, x in enumerate(xs_all))
+    pairs = [(x, rows[i]["rec"]) for i, x in enumerate(xs_all) if x is not None and rows[i]["rec"] is not None]
+    if len(pairs) < args.min_train + 5:
+        sys.exit("need at least {} scored cycles; got {}".format(args.min_train + 5, len(pairs)))
     xs, whoop = [x for x, _ in pairs], [w for _, w in pairs]
-    print("{} cycles, {} with a 7+ day baseline   ({})".format(len(rows), len(pairs), S.FORMULA_VERSION))
+    print("{} cycles: {} without 7 days of baseline, {} missing WHOOP's HRV, resting HR or score, "
+          "{} scored   ({})".format(len(rows), no_base, len(rows) - no_base - len(pairs), len(pairs), S.FORMULA_VERSION))
+    print("\nAll {} scored days (the shipped centre was fitted on these, so it is in-sample):".format(len(pairs)))
     report("uncalibrated curve (centre 0)", [score(x, 0.0) for x in xs], whoop)
     report("shipped curve (centre {:+.2f})".format(S.LOGISTIC_X0), [score(x, S.LOGISTIC_X0) for x in xs], whoop)
-    loo = [score(x, fit_x0(pairs[:i] + pairs[i + 1:])) for i, x in enumerate(xs)]
-    report("leave-one-out refit centre", loo, whoop)
-    mean_only = [st.fmean(whoop[:i] + whoop[i + 1:]) for i in range(len(whoop))]
-    err = [abs(p - w) for p, w in zip(mean_only, whoop)]
-    print("  {:<34} MAE {:5.1f}".format("baseline: predict the mean", st.fmean(err)))
+
+    # Walk forward: each day is scored with a centre fitted only on the days before it, and its own
+    # inputs are in no earlier day's baseline, so nothing from the scored day reaches the fit.
+    k = args.min_train
+    test_x, test_w = xs[k:], whoop[k:]
+    fwd = [score(x, fit_x0(pairs[:k + j])) for j, x in enumerate(test_x)]
+    print("\nOut of sample: the last {} days, each scored with a centre fitted on earlier days only:".format(len(test_x)))
+    report("walk-forward refit centre", fwd, test_w)
+    report("shipped curve, same days", [score(x, S.LOGISTIC_X0) for x in test_x], test_w)
+    mean_only = [st.fmean(whoop[:k + j]) for j in range(len(test_w))]
+    print("  {:<34} MAE {:5.1f}".format("baseline: mean of earlier days", st.fmean(abs(p - w) for p, w in zip(mean_only, test_w))))
 
 
 if __name__ == "__main__":
