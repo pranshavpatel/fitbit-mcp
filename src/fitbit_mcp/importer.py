@@ -13,7 +13,8 @@ from __future__ import annotations
 
 import json
 import shutil
-from datetime import date, timedelta
+from dataclasses import replace
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +33,18 @@ from .util import canonical_json, chunks, daterange, parse_date, parse_rfc3339, 
 
 FITBIT_REQUESTS_PER_HOUR = 150
 MAX_PAGES_PER_REQUEST = 500   # guard against a pathological paging loop (as in health-coach-app)
+
+
+FULL_HR_MARK = "full_hr_through:google"     # newest sample time a whole-day heart-rate fetch returned
+FULL_HR_MARGIN = timedelta(minutes=30)       # re-fetch this much before it: the watch uploads in batches
+
+
+def full_hr_since(mark: str | None, window_start_utc: str) -> str | None:
+    """Lower bound (UTC) for an incremental whole-day heart-rate fetch, or None for the whole window."""
+    if not mark or mark < window_start_utc:
+        return None
+    t = datetime.strptime(mark[:19], "%Y-%m-%dT%H:%M:%S") - FULL_HR_MARGIN
+    return max(t.strftime("%Y-%m-%dT%H:%M:%SZ"), window_start_utc)
 
 
 class Importer:
@@ -273,6 +286,13 @@ class Importer:
                         continue
             if floor and spec_start < floor:
                 spec_start = floor
+            since_utc = None
+            if spec.id == "heart-rate" and params.get("mode") == "sync" and spec_start is not None:
+                # whole-day heart rate is ~11 MB/day: a sync covers only yesterday and today, and only the
+                # samples after the newest one an earlier whole-day fetch returned (minus a margin for
+                # late uploads); older overlap days keep what earlier syncs or imports stored
+                spec_start = max(spec_start, end - timedelta(days=reg.FULL_HR_SYNC_DAYS - 1))
+                since_utc = full_hr_since(self.get_meta(FULL_HR_MARK), reg.local_midnight_utc(spec_start, tz))
             for chunk_start, chunk_end in chunks(spec_start, end, spec.max_chunk_days):
                 if spec.operation == reg.DAILY_ROLLUP:
                     row_params = {"op": "rollup"}
@@ -281,6 +301,8 @@ class Importer:
                     # The filter is built at execution time, so a fallback form found for one chunk
                     # (unverified types) is reused by every later chunk.
                     row_params = {"op": "list", "pageSize": spec.page_size}
+                    if since_utc:
+                        row_params["since_utc"] = since_utc
                     path = base
                 ranged.append(dict(grp=spec.id, category=spec.category, scope=scope, path=path, params=row_params,
                                    window_start=chunk_start.isoformat(), window_end=chunk_end.isoformat()))
@@ -311,7 +333,7 @@ class Importer:
         return days
 
     def _list_page(self, ctx: JobContext | None, client: ApiClient, spec: reg.Spec, start: date | None,
-                   end: date | None, tz, token: str | None) -> Any:
+                   end: date | None, tz, token: str | None, since_utc: str | None = None) -> Any:
         """One dataPoints.list page. For types not verified live, a 400 on the first page makes the importer
         try the other documented filter forms; the form that works is remembered for later chunks."""
         base = "/v4/users/me/dataTypes/" + spec.id + "/dataPoints"
@@ -327,6 +349,9 @@ class Importer:
             query: dict[str, Any] = {"pageSize": spec.page_size}
             if start is not None and end is not None:
                 flt = reg.build_filter(spec, start, end, tz, variant)
+                if since_utc and flt:          # an incremental whole-day heart-rate fetch
+                    flt = reg.build_instant_filter(replace(spec, filter_field=variants[variant][0]), since_utc,
+                                                   reg.local_midnight_utc(end + timedelta(days=1), tz))
                 if flt:
                     query["filter"] = flt
             if token:
@@ -486,7 +511,8 @@ class Importer:
                     tz = ZoneInfo(ctx.params.get("timezone") or "UTC")
                     window = (date.fromisoformat(row["window_start"]), date.fromisoformat(row["window_end"])) \
                         if row["window_start"] else (None, None)
-                    payload = self._list_page(ctx, client, spec or reg.SPECS[grp], window[0], window[1], tz, cursor)
+                    payload = self._list_page(ctx, client, spec or reg.SPECS[grp], window[0], window[1], tz, cursor,
+                                              params.get("since_utc"))
                     query = dict(self.last_query)   # actual filter sent, kept with the raw response
                 elif provider == "google":           # account snapshots (profile, settings, devices)
                     query = dict(params)
@@ -548,6 +574,10 @@ class Importer:
         if spec is not None and spec.filter_kind == reg.ECG_LOWER_BOUND and row["window_end"]:
             # the API only supports a lower bound for ECG; apply the upper bound here
             result.records = [r for r in result.records if not r.local_date or r.local_date <= row["window_end"]]
+        if grp == "heart-rate" and json.loads(row["params"]).get("op") == "list":
+            newest = max((r.start_utc for r in result.records if r.start_utc), default=None)
+            if newest and newest > (self.get_meta(FULL_HR_MARK) or ""):
+                self.set_meta(FULL_HR_MARK, newest)
         with self.store.transaction() as conn:
             counts = self.store.upsert(provider, self._parser_name(provider), result.records, raw_id, conn)
             for hint, reason in result.unsupported:

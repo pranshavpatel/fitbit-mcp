@@ -191,11 +191,15 @@ def create_server(app: App | None = None) -> MCPServer:
     def sync_data(provider: Provider | None = None,
                   overlap_days: Annotated[int, Field(ge=1, le=90, description="Days before the last sync to "
                                                                               "re-fetch for late or edited data")] = 3,
-                  categories: list[Category] | None = None, include_intraday: bool = False) -> dict[str, Any]:
+                  categories: list[Category] | None = None, include_intraday: bool = False,
+                  full_heart_rate: Annotated[bool, Field(description="Google only: whole-day heart rate for "
+                                                                     "yesterday and today (~11 MB/day) instead of "
+                                                                     "exercise windows only")] = False
+                  ) -> dict[str, Any]:
         """Fetch new and recently changed records: re-requests the overlap window (never served from cache),
         updates changed records, de-duplicates by provider IDs and flags records the provider no longer returns
         as deleted_upstream. Returns a job_id."""
-        return _wrap(_sync)(app, provider, overlap_days, categories, include_intraday)
+        return _wrap(_sync)(app, provider, overlap_days, categories, include_intraday, full_heart_rate)
 
     @mcp.tool(annotations=LOCAL_WRITE)
     def import_takeout(path: Annotated[str, Field(description="Local path to a Takeout/Fitbit export .zip or "
@@ -477,13 +481,15 @@ def _start_import(app: App, provider, start_date, end_date, categories, include_
     return view
 
 
-def _sync(app: App, provider, overlap_days, categories, include_intraday) -> dict:
+def _sync(app: App, provider, overlap_days, categories, include_intraday, full_heart_rate: bool = False) -> dict:
     provider = _default_provider(app, provider, need_token=True)
     valid = catalog.FITBIT_CATEGORIES if provider == "fitbit" else catalog.GOOGLE_CATEGORIES
     if categories and set(categories) - set(valid):
         raise ToolError("Not available from {}: {}".format(provider, ", ".join(sorted(set(categories) - set(valid)))))
     if include_intraday and provider != "fitbit":
         raise ToolError("include_intraday applies to Fitbit only.")
+    if full_heart_rate and provider != "google":
+        raise ToolError("full_heart_rate applies to Google only.")
     with app.store.connect() as conn:
         has_data = conn.execute("SELECT 1 FROM records WHERE provider=? LIMIT 1", (provider,)).fetchone() or \
             conn.execute("SELECT 1 FROM sync_state WHERE provider=?", (provider,)).fetchone()
@@ -491,7 +497,8 @@ def _sync(app: App, provider, overlap_days, categories, include_intraday) -> dic
         raise ToolError("Nothing imported from {} yet; run start_import first.".format(provider))
     job = app.jobs.submit("sync", provider, {"mode": "sync", "overlap_days": overlap_days,
                                              "categories": sorted(categories) if categories else None,
-                                             "include_intraday": include_intraday}, lane="api:" + provider)
+                                             "include_intraday": include_intraday,
+                                             "full_heart_rate": full_heart_rate}, lane="api:" + provider)
     return _job_view(job)
 
 
