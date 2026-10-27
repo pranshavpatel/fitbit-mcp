@@ -1,5 +1,9 @@
 # fitbit-mcp + fitdash
 
+[![tests](https://github.com/pranshavpatel/fitbit-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/pranshavpatel/fitbit-mcp/actions/workflows/tests.yml)
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
+[![License](https://img.shields.io/github/license/pranshavpatel/fitbit-mcp)](LICENSE)
+
 **Your own Fitbit / Google Health data, on your own machine: a read-only MCP server for Claude, and
 `fitdash`, a WHOOP-style terminal dashboard with recovery, strain, sleep, muscle freshness, a lift
 log, habit tracking and an AI coach.**
@@ -80,6 +84,7 @@ fitdash --period week                      # this week vs last
 fitdash lift bench 3x8@60 row 4x10@50      # log sets (kg; 25lb for pounds; no @ = bodyweight)
 fitdash journal +mobility -junk-food note "slept well"
 fitdash priorities set "ship the report" "pull day" "call mom"   # today's top 3; the coach checks in
+fitdash insights                           # actionable insights on today and the past week
 fitdash coach run                          # a Claude-written note if one is due
 fitdash brief --install                    # a notification every morning
 fitdash web --install                      # the phone app, running in the background
@@ -94,13 +99,17 @@ not WHOOP's proprietary algorithm. Every formula is plain Python in
 [`scores.py`](.claude/skills/stats/scripts/scores.py) and documented in
 [docs/scores.md](docs/scores.md). In short:
 
-- **Recovery 0–100 %**: overnight HRV (45 %), resting HR (30 %) and sleep score (25 %) as z-scores
-  against your previous 28 days, through a logistic curve.
-- **Strain 0–21**: Banister TRIMP from heart-rate zones calibrated to your own Fitbit zones, on a
-  log scale.
+- **Recovery 0–100 %**: overnight HRV (45 %), resting HR while asleep (30 %) and sleep score (25 %)
+  as z-scores against your previous 28 days, through a logistic curve.
+- **Strain 0–21**: Banister TRIMP on heart-rate reserve from whole-day heart rate (Active Zone
+  Minutes as a fallback), on a log scale.
 - **Sleep score**: hours vs need (50 %), efficiency (20 %), consistency (15 %), sleep stress (15 %).
 - **Muscle freshness**: a fatigue model with per-muscle half-lives, fed by your logged sets.
 - **Insights**: next-morning recovery with vs without each habit (Welch's t). Correlation, not proof.
+
+**How well does it match WHOOP?** On a WHOOP user's own inputs, fitdash's Recovery is within
+6.9 points of WHOOP's on average (7.8 out of sample), agrees on green / yellow / red 85 % of the time
+and ranks days with r 0.95. Method, limits and a script to re-run it: [docs/validation.md](docs/validation.md).
 
 ## Design principles
 
