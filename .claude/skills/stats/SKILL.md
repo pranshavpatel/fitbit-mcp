@@ -111,7 +111,8 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   zone limits, HRmax is the median of the 5 highest daily maxima, and all-day HR only counts at or
   above 30 % of heart-rate reserve (calibrated against WHOOP Day Strain; workouts have no floor). The scale is logarithmic:
   21 · ln(1 + T/25) / ln(21). Bands as WHOOP names them: Light < 10, Moderate 10–13,
-  High 14–17, All out 18+. Target ranges: green 14–18, yellow 10–14, red 4–10.
+  High 14–17, All out 18+. Target ranges: green 14–18, yellow 10–14, red 4–10; a high load ratio drops one band and caution
+  caps it at 10–14.
 - **Sleep score 0–100** (shown on the Sleep ring, the Today row and the Sleep box). Modeled on
   WHOOP's 2025 Sleep Performance, which has four components; WHOOP doesn't publish weights, so
   these are ours: hours vs need 50 % (asleep ÷ need, capped at 100), efficiency 20 % (asleep ÷ in

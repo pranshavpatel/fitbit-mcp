@@ -348,3 +348,14 @@ def test_sleeping_rhr_windows_are_clock_minutes_not_samples():
     samples = [(at(m), 60.0) for m in range(40)] + [(at(m), 40.0) for m in range(40, 160, 3)] + \
               [(at(m), 60.0) for m in range(160, 200)]
     assert S.sleeping_rhr(samples, 120) == 56.7    # 20 min at 60 + 4 sparse at 40; sample-count windows gave 40
+
+
+def test_strain_target_respects_the_load_ratio():
+    assert S.strain_target(85) == (14.0, 18.0)
+    assert S.strain_target(85, "sweet spot") == (14.0, 18.0)
+    assert S.strain_target(85, "caution") == (10.0, 14.0)         # green, but already loading up
+    assert S.strain_target(85, "high") == (10.0, 14.0)
+    assert S.strain_target(50, "high") == (4.0, 10.0)
+    assert S.strain_target(50, "caution") == (10.0, 14.0)
+    assert S.strain_target(20, "high") == (4.0, 10.0)
+    assert S.strain_target(None, "high") is None

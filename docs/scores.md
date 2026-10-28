@@ -57,7 +57,8 @@ is "—".
 2. **Scale.** `21 · ln(1 + TRIMP/25) / ln(21)`, logarithmic like WHOOP's, so going from 18 to 20
    takes far more work than going from 8 to 10.
 3. **Bands** use WHOOP's names: Light < 10, Moderate 10–13, High 14–17, All out 18+.
-4. **Target for today** depends on Recovery: green 14–18, yellow 10–14, red 4–10.
+4. **Target for today** depends on Recovery: green 14–18, yellow 10–14, red 4–10. Training load can
+   lower it: a load ratio in the high zone drops it one band, and the caution zone caps it at 10–14.
 
 ## Sleep
 

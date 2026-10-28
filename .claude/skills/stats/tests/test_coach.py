@@ -200,7 +200,7 @@ def test_insights_command_renders_claude_and_fallback(tmp_path, monkeypatch, cap
     ("Gym 1/4 with 3 days left this week", {}, "calendar"),
     ("Weight below pace for your lean bulk (+0.02 kg/wk)", {}, "snack"),
     ("Weight above pace for your lean bulk (+0.60 kg/wk)", {}, "Trim"),
-    ("Skin temp +0.9 °C off baseline", {}, "easy"),
+    ("Skin temp +0.9 °C off baseline", {}, "clinician"),
     ("SYNC", {}, "fitdash --sync"),
 ])
 def test_fallback_actions_fit_each_attention_item(text, state, expect):

@@ -286,15 +286,21 @@ def strain_band(strain: float | None) -> str | None:
     return next(name for lo, name in STRAIN_BANDS if strain >= lo)
 
 
-def strain_target(recovery_score: float | None) -> tuple[float, float] | None:
-    """Suggested day-strain range for a recovery level."""
+STRAIN_TARGETS = ((4.0, 10.0), (10.0, 14.0), (14.0, 18.0))     # red, yellow, green recovery
+
+
+def strain_target(recovery_score: float | None, load_zone: str | None = None) -> tuple[float, float] | None:
+    """Suggested day-strain range for a recovery level. A load ratio already in "caution" caps a
+    green day at the yellow range, and "high" drops any day one band: a green morning doesn't make
+    a fourth hard day in a row a good idea."""
     if recovery_score is None:
         return None
-    if recovery_score >= 67:
-        return (14.0, 18.0)
-    if recovery_score >= 34:
-        return (10.0, 14.0)
-    return (4.0, 10.0)
+    band = 2 if recovery_score >= 67 else 1 if recovery_score >= 34 else 0
+    if load_zone == "high":
+        band = max(0, band - 1)
+    elif load_zone == "caution":
+        band = min(band, 1)
+    return STRAIN_TARGETS[band]
 
 
 # ---------------------------------------------------------------- sleep

@@ -842,6 +842,8 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
         "impact_limit": limit,
         "impact_spike_recent": any(spikes[-2:]),
     }
+    if model["strain"].get("target") is not None:          # today's target also respects the load ratio
+        model["strain"]["target"] = S.strain_target(model["recovery"]["score"], model["training"]["acwr"]["zone"])
 
     # ---- body & nutrition
     w_pts = store.weights(lo, d)
@@ -1413,9 +1415,15 @@ def _verdict(m: dict) -> dict:
         reasons.append(("watch", "Skin temp {:+.1f} °C off baseline".format(h["skin_dev"])))
     band = rec["band"]
     target = m["strain"]["target"]
-    knee = " · lifting or low-impact only, no runs or jumps" if m["training"]["impact_spike_recent"] else ""
+    knee = " · no runs or jumps (knee)" if m["training"]["impact_spike_recent"] else ""
+    load_high = ac["zone"] in ("caution", "high")
     if band is None:
         headline, level = "Not enough data for a recovery score", "none"
+    elif band == "green" and load_high:
+        headline, level = "Recovered, but load is {}: train moderately (target strain {:.0f}–{:.0f}){}".format(
+            "high" if ac["zone"] == "high" else "building fast", *target, knee), "watch"
+    elif band == "yellow" and ac["zone"] == "high":
+        headline, level = "Load is high: keep it light (target strain under {:.0f}){}".format(target[1], knee), "watch"
     elif band == "green":
         headline, level = "Primed: go hard today (target strain {:.0f}–{:.0f}){}".format(*target, knee), "good"
     elif band == "yellow":

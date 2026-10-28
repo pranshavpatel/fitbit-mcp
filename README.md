@@ -112,6 +112,13 @@ WHOOP's own inputs into fitdash's formula: out of sample, fitdash's Recovery is 
 WHOOP's on average (14.6 for always guessing the average), agrees on green / yellow / red 73 % of the
 time and ranks days with r 0.94. A small sample, so read it as a sanity check. Method, limits and a script to re-run it: [docs/validation.md](docs/validation.md).
 
+**Is the AI coach safe and accurate?** An eval harness runs 42 synthetic scenarios (red recovery,
+high training load, a flagged knee, missing sleep, weight off pace…) through each prompt version
+and model, and grades every reply with 17 deterministic checks for format, grounding in the data,
+safety and specificity. Rewriting the prompt against 30 dev scenarios raised the share of replies
+passing every check on 12 untouched holdout scenarios from 33–50 % to 92 % on Opus, Sonnet and
+Haiku alike. Haiku does it at about 1/24 of Opus's cost. Details: [docs/coach-eval.md](docs/coach-eval.md).
+
 ## Design principles
 
 - **Local first.** Data lives in `~/.fitbit-mcp`. The server only ever makes read-only (GET and
@@ -128,6 +135,7 @@ time and ranks days with r 0.94. A small sample, so read it as a sanity check. M
 src/fitbit_mcp/          the MCP server (OAuth, importer, jobs, store, queries, summaries, Takeout)
 tests/                   server tests (synthetic fakes of the Google/Fitbit APIs)
 .claude/skills/stats/    fitdash: scripts/ (dashboard, scores, data, charts, coach, …) and tests/
+.claude/skills/stats/evals/  the coach eval: scenarios, graders, prompt versions and saved results
 .claude/skills/daily-health-brief/   a lighter one-screen brief
 docs/                    guides, plus demo/ (screenshots and the script that makes them)
 bin/install-fitdash.sh   installs the `fitdash` command
@@ -143,7 +151,7 @@ run offline on synthetic data:
 
 ```sh
 uv run pytest                                                                         # server: 76 tests
-uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 312 tests
+uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 509 tests
 ```
 
 ## License
