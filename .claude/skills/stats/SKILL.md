@@ -143,7 +143,9 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   instead of showing percentages.
 - **What a lift trained.** Fitbit doesn't record it. `~/.fitbit-mcp/training_log.json` holds
   what the user tagged (`fitdash tag <date> <split day>`, e.g. `fitdash tag yesterday pull`).
-  Untagged lifts after `split_anchor` follow the split rotation and are shown as "assumed". When
+  An untagged lift with sets logged that day (`fitdash lift`) takes the split day those sets match
+  (push sets → the "push…" day). Other untagged lifts after `split_anchor` follow the split rotation
+  and are shown as "assumed". When
   the user tells you what they trained, run the tag command rather than editing files by hand.
 - **Training zones.** 5 zones by % of HRmax (50/60/70/80/90 %). Each workout's badge is the zone
   with the most time, from HR samples when they cover the session, else from average HR. For
@@ -203,9 +205,9 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
 `~/.fitbit-mcp/coaching/stats.json` holds the bedtime goal and step target, wake anchor, step
 and gym goals, the split order, `split_anchor`, impact workout types, the sleep experiment and optional `brief_time`. Lift tags live in
 `~/.fitbit-mcp/training_log.json` (written by `fitdash tag`) and logged sets in
-`~/.fitbit-mcp/lift_log.json` (written by `fitdash lift`), the journal in `~/.fitbit-mcp/journal.json`. The data can't tell which muscle group a strength session trained. `split_anchor`
+`~/.fitbit-mcp/lift_log.json` (written by `fitdash lift`), the journal in `~/.fitbit-mcp/journal.json`. Fitbit's data can't tell which muscle group a strength session trained; a tag or logged sets can. `split_anchor`
 (`{"date": "YYYY-MM-DD", "day": "<split day>"}`) records one known session, and the queue
-advances by one for every later strength session. If the user tells you what they lifted and
+advances by one for every later strength session, restarting from any tagged or set-logged day. If the user tells you what they lifted and
 it doesn't match the queue, tag it with `fitdash tag`.
 Keep settings and logs in `~/.fitbit-mcp` (not the repo) so the code stays separate from personal files.
 

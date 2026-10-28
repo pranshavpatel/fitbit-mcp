@@ -178,8 +178,8 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Bo
 run offline on synthetic data:
 
 ```sh
-uv run pytest                                                                         # server: 76 tests
-uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 521 tests
+uv run pytest                                                                         # server: 77 tests
+uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 525 tests
 ```
 
 ## License

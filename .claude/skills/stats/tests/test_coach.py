@@ -209,7 +209,7 @@ def test_fallback_actions_fit_each_attention_item(text, state, expect):
     assert expect in CO.attention_action(note if text == "SYNC" else text, m)
 
 
-def test_insights_use_the_eval_chosen_model_unless_configured(monkeypatch):
+def test_insights_default_to_the_eval_chosen_model(monkeypatch):
     import subprocess
     seen = []
     monkeypatch.setattr(CO, "claude_bin", lambda: "/bin/claude")

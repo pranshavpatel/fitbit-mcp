@@ -148,5 +148,7 @@ All `--install` commands have `--uninstall`, and `brief` and `web` also have `--
 | `FITDASH_SYNC_MAX_AGE` | `30` | Minutes before an interactive run syncs |
 | `NO_COLOR` | unset | Plain output |
 
-`fitdash insights` uses Claude Haiku, chosen by the [coach eval](coach-eval.md). Set `"insights_model"`
-in `stats.json` to another model (`"sonnet"`, `"opus"`, or `"default"` for the Claude CLI's default).
+`fitdash insights` (the today and week run) uses Claude Haiku, chosen by the [coach eval](coach-eval.md).
+Set `"insights_model"` in `stats.json` to another model (`"sonnet"`, `"opus"`, or `"default"` for the
+Claude CLI's default). `fitdash insights --workout` and the coach notes aren't covered by that eval
+yet, so they use the Claude CLI's default model and ignore `insights_model`.

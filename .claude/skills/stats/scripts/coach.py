@@ -854,10 +854,13 @@ def parse_workout(raw: str | None) -> dict | None:
     def s(v):
         return " ".join(str(v or "").split())
     lvl = lambda v: v if v in INSIGHT_LEVELS else "watch"
+    def items(key):
+        v = w.get(key)
+        return [x for x in v if isinstance(x, dict)] if isinstance(v, list) else []
     exercises = [{"exercise": s(e.get("exercise")), "level": lvl(e.get("level")), "note": s(e.get("note")), "next": s(e.get("next"))}
-                 for e in w.get("exercises") or [] if isinstance(e, dict) and s(e.get("note"))]
+                 for e in items("exercises") if s(e.get("note"))]
     tips = [{"level": lvl(t.get("level")), "finding": s(t.get("finding")), "action": s(t.get("action"))}
-            for t in w.get("tips") or [] if isinstance(t, dict) and s(t.get("finding"))]
+            for t in items("tips") if s(t.get("finding"))]
     if not exercises and not tips:
         return None
     return {"headline": s(w["headline"]), "rating": w.get("rating") if w.get("rating") in WORKOUT_RATINGS else "good",
@@ -913,10 +916,15 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
         exercises.append({"exercise": r["exercise"], "level": lvl, "note": note, "next": _next_target([e for e in entries if e["exercise"] == r["exercise"]])})
     prev = ctx.get("previous_same_kind")
     prs = ses.get("prs") or []
-    if prs:
+    cut = bool(prev and prev.get("volume_kg") and ses["volume_kg"] < 0.8 * prev["volume_kg"])   # a short session
+    if prs and not downs and not cut:
         headline, rating = "{} new best{} on {} day: {}. Great session.".format(len(prs), "s" if len(prs) > 1 else "",
                                                                                  ses["kind"], ", ".join(prs)), "great"
-    elif downs > ups:
+    elif prs:
+        headline, rating = "Mixed {} day: new best on {}, but {}.".format(
+            ses["kind"], ", ".join(prs), "volume was down on last time" if cut else
+            "{} lift{} slipped".format(downs, "s" if downs > 1 else "")), "mixed"
+    elif downs > ups or cut:
         headline, rating = "A tougher {} day: more lifts down than up on last time.".format(ses["kind"]), "tough"
     else:
         headline, rating = "Solid {} day: {} sets, {:,} kg moved.".format(ses["kind"], ses["sets"], ses["volume_kg"]), "good"
@@ -924,13 +932,17 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
     if prev:
         summary += " Last {} day ({}): {} sets, {:,} kg.".format(ses["kind"], prev["date"].split()[0], prev["sets"], prev["volume_kg"])
     tips = []
+    load_high = (ctx.get("training") or {}).get("load_zone") in ("caution", "high")
+    if load_high:
+        tips.append({"level": "watch", "finding": "Training load is {} for the week.".format(ctx["training"]["load_zone"]),
+                     "action": "Keep the same sets this week: no extra sessions or volume until the load ratio drops."})
     wk = (ctx.get("week_sets_per_muscle") or {})
     lo, hi = wk.get("range") or (10, 20)
     for mu in ses.get("sets_per_muscle") or {}:
         n = (wk.get("last_7_days") or {}).get(mu)
         if n is None:
             continue
-        if n < lo:
+        if n < lo and not load_high:
             tips.append({"level": "watch", "finding": "{} has {:g} hard sets in the last 7 days, under the {}-{} range.".format(mu.title(), n, lo, hi),
                          "action": "Add {:g} sets of {} before the week is out.".format(lo - n, mu)})
         elif n > hi:

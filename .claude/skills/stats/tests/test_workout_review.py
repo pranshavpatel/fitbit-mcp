@@ -111,3 +111,49 @@ def test_logged_sets_name_an_untagged_split_day_and_move_the_queue():
     assert [x["split_source"] for x in w] == ["assumed", "assumed", "logged"]
     nxt = D._split_next(cfg, w)
     assert nxt["next"] == "pull (back/bi)" and nxt["last_done"] == "push (chest/tri)" and nxt["last_done_date"] == "2026-10-07"
+
+
+def test_parse_workout_survives_non_list_fields():
+    raw = '{"workout": {"headline": "Good day", "exercises": 3, "tips": [{"finding": "Chest 17 sets.", "action": "Hold."}, "x"]}}'
+    got = CO.parse_workout(raw)
+    assert got["exercises"] == [] and got["tips"][0]["finding"] == "Chest 17 sets."
+    assert CO.parse_workout('{"workout": {"headline": "Hi", "exercises": "a", "tips": {}}}') is None
+
+
+def test_fallback_holds_volume_at_high_load_and_rates_mixed_days(tmp_path, monkeypatch):
+    _log(tmp_path, {"2026-10-03": PUSH_1, "2026-10-07": PUSH_2})
+    m = _model(tmp_path, monkeypatch)
+    sets = L.load(tmp_path)
+    ctx = CO.workout_context(m, sets, NOW)
+    ctx["training"]["load_zone"] = "high"
+    ctx["week_sets_per_muscle"]["last_7_days"] = {"chest": 3, "triceps": 4, "shoulders": 2}     # all under 10
+    got = CO.fallback_workout(ctx, sets["2026-10-07"])
+    assert not any(t["action"].startswith("Add") for t in got["tips"])
+    assert "no extra sessions or volume" in got["tips"][0]["action"]
+    inc = next(r for r in ctx["session"]["exercises"] if r["exercise"] == "incline dumbbell press")
+    inc["e1rm_change_pct"] = -8.0                                     # a PR elsewhere, but this lift slipped
+    got = CO.fallback_workout(ctx, sets["2026-10-07"])
+    assert got["rating"] == "mixed" and "1 lift slipped" in got["headline"]
+
+
+def test_split_labels_ignore_zero_credit_sets_and_pre_anchor_tags():
+    split = ["push (chest/tri)", "pull (back/bi)", "legs/abs", "arms"]
+    w = [{"date": d, "start": d + "T17:00", "type": "STRENGTH_TRAINING"} for d in ("2026-09-28", "2026-10-02", "2026-10-04")]
+    cfg = {"split": split, "split_anchor": {"date": "2026-10-01", "day": "push (chest/tri)"},
+           "lift_log": {"2026-09-28": "legs/abs"},                                     # before the anchor
+           "lift_sets": {"2026-10-04": L.parse("box jump 3x5".split(), "2026-10-04T18:00")}}
+    D._label_lifts(w, cfg)
+    assert [x["split"] for x in w] == ["legs/abs", "pull (back/bi)", "legs/abs"]
+    assert [x["split_source"] for x in w] == ["logged", "assumed", "assumed"]       # box jumps name no day
+
+
+def test_insights_command_passes_the_configured_model(tmp_path, monkeypatch, capsys):
+    _model(tmp_path, monkeypatch)
+    cfg = json.loads((tmp_path / "coaching" / "stats.json").read_text())
+    (tmp_path / "coaching" / "stats.json").write_text(json.dumps(dict(cfg, insights_model="sonnet")))
+    seen = []
+    monkeypatch.setattr(CO, "ask", lambda system, user, timeout=150, model=None: seen.append(model))
+    assert dashboard.main(["insights", "--no-sync", "--no-color"]) == 0
+    assert seen == ["sonnet"]
+    assert dashboard.main(["insights", "--workout", "--no-sync", "--no-color"]) in (0, 1)
+    assert seen[1:] in ([], [None])                                   # the workout review: the CLI's default

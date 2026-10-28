@@ -995,19 +995,22 @@ def _label_lifts(workouts: list[dict], cfg: dict) -> None:
     anchor = cfg.get("split_anchor") or {}
     log = dict(cfg.get("lift_log") or {})
     for x, entries in (cfg.get("lift_sets") or {}).items():
-        if x not in log:
-            kind = S.session_label(entries)
+        if x not in log and x >= (anchor.get("date") or "") and sum(S.weekly_sets(entries).values()) > 0:
+            kind = S.session_label(entries)        # (sets with no muscle credit, e.g. box jumps, name nothing)
             match = [d_ for d_ in split if re.match(r"{}\b".format(re.escape(kind)), d_)]
             if len(match) == 1:
                 log[x] = match[0]
     lifts = sorted((w for w in workouts if w["type"] == "STRENGTH_TRAINING"), key=lambda w: (w["date"], w["start"]))
-    idx = None
+    idx, idx_date = None, ""
     for w in lifts:
         w["split"], w["split_source"] = None, None
         if w["date"] in log and log[w["date"]] in split:
             w["split"], w["split_source"] = log[w["date"]], "logged"
-            idx = split.index(log[w["date"]])
+            idx, idx_date = split.index(log[w["date"]]), w["date"]
         elif anchor.get("date") and anchor.get("day") in split and w["date"] >= anchor["date"]:
+            if idx_date < anchor["date"]:
+                idx = None                       # a tag from before the anchor doesn't steer the rotation
+            idx_date = w["date"]
             if idx is None and w["date"] == anchor["date"]:
                 idx = split.index(anchor["day"])
                 w["split"], w["split_source"] = anchor["day"], "logged"
