@@ -207,7 +207,7 @@ and gym goals, the split order, `split_anchor`, impact workout types, the sleep 
 `~/.fitbit-mcp/training_log.json` (written by `fitdash tag`) and logged sets in
 `~/.fitbit-mcp/lift_log.json` (written by `fitdash lift`), the journal in `~/.fitbit-mcp/journal.json`. Fitbit's data can't tell which muscle group a strength session trained; a tag or logged sets can. `split_anchor`
 (`{"date": "YYYY-MM-DD", "day": "<split day>"}`) records one known session, and the queue
-advances by one for every later strength session, restarting from any tagged or set-logged day. If the user tells you what they lifted and
+advances by one for every later strength session, restarting from any tagged or set-logged day on or after the anchor. If the user tells you what they lifted and
 it doesn't match the queue, tag it with `fitdash tag`.
 Keep settings and logs in `~/.fitbit-mcp` (not the repo) so the code stays separate from personal files.
 

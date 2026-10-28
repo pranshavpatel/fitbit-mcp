@@ -148,6 +148,7 @@ def test_split_labels_ignore_zero_credit_sets_and_pre_anchor_tags():
 
 
 def test_insights_command_passes_the_configured_model(tmp_path, monkeypatch, capsys):
+    _log(tmp_path, {"2026-10-07": PUSH_2})
     _model(tmp_path, monkeypatch)
     cfg = json.loads((tmp_path / "coaching" / "stats.json").read_text())
     (tmp_path / "coaching" / "stats.json").write_text(json.dumps(dict(cfg, insights_model="sonnet")))
@@ -155,5 +156,5 @@ def test_insights_command_passes_the_configured_model(tmp_path, monkeypatch, cap
     monkeypatch.setattr(CO, "ask", lambda system, user, timeout=150, model=None: seen.append(model))
     assert dashboard.main(["insights", "--no-sync", "--no-color"]) == 0
     assert seen == ["sonnet"]
-    assert dashboard.main(["insights", "--workout", "--no-sync", "--no-color"]) in (0, 1)
-    assert seen[1:] in ([], [None])                                   # the workout review: the CLI's default
+    assert dashboard.main(["insights", "--workout", "--no-sync", "--no-color"]) == 0
+    assert seen[1:] == [None]                                         # the workout review: the CLI's default
