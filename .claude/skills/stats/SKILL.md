@@ -23,7 +23,7 @@ unless they ask for one area or a week/month review.
 
 ## 1. Sync (when the fitbit-local tools are available)
 
-1. `mcp__fitbit-local__sync_data` with `provider: "google"`, `overlap_days: 2`.
+1. `mcp__fitbit-local__sync_data` with `provider: "google"`, `overlap_days: 2`, `full_heart_rate: true` (whole-day HR for yesterday and today, so Strain is complete).
 2. Poll `mcp__fitbit-local__job_status` until it finishes. A sync usually takes under 30 seconds.
 3. If it **fails**, render anyway. The header shows the last sync time and flags data older than
    6 h as stale. In one line, say what failed. A 7-day token expiry is fixed with
@@ -56,6 +56,7 @@ uv run --quiet --script <skill>/scripts/dashboard.py --no-color --width 80 [flag
 | "fitdash on my phone", phone app | the phone app runs via `<script> web --install` (status: `web --status`; foreground: `<script> app`); the user opens it over Tailscale (`tailscale serve --bg 8787`). It shows everything and logs habits and lifts. Their data may be public if they ask, but never expose the app with `tailscale funnel` without authentication: it has write endpoints |
 | "log my meal", "I had a wrap and a latte", anything they ate or drank | estimate each item (use published numbers for chain items, typical portions otherwise; say what you assumed) and log it with `<script> food add "<item>" <kcal> p=<g> c=<g> f=<g> meal=<…> at=<HH:MM>`; check with `<script> food`. Tell the user these are estimates |
 | "my priorities today are …", "I finished X", "how did my priorities go" | `<script> priorities set "…" "…" "…"` / `priorities done 1` (`some`, `missed`) / `priorities reflect "…"`, then `--section today`. Only record what the user said. Never mark a priority done on their behalf without being told |
+| "insights on my day / week", "what should I change", "analyse my stats" | `<script> insights --no-sync --no-color --width 80` (about a minute; paste verbatim). The Today and Past 7 days boxes are the coaching, so add nothing more |
 | "coach me", "write my coach note", a note for the Today box | `<script> coach run --kind morning\|activity\|evening --force`, or write it yourself and save it with `<script> coach set <kind> "text"` |
 | morning notification / "brief me every morning" | `<script> brief --install [HH:MM]` (status: `brief --status`, remove: `brief --uninstall`) |
 | this week / month, trends, "how did I do" | `--period week` or `--period month` |
@@ -97,16 +98,21 @@ All formulas live in `scripts/scores.py`, and the footer shows the version. Thes
 on WHOOP-style scales calibrated on the user's own history, **not WHOOP's proprietary algorithm**.
 
 - **Recovery 0–100 %.** Weighted z-scores against the prior 28 days: overnight HRV 45 %, resting
-  HR inverted 30 %, sleep score 25 %. A penalty applies when respiratory rate sits more
+  HR while asleep (lowest 30-min average; Fitbit's daily value only as fallback) inverted 30 %,
+  sleep score 25 %. A penalty applies when respiratory rate sits more
   than 1.5 SD off baseline. Skin temperature is not an input (WHOOP documents it isn't); it shows
   in Needs attention instead. The total goes through a logistic curve whose centre was fitted
   against real WHOOP scores (one WHOOP user, 26 days), so every input at baseline gives about 72 %. Bands: green ≥ 67, yellow 34–66, red ≤ 33. Without
   overnight HRV or resting HR the score is "—", never a guess.
 - **Strain 0–21.** Banister TRIMP on heart-rate reserve. It uses all-day HR when that covers
-  18 h, otherwise Active Zone Minutes. Zone intensities are calibrated from the user's own Fitbit
-  zone limits, and HRmax is the 99.5th percentile of recorded HR. The scale is logarithmic:
+  18 h (today: 80 % of the day up to the last uploaded sample), otherwise Active Zone Minutes, which
+  read low; the box says which. fitdash's own sync fetches whole-day HR for yesterday and today
+  (hourly); for the MCP tool, pass `full_heart_rate: true` to `sync_data`. Zone intensities are calibrated from the user's own Fitbit
+  zone limits, HRmax is the median of the 5 highest daily maxima, and all-day HR only counts at or
+  above 30 % of heart-rate reserve (calibrated against WHOOP Day Strain; workouts have no floor). The scale is logarithmic:
   21 · ln(1 + T/25) / ln(21). Bands as WHOOP names them: Light < 10, Moderate 10–13,
-  High 14–17, All out 18+. Target ranges: green 14–18, yellow 10–14, red 4–10.
+  High 14–17, All out 18+. Target ranges: green 14–18, yellow 10–14, red 4–10; a high load ratio drops one band and caution
+  caps it at 10–14.
 - **Sleep score 0–100** (shown on the Sleep ring, the Today row and the Sleep box). Modeled on
   WHOOP's 2025 Sleep Performance, which has four components; WHOOP doesn't publish weights, so
   these are ours: hours vs need 50 % (asleep ÷ need, capped at 100), efficiency 20 % (asleep ÷ in

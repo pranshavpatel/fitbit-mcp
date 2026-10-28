@@ -2,7 +2,8 @@
 
 Same access pattern as the daily-health-brief skill: the SQLite file in $FITBIT_MCP_HOME
 (~/.fitbit-mcp) is opened with mode=ro and only fixed, parameterized queries run. Nothing is
-written and nothing leaves the machine. Dates and clock times are in the local timezone (tz.py).
+written to the database and nothing leaves the machine; the only writes are two rebuildable caches
+of per-day results under cache/ (all_day_trimp.json, sleeping_rhr.json). Dates and clock times are in the local timezone (tz.py).
 
 `build_model()` returns plain dicts and lists (JSON-serializable) so the renderer and `--json`
 see exactly the same numbers.
@@ -44,6 +45,7 @@ DEFAULT_CONFIG = {
     "split_anchor": None,          # {"date": "YYYY-MM-DD", "day": "back/bi"}: what that day's lift was
     "impact_types": ["RUNNING", "TRAIL_RUN", "SOCCER", "TREADMILL_RUNNING"],
     "experiment": None,            # {"name", "start", "nights", "lights_out"}
+    "full_heart_rate": True,       # sync whole-day heart rate (yesterday + today, hourly) so Strain sees all of it
 }
 
 TYPE_LABEL = {"STRENGTH_TRAINING": "Strength", "CARDIO_WORKOUT": "Cardio", "WALKING": "Walk", "RUNNING": "Run",
@@ -95,6 +97,14 @@ class Store:
         self.path = path
         self.conn = sqlite3.connect("file:{}?mode=ro".format(path), uri=True)
         self.conn.row_factory = sqlite3.Row
+        # With whole-day heart rate (~35k samples a day) SQLite's planner still picks the narrower
+        # (category, metric, local_date) index and reads every row from the table: minutes instead of
+        # milliseconds. Sample queries name the covering index when the database has it.
+        # For the same reason, session and device queries name the (category, metric, local_date)
+        # index: left alone, SQLite skip-scans the provider index across every heart-rate sample.
+        idx = {r[0] for r in self.conn.execute("SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='records'")}
+        self.samples_from = "records INDEXED BY idx_records_samples" if "idx_records_samples" in idx else "records"
+        self.lookup_from = "records INDEXED BY idx_records_lookup" if "idx_records_lookup" in idx else "records"
 
     def q(self, sql: str, args: tuple = ()) -> list[sqlite3.Row]:
         return self.conn.execute(sql, args).fetchall()
@@ -131,7 +141,7 @@ class Store:
             return []
         rows = self.q(
             "SELECT r.source_id, r.metric, r.value, r.local_date, r.start_local, r.end_local, r.start_utc, r.end_utc, "
-            "r.details, r.data_source, p.json AS payload FROM records r LEFT JOIN payloads p ON p.id = r.payload_id "
+            "r.details, r.data_source, p.json AS payload FROM " + self.lookup_from.replace("records", "records AS r", 1) + " LEFT JOIN payloads p ON p.id = r.payload_id "
             "WHERE r.provider=? AND r.category=? AND r.granularity='session' AND r.status='active' "
             "AND r.local_date BETWEEN ? AND ? ORDER BY r.start_local", (prov, category, start, end))
         out: dict[str, dict] = {}
@@ -152,7 +162,7 @@ class Store:
         # every sample of the metric; a sample's local_date always falls within its own timestamp's dates
         d0 = (date.fromisoformat(start_local[:10]) - timedelta(days=1)).isoformat()
         d1 = (date.fromisoformat(end_local[:10]) + timedelta(days=1)).isoformat()
-        rows = self.q("SELECT start_local, value FROM records WHERE category=? AND metric=? AND local_date BETWEEN ? AND ? "
+        rows = self.q("SELECT start_local, value FROM " + self.samples_from + " WHERE category=? AND metric=? AND local_date BETWEEN ? AND ? "
                       "AND granularity='sample' AND status='active' AND value IS NOT NULL AND start_local BETWEEN ? AND ? "
                       "ORDER BY start_local", (category, metric, d0, d1, start_local, end_local))
         return [(r["start_local"], r["value"]) for r in rows]
@@ -180,20 +190,26 @@ class Store:
         return dict(out)
 
     def hr_minutes_by_day(self, start: str, end: str) -> dict[str, int]:
-        rows = self.q("SELECT local_date, COUNT(DISTINCT substr(start_local, 1, 16)) AS m FROM records "
+        rows = self.q("SELECT local_date, COUNT(DISTINCT substr(start_local, 1, 16)) AS m FROM " + self.samples_from + " "
                       "WHERE category='heart' AND metric='heart_rate' AND granularity='sample' AND status='active' "
                       "AND local_date BETWEEN ? AND ? GROUP BY local_date", (start, end))
         return {r["local_date"]: r["m"] for r in rows}
 
+    def hr_last_sample(self, day: str) -> str | None:
+        rows = self.q("SELECT MAX(start_local) AS t FROM " + self.samples_from + " WHERE category='heart' AND metric='heart_rate' "
+                      "AND granularity='sample' AND status='active' AND local_date = ?", (day,))
+        return rows[0]["t"] if rows else None
+
     def hr_max_estimate(self, start: str, end: str) -> float | None:
-        """99.5th percentile of recorded heart rate: robust to the odd spike, calibrated on your history."""
-        n = self.q("SELECT COUNT(*) AS n FROM records WHERE category='heart' AND metric='heart_rate' "
-                   "AND status='active' AND local_date BETWEEN ? AND ?", (start, end))[0]["n"]
-        if n < 1000:
+        """HRmax: the median of the 5 highest daily maxima. Daily maxima don't depend on how much resting
+        heart rate was synced (a percentile of all samples drops as whole days come in), and the median
+        of the top 5 ignores a single bad reading."""
+        rows = self.q("SELECT MAX(value) AS m, COUNT(*) AS n FROM " + self.samples_from + " WHERE category='heart' "
+                      "AND metric='heart_rate' AND granularity='sample' AND status='active' AND value IS NOT NULL "
+                      "AND local_date BETWEEN ? AND ? GROUP BY local_date HAVING COUNT(*) >= 30", (start, end))
+        if len(rows) < 5 or sum(r["n"] for r in rows) < 1000:
             return None
-        row = self.q("SELECT value FROM records WHERE category='heart' AND metric='heart_rate' AND status='active' "
-                     "AND local_date BETWEEN ? AND ? ORDER BY value DESC LIMIT 1 OFFSET ?", (start, end, int(n * 0.005)))
-        return row[0]["value"] if row else None
+        return statistics.median(sorted((r["m"] for r in rows), reverse=True)[:5])
 
     def activity_levels(self, day: str) -> list[tuple[str, str]]:
         rows = self.q("SELECT r.start_local, json_extract(p.json, '$.activityLevel.activityLevelType') AS lvl "
@@ -229,8 +245,10 @@ class Store:
         pairs = self.q("SELECT DISTINCT category, metric FROM records")
         out: dict[str, dict] = {}
         for p in pairs:
-            row = self.q("SELECT MIN(local_date) AS first, MAX(local_date) AS last FROM records "
-                         "WHERE category=? AND metric=? AND local_date IS NOT NULL", (p["category"], p["metric"]))[0]
+            # two subqueries, so each is answered from the index ends instead of scanning the metric
+            row = self.q("SELECT (SELECT MIN(local_date) FROM records WHERE category=? AND metric=? AND local_date IS NOT NULL) "
+                         "AS first, (SELECT MAX(local_date) FROM records WHERE category=? AND metric=?) AS last",
+                         (p["category"], p["metric"], p["category"], p["metric"]))[0]
             if row["first"] is None:
                 continue
             c = out.setdefault(p["category"], {"first": row["first"], "last": row["last"]})
@@ -238,7 +256,11 @@ class Store:
         return out
 
     def metrics(self) -> list[str]:
-        return [r["metric"] for r in self.q("SELECT DISTINCT metric FROM records WHERE status='active'")]
+        # the distinct pairs come straight from the index (a status filter there would read ~2 M sample
+        # rows); then one early-exit lookup per pair drops metrics whose rows were all deleted upstream
+        pairs = self.q("SELECT DISTINCT category, metric FROM " + self.lookup_from)
+        return sorted({r["metric"] for r in pairs if self.q(
+            "SELECT 1 FROM records WHERE category=? AND metric=? AND status='active' LIMIT 1", (r["category"], r["metric"]))})
 
     def zone_thresholds(self, day: str) -> dict[str, tuple[float, float]]:
         """The user's Fitbit heart-rate zone limits in effect on `day`."""
@@ -260,8 +282,10 @@ class Store:
         return row[0]["d"] if row else None
 
     def devices(self, start: str, end: str) -> list[str]:
-        rows = self.q("SELECT DISTINCT json_extract(data_source, '$.device.displayName') AS d FROM records "
-                      "WHERE status='active' AND local_date BETWEEN ? AND ? AND data_source IS NOT NULL", (start, end))
+        # sleep, workouts and activity name every device; whole-day heart rate would only add rows to read
+        rows = self.q("SELECT DISTINCT json_extract(data_source, '$.device.displayName') AS d FROM " + self.lookup_from +
+                      " WHERE category IN ('sleep', 'exercise', 'activity') AND status='active' AND local_date BETWEEN ? AND ? "
+                      "AND data_source IS NOT NULL", (start, end))
         return sorted({r["d"] for r in rows if r["d"]})
 
 
@@ -533,14 +557,32 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
                 and worn.get(x, 0) + asleep_any.get(x, 0) < WEAR_MIN_MINUTES}
     model["low_wear_days"] = sorted(y for y in low_wear if y >= iso(day - timedelta(days=hist)))
 
-    # ---- strain per day: TRIMP from all-day HR when it covers 18 h, else from Active Zone Minutes
+    # ---- strain per day: TRIMP from all-day HR when it covers 18 h (today: 80 % of the day up to the
+    # last uploaded sample, at least 6 h), else from Active Zone Minutes. Zone minutes miss everything
+    # below the fat-burn zone, so they under-read a long, moderately active day by several points.
     trimp, strain_by_day, strain_method = {}, {}, {}
+    hr_through = store.hr_last_sample(d) if d in hr_cov else None
+
+    def all_day_hr(x):
+        if x == d and hr_through and model.get("partial_day"):
+            t_ = datetime.fromisoformat(hr_through[:19])
+            upto = t_.hour * 60 + t_.minute
+            return upto >= 6 * 60 and hr_cov.get(x, 0) >= 0.8 * upto
+        return hr_cov.get(x, 0) >= 18 * 60
+
+    cache = _TrimpCache(store.path.parent / "cache" / "all_day_trimp.json")
     for x in span(day, LOAD_SPAN):
         if x in low_wear:
             continue
-        if hr_cov.get(x, 0) >= 18 * 60 and hr_max:
-            pts = [(epoch(t), v) for t, v in store.samples("heart", "heart_rate", x + "T00:00:00", x + "T23:59:59")]
-            t = S.trimp_from_samples(pts, rhr.get(x, rhr_base_all.mean if rhr_base_all else None), hr_max)
+        if all_day_hr(x) and hr_max:
+            rest = rhr.get(x, rhr_base_all.mean if rhr_base_all else None)
+            key = "{}|{}|{}|{}|{}".format(x, hr_cov.get(x), rest, hr_max, S.FORMULA_VERSION)
+            t = cache.get(key) if x < iso(day - timedelta(days=1)) else None     # today and yesterday still change
+            if t is None:
+                pts = [(epoch(t_), v) for t_, v in store.samples("heart", "heart_rate", x + "T00:00:00", x + "T23:59:59")]
+                t = S.trimp_from_samples(pts, rest, hr_max, S.ALL_DAY_HRR_FLOOR)
+                if t is not None:
+                    cache.put(x, key, t)
             method = "all-day HR"
         elif has_activity(x):
             z = azm.get(x, {})
@@ -550,6 +592,7 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
             continue
         if t is not None:
             trimp[x], strain_by_day[x], strain_method[x] = t, S.strain(t), method
+    cache.save()
 
     # ---- sleep per night
     nights = nights_by_date(sleeps)
@@ -598,18 +641,46 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
         sleep_scores[x] = S.sleep_score(perf[x], eff, cons, stress_pct[x])
     sscore = {x: v.score for x, v in sleep_scores.items() if v.score is not None}
 
+    # ---- resting HR while asleep (Recovery's input; Fitbit's daily value is the fallback)
+    night_cache = _TrimpCache(store.path.parent / "cache" / "sleeping_rhr.json")
+    rhr_night: dict[str, float] = {}
+    for x in span(day, hist + BASELINE_DAYS):
+        main_ = (nights.get(x) or {}).get("main")
+        if not main_ or not main_.get("start") or not main_.get("end"):
+            continue
+        prev = iso(date.fromisoformat(x) - timedelta(days=1))
+        key = "{}|{}|{}|{}|{}|{}".format(x, main_["start"][:16], main_["end"][:16], hr_cov.get(prev), hr_cov.get(x),
+                                         S.FORMULA_VERSION)
+        v = night_cache.get(key) if x < iso(day - timedelta(days=1)) else None
+        if v is None:
+            night_min = (epoch(main_["end"]) - epoch(main_["start"])) / 60
+            v = S.sleeping_rhr(store.samples("heart", "heart_rate", main_["start"][:19], main_["end"][:19]), night_min)
+            night_cache.put(x, key, -1 if v is None else v)
+        if v is not None and v > 0:
+            rhr_night[x] = v
+    night_cache.save()
+
+    def rest_source(x: str) -> dict[str, float]:
+        """Sleeping RHR when that night has it and the 28 days before have 7+ nights of it (z-scores
+        never mix the two measures, which sit ~7 bpm apart), else Fitbit's daily resting HR."""
+        win_ = span(date.fromisoformat(x) - timedelta(days=1), BASELINE_DAYS)
+        return rhr_night if x in rhr_night and sum(y in rhr_night for y in win_) >= 7 else rhr
+
     # ---- recovery per day
     rec = {}
     for x in span(day, max(hist, LOAD_SPAN - BASELINE_DAYS)):
         xd = date.fromisoformat(x)
         win = span(xd - timedelta(days=1), BASELINE_DAYS)
-        rec[x] = S.recovery(hrv.get(x), S.baseline(hrv.get(y) for y in win), rhr.get(x),
-                            S.baseline(rhr.get(y) for y in win), sscore.get(x), resp.get(x),
+        rs = rest_source(x)
+        rec[x] = S.recovery(hrv.get(x), S.baseline(hrv.get(y) for y in win), rs.get(x),
+                            S.baseline(rs.get(y) for y in win), sscore.get(x), resp.get(x),
                             S.baseline(resp.get(y) for y in win), skin_dev.get(x), skin_sd.get(x))
+    rhr_shown = rest_source(d)        # the trend chart and baseline show the measure today's Recovery used
+    model["rhr_source"] = "asleep" if rhr_shown is rhr_night else "fitbit"
 
     days_list = model["days"]
     model["series"] = {
-        "hrv": [hrv.get(x) for x in days_list], "rhr": [rhr.get(x) for x in days_list],
+        "hrv": [hrv.get(x) for x in days_list], "rhr": [rhr_shown.get(x) for x in days_list],
         "resp": [resp.get(x) for x in days_list], "spo2": [spo2.get(x) for x in days_list],
         "skin_dev": [None if x not in skin_dev else round(skin_dev[x], 2) for x in days_list],
         "vo2": [vo2.get(x) for x in days_list],
@@ -622,7 +693,7 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
     }
     win28 = span(day - timedelta(days=1), BASELINE_DAYS)
     model["baselines"] = {k: _base_dict(S.baseline(src.get(y) for y in win28)) for k, src in
-                          (("hrv", hrv), ("rhr", rhr), ("resp", resp), ("spo2", spo2), ("steps", steps),
+                          (("hrv", hrv), ("rhr", rhr_shown), ("resp", resp), ("spo2", spo2), ("steps", steps),
                            ("strain", strain_by_day), ("asleep", asleep), ("vo2", vo2), ("skin_dev", skin_dev))}
     model["baselines"]["recovery"] = _base_dict(S.baseline(rec[y].score for y in win28 if y in rec))
     model["baselines"]["sleep_perf"] = _base_dict(S.baseline(perf.get(y) for y in win28))
@@ -634,6 +705,7 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
                          "contributions": [asdict(c) for c in r.contributions]}
     model["strain"] = {"day": strain_by_day.get(d), "trimp": None if d not in trimp else round(trimp[d], 1),
                        "method": strain_method.get(d), "target": S.strain_target(r.score),
+                       "hr_through": (hr_through or "")[11:16] or None if strain_method.get(d) == "all-day HR" else None,
                        "reason": None if d in strain_by_day else "no activity data today"}
 
     # ---- sleep detail
@@ -770,6 +842,8 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
         "impact_limit": limit,
         "impact_spike_recent": any(spikes[-2:]),
     }
+    if model["strain"].get("target") is not None:          # today's target also respects the load ratio
+        model["strain"]["target"] = S.strain_target(model["recovery"]["score"], model["training"]["acwr"]["zone"])
 
     # ---- body & nutrition
     w_pts = store.weights(lo, d)
@@ -816,6 +890,8 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
 
     # ---- experiment
     model["experiment"] = _experiment(cfg.get("experiment"), nights, day)
+    if model["experiment"]:
+        _experiment_outcome(model["experiment"], model)
 
     # ---- verdict
     model["verdict"] = _verdict(model)
@@ -832,7 +908,7 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
     metrics = {
         "Recovery %": ({x: rec[x].score for x in rec if rec[x].score is not None}, True),
         "Sleep score": (sscore, True), "Sleep perf %": (perf, True), "Asleep h": ({x: v / 60 for x, v in asleep.items()}, True),
-        "Strain": (strain_by_day, None), "HRV ms": (hrv, True), "Resting HR": (rhr, False),
+        "Strain": (strain_by_day, None), "HRV ms": (hrv, True), "Resting HR": (rhr_shown, False),
         "Resp. rate": (resp, False), "Steps": (steps, True), "Active kcal": (active_kcal, True),
         "AZM": ({x: azm.get(x, {}).get("_points", 0) for x in steps}, True),
         "Workout min": ({x: S.union_minutes(w["epoch"] for w in workouts_all if w["date"] == x) for x in steps}, None),
@@ -1188,7 +1264,7 @@ def _hourly_activity(levels: list[tuple[str, str]]) -> list[int | None] | None:
 def _stress_by_hour(samples: list[tuple[str, float]], rest: float | None, hr_max: float | None,
                     covered_minutes: int) -> dict:
     if covered_minutes < 12 * 60:
-        return {"hours": None, "reason": "needs all-day heart rate (only workout windows are imported)"}
+        return {"hours": None, "reason": "needs 12 h of heart rate for the day"}
     by_h: dict[int, list[float]] = defaultdict(list)
     for t, v in samples:
         dt = local_dt(t)
@@ -1255,6 +1331,58 @@ def _experiment(exp: dict | None, nights: dict, day: date) -> dict | None:
             "exp_asleep": statistics.median(r["asleep"] for r in done if r.get("asleep")) if done else None}
 
 
+class _TrimpCache:
+    """All-day TRIMP per finished day, so ~35k heart-rate samples a day aren't re-read on every render.
+    Keyed by day, minutes of heart-rate coverage, resting HR, HRmax and the formula version: new
+    samples or a recalibration change the key. A cache that can't be read or written is just skipped."""
+
+    def __init__(self, path: Path):
+        self.path, self.dirty = path, False
+        try:
+            self.data = json.loads(path.read_text())
+        except (OSError, ValueError):
+            self.data = {}
+        if not isinstance(self.data, dict):
+            self.data = {}
+
+    def get(self, key: str) -> float | None:
+        v = self.data.get(key[:10])
+        return v[1] if isinstance(v, list) and len(v) == 2 and v[0] == key else None
+
+    def put(self, day: str, key: str, trimp: float) -> None:
+        self.data[day] = [key, trimp]
+        self.dirty = True
+
+    def save(self) -> None:
+        if not self.dirty:
+            return
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = self.path.with_suffix(".tmp")
+            tmp.write_text(json.dumps(dict(sorted(self.data.items())[-400:])))
+            tmp.replace(self.path)
+        except OSError:
+            pass
+
+
+def _experiment_outcome(ex: dict, model: dict) -> None:
+    """Next-morning numbers on each night, and on-target vs later nights side by side once at least
+    one of each is in: did the experiment's lights-out actually help?"""
+    idx = {d: i for i, d in enumerate(model.get("days") or [])}
+    ser = model.get("series") or {}
+    for r in ex["nights"]:
+        i = idx.get(r["date"])
+        for k in ("recovery", "hrv"):
+            r[k] = (ser.get(k) or [None] * len(idx))[i] if i is not None else None
+    ex["finished"] = all(r["state"] != "upcoming" for r in ex["nights"])
+    groups = {}
+    for state in ("hit", "miss"):
+        rs = [r for r in ex["nights"] if r["state"] == state]
+        mean = lambda k: (statistics.fmean(v) if (v := [r[k] for r in rs if r.get(k) is not None]) else None)
+        groups[state] = {"n": len(rs), "asleep": mean("asleep"), "recovery": mean("recovery"), "hrv": mean("hrv")}
+    ex["outcome"] = groups if groups["hit"]["n"] and groups["miss"]["n"] else None
+
+
 def _verdict(m: dict) -> dict:
     reasons = []
     rec = m["recovery"]
@@ -1287,9 +1415,15 @@ def _verdict(m: dict) -> dict:
         reasons.append(("watch", "Skin temp {:+.1f} °C off baseline".format(h["skin_dev"])))
     band = rec["band"]
     target = m["strain"]["target"]
-    knee = " · lifting or low-impact only, no runs or jumps" if m["training"]["impact_spike_recent"] else ""
+    knee = " · no runs or jumps (knee)" if m["training"]["impact_spike_recent"] else ""
+    load_high = ac["zone"] in ("caution", "high")
     if band is None:
         headline, level = "Not enough data for a recovery score", "none"
+    elif band == "green" and load_high:
+        headline, level = "Recovered, but load is {}: train moderately (target strain {:.0f}–{:.0f}){}".format(
+            "high" if ac["zone"] == "high" else "building fast", *target, knee), "watch"
+    elif band == "yellow" and ac["zone"] == "high":
+        headline, level = "Load is high: keep it light (target strain under {:.0f}){}".format(target[1], knee), "watch"
     elif band == "green":
         headline, level = "Primed: go hard today (target strain {:.0f}–{:.0f}){}".format(*target, knee), "good"
     elif band == "yellow":

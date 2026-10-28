@@ -10,10 +10,10 @@ from __future__ import annotations
 import math
 import statistics
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from typing import Iterable, Sequence
 
-FORMULA_VERSION = "stats-scores v1.3"
+FORMULA_VERSION = "stats-scores v1.5"
 
 # ---------------------------------------------------------------- baselines
 
@@ -60,8 +60,9 @@ def clamp(x: float, lo: float, hi: float) -> float:
 RECOVERY_WEIGHTS = {"hrv": 0.45, "rhr": 0.30, "sleep": 0.25}
 RECOVERY_WEIGHTS_NO_SLEEP = {"hrv": 0.60, "rhr": 0.40}
 LOGISTIC_K = 1.5          # steepness of the 0-100 mapping
-# Curve centre fitted against WHOOP Recovery (one WHOOP user, 26 days, weights and k held fixed: MAE 15.6 -> 6.9,
-# band agreement 46 % -> 85 %). The gap did not shrink with longer baselines, so it is the curve, not the window.
+# Curve centre fitted against WHOOP Recovery (one WHOOP user, 25 scored days, weights and k held fixed): MAE
+# 21.4 -> 7.0 in sample, 8.2 walk-forward; see validate_whoop.py and docs/validation.md. The gap did not shrink
+# with longer baselines, so it is the curve, not the window.
 LOGISTIC_X0 = -0.63       # x = 0 (every input exactly at baseline) maps to ~72 %
 SLEEP_Z_CENTER, SLEEP_Z_SCALE = 85.0, 15.0   # Sleep Performance 85 % is neutral, 100 % is +1
 PENALTY_SLOPE, PENALTY_FREE_Z, PENALTY_CAP = 0.35, 1.5, 1.0
@@ -71,6 +72,45 @@ RESP_MIN_SD = 0.3            # breaths/min
 # WHOOP documents Recovery's inputs as HRV, resting HR, sleep and respiratory rate; skin temperature
 # is a Health Monitor metric only. It stays a "watch" flag in Needs attention, not a Recovery input.
 SKIN_TEMP_IN_RECOVERY = False
+
+
+# Resting HR for Recovery is measured while asleep, as WHOOP does: the lowest 30-minute average of
+# per-minute heart rate over the main sleep. Fitbit's daily resting HR also counts daytime rest and is
+# smoothed across days (58 -> 59 -> 60 -> 61 over four days while sleeping HR barely moved), so a slow
+# drift looked like a 2-SD spike. The daily value is only the fallback when a night's samples are missing.
+SLEEPING_RHR_WINDOW_MIN = 30
+SLEEPING_RHR_WINDOW_FILL = 0.8    # a window needs a sample in 80 % of its clock minutes
+SLEEPING_RHR_MIN_COVERAGE = 0.6   # share of the night's minutes that need a heart-rate sample
+
+
+def sleeping_rhr(samples: Sequence[tuple[str, float]], night_minutes: float | None) -> float | None:
+    """Lowest average heart rate over SLEEPING_RHR_WINDOW_MIN consecutive clock minutes (each minute
+    is the mean of its samples). `samples` are (local ISO time, bpm) inside the main sleep. Windows
+    are clock time, not sample count, so a gap can't stretch one over hours; a window with under
+    80 % of its minutes covered is skipped. None when samples cover too little of the night (only
+    workout windows synced) or no window qualifies."""
+    per: dict[int, list[float]] = {}
+    for t, v in samples:
+        try:
+            m = int(datetime.fromisoformat(t[:16]).timestamp() // 60)
+        except ValueError:
+            continue
+        per.setdefault(m, []).append(v)
+    w = SLEEPING_RHR_WINDOW_MIN
+    if not night_minutes or len(per) < max(w * SLEEPING_RHR_WINDOW_FILL, SLEEPING_RHR_MIN_COVERAGE * night_minutes):
+        return None
+    lo_m, hi_m = min(per), max(per)
+    mean = {m: statistics.fmean(v) for m, v in per.items()}
+    run_sum, run_n, low = 0.0, 0, None
+    for m in range(lo_m, hi_m + 1):           # window = the w minutes ending at m
+        if m in mean:
+            run_sum, run_n = run_sum + mean[m], run_n + 1
+        if m - w in mean:
+            run_sum, run_n = run_sum - mean[m - w], run_n - 1
+        if m - lo_m >= w - 1 and run_n >= w * SLEEPING_RHR_WINDOW_FILL:
+            avg = run_sum / run_n
+            low = avg if low is None else min(low, avg)
+    return None if low is None else round(low, 1)
 
 
 def logistic(x: float) -> float:
@@ -160,6 +200,12 @@ ZONE_HRR = {"FAT_BURN": 0.50, "CARDIO": 0.72, "PEAK": 0.90,
 STRAIN_TAU = 25.0        # TRIMP where the curve starts bending
 STRAIN_CAP_TRIMP = 500.0  # TRIMP that would reach 21
 MAX_SAMPLE_GAP_S = 60.0   # a gap longer than this between HR samples isn't credited
+# All-day strain only counts heart rate at or above 30 % of heart-rate reserve (about 50 % of HRmax,
+# where training zone 1 starts). Without it, 16 waking hours at 65-90 bpm add up to strain ~12 on a
+# day with no exercise. 0.30 was chosen so a Fitbit user's 56 days (p25 7.4, median 10.2, p90 16.3)
+# fall in the range of one WHOOP user's 33 days of Day Strain (p25 7.4, median 9.6, p90 15.0):
+# a calibration, not WHOOP's formula. Workout strain (HR over the session only) has no floor.
+ALL_DAY_HRR_FLOOR = 0.30
 
 
 def trimp_minutes(minutes: float, hrr: float) -> float:
@@ -207,16 +253,19 @@ def trimp_from_zones(zone_minutes: dict[str, float | None], zone_hrr: dict[str, 
 
 
 def trimp_from_samples(samples: Sequence[tuple[float, float]], hr_rest: float | None,
-                       hr_max: float | None) -> float | None:
+                       hr_max: float | None, hrr_floor: float = 0.0) -> float | None:
     """Banister TRIMP from (seconds, bpm) samples using heart-rate reserve. Each sample is credited
-    until the next one, capped at MAX_SAMPLE_GAP_S so dropouts aren't counted as effort."""
+    until the next one, capped at MAX_SAMPLE_GAP_S so dropouts aren't counted as effort; samples below
+    `hrr_floor` (a fraction of heart-rate reserve) add nothing."""
     if not samples or hr_rest is None or hr_max is None or hr_max <= hr_rest:
         return None
     pts = sorted(samples)
     total = 0.0
     for (t1, bpm), (t2, _) in zip(pts, pts[1:]):
         dt = min(max(t2 - t1, 0.0), MAX_SAMPLE_GAP_S) / 60.0
-        total += trimp_minutes(dt, (bpm - hr_rest) / (hr_max - hr_rest))
+        hrr = (bpm - hr_rest) / (hr_max - hr_rest)
+        if hrr >= hrr_floor:
+            total += trimp_minutes(dt, hrr)
     return total
 
 
@@ -237,15 +286,21 @@ def strain_band(strain: float | None) -> str | None:
     return next(name for lo, name in STRAIN_BANDS if strain >= lo)
 
 
-def strain_target(recovery_score: float | None) -> tuple[float, float] | None:
-    """Suggested day-strain range for a recovery level."""
+STRAIN_TARGETS = ((4.0, 10.0), (10.0, 14.0), (14.0, 18.0))     # red, yellow, green recovery
+
+
+def strain_target(recovery_score: float | None, load_zone: str | None = None) -> tuple[float, float] | None:
+    """Suggested day-strain range for a recovery level. A load ratio already in "caution" caps a
+    green day at the yellow range, and "high" drops any day one band: a green morning doesn't make
+    a fourth hard day in a row a good idea."""
     if recovery_score is None:
         return None
-    if recovery_score >= 67:
-        return (14.0, 18.0)
-    if recovery_score >= 34:
-        return (10.0, 14.0)
-    return (4.0, 10.0)
+    band = 2 if recovery_score >= 67 else 1 if recovery_score >= 34 else 0
+    if load_zone == "high":
+        band = max(0, band - 1)
+    elif load_zone == "caution":
+        band = min(band, 1)
+    return STRAIN_TARGETS[band]
 
 
 # ---------------------------------------------------------------- sleep
@@ -798,6 +853,8 @@ EXERCISES: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "tibialis raise": ((), ()),  # anterior shin is not a tracked muscle; don't credit calves
     "box jump": ((), ()),       # jump sets are not hypertrophy hard sets
     "wide grip row": (("lats",), ("shoulders", "biceps")),
+    "single arm row": (("lats",), ("biceps", "shoulders")),
+    "lat pullover": (("lats",), ()),
     "back extension": ((), ("glutes", "hamstrings")),          # mostly lower back, which isn't tracked
     "archer pull": (("shoulders",), ("lats",)),                 # cable/band archer pull: rear delts, upper back
     "curl": (("biceps",), ()),
@@ -830,7 +887,12 @@ EXERCISE_ALIASES = {
     "dips": "dip", "pushup": "push up", "pushups": "push up", "ohp": "overhead press",
     "shoulder press": "overhead press", "military press": "overhead press", "lateral": "lateral raise",
     "laterals": "lateral raise", "side raise": "lateral raise", "rear delt": "rear delt fly",
-    "facepull": "face pull", "barbell row": "row", "cable row": "row", "seated row": "row", "bent over row": "row",
+    "facepull": "face pull", "barbell row": "row", "bent over barbell row": "row", "bent over barbell rows": "row",
+    "single arm cable row": "single arm row", "single arm row": "single arm row", "one arm row": "single arm row",
+    "single arm cable rows": "single arm row", "single hand cable row": "single arm row", "db row": "single arm row",
+    "cable lat pullover": "lat pullover", "pullover": "lat pullover", "straight arm pulldown": "lat pullover",
+    "widegrip cable row": "wide grip row", "wide grip cable row": "wide grip row",
+    "single hand preacher curl": "preacher curl", "single arm preacher curl": "preacher curl", "cable row": "row", "seated row": "row", "bent over row": "row",
     "pullup": "pull up", "pullups": "pull up", "chinup": "chin up", "chinups": "chin up",
     "pulldown": "lat pulldown", "lat pull": "lat pulldown", "rdl": "romanian deadlift", "dl": "deadlift",
     "back squat": "squat", "front squat": "squat", "lunges": "lunge",

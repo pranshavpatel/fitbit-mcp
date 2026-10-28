@@ -4,10 +4,11 @@ Runs inside the fitbit-mcp project environment (it imports the `fitbit_mcp` pack
 the exact code path of the MCP `sync_data` tool: the same stored credentials, read-only (GET-only)
 API access and job bookkeeping. Progress and the outcome go to stderr; nothing is printed to stdout.
 
-    uv run --quiet --frozen --directory <repo> python sync_now.py [--timeout 180]
+    uv run --quiet --frozen --directory <repo> python sync_now.py [--timeout 180] [--full-heart-rate]
 
 Exit codes: 0 synced (or another sync just finished), 1 sync failed, 2 couldn't start (e.g. not
-connected or the Google login expired).
+connected or the Google login expired), 3 another sync just finished but --full-heart-rate wasn't
+part of it.
 """
 from __future__ import annotations
 
@@ -55,6 +56,7 @@ def main() -> int:
     ap.add_argument("--provider", default="google")
     ap.add_argument("--overlap-days", type=int, default=2)
     ap.add_argument("--timeout", type=float, default=180)
+    ap.add_argument("--full-heart-rate", action="store_true", help="whole-day heart rate for yesterday and today")
     args = ap.parse_args()
     logging.basicConfig(level=logging.ERROR)
 
@@ -68,9 +70,15 @@ def main() -> int:
         if running:
             say("  a sync is already running; waiting for it…")
             job = wait(app, running[0]["id"], args.timeout)
+            # that sync may not have fetched whole-day heart rate; report failure so fitdash doesn't
+            # mark the hourly fetch done, and the next render asks again
+            if args.full_heart_rate and not (running[0].get("params") or {}).get("full_heart_rate") \
+                    and job.get("status") in ("succeeded", "partial"):
+                say("  ✓ synced by the running job; whole-day heart rate comes with the next sync")
+                return 3
         else:
             try:
-                view = server._sync(app, args.provider, args.overlap_days, None, False)
+                view = server._sync(app, args.provider, args.overlap_days, None, False, args.full_heart_rate)
             except Exception as exc:  # ToolError: not connected, token expired, nothing imported yet
                 msg = str(exc) or exc.__class__.__name__
                 say("  sync skipped: {}".format(msg))

@@ -13,7 +13,7 @@ filled in with a guess.
 | Input | Weight | Direction |
 | --- | --- | --- |
 | Overnight HRV (RMSSD) | 45 % | higher is better |
-| Resting heart rate | 30 % | lower is better |
+| Resting heart rate while asleep | 30 % | lower is better |
 | Sleep score | 25 % | higher is better |
 
 Each input becomes a z-score against your 28-day baseline (with small floors on the standard
@@ -22,10 +22,19 @@ logistic curve, so every input exactly at baseline gives about 72 %. Respiratory
 1.5 SD off baseline subtracts a penalty, which often shows up before illness. Skin temperature is
 not an input (WHOOP says the same of its Recovery); a big shift is flagged in Needs attention.
 
-The curve's centre is the one constant fitted to WHOOP itself: on 26 days of a WHOOP user's own
-inputs, fitdash ranked days almost exactly like WHOOP (r 0.97) but read ~16 points low every day.
-Moving only the centre cut the average error from 15.6 to 6.9 points and lifted green/yellow/red
-agreement from 46 % to 85 %. One person is a small sample, so treat absolute numbers as estimates.
+The curve's centre is the one constant fitted to WHOOP itself: on 25 days of a WHOOP user's own
+inputs, fitdash ranked days almost exactly like WHOOP (r 0.97) but read ~21 points low every day.
+Moving only the centre cut the average error from 21.4 to 7.0 points (8.2 out of sample, fitting
+only on earlier days) and lifted green/yellow/red agreement from 32 % to 84 % (73 % out of sample). One person is a small sample, so treat absolute numbers
+as estimates. The method and how to re-run it are in [validation.md](validation.md).
+
+**Resting HR is measured while asleep**, as WHOOP measures it: the lowest 30-minute average of
+per-minute heart rate during the main sleep, from the whole-day heart rate fitdash syncs. Fitbit's
+daily resting HR also counts daytime rest and is smoothed across days, so it lags and its baseline is
+very narrow: one real morning, it had crept 58 → 61 over four days (−1.9 SD, Recovery 50 %) while
+sleeping heart rate was 52 vs a usual 51 (−0.5 SD, Recovery 64 %). Fitbit's value is only the
+fallback for a night without enough samples (under 60 % of its minutes) or with fewer than 7 such
+nights in the baseline; the two never mix in one z-score.
 
 Bands: **green ≥ 67**, **yellow 34–66**, **red ≤ 33**. Without overnight HRV or resting HR the score
 is "—".
@@ -33,13 +42,23 @@ is "—".
 ## Strain 0–21
 
 1. **Load (TRIMP).** Banister's training impulse on heart-rate reserve: minutes × intensity ×
-   e^(1.92 × intensity). It uses minute-by-minute heart rate when that covers 18 h of the day, and
-   otherwise Fitbit's Active Zone Minutes. Zone intensities come from **your** Fitbit zone limits,
-   and HRmax is the 99.5th percentile of all your recorded heart rate.
+   e^(1.92 × intensity). It uses all-day heart rate when that covers 18 h of the day (today: at least
+   6 h, and 80 % of the day up to the last uploaded sample), and otherwise Fitbit's Active Zone Minutes. Zone minutes
+   miss everything below the fat-burn zone, so on a long, moderately active day they read several
+   points low (one real day: 6.5 from zone minutes vs 14.4 from all-day HR before the floor below). fitdash's sync therefore
+   fetches whole-day heart rate for yesterday and today, at most hourly, and only the samples newer
+   than the last fetch (under 1 MB an hour; turn it off with `"full_heart_rate": false` in stats.json). Zone intensities come from **your** Fitbit zone limits,
+   and HRmax is the median of your 5 highest daily maxima (a percentile of every sample would
+   drop as resting heart rate comes in). From all-day heart rate, only samples at or above 30 % of
+   heart-rate reserve count (about 50 % of HRmax, where zone 1 starts); without that floor a day
+   of sitting at 65–90 bpm scores ~12. The 30 % was chosen so your day strains (p25 7.4, median
+   10.2, p90 16.3 over 56 days) sit in the range of one WHOOP user's Day Strain (p25 7.4, median
+   9.6, p90 15.0): a calibration, not WHOOP's formula. Workout strain has no floor.
 2. **Scale.** `21 · ln(1 + TRIMP/25) / ln(21)`, logarithmic like WHOOP's, so going from 18 to 20
    takes far more work than going from 8 to 10.
 3. **Bands** use WHOOP's names: Light < 10, Moderate 10–13, High 14–17, All out 18+.
-4. **Target for today** depends on Recovery: green 14–18, yellow 10–14, red 4–10.
+4. **Target for today** depends on Recovery: green 14–18, yellow 10–14, red 4–10. Training load can
+   lower it: a load ratio in the high zone drops it one band, and the caution zone caps it at 10–14.
 
 ## Sleep
 

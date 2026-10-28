@@ -520,3 +520,26 @@ def test_catalog_rows_from_an_older_version_are_hidden_not_deleted(make_app, set
     assert not [m for m in queries.data_types(reopened.store)["metrics"] if m["category"] == "nutrition"]
     with reopened.store.connect() as conn:
         assert conn.execute("SELECT status FROM records WHERE record_key='60751'").fetchone()[0] == "excluded_catalog"
+
+
+def test_google_sync_full_heart_rate_fetches_only_yesterday_and_today(make_app, google_tokens, http):
+    api = FakeGoogle(http, google_points(), page_size_cap=5, rollups=google_rollups())
+    app = make_app()
+    run(app, _start_import(app, "google", "2026-10-01", "2026-10-06", ["heart"], False))
+    api.filters.clear()
+    job = run(app, _sync(app, "google", 3, ["heart"], False, True))
+    assert job["status"] == "succeeded" and job["params"]["full_heart_rate"] is True
+    hr = sorted({f for f in api.filters if f.startswith("heart_rate.")})
+    assert hr == ['heart_rate.sample_time.physical_time >= "2026-10-06T00:00:00Z" AND '      # yesterday + today
+                  'heart_rate.sample_time.physical_time < "2026-10-08T00:00:00Z"']
+    with pytest.raises(server.ToolError):
+        server._sync(app, "fitbit", 3, None, False, True)
+    # the next one asks only for samples after the newest one it has seen, minus 30 min for late uploads
+    api.points["heart-rate"].append(g_hr("2026-10-07T12:00:00Z", 80))
+    run(app, _sync(app, "google", 3, ["heart"], False, True))
+    api.filters.clear()
+    run(app, _sync(app, "google", 3, ["heart"], False, True))
+    assert sorted({f for f in api.filters if f.startswith("heart_rate.")}) == [
+        'heart_rate.sample_time.physical_time >= "2026-10-07T11:30:00Z" AND '
+        'heart_rate.sample_time.physical_time < "2026-10-08T00:00:00Z"']
+    assert queries.query(app.store, metric="heart_rate", start_date="2026-10-07")["count"] == 1

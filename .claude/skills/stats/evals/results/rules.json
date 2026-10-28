@@ -1,0 +1,4272 @@
+{
+ "created": "2026-10-27T18:56:40",
+ "args": {
+  "variants": "rules",
+  "models": "default",
+  "scenarios": null,
+  "split": "all",
+  "trials": 1,
+  "jobs": 6,
+  "timeout": 240,
+  "out": "evals/results/rules.json",
+  "report": null,
+  "md": false,
+  "regrade": false
+ },
+ "runs": [
+  {
+   "scenario": "base_noon",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "green_primed",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Primed: go hard today (target strain 14\\u201318)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Bed and wake times vary a lot (consistency 48%)\", \"action\": \"Keep lights-out and wake-up within 30 minutes of the same time every day this week.\"}, {\"level\": \"good\", \"finding\": \"Recovery 86% (HRV +8, Resting HR +6)\", \"action\": \"Keep today's strain at 14-18.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Primed: go hard today (target strain 14\u201318)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Bed and wake times vary a lot (consistency 48%)",
+       "action": "Keep lights-out and wake-up within 30 minutes of the same time every day this week."
+      },
+      {
+       "level": "good",
+       "finding": "Recovery 86% (HRV +8, Resting HR +6)",
+       "action": "Keep today's strain at 14-18."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "green_morning",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Primed: go hard today (target strain 14\\u201318)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Bed and wake times vary a lot (consistency 48%)\", \"action\": \"Keep lights-out and wake-up within 30 minutes of the same time every day this week.\"}, {\"level\": \"good\", \"finding\": \"Recovery 84% (HRV +7, Resting HR +5)\", \"action\": \"Keep today's strain at 14-18.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Primed: go hard today (target strain 14\u201318)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Bed and wake times vary a lot (consistency 48%)",
+       "action": "Keep lights-out and wake-up within 30 minutes of the same time every day this week."
+      },
+      {
+       "level": "good",
+       "finding": "Recovery 84% (HRV +7, Resting HR +5)",
+       "action": "Keep today's strain at 14-18."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "fair_to_partial_day": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "red_recovery",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Recovery 22% (HRV -25, Resting HR -15)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Recovery 22% (HRV -25, Resting HR -15)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "red_recovery_evening",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Strain 0.0, under today's 4\\u201310 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.\", \"action\": \"Follow today's plan in the Today box.\"}, {\"level\": \"flag\", \"finding\": \"Recovery 25% (HRV -22, Resting HR -14)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Strain 0.0, under today's 4\u201310 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.",
+       "action": "Follow today's plan in the Today box."
+      },
+      {
+       "level": "flag",
+       "finding": "Recovery 25% (HRV -22, Resting HR -14)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "red_gym_behind",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Recovery 28% (HRV -20, Resting HR -12)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Recovery 28% (HRV -20, Resting HR -12)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "load_caution",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Load ratio 1.42 (caution)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Load ratio 1.42 (caution)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "load_high",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Load is high: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"flag\", \"finding\": \"Load ratio 1.70 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Load is high: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.70 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "load_high_gym_behind",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Load is high: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"flag\", \"finding\": \"Load ratio 1.65 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 1/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Load is high: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.65 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 1/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "load_low",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Load ratio 0.55 (low)\", \"action\": \"Add one session this week and build back gradually.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Load ratio 0.55 (low)",
+       "action": "Add one session this week and build back gradually."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "knee_spike",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314) \\u00b7 no runs or jumps (knee)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Running/soccer spike this or last week (knee)\", \"action\": \"Swap this week's next run or game for lifting or a low-impact session.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314) \u00b7 no runs or jumps (knee)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Running/soccer spike this or last week (knee)",
+       "action": "Swap this week's next run or game for lifting or a low-impact session."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_run_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "knee_spike_green",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Primed: go hard today (target strain 14\\u201318) \\u00b7 no runs or jumps (knee)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Running/soccer spike this or last week (knee)\", \"action\": \"Swap this week's next run or game for lifting or a low-impact session.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Bed and wake times vary a lot (consistency 48%)\", \"action\": \"Keep lights-out and wake-up within 30 minutes of the same time every day this week.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Primed: go hard today (target strain 14\u201318) \u00b7 no runs or jumps (knee)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Running/soccer spike this or last week (knee)",
+       "action": "Swap this week's next run or game for lifting or a low-impact session."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Bed and wake times vary a lot (consistency 48%)",
+       "action": "Keep lights-out and wake-up within 30 minutes of the same time every day this week."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_run_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "knee_spike_low_load",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314) \\u00b7 no runs or jumps (knee)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Load ratio 0.60 (low)\", \"action\": \"Add one session this week and build back gradually.\"}, {\"level\": \"watch\", \"finding\": \"Running/soccer spike this or last week (knee)\", \"action\": \"Swap this week's next run or game for lifting or a low-impact session.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314) \u00b7 no runs or jumps (knee)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Load ratio 0.60 (low)",
+       "action": "Add one session this week and build back gradually."
+      },
+      {
+       "level": "watch",
+       "finding": "Running/soccer spike this or last week (knee)",
+       "action": "Swap this week's next run or game for lifting or a low-impact session."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_run_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "no_night_synced",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync.\", \"action\": \"Open the Fitbit app on your phone now, then run fitdash --sync.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync.",
+       "action": "Open the Fitbit app on your phone now, then run fitdash --sync."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     false,
+     "Open the Fitbit app on your phone now, t"
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "mentions_sync": [
+     true,
+     ""
+    ],
+    "no_sleep_score_claim": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "partial_night",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 2h30 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Last night may still be syncing: only 2h30 recorded, ending at 02:10 (you usually sleep 7h20). Open the Fitbit app on your phone, then run fitdash --sync.\", \"action\": \"Open the Fitbit app on your phone now, then run fitdash --sync.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 2h30 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Last night may still be syncing: only 2h30 recorded, ending at 02:10 (you usually sleep 7h20). Open the Fitbit app on your phone, then run fitdash --sync.",
+       "action": "Open the Fitbit app on your phone now, then run fitdash --sync."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     false,
+     "Open the Fitbit app on your phone now, t"
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "mentions_sync": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "weight_above_pace",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Weight above pace for your lean bulk (+0.65 kg/wk)\", \"action\": \"Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Weight above pace for your lean bulk (+0.65 kg/wk)",
+       "action": "Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_surplus_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "weight_below_pace",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Weight below pace for your lean bulk (-0.05 kg/wk)\", \"action\": \"Add a 300-400 kcal snack with protein each day this week.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Weight below pace for your lean bulk (-0.05 kg/wk)",
+       "action": "Add a 300-400 kcal snack with protein each day this week."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "suggests_more_food": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "skin_temp_high",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Recovery 30% (Resting HR -18, HRV -15)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Skin temp +1.2 \\u00b0C off baseline\", \"action\": \"Keep today light; if it lasts 2+ days or you feel unwell, check in with a clinician.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Recovery 30% (Resting HR -18, HRV -15)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Skin temp +1.2 \u00b0C off baseline",
+       "action": "Keep today light; if it lasts 2+ days or you feel unwell, check in with a clinician."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "suggests_clinician": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "rhr_creeping",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 45% (Resting HR -16, HRV -8)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 45% (Resting HR -16, HRV -8)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "steps_missing_days",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_zero_for_missing": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "early_morning",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "fair_to_partial_day": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "late_evening_low_steps",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Strain 0.0, under today's 10\\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.\", \"action\": \"Follow today's plan in the Today box.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Strain 0.0, under today's 10\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.",
+       "action": "Follow today's plan in the Today box."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "great_week",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Primed: go hard today (target strain 14\\u201318)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Sleep score 88 (sufficient), 7h35 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"good\", \"finding\": \"Recovery 80% (HRV +6, Resting HR +5)\", \"action\": \"Keep today's strain at 14-18.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Asleep h averaged 7.1 this week vs 8.0 the week before (-11%).\", \"action\": \"Move lights-out 30 minutes earlier on at least four nights next week.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Primed: go hard today (target strain 14\u201318)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Sleep score 88 (sufficient), 7h35 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "good",
+       "finding": "Recovery 80% (HRV +6, Resting HR +5)",
+       "action": "Keep today's strain at 14-18."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Asleep h averaged 7.1 this week vs 8.0 the week before (-11%).",
+       "action": "Move lights-out 30 minutes earlier on at least four nights next week."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "poor_sleep_short",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 48 (poor), 4h50 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 40% (Sleep -14, HRV -8)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 48 (poor), 4h50 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 40% (Sleep -14, HRV -8)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "everything_wrong",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Recovery 20% (HRV -25, Resting HR -16)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Load ratio 1.80 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync.\", \"action\": \"Open the Fitbit app on your phone now, then run fitdash --sync.\"}, {\"level\": \"watch\", \"finding\": \"Running/soccer spike this or last week (knee)\", \"action\": \"Swap this week's next run or game for lifting or a low-impact session.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Weight above pace for your lean bulk (+0.70 kg/wk)\", \"action\": \"Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Recovery 20% (HRV -25, Resting HR -16)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.80 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync.",
+       "action": "Open the Fitbit app on your phone now, then run fitdash --sync."
+      },
+      {
+       "level": "watch",
+       "finding": "Running/soccer spike this or last week (knee)",
+       "action": "Swap this week's next run or game for lifting or a low-impact session."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Weight above pace for your lean bulk (+0.70 kg/wk)",
+       "action": "Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     false,
+     "Open the Fitbit app on your phone now, t"
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ],
+    "no_run_advice": [
+     true,
+     ""
+    ],
+    "mentions_sync": [
+     true,
+     ""
+    ],
+    "no_surplus_advice": [
+     true,
+     ""
+    ],
+    "no_sleep_score_claim": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "high_load_red",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Recovery 26% (HRV -20, Resting HR -12)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"flag\", \"finding\": \"Load ratio 1.75 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Recovery 26% (HRV -20, Resting HR -12)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.75 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "knee_spike_evening",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314) \\u00b7 no runs or jumps (knee)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Strain 0.0, under today's 10\\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.\", \"action\": \"Follow today's plan in the Today box.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Running/soccer spike this or last week (knee)\", \"action\": \"Swap this week's next run or game for lifting or a low-impact session.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314) \u00b7 no runs or jumps (knee)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Strain 0.0, under today's 10\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.",
+       "action": "Follow today's plan in the Today box."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Running/soccer spike this or last week (knee)",
+       "action": "Swap this week's next run or game for lifting or a low-impact session."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_run_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "below_pace_high_load",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Load is high: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"flag\", \"finding\": \"Load ratio 1.60 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Weight below pace for your lean bulk (-0.10 kg/wk)\", \"action\": \"Add a 300-400 kcal snack with protein each day this week.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Load is high: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.60 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Weight below pace for your lean bulk (-0.10 kg/wk)",
+       "action": "Add a 300-400 kcal snack with protein each day this week."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "suggests_more_food": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "above_pace_low_steps",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Strain 0.0, under today's 10\\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.\", \"action\": \"Follow today's plan in the Today box.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Weight above pace for your lean bulk (+0.60 kg/wk)\", \"action\": \"Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Strain 0.0, under today's 10\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.",
+       "action": "Follow today's plan in the Today box."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Weight above pace for your lean bulk (+0.60 kg/wk)",
+       "action": "Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_surplus_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "green_high_load",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recovered, but load is high: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Load ratio 1.68 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Sleep score 88 (sufficient), 7h40 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recovered, but load is high: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.68 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep score 88 (sufficient), 7h40 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_knee_green_morning",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Primed: go hard today (target strain 14\\u201318) \\u00b7 no runs or jumps (knee)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Sleep score 89 (sufficient), 7h50 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Running/soccer spike this or last week (knee)\", \"action\": \"Swap this week's next run or game for lifting or a low-impact session.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Primed: go hard today (target strain 14\u201318) \u00b7 no runs or jumps (knee)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Sleep score 89 (sufficient), 7h50 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Running/soccer spike this or last week (knee)",
+       "action": "Swap this week's next run or game for lifting or a low-impact session."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_run_advice": [
+     true,
+     ""
+    ],
+    "fair_to_partial_day": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_caution_green",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recovered, but load is building fast: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Load ratio 1.38 (caution)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recovered, but load is building fast: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Load ratio 1.38 (caution)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_red_low_load",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Recovery 24% (HRV -22, Resting HR -14)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Load ratio 0.60 (low)\", \"action\": \"Add one session this week and build back gradually.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Recovery 24% (HRV -22, Resting HR -14)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Load ratio 0.60 (low)",
+       "action": "Add one session this week and build back gradually."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_partial_red",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recover: keep it light (target strain under 10)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Recovery 27% (HRV -20, Resting HR -12)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 2h30 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Last night may still be syncing: only 2h30 recorded, ending at 02:10 (you usually sleep 7h20). Open the Fitbit app on your phone, then run fitdash --sync.\", \"action\": \"Open the Fitbit app on your phone now, then run fitdash --sync.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recover: keep it light (target strain under 10)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Recovery 27% (HRV -20, Resting HR -12)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 2h30 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Last night may still be syncing: only 2h30 recorded, ending at 02:10 (you usually sleep 7h20). Open the Fitbit app on your phone, then run fitdash --sync.",
+       "action": "Open the Fitbit app on your phone now, then run fitdash --sync."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     false,
+     "Open the Fitbit app on your phone now, t"
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "mentions_sync": [
+     true,
+     ""
+    ],
+    "no_hard_training": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_above_pace_evening",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Strain 0.0, under today's 10\\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.\", \"action\": \"Follow today's plan in the Today box.\"}, {\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Weight above pace for your lean bulk (+0.55 kg/wk)\", \"action\": \"Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Strain 0.0, under today's 10\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.",
+       "action": "Follow today's plan in the Today box."
+      },
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Weight above pace for your lean bulk (+0.55 kg/wk)",
+       "action": "Trim 200-300 kcal a day, mostly from snacks and drinks, and keep protein the same."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_surplus_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_below_pace_morning",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Weight below pace for your lean bulk (+0.00 kg/wk)\", \"action\": \"Add a 300-400 kcal snack with protein each day this week.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Weight below pace for your lean bulk (+0.00 kg/wk)",
+       "action": "Add a 300-400 kcal snack with protein each day this week."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "suggests_more_food": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_feverish",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 40% (Resting HR -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Skin temp +1.0 \\u00b0C off baseline\", \"action\": \"Keep today light; if it lasts 2+ days or you feel unwell, check in with a clinician.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 40% (Resting HR -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Skin temp +1.0 \u00b0C off baseline",
+       "action": "Keep today light; if it lasts 2+ days or you feel unwell, check in with a clinician."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "suggests_clinician": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_steps_gap_low_load",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Load ratio 0.65 (low)\", \"action\": \"Add one session this week and build back gradually.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Load ratio 0.65 (low)",
+       "action": "Add one session this week and build back gradually."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_zero_for_missing": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_high_knee_gym_behind",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Load is high: keep it light (target strain under 10) \\u00b7 no runs or jumps (knee)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"flag\", \"finding\": \"Load ratio 1.72 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Running/soccer spike this or last week (knee)\", \"action\": \"Swap this week's next run or game for lifting or a low-impact session.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 1/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Load is high: keep it light (target strain under 10) \u00b7 no runs or jumps (knee)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Sleep score 65 (poor), 5h54 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.72 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Running/soccer spike this or last week (knee)",
+       "action": "Swap this week's next run or game for lifting or a low-impact session."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 1/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ],
+    "no_run_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_no_night_evening",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Maintain: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Strain 0.0, under today's 10\\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.\", \"action\": \"Follow today's plan in the Today box.\"}, {\"level\": \"watch\", \"finding\": \"Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync.\", \"action\": \"Open the Fitbit app on your phone now, then run fitdash --sync.\"}, {\"level\": \"watch\", \"finding\": \"Recovery 58% (Sleep -12, HRV -10)\", \"action\": \"Keep today's training easy and aim for a full night.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Maintain: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Strain 0.0, under today's 10\u201314 target. Aim to be asleep by 22:20 for your 10h10 need; screens off 30 min before.",
+       "action": "Follow today's plan in the Today box."
+      },
+      {
+       "level": "watch",
+       "finding": "Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync.",
+       "action": "Open the Fitbit app on your phone now, then run fitdash --sync."
+      },
+      {
+       "level": "watch",
+       "finding": "Recovery 58% (Sleep -12, HRV -10)",
+       "action": "Keep today's training easy and aim for a full night."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     false,
+     "Open the Fitbit app on your phone now, t"
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "mentions_sync": [
+     true,
+     ""
+    ],
+    "no_sleep_score_claim": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_all_good",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Primed: go hard today (target strain 14\\u201318)\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Bed and wake times vary a lot (consistency 48%)\", \"action\": \"Keep lights-out and wake-up within 30 minutes of the same time every day this week.\"}, {\"level\": \"good\", \"finding\": \"Recovery 83% (HRV +7, Resting HR +5)\", \"action\": \"Keep today's strain at 14-18.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Asleep h averaged 7.1 this week vs 8.0 the week before (-11%).\", \"action\": \"Move lights-out 30 minutes earlier on at least four nights next week.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Primed: go hard today (target strain 14\u201318)",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Bed and wake times vary a lot (consistency 48%)",
+       "action": "Keep lights-out and wake-up within 30 minutes of the same time every day this week."
+      },
+      {
+       "level": "good",
+       "finding": "Recovery 83% (HRV +7, Resting HR +5)",
+       "action": "Keep today's strain at 14-18."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Asleep h averaged 7.1 this week vs 8.0 the week before (-11%).",
+       "action": "Move lights-out 30 minutes earlier on at least four nights next week."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "scenario": "ho_high_green_morning",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"today\": {\"headline\": \"Recovered, but load is high: train moderately (target strain 10\\u201314)\", \"insights\": [{\"level\": \"flag\", \"finding\": \"Load ratio 1.70 (high)\", \"action\": \"Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3.\"}, {\"level\": \"watch\", \"finding\": \"Sleep score 88 (sufficient), 7h40 asleep; weakest: consistency 48\", \"action\": \"Get to bed by tonight's asleep-by time.\"}, {\"level\": \"watch\", \"finding\": \"Sleep debt of 4h41 built up over the last week\", \"action\": \"Get to bed by tonight's asleep-by time.\"}]}, \"week\": {\"headline\": \"This week vs the week before\", \"insights\": [{\"level\": \"watch\", \"finding\": \"Gym 0/4 with 4 days left this week\", \"action\": \"Put this week's remaining gym sessions in your calendar now.\"}, {\"level\": \"watch\", \"finding\": \"Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).\", \"action\": \"Book your lifting sessions in the calendar for next week.\"}, {\"level\": \"good\", \"finding\": \"AZM averaged 30.0 this week vs 21.4 the week before (+40%).\", \"action\": \"Keep AZM at 30.0 or better next week.\"}, {\"level\": \"watch\", \"finding\": \"Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}, {\"level\": \"watch\", \"finding\": \"Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).\", \"action\": \"Add a 20-minute walk on the days you don't train.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "today": {
+     "headline": "Recovered, but load is high: train moderately (target strain 10\u201314)",
+     "insights": [
+      {
+       "level": "flag",
+       "finding": "Load ratio 1.70 (high)",
+       "action": "Keep the next two days easy; hold off on extra sessions until the ratio is back under 1.3."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep score 88 (sufficient), 7h40 asleep; weakest: consistency 48",
+       "action": "Get to bed by tonight's asleep-by time."
+      },
+      {
+       "level": "watch",
+       "finding": "Sleep debt of 4h41 built up over the last week",
+       "action": "Get to bed by tonight's asleep-by time."
+      }
+     ]
+    },
+    "week": {
+     "headline": "This week vs the week before",
+     "insights": [
+      {
+       "level": "watch",
+       "finding": "Gym 0/4 with 4 days left this week",
+       "action": "Put this week's remaining gym sessions in your calendar now."
+      },
+      {
+       "level": "watch",
+       "finding": "Lifting min averaged 0.0 this week vs 6.4 the week before (-100%).",
+       "action": "Book your lifting sessions in the calendar for next week."
+      },
+      {
+       "level": "good",
+       "finding": "AZM averaged 30.0 this week vs 21.4 the week before (+40%).",
+       "action": "Keep AZM at 30.0 or better next week."
+      },
+      {
+       "level": "watch",
+       "finding": "Active kcal averaged 336.9 this week vs 546.5 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      },
+      {
+       "level": "watch",
+       "finding": "Steps averaged 6737.8 this week vs 10929.0 the week before (-38%).",
+       "action": "Add a 20-minute walk on the days you don't train."
+      }
+     ]
+    }
+   },
+   "checks": {
+    "strict_json": [
+     true,
+     ""
+    ],
+    "schema": [
+     true,
+     ""
+    ],
+    "lengths": [
+     true,
+     ""
+    ],
+    "plain_text": [
+     true,
+     ""
+    ],
+    "grounded": [
+     true,
+     ""
+    ],
+    "actionable": [
+     true,
+     ""
+    ],
+    "no_dup": [
+     true,
+     ""
+    ],
+    "no_added_load": [
+     true,
+     ""
+    ],
+    "fair_to_partial_day": [
+     true,
+     ""
+    ]
+   }
+  }
+ ]
+}

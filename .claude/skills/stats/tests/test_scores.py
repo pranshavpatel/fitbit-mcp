@@ -318,3 +318,44 @@ def test_bulk_anchor_rolls_forward_and_damps_noise():
     assert kg == pytest.approx(62.0)
     assert S.bulk_anchor(w, d + timedelta(days=20)) == w[0]               # less history than the window
     assert S.bulk_anchor(w[:2], d + timedelta(days=90)) == (d + timedelta(days=62), 62.0)   # nothing after: last before
+
+
+def test_all_day_floor_ignores_resting_heart_rate():
+    # 16 h at 75 bpm (HRR 0.13) + 30 min at 150 bpm (HRR 0.69), rest 58, max 190
+    pts = [(i * 60.0, 75.0) for i in range(16 * 60)] + [((16 * 60 + i) * 60.0, 150.0) for i in range(31)]
+    plain = S.trimp_from_samples(pts, 58, 190)
+    floored = S.trimp_from_samples(pts, 58, 190, S.ALL_DAY_HRR_FLOOR)
+    assert S.strain(plain) > 11 and S.strain(floored) < S.strain(plain) - 4
+    assert floored == pytest.approx(S.trimp_from_samples(pts[16 * 60:], 58, 190), rel=0.01)
+
+
+def test_sleeping_rhr_is_the_lowest_half_hour_asleep():
+    # 2 h night: 70 bpm, then 30 min at 50, then 60; two samples a minute
+    def at(m):
+        return "2026-10-27T{:02d}:{:02d}:00".format(m // 60, m % 60)
+    bpm = [70] * 40 + [50] * 30 + [60] * 50
+    samples = [(at(m), float(v)) for m, v in enumerate(bpm)] + [(at(m), float(v) + 2) for m, v in enumerate(bpm)]
+    assert S.sleeping_rhr(samples, 120) == 51.0
+    assert S.sleeping_rhr(samples[:40], 120) is None             # a third of the night covered: workout windows only
+    assert S.sleeping_rhr(samples, None) is None
+
+
+def test_sleeping_rhr_windows_are_clock_minutes_not_samples():
+    # 40 min at 60, a 2-hour gap, 40 min at 60: a sparse low stretch (one sample every 3 minutes at
+    # 40 bpm) must not count as a full window
+    def at(m):
+        return "2026-10-27T{:02d}:{:02d}:00".format(m // 60, m % 60)
+    samples = [(at(m), 60.0) for m in range(40)] + [(at(m), 40.0) for m in range(40, 160, 3)] + \
+              [(at(m), 60.0) for m in range(160, 200)]
+    assert S.sleeping_rhr(samples, 120) == 56.7    # 20 min at 60 + 4 sparse at 40; sample-count windows gave 40
+
+
+def test_strain_target_respects_the_load_ratio():
+    assert S.strain_target(85) == (14.0, 18.0)
+    assert S.strain_target(85, "sweet spot") == (14.0, 18.0)
+    assert S.strain_target(85, "caution") == (10.0, 14.0)         # green, but already loading up
+    assert S.strain_target(85, "high") == (10.0, 14.0)
+    assert S.strain_target(50, "high") == (4.0, 10.0)
+    assert S.strain_target(50, "caution") == (10.0, 14.0)
+    assert S.strain_target(20, "high") == (4.0, 10.0)
+    assert S.strain_target(None, "high") is None

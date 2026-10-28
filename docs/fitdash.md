@@ -125,6 +125,7 @@ fitdash priorities done 1 | some 2 | missed 3      # how each one went
 
 | Command | What it does |
 | --- | --- |
+| `fitdash insights` | Claude reads every stat and returns actionable insights in two boxes: **Today** and **Past 7 days**, each a finding with its numbers plus one action (`--last` reprints, `--dry-run` shows what is sent, `--json`). Falls back to rule-based insights without the `claude` CLI. Measured in [coach-eval.md](coach-eval.md) |
 | `fitdash coach run` | Writes a Claude coach note if one is due (`--kind`, `--force`, `--dry-run`) |
 | `fitdash coach set <kind> "text"` / `show` | Save your own note / list today's |
 | `fitdash coach --install` | Check every 30 min for a due note (launchd) |

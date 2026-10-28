@@ -53,6 +53,7 @@ import os
 import shutil
 import statistics
 import sys
+import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -367,6 +368,48 @@ def sec_sleep(m: dict, w: int) -> list[Text]:
     return out
 
 
+def _experiment_result(ex: dict, w: int) -> list[Text]:
+    """On-target nights vs later ones: hours asleep, next-morning Recovery and HRV, plus the verdict
+    once the experiment is over."""
+    oc = ex.get("outcome")
+    if not oc:
+        return []
+    lo = short_clock(D.hhmm(ex["lights_out"]))
+    h, mi = oc["hit"], oc["miss"]
+
+    def row(label, g, col):
+        parts = [hm(g["asleep"]) + " asleep" if g["asleep"] else "",
+                 "recovery {:.0f}%".format(g["recovery"]) if g["recovery"] is not None else "",
+                 "HRV {:.0f}".format(g["hrv"]) if g["hrv"] is not None else ""]
+        sep = "  ·  " if w >= 64 else " · "
+        lab = label.ljust(16 if w >= 64 else 14)
+        if w < 64:
+            parts = [p.replace(" asleep", "").replace("recovery ", "rec ") for p in parts]
+        return fit(T(("  ■ ", col), (lab, C["ink2"]), (sep.join(p for p in parts if p), C["ink"])), w)
+
+    out = [fit(T(("  NEXT MORNING", "bold " + C["muted"])), w),
+           row("by {} ({})".format(lo, h["n"]), h, C["good"]), row("later ({})".format(mi["n"]), mi, C["flag"])]
+    if ex.get("finished") and h["recovery"] is not None and mi["recovery"] is not None:
+        diff = h["recovery"] - mi["recovery"]
+        more = h["asleep"] - mi["asleep"] if h["asleep"] and mi["asleep"] else 0
+        few = min(h["n"], mi["n"]) < 3
+        caveat = " With so few nights this is a hint, not proof." if few else ""
+        if diff >= 5:
+            msg = ("Recovery averaged {:+.0f} points after on-target nights{}. You hit the target on {} of {} "
+                   "nights, so sticking to it is the next step: set a new \"experiment\" in stats.json.{}").format(
+                diff, " (with {} more sleep)".format(hm(more)) if more > 0 else "", h["n"], h["n"] + mi["n"], caveat)
+        elif diff <= -5:
+            msg = ("Recovery averaged {:+.0f} points after on-target nights, the opposite of what was expected: "
+                   "something other than lights-out drove these mornings.{}").format(diff, caveat)
+        else:
+            msg = "No clear recovery difference ({:+.0f} points): the lights-out time wasn't what held you back.{}".format(
+                diff, caveat)
+        out.append(blank())
+        out += takeaway(msg, w)
+    out.append(blank())
+    return out
+
+
 def sec_experiment(m: dict, w: int) -> list[Text]:
     """The sleep experiment night by night: when you fell asleep (green on target, red later) and how
     long you slept, in rows of up to 7 nights."""
@@ -376,10 +419,15 @@ def sec_experiment(m: dict, w: int) -> list[Text]:
     nights = ex["nights"]
     done = [n for n in nights if n["state"] != "upcoming"]
     hits = [n for n in done if n["state"] == "hit"]
-    out = headline(w, "good" if done and len(hits) >= len(done) * 0.7 else "watch" if done else "none",
-                   ("{}/{}".format(len(hits), len(done)), "nights on target"), ("{}".format(len(nights) - len(done)), "to go"))
+    lvl = "good" if done and len(hits) >= len(done) * 0.7 else "watch" if done else "none"
+    if ex.get("finished"):
+        out = headline(w, lvl, ("{}/{}".format(len(hits), len(done)), "nights on target"), ("finished", sdate(nights[-1]["date"])))
+    else:
+        out = headline(w, lvl, ("{}/{}".format(len(hits), len(done)), "nights on target"),
+                       ("{}".format(len(nights) - len(done)), "to go"))
     out += takeaway(ex["name"] + ".", w)
     out.append(blank())
+    out += _experiment_result(ex, w)
     cell = max(9, min(10, (w - 2) // 7))
     per_row = max(1, min(7, (w - 2) // cell))
 
@@ -406,7 +454,8 @@ def sec_experiment(m: dict, w: int) -> list[Text]:
             out.append(blank())
     out.append(blank())
     out += _flow([T(("■ ", C["good"]), ("asleep by {}".format(short_clock(D.hhmm(ex["lights_out"]))), C["muted"])),
-                  T(("■ ", C["flag"]), ("later", C["muted"])), T(("□ ", C["faint"]), ("to come", C["muted"]))], w, gap=3, indent=2)
+                  T(("■ ", C["flag"]), ("later", C["muted"]))]
+                 + ([] if ex.get("finished") else [T(("□ ", C["faint"]), ("to come", C["muted"]))]), w, gap=3, indent=2)
     return out
 
 
@@ -433,12 +482,13 @@ def sec_recovery(m: dict, w: int) -> list[Text]:
                          title="HRV · ms · higher is better")
     out.append(blank())
     out += K.trend_chart(m["series"]["rhr"], days, w, 3, C["heart"], lambda v: "{:.0f}".format(v), b.get("rhr"),
-                         title="Resting HR · bpm · lower is better")
+                         title=("Resting HR asleep" if m.get("rhr_source") == "asleep" else "Resting HR") + " · bpm · lower is better")
     hr = h["hr_today"]
     rest, hmax = h["hr_rest"], m.get("hr_max_est")
     if hr and rest and hmax:
         out.append(blank())
-        out.append(sub("Heart rate today", w, "workout windows only"))
+        through = (m.get("strain") or {}).get("hr_through")
+        out.append(sub("Heart rate today", w, "all day through " + through if through else "workout windows only"))
 
         def zc(v):
             f = (v - rest) / (hmax - rest)
@@ -470,7 +520,7 @@ def sec_recovery(m: dict, w: int) -> list[Text]:
         ("VO₂ max", "{:.1f}{}".format(vo2, " " + lvl_txt if lvl_txt else "") if vo2 else "—"),
         ("Zones today", "fat burn {} · cardio {} · peak {}".format(hm(zt.get("fat_burn") or 0), hm(zt.get("cardio") or 0),
                                                                   hm(zt.get("peak") or 0))),
-        ("Stress", "— needs all-day HR" if h["stress"]["hours"] is None else
+        ("Stress", "— needs 12 h of heart rate" if h["stress"]["hours"] is None else
          "peak {:.1f}/3".format(max((x for x in h["stress"]["hours"] if x is not None), default=0))),
     ], w)
     return out
@@ -521,6 +571,10 @@ def sec_strain(m: dict, w: int) -> list[Text]:
             bar.append("░", style=C["faint"])
     out.append(fit(T(("  0 ", C["muted"]), bar, (" 21", C["muted"])), w))
     out.append(fit(T(("    █ today  ▒ target range", C["muted"])), w))
+    src = {"all-day HR": "from all-day heart rate" + (" through " + st["hr_through"] if st.get("hr_through") else ""),
+           "zone minutes": "from Active Zone Minutes only (no all-day heart rate yet): reads low"}.get(st.get("method"))
+    if src:
+        out += K.para(src, w, C["muted"], indent=4, prefix=Text("    "))
     out.append(blank())
     ser = m["series"]["strain"]
     n = len(ser)
@@ -1469,7 +1523,7 @@ def sec_footer(m: dict, w: int) -> list[Text]:
     bw = m.get("baseline_window") or ["?", "?"]
     pairs = [("Source", "Google Health API · " + (", ".join(m.get("devices") or []) or "unknown device")),
              ("Baseline", "{} → {}".format(sdate(bw[0]), sdate(bw[1]))),
-             ("HRmax", "{:.0f} bpm (99.5th pct)".format(m["hr_max_est"]) if m.get("hr_max_est") else ""),
+             ("HRmax", "{:.0f} bpm (top daily maxima)".format(m["hr_max_est"]) if m.get("hr_max_est") else ""),
              ("Stale", ", ".join(stale)), ("Not granted", ", ".join(missing)), ("No data", ", ".join(empty))]
     out = details(pairs, w)
     out += K.para("{} · estimated, not WHOOP's proprietary algorithm · missing days are gaps, not zeros · "
@@ -2347,6 +2401,7 @@ def tag(argv: list[str]) -> int:
 
 REPO = Path(__file__).resolve().parents[4]          # .claude/skills/stats/scripts → the fitbit-mcp repo
 SYNC_MAX_AGE_MIN = float(os.environ.get("FITDASH_SYNC_MAX_AGE", "30"))
+FULL_HR_EVERY_MIN = 60
 
 
 def _minutes_since_sync() -> float | None:
@@ -2375,9 +2430,19 @@ def auto_sync(force: bool = False) -> None:
         return
     print("  last sync {}; refreshing…".format("never" if age is None else
           "{:.0f} min ago".format(age) if age < 120 else "{:.0f} h ago".format(age / 60)), file=sys.stderr)
+    cmd = ["uv", "run", "--quiet", "--frozen", "--directory", str(REPO), "python", str(Path(__file__).with_name("sync_now.py"))]
+    stamp = D.data_home() / "sync_full_hr.stamp"
+    full_hr = D.load_config().get("full_heart_rate", True)
     try:
-        subprocess.run(["uv", "run", "--quiet", "--frozen", "--directory", str(REPO), "python",
-                        str(Path(__file__).with_name("sync_now.py"))], timeout=240, check=False)
+        due_full = full_hr and (force or time.time() - stamp.stat().st_mtime >= FULL_HR_EVERY_MIN * 60)
+    except OSError:
+        due_full = bool(full_hr)
+    if due_full:
+        cmd.append("--full-heart-rate")        # whole-day HR for Strain; ~11 MB a day, so at most hourly
+    try:
+        r = subprocess.run(cmd, timeout=240, check=False)
+        if due_full and getattr(r, "returncode", 1) == 0:
+            stamp.touch()
     except (OSError, subprocess.TimeoutExpired) as exc:
         print("  sync skipped: {}".format(exc), file=sys.stderr)
 
@@ -2428,6 +2493,8 @@ def coach(argv: list[str]) -> int:
         _refresh_page()
         print("saved")
         return 0
+    if argv[0] == "insights":
+        return insights(argv[1:])
     if argv[0] != "run":
         print("unknown coach command: {}".format(argv[0]), file=sys.stderr)
         return 2
@@ -2499,6 +2566,95 @@ def coach_run(kind: str | None = None, force: bool = False, dry_run: bool = Fals
     CO.add(home, kind, text, now, "claude", ("workout:" + workout["start"]) if workout else None)
     _refresh_page()
     print("{} {} note: {}".format(now.strftime("%H:%M"), kind, text))
+    return 0
+
+
+def insight_lines(sec: dict, w: int) -> list[Text]:
+    """A headline, then each insight: status icon + finding, and the action under it."""
+    out: list[Text] = []
+    if sec.get("headline"):
+        out += K.para(sec["headline"], w, "bold " + C["ink"])
+        out.append(blank())
+    for i, it in enumerate(sec.get("insights") or []):
+        if i:
+            out.append(blank())
+        out += K.status_lines(it.get("level") if it.get("level") in K.ICON else "watch", it["finding"], w)
+        if it.get("action"):
+            out += K.para(it["action"], w, C["ink"], indent=4, prefix=T(("  → ", "bold " + C["sleep"])))
+    return out
+
+
+def render_insights(result: dict, console: Console, width: int) -> None:
+    bw = min(width, 100)
+    day = date.fromisoformat(result["date"])
+    start = day - timedelta(days=6)
+    week_title = "Past 7 days · {} – {}".format(start.strftime("%b %-d"), day.strftime("%b %-d"))
+    console.print(panel("Today · " + day.strftime("%a %b %-d"), insight_lines(result["today"], bw - 4), bw, "sleep"))
+    console.print(panel(week_title, insight_lines(result["week"], bw - 4), bw, "sleep"))
+    src = ("written by Claude at {}".format(result["at"][11:16]) if result.get("source") == "claude"
+           else "auto: Claude unavailable, rule-based from the same numbers")
+    for ln in K.para(src + " · " + result.get("formula_version", ""), bw, C["muted"], indent=2, prefix=Text("  ")):
+        console.print(ln)
+
+
+def insights(argv: list[str]) -> int:
+    """fitdash insights: Claude reads every stat and returns actionable insights for today and the week."""
+    import coach as CO
+    import food as F
+    ap = argparse.ArgumentParser(prog="fitdash insights", description=insights.__doc__)
+    ap.add_argument("--no-sync", action="store_true")
+    ap.add_argument("--last", action="store_true", help="show the last insights again; don't ask Claude")
+    ap.add_argument("--dry-run", action="store_true", help="print what would be sent to Claude; ask nothing")
+    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--width", type=int)
+    ap.add_argument("--no-color", action="store_true")
+    args = ap.parse_args(argv)
+    home = D.data_home()
+    width = max(60, args.width or shutil.get_terminal_size((100, 40)).columns)
+    if args.last:
+        result = CO.load_insights(home)
+        if not result:
+            print("no insights yet: run fitdash insights", file=sys.stderr)
+            return 1
+    else:
+        if not args.no_sync and not args.dry_run:
+            auto_sync(force=False)
+        now = datetime.now(D.NY)
+        day = date.fromisoformat(CO.coach_day(now)[0])
+        store = D.open_store()
+        try:
+            m = D.build_model(store, day, D.load_config(), now=now)
+        finally:
+            if store:
+                store.close()
+        if not m.get("has_data"):
+            print("no data yet: connect and sync first", file=sys.stderr)
+            return 1
+        try:
+            profile = (home / "coaching" / "profile.md").read_text()
+        except OSError:
+            profile = ""
+        earlier = [n for n in CO.load(home) if n.get("date") == day.isoformat()]
+        ctx = CO.insights_context(m, now, profile, earlier, F.load(home))
+        if args.dry_run:
+            print(CO.INSIGHTS_SYSTEM)
+            print(json.dumps(ctx, default=str, indent=1))
+            return 0
+        if sys.stderr.isatty():
+            print("asking the coach (reads all your stats; about a minute)…", file=sys.stderr)
+        got = CO.generate_insights(ctx)
+        source = "claude" if got else "auto"
+        if not got:
+            print("Claude CLI unavailable or failed; showing rule-based insights", file=sys.stderr)
+            got = CO.fallback_insights(m, now)
+        result = dict(got, date=day.isoformat(), at=now.strftime("%Y-%m-%dT%H:%M"), source=source,
+                      formula_version=m.get("formula_version", ""))
+        if source == "claude":
+            CO.save_insights(home, result)
+    if args.json:
+        print(json.dumps(result, indent=1))
+        return 0
+    render_insights(result, make_console(width, args.no_color), width)
     return 0
 
 
@@ -2587,7 +2743,7 @@ def brief(argv: list[str]) -> int:
     return 0
 
 
-SUBCOMMANDS = ("tag", "lift", "journal", "j", "brief", "web", "coach", "app", "priorities", "p", "food")
+SUBCOMMANDS = ("tag", "lift", "journal", "j", "brief", "web", "coach", "app", "priorities", "p", "food", "insights")
 
 
 def main(argv=None) -> int:
@@ -2606,6 +2762,8 @@ def main(argv=None) -> int:
         return web(argv[1:])
     if argv[:1] == ["coach"]:
         return coach(argv[1:])
+    if argv[:1] == ["insights"]:
+        return insights(argv[1:])
     if argv[:1] == ["app"]:
         return app(argv[1:])
     if argv[:1] == ["food"]:

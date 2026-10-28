@@ -163,6 +163,9 @@ CATEGORIES = sorted({s.category for s in SPECS_LIST})
 VERIFIED_CATEGORIES = sorted({s.category for s in VERIFIED})
 
 
+FULL_HR_SYNC_DAYS = 2      # days of whole-day heart rate a sync with full_heart_rate re-fetches
+
+
 def specs_for(categories: list[str] | None, include_unverified: bool, full_heart_rate: bool) -> list[Spec]:
     """Specs in dependency order: exercise before exercise-scoped heart rate.
 

@@ -62,6 +62,9 @@ CREATE TABLE IF NOT EXISTS records (
 CREATE INDEX IF NOT EXISTS idx_records_lookup ON records(category, metric, local_date);
 CREATE INDEX IF NOT EXISTS idx_records_provider_date ON records(provider, local_date);
 CREATE INDEX IF NOT EXISTS idx_records_scope ON records(provider, scope_key);
+-- whole-day heart rate is ~35k samples a day: a covering index keeps per-day scans off the table
+CREATE INDEX IF NOT EXISTS idx_records_samples ON records(category, metric, local_date, start_local, value)
+    WHERE granularity='sample' AND status='active';
 
 CREATE TABLE IF NOT EXISTS unsupported (
     id INTEGER PRIMARY KEY,
