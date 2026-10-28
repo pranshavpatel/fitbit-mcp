@@ -126,6 +126,7 @@ fitdash priorities done 1 | some 2 | missed 3      # how each one went
 | Command | What it does |
 | --- | --- |
 | `fitdash insights` | Claude reads every stat and returns actionable insights in two boxes: **Today** and **Past 7 days**, each a finding with its numbers plus one action (`--last` reprints, `--dry-run` shows what is sent, `--json`). Falls back to rule-based insights without the `claude` CLI. Measured in [coach-eval.md](coach-eval.md) |
+| `fitdash insights --workout` | A detailed review of your most recent workout: every exercise against the last time you did it and your best (estimated 1RM, PRs, where reps dropped off), a weight × reps target for next time, and tips on weekly volume, freshness and recovery. Upbeat when the session went well, constructive when it didn't. Uses your logged sets plus the Fitbit session's HR and strain. `--last` reprints, `--dry-run` shows what is sent. Rule-based without the `claude` CLI |
 | `fitdash coach run` | Writes a Claude coach note if one is due (`--kind`, `--force`, `--dry-run`) |
 | `fitdash coach set <kind> "text"` / `show` | Save your own note / list today's |
 | `fitdash coach --install` | Check every 30 min for a due note (launchd) |
@@ -146,3 +147,8 @@ All `--install` commands have `--uninstall`, and `brief` and `web` also have `--
 | `FITDASH_TZ` | your computer's zone | Display timezone (or `"timezone"` in stats.json) |
 | `FITDASH_SYNC_MAX_AGE` | `30` | Minutes before an interactive run syncs |
 | `NO_COLOR` | unset | Plain output |
+
+`fitdash insights` (the today and week run) uses Claude Haiku, chosen by the [coach eval](coach-eval.md).
+Set `"insights_model"` in `stats.json` to another model (`"sonnet"`, `"opus"`, or `"default"` for the
+Claude CLI's default). `fitdash insights --workout` and the coach notes aren't covered by that eval
+yet, so they use the Claude CLI's default model and ignore `insights_model`.

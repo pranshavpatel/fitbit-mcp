@@ -207,3 +207,16 @@ def test_fallback_actions_fit_each_attention_item(text, state, expect):
     note = "Last night isn't synced yet: open the Fitbit app on your phone, then run fitdash --sync."
     m = {"training": {"acwr": state}, "sleep": {"sync_note": {"text": note}}}
     assert expect in CO.attention_action(note if text == "SYNC" else text, m)
+
+
+def test_insights_default_to_the_eval_chosen_model(monkeypatch):
+    import subprocess
+    seen = []
+    monkeypatch.setattr(CO, "claude_bin", lambda: "/bin/claude")
+    monkeypatch.setattr(subprocess, "run", lambda cmd, **k: seen.append(cmd) or subprocess.CompletedProcess(cmd, 0, "{}", ""))
+    CO.generate_insights({})
+    assert seen[-1][seen[-1].index("--model") + 1] == CO.INSIGHTS_MODEL == "haiku"
+    CO.generate_insights({}, model="default")
+    assert "--model" not in seen[-1]                                   # the CLI's own default
+    CO.ask("s", "u")
+    assert "--model" not in seen[-1]                                   # notes and reviews: not evaluated yet
