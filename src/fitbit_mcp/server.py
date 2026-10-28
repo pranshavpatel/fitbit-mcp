@@ -14,7 +14,7 @@ import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Annotated, Any, Literal
+from typing import TYPE_CHECKING, Annotated, Any, Literal
 
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -46,7 +46,10 @@ LOCAL_WRITE = ToolAnnotations(read_only_hint=False, destructive_hint=False, idem
 
 Provider = Literal["google", "fitbit"]
 DateStr = Annotated[str, Field(pattern=r"^\d{4}-\d{2}-\d{2}$", description="YYYY-MM-DD")]
-Category = Literal[tuple(catalog.ALL_IMPORT_CATEGORIES)]  # type: ignore[valid-type]
+if TYPE_CHECKING:     # built from the catalog at runtime (pydantic validates it); a plain str to the type checker
+    Category = str
+else:
+    Category = Literal[tuple(catalog.ALL_IMPORT_CATEGORIES)]
 
 
 @dataclass

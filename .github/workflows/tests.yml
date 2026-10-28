@@ -21,3 +21,18 @@ jobs:
           uv run pytest
       - name: fitdash tests
         run: uv run --no-project --with rich --with pytest pytest -p no:cacheprovider .claude/skills/stats/tests
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: ruff
+        run: uvx ruff@0.8.4 check src tests .claude/skills/stats/scripts .claude/skills/stats/tests .claude/skills/stats/evals docs/demo
+      - name: mypy (MCP server)
+        run: |
+          uv sync --frozen
+          uv run --with mypy==1.13.0 mypy src/fitbit_mcp
+      - name: mypy (fitdash scores, logs and coach)
+        working-directory: .claude/skills/stats/scripts
+        run: uv run --no-project --with mypy==1.13.0 --with rich mypy --config-file ../../../../pyproject.toml scores.py lifts.py food.py journal.py priorities.py tz.py coach.py

@@ -19,7 +19,7 @@ import random
 import shutil
 import sys
 import tempfile
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -36,7 +36,6 @@ import dashboard  # noqa: E402
 import data as D  # noqa: E402
 import journal as J  # noqa: E402
 import lifts as L  # noqa: E402
-import web as W  # noqa: E402
 from rich.console import Console  # noqa: E402
 from rich.terminal_theme import TerminalTheme  # noqa: E402
 

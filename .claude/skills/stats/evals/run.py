@@ -90,7 +90,7 @@ def summarize(runs: list[dict]) -> list[dict]:
                   key=lambda k: (k[0] != "dev", k[1] != "rules", k))
     for split, variant, model in keys:
         rs = [r for r in runs if (r.get("split", "dev"), r["variant"], r["model"]) == (split, variant, model)]
-        def rate(pred):
+        def rate(pred, rs=rs):
             return 100.0 * sum(1 for r in rs if pred(r)) / len(rs)
         def group_ok(r, g):
             return all(v[0] for k, v in r["checks"].items() if K.GROUP[k] == g)

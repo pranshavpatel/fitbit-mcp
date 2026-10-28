@@ -13,8 +13,8 @@ from __future__ import annotations
 
 import base64
 import hashlib
-import os
 import secrets
+import sys
 import threading
 import time
 import webbrowser
@@ -133,7 +133,7 @@ class TokenStore:
                         break
                     except OSError:
                         if time.monotonic() > deadline:
-                            raise AuthError("Another process is refreshing these credentials; try again.")
+                            raise AuthError("Another process is refreshing these credentials; try again.") from None
                         time.sleep(0.05)
                 try:
                     yield
@@ -144,7 +144,7 @@ class TokenStore:
 
 
 def _os_lock(handle) -> None:
-    if os.name == "nt":  # pragma: no cover - Windows
+    if sys.platform == "win32":  # pragma: no cover - Windows
         import msvcrt
         handle.seek(0)
         msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
@@ -154,7 +154,7 @@ def _os_lock(handle) -> None:
 
 
 def _os_unlock(handle) -> None:
-    if os.name == "nt":  # pragma: no cover - Windows
+    if sys.platform == "win32":  # pragma: no cover - Windows
         import msvcrt
         handle.seek(0)
         msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)

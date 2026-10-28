@@ -33,7 +33,8 @@ def build_filters(store: Store, *, category: str | None = None, metric: str | No
                   granularity: str | None = None, min_value: float | None = None, max_value: float | None = None,
                   include_deleted: bool = False) -> tuple[str, list[Any]]:
     from .util import parse_date
-    clauses, args = [], []
+    clauses: list[str] = []
+    args: list[Any] = []
     category, metric = _validate_name(category, "category"), _validate_name(metric, "metric")
     if provider is not None and provider not in PROVIDERS:
         raise ValueError("provider must be one of " + ", ".join(PROVIDERS))

@@ -171,7 +171,7 @@ class Store:
                 "sha256, bytes, job_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (provider, origin, grp, endpoint, canonical_json(params or {}), locale, utcnow(), str(relative),
                  digest, len(content), job_id))
-            return int(cur.lastrowid)
+            return _rowid(cur)
 
     def register_raw_path(self, provider: str, origin: str, grp: str, endpoint: str, path: Path,
                           job_id: str | None) -> int:
@@ -186,7 +186,7 @@ class Store:
                 "sha256, bytes, job_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (provider, origin, grp, endpoint, "{}", None, utcnow(), relative, sha256_bytes(data), len(data),
                  job_id))
-            return int(cur.lastrowid)
+            return _rowid(cur)
 
     # -------------------------------------------------------------------- records
     def upsert(self, provider: str, parser: str, records: Iterable[Rec], raw_file_id: int | None,
@@ -319,3 +319,10 @@ def decode_cursor(cursor: str) -> dict[str, Any]:
         return value
     except Exception:
         raise ValueError("cursor is invalid; pass the next_cursor value from a previous result") from None
+
+
+def _rowid(cur: sqlite3.Cursor) -> int:
+    """The id of the row an INSERT just added (sqlite3 types lastrowid as optional)."""
+    if cur.lastrowid is None:
+        raise RuntimeError("INSERT added no row")
+    return int(cur.lastrowid)

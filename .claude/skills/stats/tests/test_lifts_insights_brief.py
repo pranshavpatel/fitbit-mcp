@@ -13,7 +13,7 @@ import data as D
 import fixture_db
 import lifts as L
 import scores as S
-from test_render import NOW, WIDTHS, _check, _model
+from test_render import WIDTHS, _check, _model
 
 
 # ---------------------------------------------------------------- parsing

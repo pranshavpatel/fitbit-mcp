@@ -17,7 +17,8 @@ CTX = {"recovery": {"score": 58}, "baseline_28d": {"recovery": 64.0, "hrv": 80.0
 
 
 def reply(today, week=None, headline="Keep it steady today"):
-    sec = lambda its: {"headline": headline, "insights": [{"level": "watch", "finding": f, "action": a} for f, a in its]}
+    def sec(its):
+        return {"headline": headline, "insights": [{"level": "watch", "finding": f, "action": a} for f, a in its]}
     raw = json.dumps({"today": sec(today), "week": sec(week or [("Steps fell this week.", "Walk 20 min daily next week.")] * 3)})
     return raw, CO.parse_insights(raw)
 

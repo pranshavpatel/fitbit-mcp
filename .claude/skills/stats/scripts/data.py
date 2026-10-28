@@ -19,7 +19,6 @@ from collections import defaultdict
 from dataclasses import asdict
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 from tz import local_zone
 
@@ -720,7 +719,6 @@ def build_model(store: Store | None, day: date, cfg: dict, days: int = 28, perio
         aw, short = awake_counts(main)
         nd = need.get(d)
         restorative = (stg["deep"] or 0) + (stg["rem"] or 0)
-        recent = span(day, 7)
         sleep_model.update({
             "start": main["start"], "end": main["end"], "asleep": main.get("minutes_asleep"), "in_bed": round(in_bed),
             "stages": stg, "timeline": stage_timeline(main), "awake_count": aw, "short_awakenings": short,
@@ -969,7 +967,8 @@ def _deep(store, day: date, hist: int, nights: dict, need: dict, perf: dict, ssc
     d30 = span(day, 30)
     for h in habit_list:
         cells = [((journal.get(x) or {}).get("habits") or {}).get(h["key"]) for x in d30]
-        good = (lambda c, g=h.get("good"): c is not None and (c == g if g is not None else c))
+        def good(c, g=h.get("good")):  # noqa: B008  (binds this habit's "good" value)
+            return c is not None and (c == g if g is not None else c)
         cur = best = run = 0
         for c in cells:
             run = run + 1 if good(c) else 0
@@ -1400,7 +1399,9 @@ def _experiment_outcome(ex: dict, model: dict) -> None:
     groups = {}
     for state in ("hit", "miss"):
         rs = [r for r in ex["nights"] if r["state"] == state]
-        mean = lambda k: (statistics.fmean(v) if (v := [r[k] for r in rs if r.get(k) is not None]) else None)
+        def mean(k, rs=rs):
+            v = [r[k] for r in rs if r.get(k) is not None]
+            return statistics.fmean(v) if v else None
         groups[state] = {"n": len(rs), "asleep": mean("asleep"), "recovery": mean("recovery"), "hrv": mean("hrv")}
     ex["outcome"] = groups if groups["hit"]["n"] and groups["miss"]["n"] else None
 

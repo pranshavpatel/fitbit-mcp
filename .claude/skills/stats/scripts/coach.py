@@ -38,7 +38,6 @@ import subprocess
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 from tz import local_zone
 
@@ -178,7 +177,7 @@ def due(m: dict, notes: list[dict], now: datetime) -> tuple[str, dict | None] | 
     todays = [n for n in notes if n.get("date") == today]
     kinds_done = {n.get("kind") for n in todays}
     triggers = {n.get("trigger") for n in notes if n.get("trigger")}
-    last_at = max((_local(n["at"]) for n in notes if _local(n.get("at"))), default=None)
+    last_at = max((t for t in (_local(n.get("at")) for n in notes) if t is not None), default=None)
     for w in sorted(_workouts_today(m), key=lambda w: w["end"], reverse=True):
         end = _local(w.get("end"))
         if not end or (w.get("minutes") or 0) < 10 or "workout:" + w["start"] in triggers:
@@ -624,7 +623,7 @@ def fallback_insights(m: dict, now: datetime) -> dict:
     head = ((m.get("verdict") or {}).get("headline") or "").rstrip(".")
     if note and not (head and head in note):
         band = (m.get("recovery") or {}).get("band")
-        today.insert(0, item({"green": "good", "red": "flag"}.get(band, "watch"), note,
+        today.insert(0, item({"green": "good", "red": "flag"}.get(band or "", "watch"), note,
                              "Follow today's plan in the Today box."))
     target = (m.get("strain") or {}).get("target")
     for lvl, t in (m.get("verdict") or {}).get("reasons") or []:          # pad with what's going well
@@ -853,7 +852,8 @@ def parse_workout(raw: str | None) -> dict | None:
         return None
     def s(v):
         return " ".join(str(v or "").split())
-    lvl = lambda v: v if v in INSIGHT_LEVELS else "watch"
+    def lvl(v):
+        return v if v in INSIGHT_LEVELS else "watch"
     def items(key):
         v = w.get(key)
         return [x for x in v if isinstance(x, dict)] if isinstance(v, list) else []
@@ -906,11 +906,14 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
         else:
             ch = r.get("e1rm_change_pct")
             if r.get("pr"):
-                lvl, note = "good", "New best: estimated 1RM {:g} kg from {}.".format(r["e1rm_kg"], r["top_set"]); ups += 1
+                lvl, note = "good", "New best: estimated 1RM {:g} kg from {}.".format(r["e1rm_kg"], r["top_set"])
+                ups += 1
             elif ch is not None and ch > 0:
-                lvl, note = "good", "Estimated 1RM up {:.1f}% on last time ({}).".format(ch, r["last_time"]["top_set"]); ups += 1
+                lvl, note = "good", "Estimated 1RM up {:.1f}% on last time ({}).".format(ch, r["last_time"]["top_set"])
+                ups += 1
             elif ch is not None and ch < -3:
-                lvl, note = "watch", "Estimated 1RM down {:.1f}% on last time ({}).".format(-ch, r["last_time"]["top_set"]); downs += 1
+                lvl, note = "watch", "Estimated 1RM down {:.1f}% on last time ({}).".format(-ch, r["last_time"]["top_set"])
+                downs += 1
             else:
                 lvl, note = "good", "On par with last time: top set {} vs {}.".format(r["top_set"], r["last_time"]["top_set"])
         exercises.append({"exercise": r["exercise"], "level": lvl, "note": note, "next": _next_target([e for e in entries if e["exercise"] == r["exercise"]])})

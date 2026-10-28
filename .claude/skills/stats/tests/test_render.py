@@ -410,7 +410,7 @@ def test_single_column_draws_each_box_once(model):
 
 @pytest.mark.parametrize("ratio, zone", [(0.5, "too little"), (1.0, "sweet spot"), (1.4, "caution"), (1.8, "risky"), (2.6, "risky")])
 def test_load_gauge_thickens_the_active_zone(ratio, zone):
-    lines = [l.plain for l in dashboard.load_gauge(ratio, 76)]
+    lines = [ln.plain for ln in dashboard.load_gauge(ratio, 76)]
     gauge = lines[0]
     assert gauge.startswith("  0 ") and gauge.endswith(" 2")
     thick = gauge.strip("02 ").replace("─", " ").split()
@@ -443,8 +443,8 @@ def test_finished_experiment_shows_the_result(tmp_path, monkeypatch):
 def test_experiment_outcome_groups_nights():
     days = ["2026-10-0{}".format(i) for i in range(1, 6)]
     m = {"days": days, "series": {"recovery": [80, 60, 70, None, 40], "hrv": [90, 70, 80, 60, 50]}}
-    nights = lambda *states: [{"date": d, "state": st, "asleep": 420 + 30 * i}
-                              for i, (d, st) in enumerate(zip(days, states))]
+    def nights(*states):
+        return [{"date": d, "state": st, "asleep": 420 + 30 * i} for i, (d, st) in enumerate(zip(days, states))]
     ex = {"nights": nights("hit", "miss", "hit", "missed_data", "miss")}
     D._experiment_outcome(ex, m)
     hit, miss = ex["outcome"]["hit"], ex["outcome"]["miss"]

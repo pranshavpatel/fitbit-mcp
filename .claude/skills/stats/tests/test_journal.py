@@ -135,7 +135,7 @@ def test_box_colors_mean_on_track(tmp_path, monkeypatch):
     dashboard.render(m, console, 100, "journal")
     green, red = "38;2;12;163;12", "38;2;208;59;59"
     for label in ("stretching", "alcohol"):
-        line = next(l for l in buf.getvalue().splitlines() if label in l)
+        line = next(ln for ln in buf.getvalue().splitlines() if label in ln)
         cells = line.split(label, 1)[1]
         assert cells.index(green) < cells.index(red), label         # yesterday on track, today off track
 
@@ -160,12 +160,12 @@ def test_habit_columns_counts_and_gaps():
           {"good": True, "cells": [True, False, None, False, True, None, True]},
           {"good": False, "cells": [True, False, None, False, False, None, True]}]
     lines = [t.plain for t in dashboard._habit_columns(hs, days, 80)]
-    axis = next(l for l in lines if "┼" in l)
+    axis = next(ln for ln in lines if "┼" in ln)
     assert axis.split("┼")[1].rstrip().strip("─") == ""             # the zero line is unbroken
-    assert sum(l.count("░") for l in lines) > 0                     # and shaded through the chart
-    assert any(l.split("│")[-1].strip().startswith("2") for l in lines if "done ▲" in l)   # day 1: 2 done, on top
-    assert sum(l.count("▓") for l in lines) > 0 and sum(l.count("█") for l in lines) > 0
-    braille = [ch for l in lines[1:-3] for ch in l if 0x2801 <= ord(ch) <= 0x28FF]
+    assert sum(ln.count("░") for ln in lines) > 0                     # and shaded through the chart
+    assert any(ln.split("│")[-1].strip().startswith("2") for ln in lines if "done ▲" in ln)   # day 1: 2 done, on top
+    assert sum(ln.count("▓") for ln in lines) > 0 and sum(ln.count("█") for ln in lines) > 0
+    braille = [ch for ln in lines[1:-3] for ch in ln if 0x2801 <= ord(ch) <= 0x28FF]
     assert braille                                                     # the curves joining the day counts
 
 

@@ -72,7 +72,7 @@ def parse_add(args: list[str], now: datetime) -> tuple[date, dict]:
     try:
         kcal = float(rest[0])
     except ValueError:
-        raise FoodError("the number after the name is kcal, e.g. 500")
+        raise FoodError("the number after the name is kcal, e.g. 500") from None
     if not 0 <= kcal <= 5000:
         raise FoodError("kcal should be between 0 and 5000")
     entry = {"name": name[:120], "kcal": round(kcal)}
@@ -84,7 +84,7 @@ def parse_add(args: list[str], now: datetime) -> tuple[date, dict]:
             try:
                 g = float(val)
             except ValueError:
-                raise FoodError("{}= takes grams, e.g. p=20".format(key))
+                raise FoodError("{}= takes grams, e.g. p=20".format(key)) from None
             if not 0 <= g <= 500:
                 raise FoodError("{} should be 0-500 g".format(MACROS[key]))
             entry[MACROS[key]] = round(g, 1)
