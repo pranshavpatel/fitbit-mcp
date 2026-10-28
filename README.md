@@ -12,6 +12,33 @@ log, habit tracking and an AI coach.**
 
 <sub>All screenshots are generated from synthetic data by [`docs/demo/make_demos.py`](docs/demo/make_demos.py).</sub>
 
+## Highlights
+
+- **An LLM coach with its own eval.** 42 synthetic scenarios (red recovery, high training load, a
+  flagged knee, missing sleep…) and 17 deterministic checks for format, grounding, safety and
+  specificity. A prompt rewrite took the share of replies passing every check on **12 untouched
+  holdout scenarios from 33–50 % to 92 %**, and showed Haiku matching Opus at **1/24 of the cost**,
+  so Haiku is now the default. The eval also caught the dashboard advising hard training at a high
+  load ratio. [Write-up](docs/coach-eval.md)
+- **Scores checked against WHOOP.** Fed WHOOP's own inputs, fitdash's Recovery formula lands
+  **within 8.2 points out of sample** (14.6 for always guessing the average) and agrees on the
+  green / yellow / red band 73 % of the time. [Method and limits](docs/validation.md)
+- **Read-only and local by design.** OAuth with `.readonly` scopes only, GET-only remote calls,
+  every SQL statement parameterized, secrets redacted from logs, all data in `~/.fitbit-mcp`.
+  500+ tests on synthetic fixtures, with CI on macOS and Ubuntu.
+
+```mermaid
+flowchart LR
+    G[Google Health / Fitbit API] -- OAuth, read-only --> M[MCP server<br/>importer · jobs · sync]
+    T[Google Takeout] --> M
+    M --> DB[(SQLite<br/>~/.fitbit-mcp)]
+    DB --> C[Claude via MCP tools<br/>query · summarize · export]
+    DB --> F[fitdash<br/>scores · charts · lift log]
+    F --> CO[LLM coach<br/>insights · workout review]
+    CO -. graded by .-> E[eval harness<br/>scenarios · checks]
+    F --> P[phone app over Tailscale]
+```
+
 ## What's in here
 
 | Part | What it does |
@@ -85,6 +112,7 @@ fitdash lift bench 3x8@60 row 4x10@50      # log sets (kg; 25lb for pounds; no @
 fitdash journal +mobility -junk-food note "slept well"
 fitdash priorities set "ship the report" "pull day" "call mom"   # today's top 3; the coach checks in
 fitdash insights                           # actionable insights on today and the past week
+fitdash insights --workout                 # review your latest workout: each lift vs last time, next targets
 fitdash coach run                          # a Claude-written note if one is due
 fitdash brief --install                    # a notification every morning
 fitdash web --install                      # the phone app, running in the background
@@ -151,7 +179,7 @@ run offline on synthetic data:
 
 ```sh
 uv run pytest                                                                         # server: 76 tests
-uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 509 tests
+uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 521 tests
 ```
 
 ## License

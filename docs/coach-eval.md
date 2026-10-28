@@ -115,6 +115,11 @@ So two of the three were grader errors, and none of the v2 replies advised runni
 With v2, Haiku matches Opus on this eval at about 1/24 of the cost. The prompt mattered far more
 than the model: v1 → v2 is worth +43 to +50 points, while the spread between models under v2 is 2.
 
+**Decision.** `fitdash insights` now uses Haiku by default (`coach.INSIGHTS_MODEL`). On this eval it
+matched the larger models' quality at a fraction of the cost. `"insights_model"` in `stats.json`
+switches it back (`"default"` uses the Claude CLI's own default model). The coach notes and the
+workout review aren't covered by this eval yet, so they keep the CLI default.
+
 **Rule-based fallback.** When Claude isn't available, `fallback_insights` writes the insights from
 rules. The eval found it unsafe at first: it passed on the verdict's "go hard" at a load ratio of 1.68,
 and it often returned too few items.

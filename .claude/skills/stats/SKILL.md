@@ -157,6 +157,11 @@ on WHOOP-style scales calibrated on the user's own history, **not WHOOP's propri
   the real sets (dose = 70·√(sets/8) per muscle, capped at 100) instead of the split guess, and the
   Fitbit lift that day isn't counted twice. When the user tells you what they lifted with sets and
   weights, log it with the `lift` command rather than editing the file.
+- **Workout review.** `fitdash insights --workout` has Claude review the most recent workout (logged
+  sets + the Fitbit session): each exercise vs last time and the best so far, a next-time target,
+  and tips. Use it when the user asks how their workout went or wants feedback on a session; log
+  the sets first if they just told you them. A logged session also names its split day when it
+  wasn't tagged (push sets → the "push…" day), so the split queue follows what was actually trained.
 - **What drives your recovery.** For each habit (asleep by 1:00, 7 h+ asleep, asleep within 45 min
   of the usual time, strain at the user's 75th percentile (≥ 12) the day before, a workout past 20:00,
   lifting, 10k+ steps) it compares average next-morning Recovery with vs without, using Welch's t:

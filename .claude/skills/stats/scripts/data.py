@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sqlite3
 import statistics
 from collections import defaultdict
@@ -46,6 +47,7 @@ DEFAULT_CONFIG = {
     "impact_types": ["RUNNING", "TRAIL_RUN", "SOCCER", "TREADMILL_RUNNING"],
     "experiment": None,            # {"name", "start", "nights", "lights_out"}
     "full_heart_rate": True,       # sync whole-day heart rate (yesterday + today, hourly) so Strain sees all of it
+    "insights_model": None,        # Claude model for fitdash insights: None = coach.INSIGHTS_MODEL, "default" = the CLI's
 }
 
 TYPE_LABEL = {"STRENGTH_TRAINING": "Strength", "CARDIO_WORKOUT": "Cardio", "WALKING": "Walk", "RUNNING": "Run",
@@ -986,10 +988,18 @@ def _deep(store, day: date, hist: int, nights: dict, need: dict, perf: dict, ssc
 
 def _label_lifts(workouts: list[dict], cfg: dict) -> None:
     """Give each strength session a split day. `lift_log` entries (date → day) are what the user told
-    us; from the split anchor on, the rest follow the rotation ("assumed"). Earlier ones stay unknown."""
+    us; with no tag, sets logged that day name it when they clearly match one split day (push sets →
+    the "push…" day); from the split anchor on, the rest follow the rotation ("assumed"). Earlier
+    ones stay unknown."""
     split = cfg.get("split") or []
     anchor = cfg.get("split_anchor") or {}
-    log = cfg.get("lift_log") or {}
+    log = dict(cfg.get("lift_log") or {})
+    for x, entries in (cfg.get("lift_sets") or {}).items():
+        if x not in log:
+            kind = S.session_label(entries)
+            match = [d_ for d_ in split if re.match(r"{}\b".format(re.escape(kind)), d_)]
+            if len(match) == 1:
+                log[x] = match[0]
     lifts = sorted((w for w in workouts if w["type"] == "STRENGTH_TRAINING"), key=lambda w: (w["date"], w["start"]))
     idx = None
     for w in lifts:
@@ -998,10 +1008,11 @@ def _label_lifts(workouts: list[dict], cfg: dict) -> None:
             w["split"], w["split_source"] = log[w["date"]], "logged"
             idx = split.index(log[w["date"]])
         elif anchor.get("date") and anchor.get("day") in split and w["date"] >= anchor["date"]:
-            if idx is None:
+            if idx is None and w["date"] == anchor["date"]:
                 idx = split.index(anchor["day"])
-                w["split"], w["split_source"] = anchor["day"], "logged" if w["date"] == anchor["date"] else "assumed"
-            else:
+                w["split"], w["split_source"] = anchor["day"], "logged"
+            else:                        # the anchor is a session on its date, so the next one is the day after
+                idx = split.index(anchor["day"]) if idx is None else idx
                 idx = (idx + 1) % len(split)
                 w["split"], w["split_source"] = split[idx], "assumed"
         w["muscles"] = S.split_muscles(w["split"]) if w["split"] else []
@@ -1296,10 +1307,18 @@ def _split_next(cfg: dict, workouts: list[dict]) -> dict:
         return {"next": None, "queue": split,
                 "reason": "set split_anchor in ~/.fitbit-mcp/coaching/stats.json (data can't tell muscle groups)"}
     done_after = [w for w in workouts if w["type"] == "STRENGTH_TRAINING" and w["date"] > anchor["date"]]
-    idx = (split.index(anchor["day"]) + 1 + len(done_after)) % len(split)
+    # the day after the latest session with a known split day (tagged, named by its logged sets, or
+    # following the rotation); a tag or a set log that breaks the rotation moves the queue with it
+    known = sorted((w for w in workouts if w["type"] == "STRENGTH_TRAINING" and w["date"] >= anchor["date"]
+                    and w.get("split") in split), key=lambda w: (w["date"], w["start"]))
+    if known:
+        idx = (split.index(known[-1]["split"]) + 1) % len(split)
+    else:
+        idx = (split.index(anchor["day"]) + 1 + len(done_after)) % len(split)
     queue = split[idx:] + split[:idx]
     return {"next": split[idx], "queue": queue, "reason": None, "since_anchor": len(done_after),
-            "last_done": queue[-1], "last_done_date": max((w["date"] for w in done_after), default=anchor["date"])}
+            "last_done": queue[-1], "last_done_date": known[-1]["date"] if known else
+            max((w["date"] for w in done_after), default=anchor["date"])}
 
 
 def _experiment(exp: dict | None, nights: dict, day: date) -> dict | None:

@@ -349,14 +349,17 @@ def claude_bin() -> str | None:
     return None
 
 
-def ask(system: str, user: str, timeout: float = 150) -> str | None:
+def ask(system: str, user: str, timeout: float = 150, model: str | None = None) -> str | None:
     """One Claude call: print mode, no tools, no MCP servers, no session saved. Returns stdout, or
-    None if the CLI isn't there or fails."""
+    None if the CLI isn't there or fails. `model` is a CLI alias (haiku, sonnet, opus); None or
+    "default" uses the CLI's own default."""
     exe = claude_bin()
     if not exe:
         return None
     cmd = [exe, "-p", "--tools", "", "--strict-mcp-config", "--no-session-persistence", "--setting-sources", "user",
            "--output-format", "text", "--system-prompt", system]
+    if model and model != "default":
+        cmd += ["--model", model]
     try:
         r = subprocess.run(cmd, input=user, capture_output=True, text=True, timeout=timeout, cwd=str(Path.home()))
     except (OSError, subprocess.TimeoutExpired):
@@ -547,8 +550,14 @@ def parse_insights(raw: str | None) -> dict | None:
     return out
 
 
-def generate_insights(ctx: dict, timeout: float = 240) -> dict | None:
-    raw = ask(INSIGHTS_SYSTEM, "Today's and this week's data (JSON):\n" + json.dumps(ctx, default=str), timeout)
+# Chosen by the coach eval (docs/coach-eval.md): with this prompt Haiku passed every check on 92 % of
+# holdout scenarios, the same as Opus and Sonnet, at about 1/24 of Opus's cost per call. Override
+# with "insights_model" in stats.json ("default" = the Claude CLI's own default model).
+INSIGHTS_MODEL = "haiku"
+
+
+def generate_insights(ctx: dict, timeout: float = 240, model: str | None = INSIGHTS_MODEL) -> dict | None:
+    raw = ask(INSIGHTS_SYSTEM, "Today's and this week's data (JSON):\n" + json.dumps(ctx, default=str), timeout, model)
     return parse_insights(raw)
 
 
@@ -669,6 +678,294 @@ def load_insights(home: Path) -> dict | None:
     except (OSError, ValueError):
         return None
     return data if isinstance(data, dict) and isinstance(data.get("today"), dict) else None
+
+
+# ---------------------------------------------------------------- workout analysis (fitdash insights --workout)
+
+WORKOUT_SYSTEM = """You are the user's strength and conditioning coach. They just asked you to review their most
+recent workout. You get the session in full (JSON): every logged set, how each exercise compares with the last
+time they did it and with their best, the previous session of the same kind, heart rate and strain from their
+Fitbit, weekly sets per muscle, muscle freshness, today's recovery and their profile.
+
+OUTPUT. Your whole reply is one JSON object: the first character is { and the last is }. No code fence, no text
+before or after. Exactly this shape:
+
+{"workout": {"headline": "...", "rating": "great|good|mixed|tough", "summary": "...",
+  "exercises": [{"exercise": "...", "level": "good|watch|flag", "note": "...", "next": "..."}],
+  "tips": [{"level": "good|watch|flag", "finding": "...", "action": "..."}]}}
+
+- headline: at most 16 words. The single most important takeaway.
+- rating: great = clear progress (PRs, more weight or reps than last time) and full volume; good = solid, on
+  par with last time; mixed = some lifts up, some down; tough = clearly below last time or cut short.
+- summary: 2 or 3 sentences, at most 60 words: what the session was (kind, sets, volume), how it compares with
+  the previous session of the same kind, and the standout.
+- exercises: one per logged exercise, in the order done. note, at most 30 words: what the sets show (weight and
+  reps across sets, where reps dropped off, estimated 1RM vs last time, a PR). next, at most 25 words: a concrete
+  target for next time as weight x reps. If every set at the top weight reached the rep target, add the
+  smallest step (5 lb, 2.5 kg, or one cable plate); if reps fell off sharply, keep the weight and aim for 1-2
+  more reps; if it is the first time logged, call it the baseline to beat.
+- tips: 2 to 4 points about the session as a whole: volume per muscle against the weekly 10-20 hard-set range,
+  balance and exercise order, when these muscles will be ready again (freshness), and recovery tonight (sleep,
+  protein) when the data supports it. Each action has an amount or a time. At most 30 words per finding and 25
+  per action.
+
+TONE. When the session looks good, say so with energy and be specific about why: name the PR, the extra reps,
+the volume beat. Earned praise, not generic cheering. When it doesn't, be honest and constructive, never
+scolding: name the likely cause only if the data shows one (short sleep, red recovery, high load), and say what
+will fix it. Talk to them directly, like a coach who watched the session.
+
+NUMBERS. Every number comes from the data or simple arithmetic on it. Keep weights in the unit the user logged
+(lb or kg). Cable and dumbbell weights are per hand or per side, as logged. With no earlier session of an
+exercise, there is nothing to compare: don't invent one.
+
+SAFETY. If the profile or `training.impact_spike_knee` flags the knee, never suggest running, jumping or soccer.
+If `training.load_zone` is "caution" or "high", don't suggest extra sessions or volume this week. Pain is not
+something to train through: for joint pain, suggest a clinician. With no logged sets (only a Fitbit session),
+review duration, heart rate, zones and strain, leave exercises empty and suggest logging sets with fitdash lift.
+
+STYLE. Plain text in the strings: no markdown, no emoji. Dates as weekdays.
+"""
+
+WORKOUT_RATINGS = ("great", "good", "mixed", "tough")
+
+
+def _wt(e: dict) -> str:
+    """A set's weight as the user typed it: 50lb, 32kg or bodyweight."""
+    if e.get("lb") is not None:
+        return "{:g}lb".format(e["lb"])
+    return "bodyweight" if e.get("kg") is None else "{:g}kg".format(e["kg"])
+
+
+def _ex_sessions(lift_sets: dict, ex: str, before: str) -> list[tuple[str, list[dict]]]:
+    return [(x, [e for e in lift_sets[x] if e["exercise"] == ex]) for x in sorted(lift_sets)
+            if x < before and any(e["exercise"] == ex for e in lift_sets[x])]
+
+
+def _ex_summary(group: list[dict]) -> dict:
+    import scores as S
+    best = max(group, key=lambda e: (S.e1rm(e.get("kg"), e["reps"]) or 0, e["reps"]))
+    v = S.e1rm(best.get("kg"), best["reps"])
+    return {"sets": sum(e["sets"] for e in group), "set_list": ["{}x{}@{}".format(e["sets"], e["reps"], _wt(e)) for e in group],
+            "top_set": "{} x {}".format(_wt(best), best["reps"]), "e1rm_kg": None if v is None else round(v, 1),
+            "volume_kg": round(S.tonnage(group))}
+
+
+def latest_workout(m: dict, lift_sets: dict, upto: str) -> dict | None:
+    """The most recent workout on or before `upto`: its date, the sets logged that day and the Fitbit
+    sessions that day. A logged day and a Fitbit session on the same date are one workout."""
+    lift_days = [x for x in sorted(lift_sets) if x <= upto]
+    fit = sorted((w for w in (m.get("workouts") or {}).get("week", []) if w["date"] <= upto), key=lambda w: w["start"])
+    candidates = ([lift_days[-1]] if lift_days else []) + ([fit[-1]["date"]] if fit else [])
+    if not candidates:
+        return None
+    last = max(candidates)
+    return {"date": last, "entries": lift_sets.get(last, []), "sessions": [w for w in fit if w["date"] == last]}
+
+
+def workout_context(m: dict, lift_sets: dict, now: datetime, profile: str = "") -> dict | None:
+    """Everything about the most recent workout a coach would look at; None if there is none."""
+    import scores as S
+    day = (m.get("date") or now.date().isoformat())
+    wo = latest_workout(m, lift_sets, day)
+    if not wo:
+        return None
+    d, entries = wo["date"], wo["entries"]
+    when = datetime.fromisoformat(d).date()
+    ctx: dict = {"now": now.strftime("%A %Y-%m-%d %H:%M"), "workout_date": when.strftime("%A %Y-%m-%d"),
+                 "days_ago": (now.date() - when).days}
+    if entries:
+        label = S.session_label(entries)
+        exercises, order = [], []
+        for e in entries:
+            if e["exercise"] not in order:
+                order.append(e["exercise"])
+        for ex in order:
+            group = [e for e in entries if e["exercise"] == ex]
+            row = {"exercise": ex, **_ex_summary(group)}
+            past = _ex_sessions(lift_sets, ex, d)
+            if past:
+                px, pg = past[-1]
+                prev = _ex_summary(pg)
+                row["last_time"] = {"date": datetime.fromisoformat(px).strftime("%A %Y-%m-%d"), **prev}
+                best = max((_ex_summary(g)["e1rm_kg"] or 0 for _, g in past), default=0)
+                row["best_e1rm_before_kg"] = best or None
+                if row["e1rm_kg"] and prev["e1rm_kg"]:
+                    row["e1rm_change_pct"] = round(100 * (row["e1rm_kg"] - prev["e1rm_kg"]) / prev["e1rm_kg"], 1)
+                row["pr"] = bool(row["e1rm_kg"] and best and row["e1rm_kg"] >= best + 0.05)
+                row["times_logged_before"] = len(past)
+            else:
+                row["last_time"] = None
+                row["first_time_logged"] = True
+            exercises.append(row)
+        muscles = {mu: round(v, 1) for mu, v in S.weekly_sets(entries).items() if v}
+        ctx["session"] = {"kind": label, "sets": sum(e["sets"] for e in entries), "volume_kg": round(S.tonnage(entries)),
+                          "exercises": exercises, "sets_per_muscle": muscles,
+                          "prs": [r["exercise"] for r in exercises if r.get("pr")]}
+        same = [x for x in sorted(lift_sets) if x < d and S.session_label(lift_sets[x]) == label]
+        if same:
+            ps = lift_sets[same[-1]]
+            ctx["previous_same_kind"] = {"date": datetime.fromisoformat(same[-1]).strftime("%A %Y-%m-%d"),
+                                         "sets": sum(e["sets"] for e in ps), "volume_kg": round(S.tonnage(ps)),
+                                         "exercises": list(dict.fromkeys(e["exercise"] for e in ps))}
+    else:
+        ctx["session"] = None
+        ctx["no_sets_logged"] = True
+    ctx["fitbit_sessions"] = [{"what": w["label"], "start": w["start"][11:16], "minutes": round(w["minutes"]),
+                               "avg_hr": w.get("avg_hr"), "max_hr": w.get("max_hr"), "strain": w.get("strain"),
+                               "zone": w.get("zone"), "zone_minutes": w.get("zone_minutes"), "kcal": w.get("kcal"),
+                               "km": w.get("distance_km"), "pace_s_per_km": w.get("pace_s_per_km"),
+                               "split_day": w.get("split")} for w in wo["sessions"]]
+    lf = m.get("lifting") or {}
+    if lf.get("has_log"):
+        lo, hi = S.HYPERTROPHY_SETS
+        ctx["week_sets_per_muscle"] = {"range": [lo, hi], "last_7_days": {k: v for k, v in (lf.get("sets") or {}).items() if v}}
+    mus = (m.get("muscles") or {}).get("rows") or []
+    if mus:
+        hit = set((ctx.get("session") or {}).get("sets_per_muscle") or {}) or {r["muscle"] for r in mus}
+        ctx["muscle_freshness_now_pct"] = {r["muscle"]: r["fresh"] for r in mus if r["muscle"] in hit}
+    rec, tr = m.get("recovery") or {}, m.get("training") or {}
+    sl = m.get("sleep") or {}
+    ctx["recovery_today"] = {"score": rec.get("score"), "band": rec.get("band")}
+    ctx["sleep_last_night"] = None if not sl.get("has_night") else {"asleep": _hm(sl.get("asleep")),
+                                                                    "need": _hm((sl.get("need") or {}).get("total"))}
+    ctx["training"] = {"next_split": (tr.get("split") or {}).get("next"), "gym_this_week": tr.get("gym_week"),
+                       "gym_goal": tr.get("gym_goal"), "load_zone": (tr.get("acwr") or {}).get("zone"),
+                       "impact_spike_knee": tr.get("impact_spike_recent")}
+    b = m.get("body") or {}
+    ctx["nutrition"] = {"protein_target_g": b.get("protein_target_g"), "macros_today_g": b.get("macros"),
+                        "lean_bulk_pace": (b.get("trend") or {}).get("status")}
+    if profile.strip():
+        ctx["profile"] = profile.strip()[:4000]
+    return ctx
+
+
+def parse_workout(raw: str | None) -> dict | None:
+    """The {"workout": …} object out of Claude's reply, cleaned; None if it isn't there."""
+    if not raw:
+        return None
+    a, b = raw.find("{"), raw.rfind("}")
+    try:
+        data = json.loads(raw[a:b + 1]) if 0 <= a < b else None
+    except ValueError:
+        return None
+    w = data.get("workout") if isinstance(data, dict) else None
+    if not isinstance(w, dict) or not str(w.get("headline") or "").strip():
+        return None
+    def s(v):
+        return " ".join(str(v or "").split())
+    lvl = lambda v: v if v in INSIGHT_LEVELS else "watch"
+    exercises = [{"exercise": s(e.get("exercise")), "level": lvl(e.get("level")), "note": s(e.get("note")), "next": s(e.get("next"))}
+                 for e in w.get("exercises") or [] if isinstance(e, dict) and s(e.get("note"))]
+    tips = [{"level": lvl(t.get("level")), "finding": s(t.get("finding")), "action": s(t.get("action"))}
+            for t in w.get("tips") or [] if isinstance(t, dict) and s(t.get("finding"))]
+    if not exercises and not tips:
+        return None
+    return {"headline": s(w["headline"]), "rating": w.get("rating") if w.get("rating") in WORKOUT_RATINGS else "good",
+            "summary": s(w.get("summary")), "exercises": exercises[:15], "tips": tips[:5]}
+
+
+def generate_workout(ctx: dict, timeout: float = 240) -> dict | None:
+    return parse_workout(ask(WORKOUT_SYSTEM, "My most recent workout (JSON):\n" + json.dumps(ctx, default=str), timeout))
+
+
+def _next_target(group: list[dict]) -> str:
+    """Double progression on the heaviest weight: add the smallest step once every set there reaches
+    10+ reps, otherwise keep the weight and add reps."""
+    top = max(group, key=lambda e: e.get("kg") or 0)
+    if top.get("kg") is None:
+        return "Next time: add 1-2 reps per set."
+    at_top = [e for e in group if e.get("kg") == top["kg"]]
+    low = min(e["reps"] for e in at_top)
+    lb = top.get("lb") is not None
+    if low >= 10:
+        w = (top["lb"] + 5) if lb else (top["kg"] + 2.5)
+        return "Next time: try {:g}{} for {} reps.".format(w, "lb" if lb else "kg", low)
+    return "Next time: stay at {} and aim for {} reps on every set.".format(_wt(top), min(low + 2, max(e["reps"] for e in group)))
+
+
+def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
+    """Rule-based review from the same context (and the day's logged sets), for when Claude isn't available."""
+    ses = ctx.get("session")
+    if not ses:
+        fs = ctx.get("fitbit_sessions") or []
+        w = fs[-1] if fs else {}
+        finding = "{} for {} min, strain {}, average HR {}.".format(w.get("what", "Workout"), w.get("minutes"),
+                                                                    w.get("strain"), w.get("avg_hr"))
+        return {"headline": "{} on {}".format(w.get("what", "Workout"), ctx["workout_date"].split()[0]), "rating": "good",
+                "summary": finding, "exercises": [],
+                "tips": [{"level": "watch", "finding": "No sets are logged for this session, so there's nothing to compare.",
+                          "action": "Log your sets today with fitdash lift, e.g. fitdash lift yesterday bench 3x8@60."}]}
+    exercises, ups, downs = [], 0, 0
+    for r in ses["exercises"]:
+        sets = r["set_list"]
+        if r.get("first_time_logged"):
+            lvl, note = "good", "First time logged: {}. Top set {}.".format(", ".join(sets), r["top_set"])
+        else:
+            ch = r.get("e1rm_change_pct")
+            if r.get("pr"):
+                lvl, note = "good", "New best: estimated 1RM {:g} kg from {}.".format(r["e1rm_kg"], r["top_set"]); ups += 1
+            elif ch is not None and ch > 0:
+                lvl, note = "good", "Estimated 1RM up {:.1f}% on last time ({}).".format(ch, r["last_time"]["top_set"]); ups += 1
+            elif ch is not None and ch < -3:
+                lvl, note = "watch", "Estimated 1RM down {:.1f}% on last time ({}).".format(-ch, r["last_time"]["top_set"]); downs += 1
+            else:
+                lvl, note = "good", "On par with last time: top set {} vs {}.".format(r["top_set"], r["last_time"]["top_set"])
+        exercises.append({"exercise": r["exercise"], "level": lvl, "note": note, "next": _next_target([e for e in entries if e["exercise"] == r["exercise"]])})
+    prev = ctx.get("previous_same_kind")
+    prs = ses.get("prs") or []
+    if prs:
+        headline, rating = "{} new best{} on {} day: {}. Great session.".format(len(prs), "s" if len(prs) > 1 else "",
+                                                                                 ses["kind"], ", ".join(prs)), "great"
+    elif downs > ups:
+        headline, rating = "A tougher {} day: more lifts down than up on last time.".format(ses["kind"]), "tough"
+    else:
+        headline, rating = "Solid {} day: {} sets, {:,} kg moved.".format(ses["kind"], ses["sets"], ses["volume_kg"]), "good"
+    summary = "{} sets and {:,} kg of volume across {} exercises.".format(ses["sets"], ses["volume_kg"], len(exercises))
+    if prev:
+        summary += " Last {} day ({}): {} sets, {:,} kg.".format(ses["kind"], prev["date"].split()[0], prev["sets"], prev["volume_kg"])
+    tips = []
+    wk = (ctx.get("week_sets_per_muscle") or {})
+    lo, hi = wk.get("range") or (10, 20)
+    for mu in ses.get("sets_per_muscle") or {}:
+        n = (wk.get("last_7_days") or {}).get(mu)
+        if n is None:
+            continue
+        if n < lo:
+            tips.append({"level": "watch", "finding": "{} has {:g} hard sets in the last 7 days, under the {}-{} range.".format(mu.title(), n, lo, hi),
+                         "action": "Add {:g} sets of {} before the week is out.".format(lo - n, mu)})
+        elif n > hi:
+            tips.append({"level": "watch", "finding": "{} has {:g} hard sets in the last 7 days, over the {}-{} range.".format(mu.title(), n, lo, hi),
+                         "action": "Hold {} at about {} sets next week.".format(mu, hi)})
+    fr = ctx.get("muscle_freshness_now_pct") or {}
+    tired = [mu for mu, v in fr.items() if v is not None and v < 60]
+    if tired:
+        tips.append({"level": "good", "finding": "Still recovering: {}.".format(
+                     ", ".join("{} {:.0f}% fresh".format(t, fr[t]) for t in tired)),
+                     "action": "Train other muscles for the next 24-48 h; sleep 8 h tonight."})
+    if not tips:
+        tips.append({"level": "good", "finding": "Weekly sets for these muscles are within the {}-{} range.".format(lo, hi),
+                     "action": "Keep the same volume next week and push the targets above."})
+    return {"headline": headline, "rating": rating, "summary": summary, "exercises": exercises, "tips": tips[:4]}
+
+
+def workout_insights_path(home: Path) -> Path:
+    return home / "coaching" / "workout_insights.json"
+
+
+def save_workout_insights(home: Path, result: dict) -> None:
+    p = workout_insights_path(home)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    tmp = p.with_suffix(".tmp")
+    tmp.write_text(json.dumps(result, indent=1) + "\n")
+    tmp.replace(p)
+
+
+def load_workout_insights(home: Path) -> dict | None:
+    try:
+        data = json.loads(workout_insights_path(home).read_text())
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) and data.get("headline") else None
 
 
 # ---------------------------------------------------------------- launchd

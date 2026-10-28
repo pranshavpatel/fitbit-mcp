@@ -2597,6 +2597,89 @@ def render_insights(result: dict, console: Console, width: int) -> None:
         console.print(ln)
 
 
+RATING_LEVEL = {"great": "good", "good": "good", "mixed": "watch", "tough": "flag"}
+
+
+def render_workout(result: dict, console: Console, width: int) -> None:
+    """One box: headline, summary, each exercise (what the sets show → next time's target), then tips."""
+    bw = min(width, 100)
+    w = bw - 4
+    out: list[Text] = []
+    out += K.status_lines(RATING_LEVEL.get(result.get("rating"), "good"), result["headline"], w)
+    if result.get("summary"):
+        out.append(blank())
+        out += K.para(result["summary"], w, C["ink"])
+    if result.get("exercises"):
+        out += [blank(), T(("Exercises", "bold " + C["ink"]))]
+        for e in result["exercises"]:
+            out += K.status_lines(e["level"], "{}: {}".format(e["exercise"], e["note"]) if e.get("exercise") else e["note"], w)
+            if e.get("next"):
+                out += K.para(e["next"], w, C["ink"], indent=4, prefix=T(("  → ", "bold " + C["sleep"])))
+    if result.get("tips"):
+        out += [blank(), T(("Tips", "bold " + C["ink"]))]
+        out += insight_lines({"insights": result["tips"]}, w)
+    day = date.fromisoformat(result["date"])
+    title = "Workout · " + day.strftime("%a %b %-d") + (" · " + result["kind"] if result.get("kind") else "")
+    console.print(panel(title, out, bw, None))
+    src = ("written by Claude at {}".format(result["at"][11:16]) if result.get("source") == "claude"
+           else "auto: Claude unavailable, rule-based from the same numbers")
+    for ln in K.para(src, bw, C["muted"], indent=2, prefix=Text("  ")):
+        console.print(ln)
+
+
+def workout_insights(args, home: Path, width: int) -> int:
+    """fitdash insights --workout: a detailed review of the most recent workout."""
+    import coach as CO
+    if args.last:
+        result = CO.load_workout_insights(home)
+        if not result:
+            print("no workout review yet: run fitdash insights --workout", file=sys.stderr)
+            return 1
+    else:
+        if not args.no_sync and not args.dry_run:
+            auto_sync(force=False)
+        now = datetime.now(D.NY)
+        day = date.fromisoformat(CO.coach_day(now)[0])
+        cfg = D.load_config()
+        store = D.open_store()
+        try:
+            m = D.build_model(store, day, cfg, now=now)
+        finally:
+            if store:
+                store.close()
+        lift_sets = cfg.get("lift_sets") or {}
+        try:
+            profile = (home / "coaching" / "profile.md").read_text()
+        except OSError:
+            profile = ""
+        ctx = CO.workout_context(m, lift_sets, now, profile)
+        if not ctx:
+            print("no workout found: log one with fitdash lift, or sync a Fitbit session", file=sys.stderr)
+            return 1
+        if args.dry_run:
+            print(CO.WORKOUT_SYSTEM)
+            print(json.dumps(ctx, default=str, indent=1))
+            return 0
+        if sys.stderr.isatty():
+            print("asking the coach to review your workout (about a minute)…", file=sys.stderr)
+        got = CO.generate_workout(ctx)
+        source = "claude" if got else "auto"
+        wo = CO.latest_workout(m, lift_sets, m.get("date") or day.isoformat())
+        if not got:
+            print("Claude CLI unavailable or failed; showing a rule-based review", file=sys.stderr)
+            got = CO.fallback_workout(ctx, wo["entries"])
+        result = dict(got, date=wo["date"], kind=(ctx.get("session") or {}).get("kind") or
+                      ", ".join(f["what"] for f in ctx.get("fitbit_sessions") or []),
+                      at=now.strftime("%Y-%m-%dT%H:%M"), source=source)
+        if source == "claude":
+            CO.save_workout_insights(home, result)
+    if args.json:
+        print(json.dumps(result, indent=1))
+        return 0
+    render_workout(result, make_console(width, args.no_color), width)
+    return 0
+
+
 def insights(argv: list[str]) -> int:
     """fitdash insights: Claude reads every stat and returns actionable insights for today and the week."""
     import coach as CO
@@ -2604,6 +2687,8 @@ def insights(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(prog="fitdash insights", description=insights.__doc__)
     ap.add_argument("--no-sync", action="store_true")
     ap.add_argument("--last", action="store_true", help="show the last insights again; don't ask Claude")
+    ap.add_argument("--workout", action="store_true",
+                    help="review your most recent workout instead: every exercise vs last time, next targets and tips")
     ap.add_argument("--dry-run", action="store_true", help="print what would be sent to Claude; ask nothing")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--width", type=int)
@@ -2611,6 +2696,8 @@ def insights(argv: list[str]) -> int:
     args = ap.parse_args(argv)
     home = D.data_home()
     width = max(60, args.width or shutil.get_terminal_size((100, 40)).columns)
+    if args.workout:
+        return workout_insights(args, home, width)
     if args.last:
         result = CO.load_insights(home)
         if not result:
@@ -2642,7 +2729,7 @@ def insights(argv: list[str]) -> int:
             return 0
         if sys.stderr.isatty():
             print("asking the coach (reads all your stats; about a minute)…", file=sys.stderr)
-        got = CO.generate_insights(ctx)
+        got = CO.generate_insights(ctx, model=D.load_config().get("insights_model") or CO.INSIGHTS_MODEL)
         source = "claude" if got else "auto"
         if not got:
             print("Claude CLI unavailable or failed; showing rule-based insights", file=sys.stderr)
