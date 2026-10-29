@@ -58,6 +58,11 @@ flowchart LR
 | **Journal & habits, linked to next-morning recovery** | **Sleep score, stages and 14 nights of timing** |
 | ![Journal](docs/demo/journal.svg) | ![Sleep](docs/demo/sleep.svg) |
 
+**`fitdash insights --workout`: Claude reviews your latest session, lift by lift** (a real reply to the
+synthetic pull day, kept in [`docs/demo/workout_reply.json`](docs/demo/workout_reply.json))
+
+![Workout review](docs/demo/workout.svg)
+
 ### Deep dives
 
 Ask for one section and you get an extended view: 8 weeks of history and extra charts, such as

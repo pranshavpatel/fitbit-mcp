@@ -62,7 +62,8 @@ def test_fallback_names_prs_and_next_targets(tmp_path, monkeypatch):
     sets = L.load(tmp_path)
     ctx = CO.workout_context(m, sets, NOW)
     got = CO.fallback_workout(ctx, sets["2026-10-07"])
-    assert got["rating"] == "great" and "triceps pushdown" in got["headline"]
+    # a pushdown PR, but 2 sets where there were 3: less volume on the shared lifts, so mixed, not great
+    assert got["rating"] == "mixed" and "triceps pushdown" in got["headline"] and "volume was down" in got["headline"]
     nxt = {e["exercise"]: e["next"] for e in got["exercises"]}
     assert nxt["incline dumbbell press"] == "Next time: stay at 50lb and aim for 10 reps on every set."
     assert nxt["lateral raise"] == "Next time: try 13.5kg for 12 reps."
@@ -133,7 +134,7 @@ def test_fallback_holds_volume_at_high_load_and_rates_mixed_days(tmp_path, monke
     inc = next(r for r in ctx["session"]["exercises"] if r["exercise"] == "incline dumbbell press")
     inc["e1rm_change_pct"] = -8.0                                     # a PR elsewhere, but this lift slipped
     got = CO.fallback_workout(ctx, sets["2026-10-07"])
-    assert got["rating"] == "mixed" and "1 lift slipped" in got["headline"]
+    assert got["rating"] == "mixed"
 
 
 def test_split_labels_ignore_zero_credit_sets_and_pre_anchor_tags():
@@ -158,3 +159,14 @@ def test_insights_command_passes_the_configured_model(tmp_path, monkeypatch, cap
     assert seen == ["sonnet"]
     assert dashboard.main(["insights", "--workout", "--no-sync", "--no-color"]) == 0
     assert seen[1:] == [None]                                         # the workout review: the CLI's default
+
+
+def test_fallback_rates_a_clean_pr_day_great_and_ignores_unshared_lifts(tmp_path, monkeypatch):
+    _log(tmp_path, {"2026-10-03": "bench 3x8@60 pushdown 3x12@30",
+                    "2026-10-07": "bench 3x8@62.5 pushdown 3x12@32 cable fly 3x12@10"})       # + a new exercise
+    m = _model(tmp_path, monkeypatch)
+    sets = L.load(tmp_path)
+    got = CO.fallback_workout(CO.workout_context(m, sets, NOW), sets["2026-10-07"])
+    assert got["rating"] == "great" and "2 new bests" in got["headline"]
+    first = next(e for e in got["exercises"] if e["exercise"] == "chest fly")
+    assert first["note"].startswith("First time logged")

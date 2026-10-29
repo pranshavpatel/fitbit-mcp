@@ -746,7 +746,7 @@ def _ex_summary(group: list[dict]) -> dict:
     v = S.e1rm(best.get("kg"), best["reps"])
     return {"sets": sum(e["sets"] for e in group), "set_list": ["{}x{}@{}".format(e["sets"], e["reps"], _wt(e)) for e in group],
             "top_set": "{} x {}".format(_wt(best), best["reps"]), "e1rm_kg": None if v is None else round(v, 1),
-            "volume_kg": round(S.tonnage(group))}
+            "volume_kg": round(S.tonnage(group)), "total_reps": sum(e["sets"] * e["reps"] for e in group)}
 
 
 def latest_workout(m: dict, lift_sets: dict, upto: str) -> dict | None:
@@ -791,6 +791,11 @@ def workout_context(m: dict, lift_sets: dict, now: datetime, profile: str = "") 
                 if row["e1rm_kg"] and prev["e1rm_kg"]:
                     row["e1rm_change_pct"] = round(100 * (row["e1rm_kg"] - prev["e1rm_kg"]) / prev["e1rm_kg"], 1)
                 row["pr"] = bool(row["e1rm_kg"] and best and row["e1rm_kg"] >= best + 0.05)
+                if row["e1rm_kg"] is None and prev["e1rm_kg"] is None:    # bodyweight: progress is reps
+                    top_reps = max(e["reps"] for e in group)
+                    best_reps = max(e["reps"] for _, g in past for e in g)
+                    row["reps_change"] = row["total_reps"] - prev["total_reps"]
+                    row["pr"] = top_reps > best_reps
                 row["times_logged_before"] = len(past)
             else:
                 row["last_time"] = None
@@ -897,7 +902,8 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
         return {"headline": "{} on {}".format(w.get("what", "Workout"), ctx["workout_date"].split()[0]), "rating": "good",
                 "summary": finding, "exercises": [],
                 "tips": [{"level": "watch", "finding": "No sets are logged for this session, so there's nothing to compare.",
-                          "action": "Log your sets today with fitdash lift, e.g. fitdash lift yesterday bench 3x8@60."}]}
+                          "action": "Log your sets today with fitdash lift, e.g. fitdash lift yesterday bench 3x8@60."},
+                         _recovery_tip(ctx)]}
     exercises, ups, downs = [], 0, 0
     for r in ses["exercises"]:
         sets = r["set_list"]
@@ -905,7 +911,10 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
             lvl, note = "good", "First time logged: {}. Top set {}.".format(", ".join(sets), r["top_set"])
         else:
             ch = r.get("e1rm_change_pct")
-            if r.get("pr"):
+            if r.get("pr") and r.get("e1rm_kg") is None:
+                lvl, note = "good", "New best: {} ({:+d} reps in total on last time).".format(r["top_set"], r.get("reps_change") or 0)
+                ups += 1
+            elif r.get("pr"):
                 lvl, note = "good", "New best: estimated 1RM {:g} kg from {}.".format(r["e1rm_kg"], r["top_set"])
                 ups += 1
             elif ch is not None and ch > 0:
@@ -914,15 +923,23 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
             elif ch is not None and ch < -3:
                 lvl, note = "watch", "Estimated 1RM down {:.1f}% on last time ({}).".format(-ch, r["last_time"]["top_set"])
                 downs += 1
+            elif (r["total_reps"] < 0.85 * r["last_time"]["total_reps"]):     # same top set, fewer reps overall
+                lvl, note = "watch", "Fewer reps than last time: {} vs {}.".format(
+                    ", ".join(sets), ", ".join(r["last_time"]["set_list"]))
+                downs += 1
             else:
                 lvl, note = "good", "On par with last time: top set {} vs {}.".format(r["top_set"], r["last_time"]["top_set"])
         exercises.append({"exercise": r["exercise"], "level": lvl, "note": note, "next": _next_target([e for e in entries if e["exercise"] == r["exercise"]])})
     prev = ctx.get("previous_same_kind")
     prs = ses.get("prs") or []
-    cut = bool(prev and prev.get("volume_kg") and ses["volume_kg"] < 0.8 * prev["volume_kg"])   # a short session
+    # a short session: less volume on the exercises done both times (different exercises aren't comparable)
+    shared = [r for r in ses["exercises"] if r.get("last_time")]
+    vol_now, vol_then = sum(r["volume_kg"] for r in shared), sum(r["last_time"]["volume_kg"] for r in shared)
+    cut = bool(vol_then and vol_now < 0.8 * vol_then)
     if prs and not downs and not cut:
-        headline, rating = "{} new best{} on {} day: {}. Great session.".format(len(prs), "s" if len(prs) > 1 else "",
-                                                                                 ses["kind"], ", ".join(prs)), "great"
+        named = ", ".join(prs) if len(prs) <= 2 else "including " + prs[0]
+        headline, rating = "{} new best{} on {} day, {}. Great session.".format(
+            len(prs), "s" if len(prs) > 1 else "", ses["kind"], named).replace("day, including", "day including"), "great"
     elif prs:
         headline, rating = "Mixed {} day: new best on {}, but {}.".format(
             ses["kind"], ", ".join(prs), "volume was down on last time" if cut else
@@ -960,7 +977,25 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
     if not tips:
         tips.append({"level": "good", "finding": "Weekly sets for these muscles are within the {}-{} range.".format(lo, hi),
                      "action": "Keep the same volume next week and push the targets above."})
+    tips.append(_recovery_tip(ctx))
     return {"headline": headline, "rating": rating, "summary": summary, "exercises": exercises, "tips": tips[:4]}
+
+
+def _recovery_tip(ctx: dict) -> dict:
+    """Sleep and protein tonight: what turns a session into progress."""
+    sl = ctx.get("sleep_last_night") or {}
+    prot = (ctx.get("nutrition") or {}).get("protein_target_g")
+    lo = prot[0] if isinstance(prot, (list, tuple)) and prot else prot
+    known = bool(sl.get("asleep") and sl.get("need"))
+    finding = "Last night: {} asleep against a need of {}.".format(sl["asleep"], sl["need"]) if known else \
+        "Muscle is built in the recovery after the session."
+    action = "Tonight: aim for {} of sleep".format(sl["need"] if known else "8 h") + \
+        (" and at least {} g of protein today.".format(lo) if lo else ".")
+    def mins(hm: str) -> int:                            # "7h11" -> 431
+        h, _, m = hm.partition("h")
+        return int(h) * 60 + int(m or 0)
+    short = known and mins(sl["asleep"]) < mins(sl["need"])
+    return {"level": "watch" if short else "good", "finding": finding, "action": action}
 
 
 def workout_insights_path(home: Path) -> Path:
