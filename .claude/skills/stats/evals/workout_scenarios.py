@@ -94,8 +94,11 @@ def build(sc: WorkoutScenario) -> tuple[dict, dict, list[dict]]:
     for e in sc.edits:
         e(m)
     sets = lift_sets(sc)
-    m["lifting"] = D._lifting(sets, date.fromisoformat(m["date"]))
+    day = date.fromisoformat(m["date"])
     now = SC._now(sc.at)
+    m["lifting"] = D._lifting(sets, day)
+    # freshness from the logged sets, as build_model does with the user's own (the week's sessions cover its 7 days)
+    m["muscles"] = D._muscles(m["workouts"]["week"], now, day, m["recovery"]["score"], sets)
     ctx = CO.workout_context(m, sets, now, sc.profile)
     wo = CO.latest_workout(m, sets, m["date"])
     return m, ctx, (wo or {}).get("entries") or []
@@ -106,7 +109,7 @@ def by_id(ids: str | None, split: str | None = None) -> list[WorkoutScenario]:
     if not ids:
         return pool
     want = set(ids.split(","))
-    out = [s for s in WORKOUT_SCENARIOS if s.id in want]
+    out = [s for s in WORKOUT_SCENARIOS if s.id in want]        # named ids win over --split (it defaults to dev)
     if want - {s.id for s in out}:
         raise SystemExit("unknown workout scenario(s): " + ", ".join(sorted(want - {s.id for s in out})))
     return out

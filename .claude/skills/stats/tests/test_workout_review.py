@@ -135,6 +135,8 @@ def test_fallback_holds_volume_at_high_load_and_rates_mixed_days(tmp_path, monke
     inc["e1rm_change_pct"] = -8.0                                     # a PR elsewhere, but this lift slipped
     got = CO.fallback_workout(ctx, sets["2026-10-07"])
     assert got["rating"] == "mixed"
+    note = next(e["note"] for e in got["exercises"] if e["exercise"] == "incline dumbbell press")
+    assert note.startswith("Estimated 1RM down 8.0%")                   # the slipped lift is named, not just rated
 
 
 def test_split_labels_ignore_zero_credit_sets_and_pre_anchor_tags():
@@ -170,3 +172,26 @@ def test_fallback_rates_a_clean_pr_day_great_and_ignores_unshared_lifts(tmp_path
     assert got["rating"] == "great" and "2 new bests" in got["headline"]
     first = next(e for e in got["exercises"] if e["exercise"] == "chest fly")
     assert first["note"].startswith("First time logged")
+
+
+def test_fallback_rates_progress_with_fewer_sets_good_and_keeps_the_recovery_tip(tmp_path, monkeypatch):
+    _log(tmp_path, {"2026-10-03": PUSH_1, "2026-10-07": PUSH_2})
+    m = _model(tmp_path, monkeypatch)
+    sets = L.load(tmp_path)
+    ctx = CO.workout_context(m, sets, NOW)
+    ctx["week_sets_per_muscle"]["last_7_days"] = {"chest": 9, "triceps": 25, "shoulders": 2}
+    ctx["muscle_freshness_now_pct"] = {"chest": 40}
+    got = CO.fallback_workout(ctx, sets["2026-10-07"])
+    assert len(got["tips"]) == 4 and got["tips"][-1]["action"].startswith("Tonight:")     # 4 rule tips, recovery kept
+    assert any(t["action"].startswith("Add 1 set of chest") for t in got["tips"])        # singular
+    shared = [r for r in ctx["session"]["exercises"] if r.get("last_time")]
+    for r in shared:                                     # every shared lift up, one a PR, but one set fewer each
+        r.update(e1rm_change_pct=2.0, pr=False)
+        r["last_time"].update(sets=r["sets"] + 1, volume_kg=r["volume_kg"])
+    shared[0]["pr"] = True
+    ctx["session"]["prs"] = [shared[0]["exercise"]]
+    got = CO.fallback_workout(ctx, sets["2026-10-07"])
+    assert got["rating"] == "good" and "fewer sets" in got["headline"]
+    for r in shared:
+        r["last_time"]["sets"] = r["sets"]
+    assert CO.fallback_workout(ctx, sets["2026-10-07"])["rating"] == "great"

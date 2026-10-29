@@ -881,8 +881,10 @@ def parse_workout(raw: str | None) -> dict | None:
     a = raw.find("{")
     if a < 0:
         return None
+    b = raw.rfind("}")
+    body = raw[a:b + 1] if b > a else raw[a:]               # no closing brace at all: let _close_json add it
     data = None
-    for cand in (raw[a:raw.rfind("}") + 1], _close_json(raw[a:raw.rfind("}") + 1])):
+    for cand in (body, _close_json(body)):
         try:
             data = json.loads(cand)
             break
@@ -978,7 +980,11 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
     shared = [r for r in ses["exercises"] if r.get("last_time")]
     vol_now, vol_then = sum(r["volume_kg"] for r in shared), sum(r["last_time"]["volume_kg"] for r in shared)
     cut = bool(vol_then and vol_now < 0.8 * vol_then)
-    if prs and not downs and not cut:
+    fewer_sets = sum(r["sets"] for r in shared) < sum(r["last_time"]["sets"] for r in shared)
+    if prs and not downs and not cut and fewer_sets:          # progress with fewer sets: good, not great
+        headline, rating = "New best{} on {}, with fewer sets than last time.".format(
+            "s" if len(prs) > 1 else "", ", ".join(prs)), "good"
+    elif prs and not downs and not cut:
         named = ", ".join(prs) if len(prs) <= 2 else "including " + prs[0]
         headline, rating = "{} new best{} on {} day, {}. Great session.".format(
             len(prs), "s" if len(prs) > 1 else "", ses["kind"], named).replace("day, including", "day including"), "great"
@@ -991,7 +997,7 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
     else:
         headline, rating = "Solid {} day: {} sets, {:,} kg moved.".format(ses["kind"], ses["sets"], ses["volume_kg"]), "good"
     summary = "{} sets and {:,} kg of volume across {} exercises.".format(ses["sets"], ses["volume_kg"], len(exercises))
-    if prev:
+    if prev and shared:                                       # without shared exercises the totals aren't comparable
         summary += " Last {} day ({}): {} sets, {:,} kg.".format(ses["kind"], prev["date"].split()[0], prev["sets"], prev["volume_kg"])
     tips = []
     load_high = (ctx.get("training") or {}).get("load_zone") in ("caution", "high")
@@ -1006,7 +1012,7 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
             continue
         if n < lo and not load_high:
             tips.append({"level": "watch", "finding": "{} has {:g} hard sets in the last 7 days, under the {}-{} range.".format(mu.title(), n, lo, hi),
-                         "action": "Add {:g} sets of {} before the week is out.".format(lo - n, mu)})
+                         "action": "Add {:g} set{} of {} before the week is out.".format(lo - n, "" if lo - n == 1 else "s", mu)})
         elif n > hi:
             tips.append({"level": "watch", "finding": "{} has {:g} hard sets in the last 7 days, over the {}-{} range.".format(mu.title(), n, lo, hi),
                          "action": "Hold {} at about {} sets next week.".format(mu, hi)})
@@ -1019,8 +1025,8 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
     if not tips:
         tips.append({"level": "good", "finding": "Weekly sets for these muscles are within the {}-{} range.".format(lo, hi),
                      "action": "Keep the same volume next week and push the targets above."})
-    tips.append(_recovery_tip(ctx))
-    return {"headline": headline, "rating": rating, "summary": summary, "exercises": exercises, "tips": tips[:4]}
+    return {"headline": headline, "rating": rating, "summary": summary, "exercises": exercises,
+            "tips": tips[:3] + [_recovery_tip(ctx)]}         # the recovery tip always keeps its slot
 
 
 def _recovery_tip(ctx: dict) -> dict:

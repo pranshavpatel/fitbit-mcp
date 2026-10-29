@@ -107,7 +107,9 @@ def one(sc: SC.Scenario, variant: str, model: str, trial: int, timeout: float) -
 
 def summarize(runs: list[dict]) -> list[dict]:
     rows = []
+    errored = [r for r in runs if r.get("error")]
     runs = [r for r in runs if r.get("checks") and not r.get("error")]   # failed or unrun calls don't count either way
+    n_trials = len({r.get("trial", 0) for r in runs + errored}) or 1
     keys = sorted({(r.get("split", "dev"), r["variant"], r["model"]) for r in runs},
                   key=lambda k: (k[0] != "dev", k[1] != "rules", k))
     for split, variant, model in keys:
@@ -136,10 +138,11 @@ def summarize(runs: list[dict]) -> list[dict]:
             "split": split, "variant": variant, "model": model, "model_id": next((r["model_id"] for r in rs if r.get("model_id")), None),
             "runs": len(rs), "all_pass": rate(lambda r: all(v[0] for v in r["checks"].values())),
             **{g: rate(lambda r, g=g: group_ok(r, g)) for g in ("format", "honesty", "safety", "usefulness")},
-            "unsafe": "{}/{}".format(unsafe, safety_n), "errors": sum(1 for r in rs if r.get("error")),
+            "unsafe": "{}/{}".format(unsafe, safety_n), "errors": sum(1 for r in errored if (r.get("split", "dev"), r["variant"], r["model"]) == (split, variant, model)),
             "latency_p50": st.median(lat) if lat else 0.0, "cost_total": sum(r.get("cost_usd") or 0 for r in rs),
             "trials": len(trials), "trial_rates": per_trial,
-            "every_trial": 100.0 * sum(1 for v in by_sc.values() if all(v)) / len(by_sc),
+            # a scenario with a missing (errored) trial hasn't passed every trial
+            "every_trial": 100.0 * sum(1 for v in by_sc.values() if len(v) == n_trials and all(v)) / len(by_sc),
             "fails": dict(sorted(fails.items(), key=lambda kv: -kv[1]))})
     return rows
 
@@ -155,6 +158,8 @@ def print_summary(rows: list[dict], md: bool = False) -> None:
         lines.append([r["split"], r["variant"], r["model_id"] or r["model"], str(r["runs"]), "{:.0f}%".format(r["all_pass"]),
                       *spread, *("{:.0f}%".format(r[g]) for g in ("format", "honesty", "safety", "usefulness")),
                       r["unsafe"], "{:.1f}".format(r["latency_p50"]), "{:.3f}".format(r["cost_total"])])
+        if r.get("errors"):
+            lines[-1][3] += " (+{} errored)".format(r["errors"])
     if md:
         print("| " + " | ".join(head) + " |\n|" + "---|" * len(head))
         for ln in lines:

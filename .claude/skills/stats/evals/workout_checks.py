@@ -16,8 +16,8 @@ import scenarios  # noqa: F401  (puts scripts/ on the path)
 import coach as CO  # noqa: E402
 
 RATINGS = ("great", "good", "mixed", "tough")
-LIMITS = {"headline": 16, "summary": 60, "note": 30, "next": 25, "finding": 30, "action": 25}
-SLACK = 3                       # as in the insights eval: hyphens and weights like "50 lb x 12" split oddly
+LIMITS = {"headline": 14, "summary": 50, "note": 26, "next": 20, "finding": 26, "action": 20}   # WORKOUT_SYSTEM's
+SLACK = 2                       # hyphens and weights like "50 lb x 12" split oddly
 TIPS = (2, 4)
 
 Result = tuple[bool, str]
@@ -27,7 +27,8 @@ Check = Callable[[str, "dict | None", dict, Any], Result]
 def _raw(raw: str) -> dict:
     """The reply's own object (flat or under "workout"), with missing closing brackets repaired the
     way the product repairs them: broken JSON is strict_json's to judge, not every check's."""
-    body = raw[raw.find("{"):raw.rfind("}") + 1]
+    a, b = raw.find("{"), raw.rfind("}")
+    body = raw[a:b + 1] if b > a else raw[a:] if a >= 0 else ""
     data = None
     for cand in (body, CO._close_json(body)):
         try:
@@ -84,6 +85,15 @@ def schema(raw, parsed, ctx, sc) -> Result:
     exs = w.get("exercises") if isinstance(w.get("exercises"), list) else []
     if len(exs) != len(_logged(ctx)):
         bad.append("{} exercises for {} logged".format(len(exs), len(_logged(ctx))))
+    else:                                                  # one entry per logged exercise, by name
+        free = [_words(str(e.get("exercise") or "")) if isinstance(e, dict) else set() for e in exs]
+        for r in _logged(ctx):
+            want = _words(r["exercise"])
+            hit = next((j for j, got in enumerate(free) if got and want and (want <= got or got <= want)), None)
+            if hit is None:
+                bad.append("no entry for " + r["exercise"])
+            else:
+                free[hit] = set()
     bad += ["exercise without note or next" for e in exs if not (isinstance(e, dict) and e.get("note") and e.get("next"))]
     tips = w.get("tips") if isinstance(w.get("tips"), list) else []
     if not TIPS[0] <= len(tips) <= TIPS[1]:
@@ -96,7 +106,7 @@ def lengths(raw, parsed, ctx, sc) -> Result:
     over = []
     for f in ("headline", "summary"):
         n = len(str((parsed or {}).get(f) or "").split())
-        if n > LIMITS[f] + (0 if f == "headline" else SLACK):
+        if n > LIMITS[f] + SLACK:
             over.append("{} {} words".format(f, n))
     for e in (parsed or {}).get("exercises") or []:
         over += ["{} {} words".format(f, len(e[f].split())) for f in ("note", "next") if len(e[f].split()) > LIMITS[f] + SLACK]
@@ -186,15 +196,24 @@ def workout_numbers(ctx: dict) -> set:
     return out
 
 
+def _near(n: float, known: set) -> bool:
+    """checks._grounded's tolerance (exact, or rounded), without its free pass for 0-10."""
+    return any(abs(v - n) <= 0.051 or abs(abs(v) - abs(n)) <= max(0.51, 0.005 * abs(v)) for v in known)
+
+
 def grounded(raw, parsed, ctx, sc) -> Result:
     """Every number in the headline, summary, exercise notes and tip findings is in the data or simple
     arithmetic on it. Next-time targets and actions are recommendations, so they aren't graded."""
     known = workout_numbers(ctx)
     bad = []
     for t in _texts(parsed, ("headline", "summary", "note", "finding")):
-        for tok in K.NUM.findall(K.HM.sub(" ", K.TIME.sub(" ", t))):
+        t = K.HM.sub(" ", K.TIME.sub(" ", t))
+        for mt in K.NUM.finditer(t):
+            tok = mt.group(0)
             n = float(tok.replace(",", "").replace("−", "-"))
-            if not K._grounded(n, known):
+            # small counts ("3 sets") are derived, but a weight is a weight: "5 kg" must be in the data
+            small = n.is_integer() and 0 <= abs(n) <= K.SMALL_OK and not WEIGHT_AFTER.match(t, mt.end())
+            if not small and not _near(n, known):
                 bad.append(tok)
     return not bad, ", ".join(bad[:8])
 
@@ -229,6 +248,7 @@ def units_kept(raw, parsed, ctx, sc) -> Result:
 
 
 WEIGHT = re.compile(r"\d+(?:\.\d+)? ?(?:kg|lb|lbs|pounds?|kilos?)\b", re.I)
+WEIGHT_AFTER = re.compile(r" ?(?:kg|lb|lbs|pounds?|kilos?)\b", re.I)
 
 
 def no_invented_weight(raw, parsed, ctx, sc) -> Result:
@@ -281,7 +301,8 @@ def recommends(text: str, pattern: re.Pattern) -> str | None:
     return None
 
 
-ADD_SETS = re.compile(K.ADD_LOAD.pattern + r"|\badd (?:\d+|one|two|three|a|an|another|extra|more)?\s?(?:more |extra )?"
+ADD_SETS = re.compile(K.ADD_LOAD.pattern + r"|\b(?:increase|raise|bump up) (?:your |the )?(?:number of |weekly )?"
+                      r"(?:sets?|volume)\b|\badd (?:\d+|one|two|three|a|an|another|extra|more)?\s?(?:more |extra )?"
                       r"(?:hard |working )?sets?\b|\bmore sets\b|\bextra (?:exercise|day)\b", re.I)
 
 
@@ -295,17 +316,25 @@ def _no(pattern: re.Pattern, fields: tuple[str, ...]) -> Check:
 no_run_advice = _no(K.RUN, ("next", "action"))
 no_added_volume = _no(ADD_SETS, ("headline", "next", "action"))
 TODAY = re.compile(r"\btoday\b|\bnow\b|this (?:morning|afternoon|evening)|\btonight\b", re.I)
+CLOCK = re.compile(r"\b\d{1,2}:\d{2}\b")
+LATER = re.compile(r"\btomorrow\b|\bnext\b|monday|tuesday|wednesday|thursday|friday|saturday|sunday", re.I)
+
+
+def _today(t: str) -> bool:
+    """Said for today, or at a bare clock time ("heavy squats at 18:00") with no later day named."""
+    return bool(TODAY.search(t) or (CLOCK.search(t) and not LATER.search(t)))
 
 
 def no_hard_today(raw, parsed, ctx, sc) -> Result:
     """On a red day the tips don't send them to train hard *today* (next session's targets are fine)."""
-    hits = [h for t in _texts(parsed, ("action",)) if TODAY.search(t) for h in [recommends(t, K.HARD)] if h]
+    hits = [h for t in _texts(parsed, ("action",)) if _today(t) for h in [recommends(t, K.HARD)] if h]
     return not hits, ", ".join(hits)
 
 
 # ---------------------------------------------------------------- usefulness
 
-TARGET = re.compile(r"\d")
+# a weight, a rep count or sets x reps ("9 sets" alone is not a target)
+TARGET = re.compile(r"\d+(?:\.\d+)?\s?(?:kg|lbs?|pounds?|kilos?)\b|\d+\s?(?:more |extra )?reps?\b|\d+\s?[x×]\s?\d+", re.I)
 
 
 def next_targets(raw, parsed, ctx, sc) -> Result:

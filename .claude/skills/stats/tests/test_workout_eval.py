@@ -180,3 +180,39 @@ def test_reviewed_false_positives_stay_fixed():
     assert check("no_run_advice", raw, parsed, ctx, sc)
     assert check("praises_progress", *reply("ho_bodyweight", headline="Pull-up PR at 3x8, but fewer sets.",
                                             rating="mixed"))
+
+
+def test_review_fixes_tighten_the_graders():
+    """Holes found in code review (PR #3), closed before the re-run."""
+    assert not check("lengths", *reply("pr_day", headline=" ".join(["word"] * 17)))       # prompt says 14
+    raw, parsed, ctx, sc = reply("pr_day")
+    swapped = [dict(e, exercise="squat") for e in parsed["exercises"]]                  # right count, wrong lifts
+    assert not check("schema", *reply("pr_day", exercises=swapped))
+    k_raw, k_parsed, k_ctx, k_sc = reply("knee_legs")                                    # no 5 anywhere in its data
+    k_parsed["exercises"][0]["note"] = "Leg press 150 kg x 10, 5 kg over your best."     # an invented small weight
+    assert not check("grounded", k_raw, k_parsed, k_ctx, k_sc)
+    k_parsed["exercises"][0]["note"] = "Leg press 150 kg x 10 on all 3 sets, 5 of them at full depth."
+    assert check("grounded", k_raw, k_parsed, k_ctx, k_sc)                              # a small count is fine
+    parsed["exercises"][0]["next"] = "Next time: 9 sets."
+    assert not check("next_targets", raw, parsed, ctx, sc)
+    for nxt in ("Next time: 62.5 kg for 3x8.", "Aim for 2 more reps per set.", "Next time: 3x9."):
+        parsed["exercises"][0]["next"] = nxt
+        assert check("next_targets", raw, parsed, ctx, sc), nxt
+    raw, parsed, ctx, sc = reply("high_load")
+    parsed["tips"][0]["action"] = "Increase sets on chest by Friday."
+    assert not check("no_added_volume", raw, parsed, ctx, sc)
+    raw, parsed, ctx, sc = reply("ho_pr_red")
+    parsed["tips"][0]["action"] = "Heavy squats at 18:00."
+    assert not check("no_hard_today", raw, parsed, ctx, sc)
+    parsed["tips"][0]["action"] = "Tomorrow at 18:00: heavy squats if recovery is green."
+    assert check("no_hard_today", raw, parsed, ctx, sc)
+
+
+def test_eval_freshness_comes_from_the_logged_sets():
+    m, ctx, entries = WS.build(WS.by_id("pr_day")[0])
+    assert ctx["muscle_freshness_now_pct"]["chest"] < 80          # pushed yesterday: not fully fresh
+
+
+def test_parse_workout_repairs_a_reply_with_no_closing_brace():
+    got = CO.parse_workout('{"headline": "Solid day", "rating": "good", "tips": [{"finding": "Chest 12 sets.", "action": "Hold."}')
+    assert got and got["tips"][0]["finding"] == "Chest 12 sets."
