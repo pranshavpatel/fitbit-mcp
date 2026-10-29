@@ -283,6 +283,8 @@ sets". So all four are grader false positives, left in the numbers because the g
   to 10, so with a large context an invented number can match by chance. The workout grader is stricter (leaf values and targeted comparisons only).
 - **Synthetic scenarios from one fixture.** They cover the risky states I could name. They don't
   sample real users' days.
+- **Not every prompt rule is graded.** The workout prompt's "at most 3 numbers" per note or finding
+  has no check, so a reply can break it and still pass.
 - **Regex graders.** They are tested, but they check patterns, not meaning: a reply can pass every
   check and still be unhelpful, and the safety section above shows that negation can trip them.
   An LLM judge with human-labelled agreement would be the next step.
