@@ -187,7 +187,7 @@ run offline on synthetic data:
 
 ```sh
 uv run pytest                                                                         # server: 77 tests
-uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 562 tests
+uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 561 tests
 ```
 
 ## License
