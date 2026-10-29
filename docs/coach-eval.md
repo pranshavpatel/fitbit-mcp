@@ -65,7 +65,9 @@ calls it. The CLI's JSON output gives the cost and the model actually used.
 cd .claude/skills/stats
 uv run --script evals/run.py --variants v1,v2 --models default,sonnet,haiku --split all --out evals/results/final.json
 uv run --script evals/run.py --report evals/results/final.json --md      # re-print
-uv run --script evals/run.py --variants v1,v2 --models default,sonnet,haiku --split all --trials 3 --out evals/results/trials.json
+# trials.json: final.json's replies as trial 0, then trials 1-2 added with --resume (a fresh --trials 3 run
+# makes all three trials new, so its numbers will differ by the trial-to-trial noise described below)
+uv run --script evals/run.py --resume evals/results/trials.json
 uv run --script evals/run.py --variants rules --split all                # rule-based fallback, no model
 ```
 
@@ -121,8 +123,8 @@ than the model: v1 → v2 is worth +43 to +50 points, while the spread between m
 
 **Decision.** `fitdash insights` now uses Haiku by default (`coach.INSIGHTS_MODEL`). On this eval it
 matched the larger models' quality at a fraction of the cost. `"insights_model"` in `stats.json`
-switches it back (`"default"` uses the Claude CLI's own default model). The coach notes and the
-workout review aren't covered by this eval yet, so they keep the CLI default.
+switches it back (`"default"` uses the Claude CLI's own default model). The workout review has its
+own eval and default (below). The coach notes aren't evaluated yet, so they keep the CLI default.
 
 **Rule-based fallback.** When Claude isn't available, `fallback_insights` writes the insights from
 rules. The eval found it unsafe at first: it passed on the verdict's "go hard" at a load ratio of 1.68,
@@ -192,7 +194,7 @@ give (a PR day is "great"; a session below last time is "mixed" or "tough").
 - usefulness: a weight × reps target for every lift, tips with an amount or a time, praise when
   they made progress, and a nudge to log sets when none are logged.
 
-31 labelled tests (in `tests/test_workout_eval.py`) pin them.
+34 labelled tests (in `tests/test_workout_eval.py`) pin them.
 
 Grounding here is stricter than in the insights eval. That grader also counts every pairwise
 difference and percent change in the data as grounded. In a workout context that admits about 360
@@ -221,24 +223,42 @@ as baselines, and leave today's state out of the rating. The parser now also tak
 and repairs missing closing brackets, so a user still gets the review. `strict_json` still counts
 the slip.
 
-**Results** (3 trials per scenario, all checks passing):
+**Re-run after code review.** A review of the first version found a bug in the eval itself: the
+scenarios computed muscle freshness without the logged sets, so Claude was told chest was 100 %
+fresh the day after a push session. It also found holes in six graders: word limits looser than the
+prompt's, exercises not matched by name, a free pass for small weights ("5 kg"), "increase sets" and
+bare clock times ("heavy squats at 18:00") not caught, and "9 sets" accepted as a next-time target.
+I fixed all of these with labelled tests (34 now), froze the graders, and re-ran everything. The
+first run's numbers (wv2 holdout 83 / 92 / 100 %) are superseded. The review also suggested three
+prompt clarifications: a rating for sessions with nothing to compare, bodyweight lifts progressing
+by reps only, and target increments being allowed under the numbers rule. They went into a
+candidate, wv3 ([`prompts/wv3.txt`](../.claude/skills/stats/evals/prompts/wv3.txt)).
+
+**Results** (3 trials per scenario, share of replies passing all checks, lowest–highest trial in
+brackets):
 
 | Split | Prompt | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
 | --- | --- | --- | --- | --- |
-| dev (8 × 3) | wv1 | 71 % | 46 % | 46 % |
-| dev (8 × 3) | wv2 | 92 % | 96 % | 88 % |
-| **holdout (4 × 3)** | wv1 | 33 % | 17 % | 25 % |
-| **holdout (4 × 3)** | **wv2** | **83 %** | **92 %** | **100 %** |
+| dev (8 × 3) | wv1 | 25 % (0–38) | 17 % (12–25) | 0 % (0–0) |
+| dev (8 × 3) | wv2 | 79 % (75–88) | 83 % (75–88) | 88 % (75–100) |
+| dev (8 × 3) | wv3 | 83 % (62–100) | 92 % (88–100) | 79 % (75–88) |
+| **holdout (4 × 3)** | wv1 | 25 % (25–25) | 8 % (0–25) | 25 % (0–50) |
+| **holdout (4 × 3)** | **wv2** | 75 % (50–100) | 58 % (50–75) | **83 % (75–100)** |
+| **holdout (4 × 3)** | wv3 | 83 % (75–100) | 92 % (75–100) | 83 % (75–100) |
 
-With wv1, no holdout scenario passed in all three trials on any model. With wv2, Haiku passed all of
-them in every trial. Mean cost per call with wv2 was $0.056 on Opus, $0.023 on Sonnet and $0.003 on
-Haiku. So the review now uses wv2 on Haiku (`coach.WORKOUT_MODEL`); `"workout_model"` in
-`stats.json` overrides it.
+wv1 scores lower than in the first run because the tightened word limits now apply. The prompt
+rewrite is still the big effect: +54 to +88 points on dev (wv1 → wv2). wv2 and wv3 are within each model's own
+trial-to-trial noise on dev (one dev reply is 4 points), so the choice was made on dev and cost.
+Haiku with wv2 has the best Haiku dev score, and Haiku costs $0.003 a call against $0.050 for Opus
+and $0.019 for Sonnet. So the review keeps wv2 on Haiku (`coach.WORKOUT_MODEL`); `"workout_model"`
+in `stats.json` overrides it. wv3 on Sonnet scored highest overall (92 % on both splits), so it is the
+candidate if quality ever matters more than a 6× cost.
 
-**Safety.** Opus had 3 of its 36 wv2 replies flagged for added volume at caution or high load. All
-three say to hold volume this week and add sets next week: "Your load is in caution, so hold
-volume this week. Next week add 3 sets of lateral raises." That follows the prompt's "this week"
-rule. The frozen grader reads any added sets as a fail, so they count.
+**Safety.** 4 of the 216 wv2/wv3 replies were flagged for added volume at caution or high load. I
+read all four. Each holds volume this week and puts sets back next week ("Your load is in caution,
+so hold volume this week. Next week, add 2 lateral raise sets."), which the prompt allows. Three of
+the four were also caught by the new "raise sets" pattern matching the exercise name "lateral raise
+sets". So all four are grader false positives, left in the numbers because the graders were frozen.
 
 **What the eval changed in the product:**
 - **Bodyweight progress.** Lifts without a weight can now register progress: a pull-up PR is more

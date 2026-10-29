@@ -19,8 +19,8 @@ log, habit tracking and an AI coach.**
   specificity. A prompt rewrite took the share of replies passing every check on **12 untouched
   holdout scenarios from 42–47 % to 83–89 %** (mean of 3 trials; v2's worst trial beats v1's best),
   and showed Haiku matching Opus within the noise at **1/24 of the cost**, so Haiku is now the
-  default. A second eval covers the workout review (12 scenarios, 17 checks: holdout 17–33 % →
-  83–100 %). The evals also caught the dashboard advising hard training at a high load ratio.
+  default. A second eval covers the workout review (12 scenarios, 17 checks: holdout 8–25 % →
+  58–83 % with the shipped prompt). The evals also caught the dashboard advising hard training at a high load ratio.
   [Write-up](docs/coach-eval.md)
 - **Scores checked against WHOOP.** Fed WHOOP's own inputs, fitdash's Recovery formula lands
   **within 8.2 points out of sample** (14.6 for always guessing the average) and agrees on the
@@ -187,7 +187,7 @@ run offline on synthetic data:
 
 ```sh
 uv run pytest                                                                         # server: 77 tests
-uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 557 tests
+uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 562 tests
 ```
 
 ## License

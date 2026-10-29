@@ -910,8 +910,8 @@ def parse_workout(raw: str | None) -> dict | None:
             "summary": s(w.get("summary")), "exercises": exercises[:15], "tips": tips[:5]}
 
 
-# Chosen by the workout eval (docs/coach-eval.md): with prompt wv2, Haiku passed every check on all holdout
-# runs (Opus 83 %, Sonnet 92 %) at about 1/18 of Opus's cost. Override with "workout_model" in stats.json.
+# Chosen by the workout eval (docs/coach-eval.md): with prompt wv2, Haiku had the best dev score (88 %, holdout
+# 83 %) at about 1/17 of Opus's cost. Override with "workout_model" in stats.json.
 WORKOUT_MODEL = "haiku"
 
 
