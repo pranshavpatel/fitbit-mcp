@@ -2662,7 +2662,7 @@ def workout_insights(args, home: Path, width: int) -> int:
             return 0
         if sys.stderr.isatty():
             print("asking the coach to review your workout (about a minute)…", file=sys.stderr)
-        got = CO.generate_workout(ctx)
+        got = CO.generate_workout(ctx, model=cfg.get("workout_model") or CO.WORKOUT_MODEL)
         source = "claude" if got else "auto"
         wo = CO.latest_workout(m, lift_sets, m.get("date") or day.isoformat())
         if not got:

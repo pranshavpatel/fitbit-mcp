@@ -1,53 +1,48 @@
 {
- "headline": "Two PRs on rows and curls, plus a solid pull-up baseline to build on",
+ "headline": "Row and curl both set PRs, a great pull session.",
  "rating": "great",
- "summary": "Wednesday's pull day was 14 sets and 3036 kg, against 13 sets and 4682 kg last Thursday. The lower tonnage comes from swapping lat pulldown for bodyweight pull-ups, which log 0 kg. The standout is curls, with an estimated 1RM up 16.7 percent.",
+ "summary": "Row and curl both beat last time with no fewer sets, so this is a strong pull session. Pull-ups and hammer curls are new baselines at 8 and 12 reps. Sleep was short, so protect recovery tonight.",
  "exercises": [
   {
    "exercise": "row",
    "level": "good",
-   "note": "All 4 sets of 10 at 52.5kg, up from 50kg last time with no reps lost. Estimated 1RM went from 66.7kg to 70.0kg, a 4.9 percent PR.",
-   "next": "55kg x 10 for all 4 sets."
+   "note": "All four sets 52.5kg for 10 reps. Estimated 1RM up 4.9%, a new PR.",
+   "next": "55kg x 10 on all four sets."
   },
   {
    "exercise": "pull up",
    "level": "good",
-   "note": "First time logged: 4 sets of 8 at bodyweight, 32 reps in total, held steady across every set.",
-   "next": "4 x 8 at bodyweight is the baseline to beat. Aim for bodyweight x 9 on the first set."
+   "note": "First time logged: four sets of 8 bodyweight, 32 reps total. This is the baseline to beat.",
+   "next": "Bodyweight x 9 reps on every set."
   },
   {
    "exercise": "curl",
    "level": "good",
-   "note": "3 clean sets of 12 at 14kg, up from 12kg last time. Estimated 1RM rose from 16.8kg to 19.6kg, a 16.7 percent PR.",
-   "next": "16.5kg x 12 for all 3 sets."
+   "note": "All three sets at 14kg for 12 reps. Estimated 1RM up 16.7%, a PR.",
+   "next": "16.5kg x 12 on all three sets."
   },
   {
    "exercise": "hammer curl",
    "level": "good",
-   "note": "First time logged: 3 sets of 12 at 12kg with every rep completed. Estimated 1RM is 16.8kg.",
-   "next": "3 x 12 at 12kg is the baseline to beat. Try 14.5kg x 12 next time."
+   "note": "First time logged: three sets of 12kg for 12 reps, 36 total. Baseline to beat.",
+   "next": "12kg x 13 reps on all three sets."
   }
  ],
  "tips": [
   {
    "level": "watch",
-   "finding": "Lats are at 8 hard sets for the week, below the 10-20 range. Biceps sit at 10, the low edge. Lat pulldown and face pulls dropped out this session.",
-   "action": "Add 3 sets of lat pulldown on your next pull day to bring lats to about 11 weekly sets."
+   "finding": "Sleep was under six hours, far below your ten-hour need, and recovery is yellow.",
+   "action": "Be in bed by 22:30 tonight to bank about 9 hours."
   },
   {
-   "level": "good",
-   "finding": "Lats are 50 percent fresh and biceps 51 percent, so they are still recovering. Your next split is chest/tri, which leaves them alone.",
-   "action": "Run chest/tri next and give lats and biceps at least 48 hours before pulling again."
+   "level": "watch",
+   "finding": "Protein is at 40g today; your floor is 113g, so you're at the low edge.",
+   "action": "Eat at least 73g more protein today, spread across dinner and a snack."
   },
   {
-   "level": "flag",
-   "finding": "You slept 5h54 against a 10h10 need, and recovery is 58, in the yellow band. That will cap your next session.",
-   "action": "Get to bed at least 1 hour earlier tonight to aim for 7 hours or more of sleep."
-  },
-  {
-   "level": "flag",
-   "finding": "Protein is at 40g today against a 113-156g target, and your lean bulk pace is at the low edge. These PRs need building material.",
-   "action": "Eat at least 73g more protein today, for example 2 to 3 servings of about 30g each."
+   "level": "watch",
+   "finding": "Chest sits at 7 weekly sets, under the 10-set floor, with triceps close behind.",
+   "action": "Train chest and triceps Saturday for at least 10 sets across both muscles."
   }
  ]
 }

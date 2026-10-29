@@ -12,6 +12,8 @@ import re
 from typing import Any, Callable
 
 import checks as K
+import scenarios  # noqa: F401  (puts scripts/ on the path)
+import coach as CO  # noqa: E402
 
 RATINGS = ("great", "good", "mixed", "tough")
 LIMITS = {"headline": 16, "summary": 60, "note": 30, "next": 25, "finding": 30, "action": 25}
@@ -23,11 +25,19 @@ Check = Callable[[str, "dict | None", dict, Any], Result]
 
 
 def _raw(raw: str) -> dict:
-    try:
-        data = json.loads(raw[raw.find("{"):raw.rfind("}") + 1])
-    except ValueError:
+    """The reply's own object (flat or under "workout"), with missing closing brackets repaired the
+    way the product repairs them: broken JSON is strict_json's to judge, not every check's."""
+    body = raw[raw.find("{"):raw.rfind("}") + 1]
+    data = None
+    for cand in (body, CO._close_json(body)):
+        try:
+            data = json.loads(cand)
+            break
+        except ValueError:
+            continue
+    if not isinstance(data, dict):
         return {}
-    return (data.get("workout") if isinstance(data, dict) else None) or {}
+    return data["workout"] if isinstance(data.get("workout"), dict) else data
 
 
 def _texts(parsed: dict | None, fields: tuple[str, ...]) -> list[str]:
@@ -161,6 +171,11 @@ def workout_numbers(ctx: dict) -> set:
         ws = [float(w) for sl in (r.get("set_list") or [], last.get("set_list") or []) for st in sl
               for _, _, w, _ in SET.findall(st) if w]
         out.update(abs(a - b) for a in ws for b in ws)
+    tot = [r.get("total_reps") for r in _logged(ctx) if isinstance(r.get("total_reps"), int)]
+    out.add(float(sum(tot)))                                     # the session's total reps
+    for f in ctx.get("fitbit_sessions") or []:                   # minutes in adjacent HR zones ("zones 4 and 5")
+        zm = [v for _, v in sorted((f.get("zone_minutes") or {}).items()) if isinstance(v, (int, float))]
+        out.update(float(sum(zm[i:j])) for i in range(len(zm)) for j in range(i + 2, len(zm) + 1))
     prev = ctx.get("previous_same_kind") or {}
     for k in ("sets", "volume_kg"):
         _compare(ses.get(k), prev.get(k), out)
@@ -243,12 +258,28 @@ def no_hype(raw, parsed, ctx, sc) -> Result:
     """A session below last time isn't sold as a great one: no unnegated superlative in the headline,
     unless it's set against the rest ("Great bench, but the presses slipped")."""
     head = (parsed or {}).get("headline", "")
-    hit = K.recommends(head, HYPE)
+    hit = recommends(head, HYPE)
     ok = parsed is not None and not (hit and not re.search(r"\bbut\b|\bthough\b|\bwhile\b|\bdespite\b|\byet\b", head, re.I))
     return ok, "" if ok else "headline: " + head[:60]
 
 
 # ---------------------------------------------------------------- safety
+
+# "before running again", "wait until recovery is back before training heavy": postponed, not advised
+DEFER = K.NEGATORS | {"before", "wait", "delay", "later"}
+
+
+def recommends(text: str, pattern: re.Pattern) -> str | None:
+    """checks.recommends with deferral words added to its negators (the insights graders stay frozen)."""
+    for clause in K.CLAUSE.split(text):
+        for mt in pattern.finditer(clause):
+            before = re.findall(r"[a-z']+", clause[:mt.start()].lower())[-5:]
+            after = clause[mt.end():mt.end() + 24].lower()
+            if DEFER & set(before) or re.match(r"\s*(off|out of|-free)\b", after):
+                continue
+            return mt.group(0)
+    return None
+
 
 ADD_SETS = re.compile(K.ADD_LOAD.pattern + r"|\badd (?:\d+|one|two|three|a|an|another|extra|more)?\s?(?:more |extra )?"
                       r"(?:hard |working )?sets?\b|\bmore sets\b|\bextra (?:exercise|day)\b", re.I)
@@ -256,7 +287,7 @@ ADD_SETS = re.compile(K.ADD_LOAD.pattern + r"|\badd (?:\d+|one|two|three|a|an|an
 
 def _no(pattern: re.Pattern, fields: tuple[str, ...]) -> Check:
     def check(raw, parsed, ctx, sc) -> Result:
-        hits = [h for t in _texts(parsed, fields) for h in [K.recommends(t, pattern)] if h]
+        hits = [h for t in _texts(parsed, fields) for h in [recommends(t, pattern)] if h]
         return not hits, ", ".join(hits)
     return check
 
@@ -268,7 +299,7 @@ TODAY = re.compile(r"\btoday\b|\bnow\b|this (?:morning|afternoon|evening)|\btoni
 
 def no_hard_today(raw, parsed, ctx, sc) -> Result:
     """On a red day the tips don't send them to train hard *today* (next session's targets are fine)."""
-    hits = [h for t in _texts(parsed, ("action",)) if TODAY.search(t) for h in [K.recommends(t, K.HARD)] if h]
+    hits = [h for t in _texts(parsed, ("action",)) if TODAY.search(t) for h in [recommends(t, K.HARD)] if h]
     return not hits, ", ".join(hits)
 
 
@@ -295,9 +326,10 @@ PRAISE = re.compile(r"\bprs?\b|new best|personal best|\brecord\b|\bstronger\b|\b
 
 
 def praises_progress(raw, parsed, ctx, sc) -> Result:
-    """When they made progress, the headline says so (the motivating part)."""
+    """When they made progress, the headline says so (the motivating part). The rating is graded
+    separately, by rating_fits."""
     head = (parsed or {}).get("headline", "")
-    ok = bool(PRAISE.search(head)) and (parsed or {}).get("rating") in ("great", "good")
+    ok = bool(PRAISE.search(head))
     return ok, "" if ok else "headline: " + head[:60]
 
 

@@ -158,7 +158,7 @@ def test_insights_command_passes_the_configured_model(tmp_path, monkeypatch, cap
     assert dashboard.main(["insights", "--no-sync", "--no-color"]) == 0
     assert seen == ["sonnet"]
     assert dashboard.main(["insights", "--workout", "--no-sync", "--no-color"]) == 0
-    assert seen[1:] == [None]                                         # the workout review: the CLI's default
+    assert seen[1:] == [CO.WORKOUT_MODEL] == ["haiku"]                # the workout review: its own eval-chosen model
 
 
 def test_fallback_rates_a_clean_pr_day_great_and_ignores_unshared_lifts(tmp_path, monkeypatch):

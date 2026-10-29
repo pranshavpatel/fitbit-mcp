@@ -47,6 +47,7 @@ DEFAULT_CONFIG = {
     "experiment": None,            # {"name", "start", "nights", "lights_out"}
     "full_heart_rate": True,       # sync whole-day heart rate (yesterday + today, hourly) so Strain sees all of it
     "insights_model": None,        # Claude model for fitdash insights: None = coach.INSIGHTS_MODEL, "default" = the CLI's
+    "workout_model": None,         # Claude model for fitdash insights --workout: None = coach.WORKOUT_MODEL
 }
 
 TYPE_LABEL = {"STRENGTH_TRAINING": "Strength", "CARDIO_WORKOUT": "Cardio", "WALKING": "Walk", "RUNNING": "Run",

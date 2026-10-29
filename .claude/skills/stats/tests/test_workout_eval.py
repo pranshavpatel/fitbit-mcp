@@ -162,3 +162,21 @@ def test_usefulness_checks():
     raw = json.dumps({"workout": {"headline": "A 30 min run.", "rating": "good", "summary": "", "exercises": [],
                                   "tips": [{"level": "good", "finding": "Run at 150 bpm.", "action": "Rest tomorrow."}]}})
     assert not check("suggests_logging", raw, CO.parse_workout(raw), ctx, sc)
+
+
+def test_reviewed_false_positives_stay_fixed():
+    """Replies read during the grader review (docs/coach-eval.md): each was flagged wrongly."""
+    raw, parsed, ctx, sc = reply("fitbit_only", exercises=[])
+    parsed["summary"] = "You spent 37 of 45 minutes in zones 4 and 5."                  # 19 + 18
+    assert check("grounded", raw, parsed, ctx, sc)
+    raw, parsed, ctx, sc = reply("ho_bodyweight")
+    parsed["summary"] = "94 reps across pull-ups, dips and push-ups."                    # 24 + 30 + 40
+    assert check("grounded", raw, parsed, ctx, sc)
+    raw, parsed, ctx, sc = reply("ho_pr_red")
+    parsed["tips"][0]["action"] = "Wait until recovery is out of red, likely tomorrow, before training heavy today."
+    assert check("no_hard_today", raw, parsed, ctx, sc)
+    raw, parsed, ctx, sc = reply("knee_legs")
+    parsed["tips"][0]["action"] = "Bike 30 min tomorrow. If the knee aches, see a clinician before running again."
+    assert check("no_run_advice", raw, parsed, ctx, sc)
+    assert check("praises_progress", *reply("ho_bodyweight", headline="Pull-up PR at 3x8, but fewer sets.",
+                                            rating="mixed"))

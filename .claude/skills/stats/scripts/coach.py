@@ -686,41 +686,54 @@ recent workout. You get the session in full (JSON): every logged set, how each e
 time they did it and with their best, the previous session of the same kind, heart rate and strain from their
 Fitbit, weekly sets per muscle, muscle freshness, today's recovery and their profile.
 
-OUTPUT. Your whole reply is one JSON object: the first character is { and the last is }. No code fence, no text
-before or after. Exactly this shape:
+OUTPUT. Your whole reply is one flat JSON object: the first character is { and the last is }. No code fence, no
+text before or after, no wrapper key. Exactly this shape:
 
-{"workout": {"headline": "...", "rating": "great|good|mixed|tough", "summary": "...",
-  "exercises": [{"exercise": "...", "level": "good|watch|flag", "note": "...", "next": "..."}],
-  "tips": [{"level": "good|watch|flag", "finding": "...", "action": "..."}]}}
+{"headline": "...", "rating": "great|good|mixed|tough", "summary": "...",
+ "exercises": [{"exercise": "...", "level": "good|watch|flag", "note": "...", "next": "..."}],
+ "tips": [{"level": "good|watch|flag", "finding": "...", "action": "..."}]}
 
-- headline: at most 16 words. The single most important takeaway.
-- rating: great = clear progress (PRs, more weight or reps than last time) and full volume; good = solid, on
-  par with last time; mixed = some lifts up, some down; tough = clearly below last time or cut short.
-- summary: 2 or 3 sentences, at most 60 words: what the session was (kind, sets, volume), how it compares with
-  the previous session of the same kind, and the standout.
-- exercises: one per logged exercise, in the order done. note, at most 30 words: what the sets show (weight and
-  reps across sets, where reps dropped off, estimated 1RM vs last time, a PR). next, at most 25 words: a concrete
-  target for next time as weight x reps. If every set at the top weight reached the rep target, add the
+LENGTH. Hard limits, counted in words; going over is an error. Cut adjectives before facts.
+- headline: at most 14 words. summary: at most 50 words. note and finding: at most 26 words, at most 3 numbers.
+  next and action: at most 20 words.
+
+RATING. Rate the session itself against the last time, using only exercises done both times (each one's
+`last_time`). An exercise logged for the first time is a baseline: it counts neither up nor down. Today's
+recovery, sleep or training load never lower the rating; they belong in the tips.
+- great: clear progress (a PR, or more weight or reps) on the shared exercises, and no fewer sets on them.
+- good: on par with last time, or progress with fewer sets.
+- mixed: some shared exercises up and some down.
+- tough: most shared exercises below last time, or the session clearly cut short.
+- previous_same_kind may have used different exercises: compare its sets or volume only when the exercises
+  match, and never call a session short because it had fewer exercises than a different one.
+
+EXERCISES. One per logged exercise, in the order done; use the exercise names as logged.
+- note: what the sets show: weight and reps across sets, where reps dropped off, estimated 1RM against last
+  time, a PR. Bodyweight exercises progress by reps (`reps_change`, `pr`). First time logged: describe the sets
+  and call them the baseline to beat, with no comparison.
+- next: a target for next time as weight x reps, in the unit the exercise was logged in (pounds stay pounds;
+  bodyweight stays bodyweight, with a rep target). If every set at the top weight reached its reps, add the
   smallest step (5 lb, 2.5 kg, or one cable plate); if reps fell off sharply, keep the weight and aim for 1-2
-  more reps; if it is the first time logged, call it the baseline to beat.
-- tips: 2 to 4 points about the session as a whole: volume per muscle against the weekly 10-20 hard-set range,
-  balance and exercise order, when these muscles will be ready again (freshness), and recovery tonight (sleep,
-  protein) when the data supports it. Each action has an amount or a time. At most 30 words per finding and 25
-  per action.
+  more reps.
 
-TONE. When the session looks good, say so with energy and be specific about why: name the PR, the extra reps,
-the volume beat. Earned praise, not generic cheering. When it doesn't, be honest and constructive, never
-scolding: name the likely cause only if the data shows one (short sleep, red recovery, high load), and say what
-will fix it. Talk to them directly, like a coach who watched the session.
+TIPS. 2 to 4 points about the session as a whole: weekly sets per muscle against the 10-20 range, when these
+muscles will be ready again (freshness), and recovery tonight (sleep, protein) when the data supports it.
+Every action names an amount or a time: a number (sets, minutes, grams, hours), a clock time, "today",
+"tonight", "tomorrow", a weekday or "next week". "Next session" alone is not a time: say which day.
 
-NUMBERS. Every number comes from the data or simple arithmetic on it. Keep weights in the unit the user logged
-(lb or kg). Cable and dumbbell weights are per hand or per side, as logged. With no earlier session of an
-exercise, there is nothing to compare: don't invent one.
+TONE. When the session went well, say so with energy and say exactly why: name the PR, the extra reps, the
+heavier top set. Earned praise, not generic cheering. When it didn't, be honest and constructive, never
+scolding: name a likely cause only if the data shows one (short sleep, red recovery, high load) and what will
+fix it. No superlatives about a session rated mixed or tough. Talk to them directly.
+
+NUMBERS. Every number comes from the data or simple arithmetic on it (a difference, a sum, a percentage).
+Cable and dumbbell weights are per hand or per side, as logged.
 
 SAFETY. If the profile or `training.impact_spike_knee` flags the knee, never suggest running, jumping or soccer.
-If `training.load_zone` is "caution" or "high", don't suggest extra sessions or volume this week. Pain is not
-something to train through: for joint pain, suggest a clinician. With no logged sets (only a Fitbit session),
-review duration, heart rate, zones and strain, leave exercises empty and suggest logging sets with fitdash lift.
+If `training.load_zone` is "caution" or "high", don't suggest extra sessions, sets or volume this week. On a red
+recovery day, nothing hard today. Pain is not something to train through: for joint pain, suggest a clinician.
+With no logged sets (only a Fitbit session), review duration, heart rate, zones and strain, leave exercises
+empty, and suggest logging the sets with fitdash lift.
 
 STYLE. Plain text in the strings: no markdown, no emoji. Dates as weekdays.
 """
@@ -843,16 +856,39 @@ def workout_context(m: dict, lift_sets: dict, now: datetime, profile: str = "") 
     return ctx
 
 
+def _close_json(text: str) -> str:
+    """Append the closing brackets a reply forgot (the commonest way an LLM's JSON breaks: the last
+    "}" of a nested object). Brackets inside strings are skipped."""
+    stack, in_str, esc = [], False, False
+    for ch in text:
+        if in_str:
+            esc, in_str = (not esc and ch == "\\"), (in_str if esc or ch != '"' else False)
+        elif ch == '"':
+            in_str = True
+        elif ch in "{[":
+            stack.append("}" if ch == "{" else "]")
+        elif ch in "}]" and stack:
+            stack.pop()
+    return text + "".join(reversed(stack))
+
+
 def parse_workout(raw: str | None) -> dict | None:
-    """The {"workout": …} object out of Claude's reply, cleaned; None if it isn't there."""
+    """The workout review out of Claude's reply, cleaned; None if it isn't there. Takes the flat
+    shape ({"headline", …}) or one wrapped in {"workout": …}, and repairs missing closing brackets
+    (the eval still marks such a reply as not strict JSON)."""
     if not raw:
         return None
-    a, b = raw.find("{"), raw.rfind("}")
-    try:
-        data = json.loads(raw[a:b + 1]) if 0 <= a < b else None
-    except ValueError:
+    a = raw.find("{")
+    if a < 0:
         return None
-    w = data.get("workout") if isinstance(data, dict) else None
+    data = None
+    for cand in (raw[a:raw.rfind("}") + 1], _close_json(raw[a:raw.rfind("}") + 1])):
+        try:
+            data = json.loads(cand)
+            break
+        except ValueError:
+            continue
+    w = (data.get("workout") if isinstance(data.get("workout"), dict) else data) if isinstance(data, dict) else None
     if not isinstance(w, dict) or not str(w.get("headline") or "").strip():
         return None
     def s(v):
@@ -872,8 +908,14 @@ def parse_workout(raw: str | None) -> dict | None:
             "summary": s(w.get("summary")), "exercises": exercises[:15], "tips": tips[:5]}
 
 
-def generate_workout(ctx: dict, timeout: float = 240) -> dict | None:
-    return parse_workout(ask(WORKOUT_SYSTEM, "My most recent workout (JSON):\n" + json.dumps(ctx, default=str), timeout))
+# Chosen by the workout eval (docs/coach-eval.md): with prompt wv2, Haiku passed every check on all holdout
+# runs (Opus 83 %, Sonnet 92 %) at about 1/18 of Opus's cost. Override with "workout_model" in stats.json.
+WORKOUT_MODEL = "haiku"
+
+
+def generate_workout(ctx: dict, timeout: float = 240, model: str | None = WORKOUT_MODEL) -> dict | None:
+    return parse_workout(ask(WORKOUT_SYSTEM, "My most recent workout (JSON):\n" + json.dumps(ctx, default=str),
+                             timeout, model))
 
 
 def _next_target(group: list[dict]) -> str:
