@@ -17,15 +17,17 @@ log, habit tracking and an AI coach.**
 - **An LLM coach with its own eval.** 42 synthetic scenarios (red recovery, high training load, a
   flagged knee, missing sleep…) and 17 deterministic checks for format, grounding, safety and
   specificity. A prompt rewrite took the share of replies passing every check on **12 untouched
-  holdout scenarios from 33–50 % to 92 %**, and showed Haiku matching Opus at **1/24 of the cost**,
-  so Haiku is now the default. The eval also caught the dashboard advising hard training at a high
-  load ratio. [Write-up](docs/coach-eval.md)
+  holdout scenarios from 42–47 % to 83–89 %** (mean of 3 trials; v2's worst trial beats v1's best),
+  and showed Haiku matching Opus within the noise at **1/24 of the cost**, so Haiku is now the
+  default. A second eval covers the workout review (12 scenarios, 17 checks: holdout 17–33 % →
+  83–100 %). The evals also caught the dashboard advising hard training at a high load ratio.
+  [Write-up](docs/coach-eval.md)
 - **Scores checked against WHOOP.** Fed WHOOP's own inputs, fitdash's Recovery formula lands
   **within 8.2 points out of sample** (14.6 for always guessing the average) and agrees on the
   green / yellow / red band 73 % of the time. [Method and limits](docs/validation.md)
 - **Read-only and local by design.** OAuth with `.readonly` scopes only, GET-only remote calls,
   every SQL statement parameterized, secrets redacted from logs, all data in `~/.fitbit-mcp`.
-  500+ tests on synthetic fixtures, with CI on macOS and Ubuntu.
+  600+ tests on synthetic fixtures, with CI on macOS and Ubuntu plus ruff and mypy.
 
 ```mermaid
 flowchart LR
@@ -149,8 +151,9 @@ time and ranks days with r 0.94. A small sample, so read it as a sanity check. M
 high training load, a flagged knee, missing sleep, weight off pace…) through each prompt version
 and model, and grades every reply with 17 deterministic checks for format, grounding in the data,
 safety and specificity. Rewriting the prompt against 30 dev scenarios raised the share of replies
-passing every check on 12 untouched holdout scenarios from 33–50 % to 92 % on Opus, Sonnet and
-Haiku alike. Haiku does it at about 1/24 of Opus's cost. Details: [docs/coach-eval.md](docs/coach-eval.md).
+passing every check on 12 untouched holdout scenarios from 42–47 % to 83–89 % (mean of 3 trials)
+on Opus, Sonnet and Haiku alike. Haiku does it at about 1/24 of Opus's cost. A second eval does the
+same for the workout review. Details: [docs/coach-eval.md](docs/coach-eval.md).
 
 ## Design principles
 
@@ -184,7 +187,7 @@ run offline on synthetic data:
 
 ```sh
 uv run pytest                                                                         # server: 77 tests
-uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 525 tests
+uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 557 tests
 ```
 
 ## License

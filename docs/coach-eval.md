@@ -58,13 +58,14 @@ I found was fixed and covered by a labelled test, and saved replies were regrade
 The graders were then frozen. The results below come from that frozen version.
 
 **Run.** Prompts v1 (as shipped) and v2, on Opus 5.5, Sonnet 5.5 and Haiku 5.5, one trial per
-scenario: 252 calls through the Claude CLI in print mode with no tools, the same way the dashboard
+scenario first (below), then three (see "Three trials per scenario"): 252 calls per trial through the Claude CLI in print mode with no tools, the same way the dashboard
 calls it. The CLI's JSON output gives the cost and the model actually used.
 
 ```text
 cd .claude/skills/stats
 uv run --script evals/run.py --variants v1,v2 --models default,sonnet,haiku --split all --out evals/results/final.json
 uv run --script evals/run.py --report evals/results/final.json --md      # re-print
+uv run --script evals/run.py --variants v1,v2 --models default,sonnet,haiku --split all --trials 3 --out evals/results/trials.json
 uv run --script evals/run.py --variants rules --split all                # rule-based fallback, no model
 ```
 
@@ -128,6 +129,39 @@ rules. The eval found it unsafe at first: it passed on the verdict's "go hard" a
 and it often returned too few items.
 After the rewrite it passes every check on 90 % of dev and 83 % of holdout scenarios, with 0 unsafe
 replies. Its remaining misses are actions without a time.
+
+### Three trials per scenario
+
+A single trial can't separate a real gap from luck, so I re-ran the whole grid twice more (504 more
+calls, 0 errors). Trial 0 is the run above, copied from `final.json` after checking by hash that
+every scenario's input was identical; trials 1 and 2 are new.
+
+| Split | Prompt | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
+| --- | --- | --- | --- | --- |
+| dev (30) | v1 | 54 % (47–63) | 63 % (60–67) | 59 % (43–70) |
+| dev (30) | v2 | 90 % (87–93) | 88 % (83–93) | 94 % (90–97) |
+| **holdout (12)** | v1 | 47 % (42–50) | 47 % (42–50) | 42 % (33–50) |
+| **holdout (12)** | **v2** | **89 % (83–92)** | **83 % (75–92)** | **86 % (83–92)** |
+| all (42) | v1 → v2 | 52 → 90 % | 59 → 87 % | 54 → 92 % |
+
+Mean share of replies passing every check, with the lowest and highest of the three trials in
+brackets. What this shows:
+
+- **The prompt gap is real.** On every model and split, v2's worst trial beats v1's best.
+- **The model gap isn't.** Under v2 the three models sit within 5 points on all 42 scenarios, well
+  inside one model's own trial-to-trial range (up to 17 points on the 12 holdout scenarios). The
+  single-trial "92 / 92 / 92 %" holdout tie was partly luck; none of the three is clearly ahead.
+- **Consistency.** Under v2, 67–76 % of scenarios passed in all three trials (v1: 12–24 %), and only
+  one scenario (Sonnet) failed in all three. Most v2 misses are one-off: a word limit or a number the
+  grounding check couldn't trace.
+- **Safety.** 7 of 378 v2 runs failed a safety check (v1: 9 of 378). I read the 4 new ones; all were
+  negations the regexes miss: "add **no** extra snacks", "swapping any extra snack **for** lean
+  protein", "**Run nothing** next week", "**skip** intervals, heavy lifting and runs". So across the
+  three trials, 6 of the 7 v2 flags are grader errors and the seventh is the borderline protein
+  action above.
+
+Haiku stays the default: it is as good as the larger models within the noise, at about 1/24 of
+Opus's cost.
 
 ## Product bugs the eval found
 
@@ -222,8 +256,11 @@ rule. The frozen grader reads any added sets as a fail, so they count.
 
 ## Limits
 
-- **One trial per scenario.** Differences of one or two replies (about 3–8 points) are noise; the
-  v1 → v2 gap of 40+ points is not.
+- **Three trials is still few.** It separates the 30–40 point prompt gap from noise, but not the
+  few-point gaps between models: one model's own trials vary by up to 17 points on the holdout.
+- **Grounding is permissive.** The insights `grounded` check accepts any number that is in the
+  context, any difference or percent change between numbers listed together there, and any count up
+  to 10, so with a large context an invented number can match by chance. The workout grader is stricter (leaf values and targeted comparisons only).
 - **Synthetic scenarios from one fixture.** They cover the risky states I could name. They don't
   sample real users' days.
 - **Regex graders.** They are tested, but they check patterns, not meaning: a reply can pass every
