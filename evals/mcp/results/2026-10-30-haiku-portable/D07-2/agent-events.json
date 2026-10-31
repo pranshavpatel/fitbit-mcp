@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01LkZSZ9mCmyrXueP2ehVVPF",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_018q4485BuEHtdwZTR9BcTQn",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_8a9968f13630"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01S2fasJHrhrVtXo4JmJtgAw",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_8a9968f13630"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The most recent cancelled Google import (job `job_8a9968f13630`) has been resumed and finished successfully.\n\n- **Result:** All 18 planned requests succeeded. The 4 requests completed before the cancellation were kept, so the job did not start over.\n- **Records:** 3 new activity records were inserted. Nothing was updated, unchanged, restored, or marked deleted upstream.\n- **Scope:** The job covered activity data for October 1\u20133, 2026, with unverified types included and no intraday or full heart-rate data.\n\nNote that only 3 new records came in for a three-day window. If you expected more, that may just reflect what Google returned for those dates."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The most recent cancelled Google import (job `job_8a9968f13630`) has been resumed and finished successfully.\n\n- **Result:** All 18 planned requests succeeded. The 4 requests completed before the cancellation were kept, so the job did not start over.\n- **Records:** 3 new activity records were inserted. Nothing was updated, unchanged, restored, or marked deleted upstream.\n- **Scope:** The job covered activity data for October 1\u20133, 2026, with unverified types included and no intraday or full heart-rate data.\n\nNote that only 3 new records came in for a three-day window. If you expected more, that may just reflect what Google returned for those dates.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 462,
+        "cacheReadInputTokens": 27339,
+        "cacheCreationInputTokens": 2299,
+        "webSearchRequests": 0,
+        "costUSD": 0.00096499,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 66,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2299,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00096499,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2299,
+      "cache_read_input_tokens": 27339,
+      "output_tokens": 462,
+      "output_tokens_details": {
+        "thinking_tokens": 66
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2299,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 217,
+          "cache_read_input_tokens": 7660,
+          "cache_creation_input_tokens": 566,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 566
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

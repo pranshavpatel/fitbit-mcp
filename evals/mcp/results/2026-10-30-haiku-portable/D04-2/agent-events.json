@@ -1,0 +1,189 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HSbdq17itC4YhyzKXP5JNV",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google is connected and the remote check passed. Starting the import for activity and sleep, October 1\u20133, 2026."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019Bu9YNG3rFUAf7azezGsLb",
+        "name": "mcp__fitbit_eval__start_import",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity",
+            "sleep"
+          ],
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01FAoCE5FjBUJ2K92uJF5K32",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_54bfdfa47955"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013nxcw4K9Cr7KHkjduQgcPd",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Google import for October 1\u20133, 2026 finished as **partial**. Activity imported, but sleep did not.\n\n**What came in**\n- **Activity (steps):** 3 daily step records, one for each day from Oct 1 to Oct 3. These are the only activity records stored locally.\n\n**What's missing**\n- **Sleep: nothing imported.** Google returned HTTP 403 PERMISSION_DENIED for the sleep request. The connection status lists sleep as granted, so the token and the granted scope don't match what the API accepted. Retrying the import won't fix a permission error, so I didn't retry.\n- **Other activity types returned no data for these dates:** active energy, active minutes, active zone minutes, activity level, altitude, basal energy, heart-rate-zone calories, distance, floors, sedentary periods, swim lengths, time in heart-rate zones, and total calories. The API answered each request successfully but had no records, so these may be genuinely empty for these days or not tracked on this account. They are not zero.\n\n**Next steps**\n- To fix sleep, re-authorize with `ghealth auth login`. The connection notes say the Google consent screen is in Testing mode, so tokens expire after 7 days. Once you've logged in, I can re-import sleep for these dates.\n- If you want to check distance or calories specifically, confirm whether your device or app was recording those on these days."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Google import for October 1\u20133, 2026 finished as **partial**. Activity imported, but sleep did not.\n\n**What came in**\n- **Activity (steps):** 3 daily step records, one for each day from Oct 1 to Oct 3. These are the only activity records stored locally.\n\n**What's missing**\n- **Sleep: nothing imported.** Google returned HTTP 403 PERMISSION_DENIED for the sleep request. The connection status lists sleep as granted, so the token and the granted scope don't match what the API accepted. Retrying the import won't fix a permission error, so I didn't retry.\n- **Other activity types returned no data for these dates:** active energy, active minutes, active zone minutes, activity level, altitude, basal energy, heart-rate-zone calories, distance, floors, sedentary periods, swim lengths, time in heart-rate zones, and total calories. The API answered each request successfully but had no records, so these may be genuinely empty for these days or not tracked on this account. They are not zero.\n\n**Next steps**\n- To fix sleep, re-authorize with `ghealth auth login`. The connection notes say the Google consent screen is in Testing mode, so tokens expire after 7 days. Once you've logged in, I can re-import sleep for these dates.\n- If you want to check distance or calories specifically, confirm whether your device or app was recording those on these days.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1190,
+        "cacheReadInputTokens": 35988,
+        "cacheCreationInputTokens": 3908,
+        "webSearchRequests": 0,
+        "costUSD": 0.00173748,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 357,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3908,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00173748,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 3908,
+      "cache_read_input_tokens": 35988,
+      "output_tokens": 1190,
+      "output_tokens_details": {
+        "thinking_tokens": 357
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3908,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 666,
+          "cache_read_input_tokens": 8363,
+          "cache_creation_input_tokens": 1481,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1481
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

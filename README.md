@@ -155,6 +155,12 @@ passing every check on 12 untouched holdout scenarios from 42–47 % to 83–89 
 on Opus, Sonnet and Haiku alike. Haiku does it at about 1/24 of Opus's cost. A second eval does the
 same for the workout review. Details: [docs/coach-eval.md](docs/coach-eval.md).
 
+**Does that evaluate MCP tool use?** No. The server has automated integration tests,
+but the coach eval starts from prepared stats. A dedicated agent eval for tool selection,
+arguments, job completion, pagination and faithful answers is
+[implemented here](docs/mcp-tool-use-eval.md), with a synthetic baseline and
+[results and limits](docs/mcp-tool-use-results.md). This is separate from official MCP conformance.
+
 ## Design principles
 
 - **Local first.** Data lives in `~/.fitbit-mcp`. The server only ever makes read-only (GET and

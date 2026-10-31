@@ -1,0 +1,587 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "summarize_data"
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "2,?000"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "google"
+    },
+    "answer_fact_3": {
+      "pass": true,
+      "detail": "fitbit"
+    },
+    "answer_fact_4": {
+      "pass": true,
+      "detail": "not .*add|not .*combin|one provider|select|exclud|double"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D15",
+  "split": "dev",
+  "trial": 0,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "configured",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0018372500000000001,
+  "latency_s": 13.24,
+  "error": null,
+  "answers": [
+    "## Steps, October 1\u20133, 2026\n\n**Recommended total: 6,000 steps** across three days, using Google as the single source.\n\n| Date | Google | Fitbit (legacy) | Value used |\n|---|---|---|---|\n| Oct 1 | 1,000 | 9,000 | 1,000 (Google) |\n| Oct 2 | 2,000 | no record | 2,000 |\n| Oct 3 | 3,000 | no record | 3,000 |\n| **Total** | **6,000** | 9,000 (1 day only) | **6,000** |\n\n## Provider selection\n\nBoth providers have locally stored step records, but they overlap only on Oct 1:\n\n- **Google** covers all three days.\n- **Fitbit (legacy)** has only Oct 1.\n\nI used one provider for the whole range rather than mixing sources. Google is the better choice because it covers every day and is the provider the app is moving toward. The Fitbit legacy Web API is scheduled to be turned off, so its data may not be updated going forward.\n\n## Avoiding double-counting\n\nAdding both providers' values would give 15,000 steps, which counts Oct 1 twice (9,000 + 1,000 on that day). Each day should come from one source only.\n\n## Caveats\n\n- **Oct 1 disagrees by a lot.** Fitbit shows 9,000 and Google shows 1,000. The local data doesn't show which is correct. If the 9,000 figure is right, the three-day total would be 14,000 instead of 6,000. You could check the Oct 1 figure against the device or app that recorded it.\n- **Neither account is currently connected.** These values come from earlier imports stored locally. I didn't check whether the connections still work.\n- **Records are tagged `eval-synthetic`.** Their parser label suggests they may be test or synthetic data rather than real readings. Please confirm they match your actual activity before relying on them.\n- **Missing days are not zero.** The Fitbit data has no record for Oct 2 or 3, so those days are unknown for that provider, not zero steps."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"fitbit\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-01\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "fitbit",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-01",
+              "days_with_data": 1
+            },
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0013,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 9000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "connection_status",
+      "arguments": {
+        "check_remote": false
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": false,\n      \"client_secret_path\": \"$TRIAL/ghealth/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    },\n    {\n      \"provider\": \"fitbit\",\n      \"configured\": false,\n      \"api_available\": true,\n      \"availability\": \"Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (23 day(s) left). Use an existing working Fitbit developer app only.\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"No verified API connection.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": false,
+              "client_secret_path": "$TRIAL/ghealth/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            },
+            {
+              "provider": "fitbit",
+              "configured": false,
+              "api_available": true,
+              "availability": "Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (23 day(s) left). Use an existing working Fitbit developer app only.",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "No verified API connection."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0038,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 9000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "query_data",
+      "arguments": {
+        "category": "activity",
+        "metric": "steps",
+        "provider": "fitbit",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-03"
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"count\": 1,\n  \"total_matching\": 1,\n  \"records\": [\n    {\n      \"id\": 4,\n      \"provider\": \"fitbit\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-01\",\n      \"time_basis\": \"date_only\",\n      \"value\": 9000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:17Z\",\n      \"updated_at\": \"2026-10-30T17:12:17Z\",\n      \"parser\": \"eval-synthetic\"\n    }\n  ],\n  \"notes\": [\n    \"local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.\",\n    \"Records marked deleted_upstream are hidden unless include_deleted=true.\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "count": 1,
+          "total_matching": 1,
+          "records": [
+            {
+              "id": 4,
+              "provider": "fitbit",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-01",
+              "time_basis": "date_only",
+              "value": 9000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:17Z",
+              "updated_at": "2026-10-30T17:12:17Z",
+              "parser": "eval-synthetic"
+            }
+          ],
+          "notes": [
+            "local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.",
+            "Records marked deleted_upstream are hidden unless include_deleted=true."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0033,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 9000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "query_data",
+      "arguments": {
+        "category": "activity",
+        "metric": "steps",
+        "provider": "google",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-03"
+      },
+      "user_turn": 1,
+      "index": 4,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"count\": 3,\n  \"total_matching\": 3,\n  \"records\": [\n    {\n      \"id\": 1,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-01\",\n      \"time_basis\": \"date_only\",\n      \"value\": 1000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:17Z\",\n      \"updated_at\": \"2026-10-30T17:12:17Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 2,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-02\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:17Z\",\n      \"updated_at\": \"2026-10-30T17:12:17Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 3,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-03\",\n      \"time_basis\": \"date_only\",\n      \"value\": 3000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:17Z\",\n      \"updated_at\": \"2026-10-30T17:12:17Z\",\n      \"parser\": \"eval-synthetic\"\n    }\n  ],\n  \"notes\": [\n    \"local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.\",\n    \"Records marked deleted_upstream are hidden unless include_deleted=true.\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "count": 3,
+          "total_matching": 3,
+          "records": [
+            {
+              "id": 1,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-01",
+              "time_basis": "date_only",
+              "value": 1000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:17Z",
+              "updated_at": "2026-10-30T17:12:17Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 2,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-02",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:17Z",
+              "updated_at": "2026-10-30T17:12:17Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 3,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-03",
+              "time_basis": "date_only",
+              "value": 3000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:17Z",
+              "updated_at": "2026-10-30T17:12:17Z",
+              "parser": "eval-synthetic"
+            }
+          ],
+          "notes": [
+            "local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.",
+            "Records marked deleted_upstream are hidden unless include_deleted=true."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0028,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 9000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 9000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 9000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 4,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

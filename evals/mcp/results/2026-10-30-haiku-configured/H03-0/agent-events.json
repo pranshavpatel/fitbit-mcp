@@ -1,0 +1,186 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JZFQ4dDyamAJbzFwz2RjxZ",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01J49tnquSGz5AMfgAVFx1ne",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "activity",
+          "metric": "steps",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "order": "asc"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01DpZiukJbi2FMjRScHjtUPu",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "activity",
+          "metric": "steps",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "order": "asc",
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjoyLCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01K5LJSKWv6ZoeW6twYnqnFi",
+        "name": "mcp__fitbit_eval__export_data",
+        "input": {
+          "provider": "google",
+          "category": "activity",
+          "metric": "steps",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "format": "csv"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google daily steps for October 1\u20133, 2026:\n\n| Date | Steps |\n|---|---|\n| 2026-10-01 | 1,000 |\n| 2026-10-02 | 2,000 |\n| 2026-10-03 | 3,000 |\n\nI fetched these in two requests (2 records, then 1), as you asked. The Fitbit record for October 1 was left out.\n\nThe CSV export has the 3 Google records and is saved locally at:\n`/private/tmp/fitbit-mcp-eval-ccr5gqkr/home/exports/fitbit-google-activity-steps-20261030-131349.csv`\n\nThe file is readable only by you and was not uploaded anywhere.\n\nThese values are from the local database. The records are marked as synthetic test data (\"parser\": \"eval-synthetic\"), so they may not reflect your real activity."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Google daily steps for October 1\u20133, 2026:\n\n| Date | Steps |\n|---|---|\n| 2026-10-01 | 1,000 |\n| 2026-10-02 | 2,000 |\n| 2026-10-03 | 3,000 |\n\nI fetched these in two requests (2 records, then 1), as you asked. The Fitbit record for October 1 was left out.\n\nThe CSV export has the 3 Google records and is saved locally at:\n`/private/tmp/fitbit-mcp-eval-ccr5gqkr/home/exports/fitbit-google-activity-steps-20261030-131349.csv`\n\nThe file is readable only by you and was not uploaded anywhere.\n\nThese values are from the local database. The records are marked as synthetic test data (\"parser\": \"eval-synthetic\"), so they may not reflect your real activity.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1246,
+        "cacheReadInputTokens": 38914,
+        "cacheCreationInputTokens": 3373,
+        "webSearchRequests": 0,
+        "costUSD": 0.0016877400000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 193,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3373,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0016877400000000003,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 3373,
+      "cache_read_input_tokens": 38914,
+      "output_tokens": 1246,
+      "output_tokens_details": {
+        "thinking_tokens": 193
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3373,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 274,
+          "cache_read_input_tokens": 9164,
+          "cache_creation_input_tokens": 378,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 378
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

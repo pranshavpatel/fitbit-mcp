@@ -1,0 +1,161 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01WUwLjbRt411L3bAeTJBhFp",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JKCWwV2KFNs1SXMTLq89Br",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014WAtmy2QgckToza6X74cjQ",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google sleep data for October 1\u20137, 2026 is almost entirely missing, so I can't give you a real weekly summary yet.\n\n**Connection:** Google isn't connected. The app has no verified Google account and no Google sleep history imported. Only two sleep records exist locally for this period.\n\n**Week of Oct 1\u20137 (one week, so there's only one bucket):**\n\n- **Nights:** One sleep session, from 11:00 PM on Oct 1 to 7:00 AM on Oct 2, totaling 420 minutes (7 hours asleep).\n- **Naps:** One short nap on Oct 2, from 2:00 PM to 2:40 PM, with 35 minutes asleep.\n- **Coverage:** Only 1 of 7 days (Oct 2) has any sleep records. Oct 1 and Oct 3\u20137 have no sleep data. That is missing data, not zero sleep.\n- **Detail:** The records only include total minutes asleep. There are no sleep stages, scores, or heart-rate or HRV data for these nights.\n\n**Caveat on the records:** Both records are tagged with the parser `eval-synthetic`, which suggests they may be test or placeholder data rather than a sync of your real Google Health account. Please check this before relying on the 7-hour figure.\n\n**Next steps (your call):**\n1. Connect your Google account. This opens a browser sign-in, and I'll need your go-ahead to start it. Alternatively, run `ghealth auth login` in a terminal and I'll pick up those credentials.\n2. Once connected, I can sync and re-run this summary.\n3. If you have a Google Takeout export containing sleep data, I can import that instead.\n\nThis is general information from your data, not medical advice. If your sleep is a concern, please talk to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google sleep data for October 1\u20137, 2026 is almost entirely missing, so I can't give you a real weekly summary yet.\n\n**Connection:** Google isn't connected. The app has no verified Google account and no Google sleep history imported. Only two sleep records exist locally for this period.\n\n**Week of Oct 1\u20137 (one week, so there's only one bucket):**\n\n- **Nights:** One sleep session, from 11:00 PM on Oct 1 to 7:00 AM on Oct 2, totaling 420 minutes (7 hours asleep).\n- **Naps:** One short nap on Oct 2, from 2:00 PM to 2:40 PM, with 35 minutes asleep.\n- **Coverage:** Only 1 of 7 days (Oct 2) has any sleep records. Oct 1 and Oct 3\u20137 have no sleep data. That is missing data, not zero sleep.\n- **Detail:** The records only include total minutes asleep. There are no sleep stages, scores, or heart-rate or HRV data for these nights.\n\n**Caveat on the records:** Both records are tagged with the parser `eval-synthetic`, which suggests they may be test or placeholder data rather than a sync of your real Google Health account. Please check this before relying on the 7-hour figure.\n\n**Next steps (your call):**\n1. Connect your Google account. This opens a browser sign-in, and I'll need your go-ahead to start it. Alternatively, run `ghealth auth login` in a terminal and I'll pick up those credentials.\n2. Once connected, I can sync and re-run this summary.\n3. If you have a Google Takeout export containing sleep data, I can import that instead.\n\nThis is general information from your data, not medical advice. If your sleep is a concern, please talk to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1426,
+        "cacheReadInputTokens": 19910,
+        "cacheCreationInputTokens": 2776,
+        "webSearchRequests": 0,
+        "costUSD": 0.0014679,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 576,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2776,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0014679,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2776,
+      "cache_read_input_tokens": 19910,
+      "output_tokens": 1426,
+      "output_tokens_details": {
+        "thinking_tokens": 576
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2776,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 972,
+          "cache_read_input_tokens": 7662,
+          "cache_creation_input_tokens": 761,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 761
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

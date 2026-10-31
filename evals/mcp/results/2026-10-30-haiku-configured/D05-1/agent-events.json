@@ -1,0 +1,169 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01DuY9sT9q7mdbHnqWGrsxSg",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google is connected and the remote check passed. Starting the sync for activity with a two-day overlap."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_017PfTfeKW6YShVftvo8iG3k",
+        "name": "mcp__fitbit_eval__sync_data",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity"
+          ],
+          "overlap_days": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CV4d5zVZu9H9kx1uAF9U74",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_92d702680242"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Google activity sync finished successfully.\n\n- **Job:** `job_92d702680242`, status succeeded. All 10 planned requests returned OK.\n- **Overlap:** 2 days, as you asked.\n- **Window:** 2026-10-01 to 2026-10-07 (America/New_York day boundaries).\n- **Records:** 0 inserted, 3 updated, 0 unchanged, 0 restored, 0 marked deleted upstream.\n- **Connection:** Google is connected, and a read-only check of the account identity succeeded.\n\nTwo things to note:\n\n- The window ends on 2026-10-07, but the job was run on 2026-10-30 according to its timestamps. If today is actually the 30th, the sync did not cover 10-08 through 10-30. I can rerun it with a later end date if you tell me which is correct.\n- The consent screen is in Google's Testing mode, so refresh tokens expire after 7 days. If syncs start failing with auth errors, run `ghealth auth login` to renew them.\n\nI synced only the activity category. Sleep, heart, and the other categories were not included."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Google activity sync finished successfully.\n\n- **Job:** `job_92d702680242`, status succeeded. All 10 planned requests returned OK.\n- **Overlap:** 2 days, as you asked.\n- **Window:** 2026-10-01 to 2026-10-07 (America/New_York day boundaries).\n- **Records:** 0 inserted, 3 updated, 0 unchanged, 0 restored, 0 marked deleted upstream.\n- **Connection:** Google is connected, and a read-only check of the account identity succeeded.\n\nTwo things to note:\n\n- The window ends on 2026-10-07, but the job was run on 2026-10-30 according to its timestamps. If today is actually the 30th, the sync did not cover 10-08 through 10-30. I can rerun it with a later end date if you tell me which is correct.\n- The consent screen is in Google's Testing mode, so refresh tokens expire after 7 days. If syncs start failing with auth errors, run `ghealth auth login` to renew them.\n\nI synced only the activity category. Sleep, heart, and the other categories were not included.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 905,
+        "cacheReadInputTokens": 29452,
+        "cacheCreationInputTokens": 2244,
+        "webSearchRequests": 0,
+        "costUSD": 0.0011966200000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 245,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2244,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0011966200000000002,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2244,
+      "cache_read_input_tokens": 29452,
+      "output_tokens": 905,
+      "output_tokens_details": {
+        "thinking_tokens": 245
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2244,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 545,
+          "cache_read_input_tokens": 8135,
+          "cache_creation_input_tokens": 551,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 551
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,181 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_018Lk3oxWfToN3HrMDjBjmcq",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01KNcPAPF9pizLMYCZSmq8uE",
+        "name": "mcp__fitbit_eval__start_import",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity",
+            "sleep"
+          ],
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "include_unverified_types": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01En75DCwU4zecw6mc6CicfJ",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_f6a18d871da5"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TH5XBRnzfHVAgcP8hjytNK",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I couldn't get your sleep for October 1\u20133, so I can't give you an average. The sleep data was blocked by a permissions error, not by zero sleep.\n\n**What happened**\n- The Google import for activity and sleep, October 1\u20133, finished as **partial**. 14 of 15 requests succeeded, and one failed.\n- The failed request was **sleep**, with `HTTP 403: PERMISSION_DENIED`. A 403 means Google refused access to that data, so the import never received any sleep records.\n- Activity imported only steps: 3 daily records, one each for October 1, 2, and 3. The other activity requests (calories, distance, active minutes, and so on) returned successfully but empty.\n- Nothing about sleep was stored locally, so there is no sleep average to report. Zero sleep would show up as a recorded night with a value of 0, and that didn't happen.\n\n**Why this is odd:** `connection_status` lists `sleep` as a granted permission, and the token is active. The 403 suggests the stored token doesn't actually carry sleep access, or the grant was revoked on Google's side.\n\n**What you can do:** Re-authorize with `ghealth auth login` so the sleep scope is granted again, then tell me and I'll re-run the import for October 1\u20133. Since the consent screen is in Testing mode, tokens expire after 7 days, so an expired token can cause the same kind of failure."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I couldn't get your sleep for October 1\u20133, so I can't give you an average. The sleep data was blocked by a permissions error, not by zero sleep.\n\n**What happened**\n- The Google import for activity and sleep, October 1\u20133, finished as **partial**. 14 of 15 requests succeeded, and one failed.\n- The failed request was **sleep**, with `HTTP 403: PERMISSION_DENIED`. A 403 means Google refused access to that data, so the import never received any sleep records.\n- Activity imported only steps: 3 daily records, one each for October 1, 2, and 3. The other activity requests (calories, distance, active minutes, and so on) returned successfully but empty.\n- Nothing about sleep was stored locally, so there is no sleep average to report. Zero sleep would show up as a recorded night with a value of 0, and that didn't happen.\n\n**Why this is odd:** `connection_status` lists `sleep` as a granted permission, and the token is active. The 403 suggests the stored token doesn't actually carry sleep access, or the grant was revoked on Google's side.\n\n**What you can do:** Re-authorize with `ghealth auth login` so the sleep scope is granted again, then tell me and I'll re-run the import for October 1\u20133. Since the consent screen is in Testing mode, tokens expire after 7 days, so an expired token can cause the same kind of failure.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1146,
+        "cacheReadInputTokens": 38276,
+        "cacheCreationInputTokens": 3911,
+        "webSearchRequests": 0,
+        "costUSD": 0.0017389600000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 318,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3911,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0017389600000000001,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 3911,
+      "cache_read_input_tokens": 38276,
+      "output_tokens": 1146,
+      "output_tokens_details": {
+        "thinking_tokens": 318
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3911,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 654,
+          "cache_read_input_tokens": 8872,
+          "cache_creation_input_tokens": 1208,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1208
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

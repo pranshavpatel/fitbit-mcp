@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019mdeBsPyyxPNSdoxRMr7R3",
+        "name": "mcp__fitbit_eval__import_takeout",
+        "input": {
+          "path": "/private/tmp/fitbit-mcp-eval-wra51nuw/takeout-synthetic.zip"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01UCmGE3XWfXqVdXznejXwGz",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_dad0c1bade5b"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Acq9h7j1fYM6NK1LA2Habj",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Takeout import finished successfully, but it only added a small amount of data, and it did not connect your API account.\n\n**Completion:** The job succeeded. It processed 9 files and inserted 11 records. Three files were skipped because they aren't in a format the tool reads:\n- An HTML file\n- A sleep CSV (`sleep_log_entry_id, timestamp, overall_score`)\n- A JSON file with an unrecognized structure (top-level key `unknownThing`)\n\nAlso, a symbolic link in the archive was not extracted.\n\n**Coverage (local data only):**\n\n| Source | Metric | Dates |\n|---|---|---|\n| Fitbit Takeout | Steps (2 records) | Oct 1, 2026 |\n| Fitbit Takeout | Weight (unit unknown, so excluded from summaries) | Oct 1, 2026 |\n| Fitbit Takeout | BMI | Oct 1, 2026 |\n| Fitbit Takeout | Heart rate (1 sample) | Oct 1, 2026 |\n| Fitbit Takeout | Resting heart rate | Oct 1, 2026 |\n| Fitbit Takeout | Sleep: minutes asleep, minutes awake, time in bed, efficiency | Oct 2, 2026 (one session) |\n| Google Takeout | Steps (1 record) | Oct 3, 2026 |\n\nEvery other category has no local records. The data covers only October 1\u20133, 2026, so it is too thin for trends or summaries.\n\n**Warning:** The resting heart rate file lists one day without an estimate, which was treated as missing. Missing days are not zeros.\n\n**API connection:** No. Importing a Takeout archive only adds local records. It doesn't connect or verify your Fitbit or Google API account. To pull live data, you'd need to connect an account separately, and I can do that if you want."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Takeout import finished successfully, but it only added a small amount of data, and it did not connect your API account.\n\n**Completion:** The job succeeded. It processed 9 files and inserted 11 records. Three files were skipped because they aren't in a format the tool reads:\n- An HTML file\n- A sleep CSV (`sleep_log_entry_id, timestamp, overall_score`)\n- A JSON file with an unrecognized structure (top-level key `unknownThing`)\n\nAlso, a symbolic link in the archive was not extracted.\n\n**Coverage (local data only):**\n\n| Source | Metric | Dates |\n|---|---|---|\n| Fitbit Takeout | Steps (2 records) | Oct 1, 2026 |\n| Fitbit Takeout | Weight (unit unknown, so excluded from summaries) | Oct 1, 2026 |\n| Fitbit Takeout | BMI | Oct 1, 2026 |\n| Fitbit Takeout | Heart rate (1 sample) | Oct 1, 2026 |\n| Fitbit Takeout | Resting heart rate | Oct 1, 2026 |\n| Fitbit Takeout | Sleep: minutes asleep, minutes awake, time in bed, efficiency | Oct 2, 2026 (one session) |\n| Google Takeout | Steps (1 record) | Oct 3, 2026 |\n\nEvery other category has no local records. The data covers only October 1\u20133, 2026, so it is too thin for trends or summaries.\n\n**Warning:** The resting heart rate file lists one day without an estimate, which was treated as missing. Missing days are not zeros.\n\n**API connection:** No. Importing a Takeout archive only adds local records. It doesn't connect or verify your Fitbit or Google API account. To pull live data, you'd need to connect an account separately, and I can do that if you want.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1153,
+        "cacheReadInputTokens": 26959,
+        "cacheCreationInputTokens": 3564,
+        "webSearchRequests": 0,
+        "costUSD": 0.0015596900000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 328,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3564,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0015596900000000003,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 3564,
+      "cache_read_input_tokens": 26959,
+      "output_tokens": 1153,
+      "output_tokens_details": {
+        "thinking_tokens": 328
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3564,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 874,
+          "cache_read_input_tokens": 7647,
+          "cache_creation_input_tokens": 1564,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1564
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

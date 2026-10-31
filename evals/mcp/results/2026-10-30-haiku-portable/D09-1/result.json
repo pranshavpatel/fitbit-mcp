@@ -1,0 +1,256 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "steps"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "denied|permission"
+    },
+    "answer_fact_3": {
+      "pass": true,
+      "detail": "unsupported|unparsed"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D09",
+  "split": "dev",
+  "trial": 1,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0008913899999999999,
+  "latency_s": 7.59,
+  "error": null,
+  "answers": [
+    "**Metrics you have locally:** Only one metric has records.\n\n- **Steps** (Google provider, daily): unit is count. There are 3 records covering 2026-10-01 to 2026-10-03, with no deleted records.\n\n**Denied:**\n- **Google sleep:** Access was denied. The record says \"Synthetic permissions denied,\" last updated 2026-10-30 at 17:11 UTC. Sleep data can't be imported until access is granted.\n\n**Unsupported or unparsed:**\n- **Google body (weight):** One file or request couldn't be read because of an \"unknown weight format.\" The raw response is kept on disk.\n\n**No local records (reason not recorded):**\n- **Fitbit:** activity, body, cardio fitness, ECG, exercise, heart, IRN, nutrition, sleep, and SpO2/breathing/temperature. No denial or failure is logged for these. They may not have been imported yet, may not be granted, or may be empty.\n- **Google:** blood glucose, body, cardio fitness, ECG, exercise, heart, IRN, nutrition, reproductive health, sleep, SpO2/breathing/temperature, and symptoms/mood. Same caveat applies, except sleep, which is denied.\n\n**Limitations:**\n- Only 3 days of steps are stored, so this is a very small dataset. Missing days aren't zero.\n- No sync has run yet, so there is no sync history.\n- The tool's date header is inconsistent: the system context says 2026-10-07, but the session note says 2026-10-30. The denial timestamp is 2026-10-30. I used the record dates as given.\n\nIf you want more data, check the connection with `connection_status`, then run `start_import` to pull history for the categories that aren't denied. You may need to re-grant sleep access first."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    }\n  ],\n  \"missing_denied_or_failed\": [\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"sleep\",\n      \"category\": \"sleep\",\n      \"status\": \"denied\",\n      \"reason\": \"Synthetic permissions denied\",\n      \"updated_at\": \"2026-10-30T17:11:11Z\"\n    }\n  ],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [\n    {\n      \"provider\": \"google\",\n      \"category_hint\": \"body\",\n      \"reason\": \"Synthetic unknown weight format\",\n      \"files_or_requests\": 1,\n      \"occurrences\": 1\n    }\n  ],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            }
+          ],
+          "missing_denied_or_failed": [
+            {
+              "provider": "google",
+              "request_group": "sleep",
+              "category": "sleep",
+              "status": "denied",
+              "reason": "Synthetic permissions denied",
+              "updated_at": "2026-10-30T17:11:11Z"
+            }
+          ],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [
+            {
+              "provider": "google",
+              "category_hint": "body",
+              "reason": "Synthetic unknown weight format",
+              "files_or_requests": 1,
+              "occurrences": 1
+            }
+          ],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0008,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 1,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

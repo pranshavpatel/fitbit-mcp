@@ -1,0 +1,148 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RstWLFHNxUFoLaMF5AWSPb",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01N5RvdvJYEwYKkAXg5RRvAp",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01J2QXXD4mWdEEWeHpHU7mrx",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_ad98d31ddc0f"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes, verification finished successfully. Your Google account is now connected using the existing ghealth CLI credentials, and a read-only API request (`users.getIdentity`) confirmed the connection works.\n\n**Permissions granted (all read-only):**\n- Activity and fitness\n- ECG\n- Health metrics and measurements\n- IRN\n- Location\n- Logged symptoms\n- Mindfulness\n- Nutrition\n- Profile\n- Reproductive health\n- Settings\n- Sleep\n\nNo permissions were denied.\n\n**Limitations:**\n- The Google consent screen is in Testing mode, so refresh tokens expire after 7 days. When that happens, run `ghealth auth login` and the server will pick up the new credentials.\n- No data has been imported yet. I can start an import or a sync if you want your history loaded locally."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Yes, verification finished successfully. Your Google account is now connected using the existing ghealth CLI credentials, and a read-only API request (`users.getIdentity`) confirmed the connection works.\n\n**Permissions granted (all read-only):**\n- Activity and fitness\n- ECG\n- Health metrics and measurements\n- IRN\n- Location\n- Logged symptoms\n- Mindfulness\n- Nutrition\n- Profile\n- Reproductive health\n- Settings\n- Sleep\n\nNo permissions were denied.\n\n**Limitations:**\n- The Google consent screen is in Testing mode, so refresh tokens expire after 7 days. When that happens, run `ghealth auth login` and the server will pick up the new credentials.\n- No data has been imported yet. I can start an import or a sync if you want your history loaded locally.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 488,
+        "cacheReadInputTokens": 19942,
+        "cacheCreationInputTokens": 2239,
+        "webSearchRequests": 0,
+        "costUSD": 0.00089182,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2239,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00089182,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2239,
+      "cache_read_input_tokens": 19942,
+      "output_tokens": 488,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2239,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 270,
+          "cache_read_input_tokens": 7408,
+          "cache_creation_input_tokens": 765,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 765
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

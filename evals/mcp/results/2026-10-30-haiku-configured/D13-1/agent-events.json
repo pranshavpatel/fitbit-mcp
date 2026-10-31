@@ -1,0 +1,162 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013VXqP749jHTx9K3ocAvGmw",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01VfMaJpoJJxor7GLfcrbjDq",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TV3LUEsVNV3eYhMtjgrywQ",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Short answer:** Your local data has only one night of Google sleep for October 1\u20137, 2026, and no week has meaningful coverage. Your Google account also isn't connected right now, so I can't check whether more data exists online.\n\n**Week of Sep 28 \u2013 Oct 4 (only Oct 1\u20134 requested)**\n- **Nights:** 1 night recorded, Oct 1 23:00 to Oct 2 07:00. Minutes asleep: 420 (7 h 00 min).\n- **Naps:** 1 daytime session on Oct 2, 14:00\u201314:40, 35 minutes asleep. The record doesn't carry a \"nap\" label, so I'm inferring that from the daytime timing.\n- **Coverage:** Oct 1 and Oct 3\u20134 have no sleep records. Those are missing data, not zero hours.\n\n**Week of Oct 5 \u2013 Oct 11 (only Oct 5\u20137 requested)**\n- **Nights:** No records.\n- **Naps:** No records.\n- **Coverage:** Nothing for Oct 5\u20137.\n\n**Caveats**\n- **Connection:** `connection_status` shows no verified Google connection (no token, and no ghealth CLI credentials found). Records could be stale or incomplete, and I can't confirm whether Oct 3\u20137 sleep exists on Google's side.\n- **Data source:** The two records are labeled with the parser `eval-synthetic`, which suggests they may be test or sample data rather than your real Google export. Please check this before relying on the numbers.\n- **Metrics:** Only total minutes asleep is stored. There are no sleep stages, efficiency scores, or heart-rate values for these sessions.\n- **Timestamps:** Local timezone is America/New_York. The records have no UTC offset, so the times above are as recorded.\n- **Dates:** The system context gives today as Oct 7, 2026, but the environment gives Oct 30, 2026. This doesn't change the query results, since the range is fixed.\n\n**Next steps (your choice)**\n1. I can start a Google connection with `connect_account`. That opens a sign-in step that needs your approval.\n2. Once connected, I can run a sync or import for sleep and then redo this weekly summary.\n3. If you have a Google Takeout export, I can import that instead."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Short answer:** Your local data has only one night of Google sleep for October 1\u20137, 2026, and no week has meaningful coverage. Your Google account also isn't connected right now, so I can't check whether more data exists online.\n\n**Week of Sep 28 \u2013 Oct 4 (only Oct 1\u20134 requested)**\n- **Nights:** 1 night recorded, Oct 1 23:00 to Oct 2 07:00. Minutes asleep: 420 (7 h 00 min).\n- **Naps:** 1 daytime session on Oct 2, 14:00\u201314:40, 35 minutes asleep. The record doesn't carry a \"nap\" label, so I'm inferring that from the daytime timing.\n- **Coverage:** Oct 1 and Oct 3\u20134 have no sleep records. Those are missing data, not zero hours.\n\n**Week of Oct 5 \u2013 Oct 11 (only Oct 5\u20137 requested)**\n- **Nights:** No records.\n- **Naps:** No records.\n- **Coverage:** Nothing for Oct 5\u20137.\n\n**Caveats**\n- **Connection:** `connection_status` shows no verified Google connection (no token, and no ghealth CLI credentials found). Records could be stale or incomplete, and I can't confirm whether Oct 3\u20137 sleep exists on Google's side.\n- **Data source:** The two records are labeled with the parser `eval-synthetic`, which suggests they may be test or sample data rather than your real Google export. Please check this before relying on the numbers.\n- **Metrics:** Only total minutes asleep is stored. There are no sleep stages, efficiency scores, or heart-rate values for these sessions.\n- **Timestamps:** Local timezone is America/New_York. The records have no UTC offset, so the times above are as recorded.\n- **Dates:** The system context gives today as Oct 7, 2026, but the environment gives Oct 30, 2026. This doesn't change the query results, since the range is fixed.\n\n**Next steps (your choice)**\n1. I can start a Google connection with `connect_account`. That opens a sign-in step that needs your approval.\n2. Once connected, I can run a sync or import for sleep and then redo this weekly summary.\n3. If you have a Google Takeout export, I can import that instead.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1755,
+        "cacheReadInputTokens": 21741,
+        "cacheCreationInputTokens": 2425,
+        "webSearchRequests": 0,
+        "costUSD": 0.0015805099999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 713,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2425,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0015805099999999998,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2425,
+      "cache_read_input_tokens": 21741,
+      "output_tokens": 1755,
+      "output_tokens_details": {
+        "thinking_tokens": 713
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2425,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1357,
+          "cache_read_input_tokens": 8168,
+          "cache_creation_input_tokens": 711,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 711
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

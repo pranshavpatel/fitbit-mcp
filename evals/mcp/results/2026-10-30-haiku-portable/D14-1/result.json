@@ -1,0 +1,444 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "summarize_data"
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": false,
+      "detail": "3,?000"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "no.wear|not worn|excluded"
+    },
+    "answer_fact_3": {
+      "pass": true,
+      "detail": "2|two"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D14",
+  "split": "dev",
+  "trial": 1,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0010683000000000001,
+  "latency_s": 9.74,
+  "error": null,
+  "answers": [
+    "**Short answer:** Counting all three days as recorded, your average was **2,000 steps/day**. But two of those three days are recorded as 0 with a flag that says zero may mean \"no data,\" so the more likely picture is that you only have a reliable count for October 3, which was **6,000 steps**.\n\n| Date | Steps | Quality flag |\n|---|---|---|\n| Oct 1, 2026 | 0 | Zero may mean no data |\n| Oct 2, 2026 | 0 | Zero may mean no data |\n| Oct 3, 2026 | 6,000 | None |\n\n**How missing or no-wear days affect the average:**\n\n- **Counted as zero:** The average is the total divided by every day in the range, so 6,000 \u00f7 3 = 2,000. This understates your typical activity if the zeros mean the tracker wasn't worn.\n- **Excluded as missing:** The average is taken only over days with real data, so 6,000 \u00f7 1 = 6,000. This is based on a single day, so it's a weak estimate of your typical steps.\n- **Neither number is a reliable weekly average.** A 3-day window with two unverified days can't show your normal pattern. Also, a day that really had few steps (say, a rest day) looks the same as a no-wear day in this data, so I can't tell them apart from the record alone.\n\nIf you were wearing the tracker on October 1 and 2, the data may not have synced yet. I can run a sync for the Fitbit account and then recheck these days."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"fitbit\",\n      \"category\": \"activity\",\n      \"metric\": \"sedentary_minutes\",\n      \"granularity\": \"daily\",\n      \"unit\": \"min\",\n      \"records\": 2,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-02\",\n      \"days_with_data\": 2\n    },\n    {\n      \"provider\": \"fitbit\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"activity\",\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "fitbit",
+              "category": "activity",
+              "metric": "sedentary_minutes",
+              "granularity": "daily",
+              "unit": "min",
+              "records": 2,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-02",
+              "days_with_data": 2
+            },
+            {
+              "provider": "fitbit",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "activity",
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.001,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit",
+            "metric": "sedentary_minutes",
+            "local_date": "2026-10-01",
+            "value": 1440.0,
+            "unit": "min",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "sedentary_minutes",
+            "local_date": "2026-10-02",
+            "value": 900.0,
+            "unit": "min",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 0.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 0.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 6000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "query_data",
+      "arguments": {
+        "metric": "steps",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-03",
+        "granularity": "daily",
+        "limit": 100
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"count\": 3,\n  \"total_matching\": 3,\n  \"records\": [\n    {\n      \"id\": 1,\n      \"provider\": \"fitbit\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-01\",\n      \"time_basis\": \"date_only\",\n      \"value\": 0.0,\n      \"unit\": \"count\",\n      \"quality\": [\n        \"zero_may_mean_no_data\"\n      ],\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:45Z\",\n      \"updated_at\": \"2026-10-30T17:11:45Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 3,\n      \"provider\": \"fitbit\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-02\",\n      \"time_basis\": \"date_only\",\n      \"value\": 0.0,\n      \"unit\": \"count\",\n      \"quality\": [\n        \"zero_may_mean_no_data\"\n      ],\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:45Z\",\n      \"updated_at\": \"2026-10-30T17:11:45Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 5,\n      \"provider\": \"fitbit\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-03\",\n      \"time_basis\": \"date_only\",\n      \"value\": 6000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:45Z\",\n      \"updated_at\": \"2026-10-30T17:11:45Z\",\n      \"parser\": \"eval-synthetic\"\n    }\n  ],\n  \"notes\": [\n    \"local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.\",\n    \"Records marked deleted_upstream are hidden unless include_deleted=true.\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "count": 3,
+          "total_matching": 3,
+          "records": [
+            {
+              "id": 1,
+              "provider": "fitbit",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-01",
+              "time_basis": "date_only",
+              "value": 0.0,
+              "unit": "count",
+              "quality": [
+                "zero_may_mean_no_data"
+              ],
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:45Z",
+              "updated_at": "2026-10-30T17:11:45Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 3,
+              "provider": "fitbit",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-02",
+              "time_basis": "date_only",
+              "value": 0.0,
+              "unit": "count",
+              "quality": [
+                "zero_may_mean_no_data"
+              ],
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:45Z",
+              "updated_at": "2026-10-30T17:11:45Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 5,
+              "provider": "fitbit",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-03",
+              "time_basis": "date_only",
+              "value": 6000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:45Z",
+              "updated_at": "2026-10-30T17:11:45Z",
+              "parser": "eval-synthetic"
+            }
+          ],
+          "notes": [
+            "local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.",
+            "Records marked deleted_upstream are hidden unless include_deleted=true."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0011,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit",
+            "metric": "sedentary_minutes",
+            "local_date": "2026-10-01",
+            "value": 1440.0,
+            "unit": "min",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "sedentary_minutes",
+            "local_date": "2026-10-02",
+            "value": 900.0,
+            "unit": "min",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 0.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 0.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 6000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-01",
+        "value": 1440.0,
+        "unit": "min",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-02",
+        "value": 900.0,
+        "unit": "min",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 6000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-01",
+        "value": 1440.0,
+        "unit": "min",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-02",
+        "value": 900.0,
+        "unit": "min",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 6000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 2,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

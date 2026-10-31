@@ -1,0 +1,187 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Lkn8WbaSJ79UhpKDGm1p2h",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google has 3 local step records covering Oct 1\u20133. I'll query them two at a time, as you asked."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CDfyJwTEG5YBmWNE5LHdWA",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Qw2x8BZPWM9JHZJnM9mu9A",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjoyLCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CrKHrxKgmZ9o5VZg182QsW",
+        "name": "mcp__fitbit_eval__export_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "format": "csv"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google daily steps for October 1\u20133, 2026:\n\n| Date | Steps |\n|---|---|\n| 2026-10-01 | 1,000 |\n| 2026-10-02 | 2,000 |\n| 2026-10-03 | 3,000 |\n\nI pulled these in two requests (2 records, then 1), and all three records are active.\n\nThe CSV export has all 3 Google records and is saved at:\n`/private/tmp/fitbit-mcp-eval-mkq4m2n1/home/exports/fitbit-google-steps-20261030-131356.csv`\n\nThe export includes only Google data. I didn't add the Fitbit copy. The local database also has a Fitbit steps record for 2026-10-01, which I left out as you asked.\n\nThese values are from local synthetic test data, so treat them as sample values rather than your actual step counts."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Google daily steps for October 1\u20133, 2026:\n\n| Date | Steps |\n|---|---|\n| 2026-10-01 | 1,000 |\n| 2026-10-02 | 2,000 |\n| 2026-10-03 | 3,000 |\n\nI pulled these in two requests (2 records, then 1), and all three records are active.\n\nThe CSV export has all 3 Google records and is saved at:\n`/private/tmp/fitbit-mcp-eval-mkq4m2n1/home/exports/fitbit-google-steps-20261030-131356.csv`\n\nThe export includes only Google data. I didn't add the Fitbit copy. The local database also has a Fitbit steps record for 2026-10-01, which I left out as you asked.\n\nThese values are from local synthetic test data, so treat them as sample values rather than your actual step counts.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1069,
+        "cacheReadInputTokens": 38966,
+        "cacheCreationInputTokens": 2875,
+        "webSearchRequests": 0,
+        "costUSD": 0.00150016,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 164,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2875,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00150016,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 2875,
+      "cache_read_input_tokens": 38966,
+      "output_tokens": 1069,
+      "output_tokens_details": {
+        "thinking_tokens": 164
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2875,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 273,
+          "cache_read_input_tokens": 9019,
+          "cache_creation_input_tokens": 325,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 325
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

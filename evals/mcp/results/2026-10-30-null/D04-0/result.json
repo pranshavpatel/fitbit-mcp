@@ -1,0 +1,80 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "start_import, job_status, list_data_types"
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": false,
+      "detail": "partial|denied|permission"
+    },
+    "answer_fact_2": {
+      "pass": false,
+      "detail": "sleep"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "terminal_job_observed": {
+      "pass": false,
+      "detail": ""
+    },
+    "expected_job_outcome": {
+      "pass": false,
+      "detail": "[]"
+    },
+    "actual_activity_rows": {
+      "pass": false,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D04",
+  "split": "dev",
+  "trial": 0,
+  "mode": "null",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [],
+  "cost_usd": 0,
+  "latency_s": 1.29,
+  "error": null,
+  "answers": [
+    "I cannot verify this without using tools."
+  ],
+  "trace": [],
+  "initial": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": true
+  },
+  "final": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": true
+  },
+  "tool_calls": 0,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [],
+  "discovered_schema_sha256": null
+}

@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01QeW6jmjRX2ywh2Nfce7Zky",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01GirG8JeQDCei3o6JRME8M4",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CXFBJB4GwRbudRHQTbxUdv",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "heart",
+          "metric": "heart_rate",
+          "provider": "google",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Short answer: no.** Your local Google data for October 2, 2026 has only 3 heart rate readings, and they cover a short exercise window, not your whole day.\n\n**What's there:**\n- 10:00:00, 10:01:00, and 10:02:00 local time\n- Values: 100, 101, and 102 bpm\n- Average: 101 bpm, range 100\u2013102 bpm\n\n**The sampling limitation:**\n- Google's export for this day is labeled \"exercise windows only.\" The provider sent heart rate only during an activity period, so the readings describe that stretch of about three minutes.\n- Resting, sleeping, and other daytime heart rate are not in the data. Silence in those hours doesn't mean your heart rate was zero or unrecorded; it means it wasn't exported.\n- Three readings are too few to describe even the exercise window well. They can't show peak or lowest heart rate for the session.\n- A whole-day summary would need all-day heart rate data. Google offers this as a separate option (\"full heart rate,\" roughly 37 MB per day). I haven't pulled it because you didn't ask for a new import.\n\n**Other notes:**\n- These records are from an earlier local import. The Google API connection isn't currently verified, so I couldn't check whether newer data exists. Running a sync or re-import would require a live connection.\n- This is information about your data, not medical advice. If you have concerns about your heart rate, talk to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Short answer: no.** Your local Google data for October 2, 2026 has only 3 heart rate readings, and they cover a short exercise window, not your whole day.\n\n**What's there:**\n- 10:00:00, 10:01:00, and 10:02:00 local time\n- Values: 100, 101, and 102 bpm\n- Average: 101 bpm, range 100\u2013102 bpm\n\n**The sampling limitation:**\n- Google's export for this day is labeled \"exercise windows only.\" The provider sent heart rate only during an activity period, so the readings describe that stretch of about three minutes.\n- Resting, sleeping, and other daytime heart rate are not in the data. Silence in those hours doesn't mean your heart rate was zero or unrecorded; it means it wasn't exported.\n- Three readings are too few to describe even the exercise window well. They can't show peak or lowest heart rate for the session.\n- A whole-day summary would need all-day heart rate data. Google offers this as a separate option (\"full heart rate,\" roughly 37 MB per day). I haven't pulled it because you didn't ask for a new import.\n\n**Other notes:**\n- These records are from an earlier local import. The Google API connection isn't currently verified, so I couldn't check whether newer data exists. Running a sync or re-import would require a live connection.\n- This is information about your data, not medical advice. If you have concerns about your heart rate, talk to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 930,
+        "cacheReadInputTokens": 20172,
+        "cacheCreationInputTokens": 2520,
+        "webSearchRequests": 0,
+        "costUSD": 0.00117132,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 203,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2520,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00117132,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2520,
+      "cache_read_input_tokens": 20172,
+      "output_tokens": 930,
+      "output_tokens_details": {
+        "thinking_tokens": 203
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2520,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 668,
+          "cache_read_input_tokens": 7631,
+          "cache_creation_input_tokens": 826,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 826
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

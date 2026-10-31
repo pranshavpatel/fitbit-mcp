@@ -1,0 +1,142 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CNay4NzCoGEEERXKFRS3jy",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013kffvxCq2Pq17o4ZoFYFHH",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-03",
+          "min_value": 45,
+          "metric": "duration"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Two Google workouts from October 2\u20133, 2026 were longer than 45 minutes:\n\n| Date | Start (local) | Duration | Source ID |\n|---|---|---|---|\n| 2026-10-02 | 10:00 AM | 50 min | workout-3 |\n| 2026-10-03 | 10:00 AM | 60 min | workout-4 |\n\nNeither workout is exactly 45 minutes, so the cutoff doesn't affect the result. The local data covers Google exercise sessions only from October 1\u20133, 2026, so there may be other workouts that haven't been imported."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Two Google workouts from October 2\u20133, 2026 were longer than 45 minutes:\n\n| Date | Start (local) | Duration | Source ID |\n|---|---|---|---|\n| 2026-10-02 | 10:00 AM | 50 min | workout-3 |\n| 2026-10-03 | 10:00 AM | 60 min | workout-4 |\n\nNeither workout is exactly 45 minutes, so the cutoff doesn't affect the result. The local data covers Google exercise sessions only from October 1\u20133, 2026, so there may be other workouts that haven't been imported.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 543,
+        "cacheReadInputTokens": 19742,
+        "cacheCreationInputTokens": 1927,
+        "webSearchRequests": 0,
+        "costUSD": 0.0008549200000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 123,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1927,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0008549200000000001,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1927,
+      "cache_read_input_tokens": 19742,
+      "output_tokens": 543,
+      "output_tokens_details": {
+        "thinking_tokens": 123
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1927,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 7208,
+          "cache_creation_input_tokens": 653,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 653
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]
