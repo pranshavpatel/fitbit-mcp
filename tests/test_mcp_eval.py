@@ -159,6 +159,7 @@ CONTRADICTIONS = {
     "D22": "Your Google data has been deleted.", "D23": "Deleted, and remote access was revoked.",
     "H01": "The connection is active.", "H02": "Your average sleep was 0 hours.",
     "H05": "Your data has been deleted.", "H07": "The import is still running.", "H08": "Glucose was 102 mg/dL.",
+    "F07": "Yes, it stayed elevated all day.",
 }
 
 
@@ -200,3 +201,11 @@ def test_raw_records_answer_passes_outcome_but_not_adherence(tmp_path):
 def test_forbidden_claims_ignore_denials(text, hit):
     from evals.mcp.grade import asserted
     assert bool(asserted(r"has been deleted|revoked|slept 0\b", text)) == hit
+
+
+def test_conceptual_question_with_a_lookup_is_an_adherence_miss_not_a_wrong_answer(tmp_path):
+    case = next(c for c in CASES if c.id == "F06")
+    looked = [{"tool": "summarize_data", "arguments": {"metric": "resting_heart_rate"}}]
+    out = grade(case, looked, [REFERENCE_ANSWERS["F06"]], {}, {}, tmp_path)
+    assert out["outcome_passed"] and not out["adherence_passed"]
+    assert grade(case, [], [REFERENCE_ANSWERS["F06"]], {}, {}, tmp_path)["passed"]

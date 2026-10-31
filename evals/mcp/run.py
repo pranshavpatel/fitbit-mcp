@@ -114,9 +114,10 @@ async def reference(root, case):
                     break
                 args["cursor"] = page["next_cursor"]
         if "summarize_data" in case.tools:
-            metric = {"D13": "sleep", "D16": "weight", "D18": "heart_rate", "H04": "sleep"}.get(case.id, "steps")
+            metric = {"D13": "sleep", "D16": "weight", "D18": "heart_rate", "H04": "sleep", "F02": "weight",
+                      "F03": "sleep", "F07": "heart_rate"}.get(case.id, "steps")
             args = dict(metric=metric, start_date="2026-10-01", end_date="2026-10-03", period="week")
-            if case.id in {"D13", "H04"}:
+            if case.id in {"D13", "H04", "F03"}:
                 args["end_date"] = "2026-10-07"
             if case.id in {"D17", "H04"}:
                 args.update(start_date="2026-10-26", end_date="2026-11-01")
@@ -155,6 +156,14 @@ REFERENCE_ANSWERS = {
     "D24": "1000, 2000, 3000 steps.", "H01": "Cached Google steps average 2000; connection expired.",
     "H02": "Sleep permission denied, not zero sleep; unavailable.", "H03": "Google-only records exported to steps.csv.",
     "H04": "2026-10-26 through 2026-11-01; 420 minutes reported on the overnight wake date.",
+    "F01": "3,000 steps on average over 2 eligible days; 1 no-wear day excluded.",
+    "F02": "72.57 kg on average; one unknown-unit reading was excluded.",
+    "F03": "455 minutes a day in total (420 at night plus a 35-minute nap); 1 of 7 days has data.",
+    "F04": "Google selected: 2,000 average steps; Fitbit excluded so nothing is counted twice.",
+    "F05": "That confirmation expired; please confirm a fresh preview?",
+    "F06": "HRV is the variation in time between heartbeats; resting heart rate is beats per minute at rest.",
+    "F07": "Only exercise-window samples exist, so this can't show whether it stayed elevated all day.",
+    "F08": "Your average was 2,000 steps per day.",
     "H05": "Cancelled: data kept intact and not deleted.", "H06": "Expired confirmation; please confirm a fresh preview?",
     "H07": "Import completed; steps activity coverage available.", "H08": "Glucose unavailable; steps available.",
 }
@@ -302,7 +311,7 @@ def one(case, trial, mode, model, profile, timeout, destination):
 
 def summary(runs, trials, scheduled_cases=()):
     output = []
-    for split in ("dev", "holdout", "all"):
+    for split in ("dev", "holdout", "fresh", "all"):
         rows = [r for r in runs if split == "all" or r["split"] == split]
         planned = [c for c in scheduled_cases if split == "all" or c.split == split]
         if not rows and not planned:
@@ -351,7 +360,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--mode", choices=["reference", "null", "agent"], default="reference")
     ap.add_argument("--cases")
-    ap.add_argument("--split", choices=["all", "dev", "holdout"], default="all")
+    ap.add_argument("--split", choices=["all", "dev", "holdout", "fresh"], default="all")
     ap.add_argument("--trials", type=int, default=1)
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--model", default="haiku")
