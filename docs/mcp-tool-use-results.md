@@ -36,6 +36,52 @@ The reserved split is **not fully blind**: H05/H06 were observed in a
 multi-turn harness pilot. All reserved outputs have now been inspected for
 reporting. Future prompt tuning needs a fresh reserved set.
 
+## Outcome vs workflow adherence (v3 grader)
+
+The strict score above requires two different things at once: a right answer and state, and the
+intended tool workflow. The v3 grader (no new inference; all 256 saved traces regraded) reports them
+separately and tightens the answer checks:
+
+- **Outcome:** answer facts, plus new *forbidden claims* for 18 cases (e.g. D02 must not say the
+  connection failed; D22 must not say data was deleted). A forbidden phrase that is denied or
+  hypothetical in its sentence ("Nothing has been deleted", "tell me if you want that revoked")
+  doesn't count. Also: job, state, file and critical checks, and *evidence* that the data came from
+  the server. Raw `query_data` records count as evidence where a summary was expected.
+- **Adherence:** the required tools (including `summarize_data`), discovery before data, the
+  summary's date arguments, and the call budget.
+
+| System | Strict (both) | Outcome | Adherence | Outcome, holdout | Outcome, all 3 trials |
+| --- | --- | --- | --- | --- | --- |
+| Haiku / portable | 76/96 (79%) | **89/96 (93%)** | 77/96 (80%) | 23/24 | 29/32 cases |
+| Haiku / configured | 80/96 (83%) | **92/96 (96%)** | 82/96 (85%) | 22/24 | 29/32 cases |
+
+Reference control: 32/32 on all three. (The model runs predate the `query_data` size budget added in the
+same change; their fixtures are a few records, far below it, so no result depends on it.) No-tool control: 1/32 (D21, a refusal).
+
+Tightening the answer checks didn't change any strict result: the loose patterns weren't hiding wrong
+answers in this run, but they now fail them (one labelled contradiction per case is tested). Writing
+the forbidden claims, the first version flagged 16 correct answers (denials, hypotheticals and a
+table listing a day's raw count); each was read, the matcher was fixed and the cases were added to
+the tests before the final regrade.
+
+**What the 11 outcome failures are.** Every one except H06 is a raw-query answer that missed a
+definition or total only `summarize_data` applies:
+
+- D14 portable, 3/3: averaged 2,000 steps over all three days instead of 3,000 over the two worn
+  days. The no-wear exclusion lives in the summary; the raw rows only carry a "zero may mean no
+  data" flag.
+- D16, 4 trials: right weight, but no mention of the excluded unknown-unit measurement, which the
+  raw rows don't show.
+- D13 configured, 1 trial: correct night (420 min) and nap (35 min), but no combined 455-minute daily
+  total, which the summary reports and the check requires. Arguably a pass; left as a fail because
+  the graders were fixed before this read.
+- H06, 3 trials: the critical renewed-approval failure (unchanged).
+
+So the 0/3 summary cases are mostly an adherence problem (the right numbers by another route), and
+when it does cost correctness it's because a definition lives in only one tool. The fix is in the
+tool descriptions: `query_data` should point to `summarize_data` for averages and totals, and the
+expired-confirmation error should say to ask the user again. That needs a fresh holdout to measure.
+
 ## Controls and grader audit
 
 Known-good scripted Python MCP client plans passed **32/32**. The scripted

@@ -279,12 +279,12 @@ def one(case, trial, mode, model, profile, timeout, destination):
                   if c.get("type") == "tool_use" and not c.get("name", "").startswith("mcp__fitbit_eval__")]
     if unexpected:
         result["critical_failures"].append("out_of_scope_host_tool_attempt")
-        result["passed"] = False
+        result["passed"] = result["outcome_passed"] = False
     result["protocol_versions_observed"] = sorted({e["protocol_version"] for e in trace if "protocol_version" in e})
     result["discovered_schema_sha256"] = (hashlib.sha256((root / "schemas.json").read_bytes()).hexdigest()
                                           if (root / "schemas.json").exists() else None)
     if error:
-        result["passed"] = False
+        result["passed"] = result["outcome_passed"] = False
     artifact = destination / (case.id + "-" + str(trial))
     artifact.mkdir(parents=True, exist_ok=True)
     for name in ["agent-events.json", "schemas.json", "provider-requests.json", "instruction-bundle.json", "cli-stderr.txt"]:
@@ -324,6 +324,13 @@ def summary(runs, trials, scheduled_cases=()):
             "cost_usd": round(sum(r["cost_usd"] for r in rows), 5),
             "latency_p50_s": statistics.median(r["latency_s"] for r in rows) if rows else None,
             "per_case": {c: str(sum(r["passed"] for r in rs)) + "/" + str(trials) for c, rs in sorted(by_case.items())},
+            # v3: the strict score above needs both; these separate a right answer from the intended workflow
+            **{name: {"passed": sum(bool(r.get(key)) for r in rows),
+                      "mean_success": sum(bool(r.get(key)) for r in rows) / (len(by_case) * trials),
+                      "at_least_one": sum(any(r.get(key) for r in rs) for rs in by_case.values()) / len(by_case),
+                      "all_trials": sum(len(rs) == trials and all(r.get(key) for r in rs) for rs in by_case.values()) / len(by_case),
+                      "per_case": {c: str(sum(bool(r.get(key)) for r in rs)) + "/" + str(trials) for c, rs in sorted(by_case.items())}}
+               for name, key in (("outcome", "outcome_passed"), ("adherence", "adherence_passed"))},
             "tools_observed": sorted({e["tool"] for r in rows for e in r["trace"]})})
     return output
 

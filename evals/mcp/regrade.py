@@ -9,7 +9,7 @@ import shutil
 import tempfile
 
 from .cases import CASES
-from .grade import grade
+from .grade import grade, verdicts
 from .run import read, save, summary
 
 
@@ -28,13 +28,15 @@ def regrade(directory):
             # Do not erase harness errors or critical violations captured by the original runner.
             score["critical_failures"] = sorted(set(score["critical_failures"] + r["critical_failures"]))
             score["checks"]["no_critical_failures"]["pass"] = not score["critical_failures"]
-            score["passed"] = all(c["pass"] for c in score["checks"].values()) and not r["error"]
+            strict, outcome, adherence = verdicts(score["checks"], r["error"])
+            score.update(passed=strict and not r["error"], outcome_passed=outcome, adherence_passed=adherence)
             next_result = {**saved, **score}
             updated.append(next_result)
-            if score != {k: saved[k] for k in score}:
+            if score != {k: saved.get(k) for k in score}:
                 changes.append({"case": r["case"], "trial": r["trial"], "before": saved["passed"],
-                                "after": score["passed"], "critical_failures": score["critical_failures"]})
-    report = {"grader_revision": "v2-post-baseline-audit", "original_untouched": True,
+                                "after": score["passed"], "outcome": score["outcome_passed"],
+                                "critical_failures": score["critical_failures"]})
+    report = {"grader_revision": "v3-outcome-adherence-split", "original_untouched": True,
               "grader_sha256": hashlib.sha256(Path(__file__).with_name("grade.py").read_bytes()).hexdigest(),
               "original_results_sha256": hashlib.sha256((directory / "results.json").read_bytes()).hexdigest(),
               "changes": changes, "runs": updated,

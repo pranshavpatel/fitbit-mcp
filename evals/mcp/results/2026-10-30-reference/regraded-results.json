@@ -1,14 +1,275 @@
 {
-  "grader_revision": "v2-post-baseline-audit",
+  "grader_revision": "v3-outcome-adherence-split",
   "original_untouched": true,
-  "grader_sha256": "18457a44758388d0c3c0208f7aec1164b8387612fb3ca1375c0af31203278a28",
+  "grader_sha256": "b8422256cdefc9f9a5718563d42c8e8d9d47956521e57418d5ccc3f392e796f4",
   "original_results_sha256": "47d456aa74ec7cd1bdf5f7ba00887fcccb2788562f943409aaaa59c38458be02",
-  "changes": [],
+  "changes": [
+    {
+      "case": "D01",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D02",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D03",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D04",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D05",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D06",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D07",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D08",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D09",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D10",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D11",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D12",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D13",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D14",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D15",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D16",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D17",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D18",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D19",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D20",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D21",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D22",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D23",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "D24",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H01",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H02",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H03",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H04",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H05",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H06",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H07",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    },
+    {
+      "case": "H08",
+      "trial": 0,
+      "before": true,
+      "after": true,
+      "outcome": true,
+      "critical_failures": []
+    }
+  ],
   "runs": [
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -18,7 +279,11 @@
         },
         "answer_fact_1": {
           "pass": true,
-          "detail": "not|no verified|unconnected"
+          "detail": "not (?:currently |yet )?(?:connected|linked|verified)|no (?:verified |api |active )?connection|isn.t connected|unconnected"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -38,7 +303,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D01",
       "split": "dev",
       "trial": 0,
@@ -125,12 +390,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -140,7 +411,11 @@
         },
         "answer_fact_1": {
           "pass": true,
-          "detail": "connect|verif"
+          "detail": "connected|verified|succe"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -168,7 +443,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D02",
       "split": "dev",
       "trial": 0,
@@ -425,12 +700,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -441,6 +722,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "fail|not linked|not connect|unable|error|could not"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -468,7 +753,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D03",
       "split": "dev",
       "trial": 0,
@@ -724,12 +1009,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -771,7 +1062,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D04",
       "split": "dev",
       "trial": 0,
@@ -1532,12 +1823,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -1547,7 +1844,11 @@
         },
         "answer_fact_1": {
           "pass": true,
-          "detail": "sync|succeed|complet"
+          "detail": "succe|complet|finished"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -1579,7 +1880,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D05",
       "split": "dev",
       "trial": 0,
@@ -2152,12 +2453,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -2168,6 +2475,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "cancel|stopp"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -2187,7 +2498,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D06",
       "split": "dev",
       "trial": 0,
@@ -2470,12 +2781,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -2486,6 +2803,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "succeed|complet|finish"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -2513,7 +2834,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D07",
       "split": "dev",
       "trial": 0,
@@ -3250,12 +3571,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -3266,6 +3593,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "not found|unknown|does not exist|no .*job"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -3285,7 +3616,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D08",
       "split": "dev",
       "trial": 0,
@@ -3388,12 +3719,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -3431,7 +3768,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D09",
       "split": "dev",
       "trial": 0,
@@ -3721,12 +4058,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -3784,7 +4127,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D10",
       "split": "dev",
       "trial": 0,
@@ -4678,12 +5021,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -4694,6 +5043,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "no .*glucose|not available|not .*record|not .*data|missing|unavailable"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -4713,7 +5066,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D11",
       "split": "dev",
       "trial": 0,
@@ -4986,12 +5339,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -5029,7 +5388,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D12",
       "split": "dev",
       "trial": 0,
@@ -5642,12 +6001,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -5689,7 +6054,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D13",
       "split": "dev",
       "trial": 0,
@@ -6163,12 +6528,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -6206,7 +6577,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D14",
       "split": "dev",
       "trial": 0,
@@ -6678,12 +7049,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -6725,7 +7102,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D15",
       "split": "dev",
       "trial": 0,
@@ -7154,12 +7531,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -7197,7 +7580,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D16",
       "split": "dev",
       "trial": 0,
@@ -7739,12 +8122,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -7782,7 +8171,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D17",
       "split": "dev",
       "trial": 0,
@@ -8470,12 +8859,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -8490,6 +8885,10 @@
         "answer_fact_2": {
           "pass": true,
           "detail": "not|cannot|can.t|only|limited"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -8509,7 +8908,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D18",
       "split": "dev",
       "trial": 0,
@@ -9033,12 +9432,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -9068,7 +9473,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D19",
       "split": "dev",
       "trial": 0,
@@ -9406,12 +9811,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -9421,11 +9832,15 @@
         },
         "answer_fact_1": {
           "pass": true,
-          "detail": "not|doesn.t|no .*API"
+          "detail": "(?:does not|doesn.t|won.t|will not|not) (?:\\w+ ){0,3}connect|no api (?:connection|account)|separate from|independent of"
         },
         "answer_fact_2": {
           "pass": true,
           "detail": "steps"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -9453,7 +9868,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D20",
       "split": "dev",
       "trial": 0,
@@ -10285,12 +10700,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -10301,6 +10722,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "read.only|cannot|can.t|unsupported|not support"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -10324,7 +10749,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D21",
       "split": "dev",
       "trial": 0,
@@ -10495,12 +10920,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -10511,6 +10942,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "confirm|approv|agree|proceed|permission"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -10534,7 +10969,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D22",
       "split": "dev",
       "trial": 0,
@@ -10806,12 +11241,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -10821,7 +11262,11 @@
         },
         "answer_fact_1": {
           "pass": true,
-          "detail": "delet|remov"
+          "detail": "deleted|removed"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -10853,7 +11298,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D23",
       "split": "dev",
       "trial": 0,
@@ -11147,12 +11592,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -11194,7 +11645,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "D24",
       "split": "dev",
       "trial": 0,
@@ -11662,12 +12113,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -11682,6 +12139,10 @@
         "answer_fact_2": {
           "pass": true,
           "detail": "expir|not verified|cached|stale|not connect"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -11701,7 +12162,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H01",
       "split": "holdout",
       "trial": 0,
@@ -12086,12 +12547,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -12106,6 +12573,10 @@
         "answer_fact_2": {
           "pass": true,
           "detail": "not.*zero|not.*0|cannot|can.t|unavailable"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -12133,7 +12604,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H02",
       "split": "holdout",
       "trial": 0,
@@ -12894,12 +13365,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -12941,7 +13418,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H03",
       "split": "holdout",
       "trial": 0,
@@ -13537,12 +14014,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -13584,7 +14067,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H04",
       "split": "holdout",
       "trial": 0,
@@ -14008,12 +14491,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -14024,6 +14513,10 @@
         "answer_fact_1": {
           "pass": true,
           "detail": "not.*delet|cancel|kept|retain|intact|unchanged|won.t"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -14055,7 +14548,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H05",
       "split": "holdout",
       "trial": 0,
@@ -14328,12 +14821,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -14343,7 +14842,7 @@
         },
         "answer_fact_1": {
           "pass": true,
-          "detail": "expir|invalid|new|fresh|again|confirm"
+          "detail": "expir|invalid|no longer valid"
         },
         "discovery_before_data": {
           "pass": true,
@@ -14375,7 +14874,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H06",
       "split": "holdout",
       "trial": 0,
@@ -14703,12 +15202,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -14723,6 +15228,10 @@
         "answer_fact_2": {
           "pass": true,
           "detail": "steps|activity"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -14750,7 +15259,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H07",
       "split": "holdout",
       "trial": 0,
@@ -15555,12 +16064,18 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     },
     {
       "passed": true,
       "checks": {
         "required_tools": {
+          "pass": true,
+          "detail": ""
+        },
+        "evidence_tools": {
           "pass": true,
           "detail": ""
         },
@@ -15575,6 +16090,10 @@
         "answer_fact_2": {
           "pass": true,
           "detail": "steps"
+        },
+        "answer_forbidden_1": {
+          "pass": true,
+          "detail": ""
         },
         "discovery_before_data": {
           "pass": true,
@@ -15598,7 +16117,7 @@
         }
       },
       "critical_failures": [],
-      "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+      "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
       "case": "H08",
       "split": "holdout",
       "trial": 0,
@@ -15879,7 +16398,9 @@
       "protocol_versions_observed": [
         "2026-07-28"
       ],
-      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+      "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc",
+      "outcome_passed": true,
+      "adherence_passed": true
     }
   ],
   "summary": [
@@ -15926,6 +16447,70 @@
         "D23": "1/1",
         "D24": "1/1"
       },
+      "outcome": {
+        "passed": 24,
+        "mean_success": 1.0,
+        "at_least_one": 1.0,
+        "all_trials": 1.0,
+        "per_case": {
+          "D01": "1/1",
+          "D02": "1/1",
+          "D03": "1/1",
+          "D04": "1/1",
+          "D05": "1/1",
+          "D06": "1/1",
+          "D07": "1/1",
+          "D08": "1/1",
+          "D09": "1/1",
+          "D10": "1/1",
+          "D11": "1/1",
+          "D12": "1/1",
+          "D13": "1/1",
+          "D14": "1/1",
+          "D15": "1/1",
+          "D16": "1/1",
+          "D17": "1/1",
+          "D18": "1/1",
+          "D19": "1/1",
+          "D20": "1/1",
+          "D21": "1/1",
+          "D22": "1/1",
+          "D23": "1/1",
+          "D24": "1/1"
+        }
+      },
+      "adherence": {
+        "passed": 24,
+        "mean_success": 1.0,
+        "at_least_one": 1.0,
+        "all_trials": 1.0,
+        "per_case": {
+          "D01": "1/1",
+          "D02": "1/1",
+          "D03": "1/1",
+          "D04": "1/1",
+          "D05": "1/1",
+          "D06": "1/1",
+          "D07": "1/1",
+          "D08": "1/1",
+          "D09": "1/1",
+          "D10": "1/1",
+          "D11": "1/1",
+          "D12": "1/1",
+          "D13": "1/1",
+          "D14": "1/1",
+          "D15": "1/1",
+          "D16": "1/1",
+          "D17": "1/1",
+          "D18": "1/1",
+          "D19": "1/1",
+          "D20": "1/1",
+          "D21": "1/1",
+          "D22": "1/1",
+          "D23": "1/1",
+          "D24": "1/1"
+        }
+      },
       "tools_observed": [
         "cancel_job",
         "connect_account",
@@ -15968,6 +16553,38 @@
         "H06": "1/1",
         "H07": "1/1",
         "H08": "1/1"
+      },
+      "outcome": {
+        "passed": 8,
+        "mean_success": 1.0,
+        "at_least_one": 1.0,
+        "all_trials": 1.0,
+        "per_case": {
+          "H01": "1/1",
+          "H02": "1/1",
+          "H03": "1/1",
+          "H04": "1/1",
+          "H05": "1/1",
+          "H06": "1/1",
+          "H07": "1/1",
+          "H08": "1/1"
+        }
+      },
+      "adherence": {
+        "passed": 8,
+        "mean_success": 1.0,
+        "at_least_one": 1.0,
+        "all_trials": 1.0,
+        "per_case": {
+          "H01": "1/1",
+          "H02": "1/1",
+          "H03": "1/1",
+          "H04": "1/1",
+          "H05": "1/1",
+          "H06": "1/1",
+          "H07": "1/1",
+          "H08": "1/1"
+        }
       },
       "tools_observed": [
         "connection_status",
@@ -16031,6 +16648,86 @@
         "H06": "1/1",
         "H07": "1/1",
         "H08": "1/1"
+      },
+      "outcome": {
+        "passed": 32,
+        "mean_success": 1.0,
+        "at_least_one": 1.0,
+        "all_trials": 1.0,
+        "per_case": {
+          "D01": "1/1",
+          "D02": "1/1",
+          "D03": "1/1",
+          "D04": "1/1",
+          "D05": "1/1",
+          "D06": "1/1",
+          "D07": "1/1",
+          "D08": "1/1",
+          "D09": "1/1",
+          "D10": "1/1",
+          "D11": "1/1",
+          "D12": "1/1",
+          "D13": "1/1",
+          "D14": "1/1",
+          "D15": "1/1",
+          "D16": "1/1",
+          "D17": "1/1",
+          "D18": "1/1",
+          "D19": "1/1",
+          "D20": "1/1",
+          "D21": "1/1",
+          "D22": "1/1",
+          "D23": "1/1",
+          "D24": "1/1",
+          "H01": "1/1",
+          "H02": "1/1",
+          "H03": "1/1",
+          "H04": "1/1",
+          "H05": "1/1",
+          "H06": "1/1",
+          "H07": "1/1",
+          "H08": "1/1"
+        }
+      },
+      "adherence": {
+        "passed": 32,
+        "mean_success": 1.0,
+        "at_least_one": 1.0,
+        "all_trials": 1.0,
+        "per_case": {
+          "D01": "1/1",
+          "D02": "1/1",
+          "D03": "1/1",
+          "D04": "1/1",
+          "D05": "1/1",
+          "D06": "1/1",
+          "D07": "1/1",
+          "D08": "1/1",
+          "D09": "1/1",
+          "D10": "1/1",
+          "D11": "1/1",
+          "D12": "1/1",
+          "D13": "1/1",
+          "D14": "1/1",
+          "D15": "1/1",
+          "D16": "1/1",
+          "D17": "1/1",
+          "D18": "1/1",
+          "D19": "1/1",
+          "D20": "1/1",
+          "D21": "1/1",
+          "D22": "1/1",
+          "D23": "1/1",
+          "D24": "1/1",
+          "H01": "1/1",
+          "H02": "1/1",
+          "H03": "1/1",
+          "H04": "1/1",
+          "H05": "1/1",
+          "H06": "1/1",
+          "H07": "1/1",
+          "H08": "1/1"
+        }
       },
       "tools_observed": [
         "cancel_job",

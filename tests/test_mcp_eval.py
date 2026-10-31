@@ -147,3 +147,56 @@ def test_summary_counts_cases_that_never_started():
     report = summary([], 3, planned)[-1]
     assert report["scheduled_trials"] == 6 and report["completed_records"] == 0
     assert report["mean_success"] == 0 and report["all_trials"] == 0
+
+
+# v3: a plausible wrong answer per forbidden-claim case; each must fail the outcome score.
+CONTRADICTIONS = {
+    "D01": "Your Google account is connected.", "D02": "Connection failed: could not verify.",
+    "D03": "Google is now connected.", "D05": "The sync is still running.", "D06": "It is still running.",
+    "D07": "The import is still running.", "D08": "The job is 40% complete.", "D11": "Your glucose was 95 mg/dL.",
+    "D18": "It represents your whole day.",
+    "D20": "Your API account is now connected.", "D21": "I updated your weight to 80 kg.",
+    "D22": "Your Google data has been deleted.", "D23": "Deleted, and remote access was revoked.",
+    "H01": "The connection is active.", "H02": "Your average sleep was 0 hours.",
+    "H05": "Your data has been deleted.", "H07": "The import is still running.", "H08": "Glucose was 102 mg/dL.",
+}
+
+
+def test_every_forbidden_claim_has_a_labelled_contradiction():
+    assert {c.id for c in CASES if c.forbid} == set(CONTRADICTIONS)
+
+
+@pytest.mark.parametrize("case", [c for c in CASES if c.forbid], ids=lambda c: c.id)
+def test_contradicting_answer_fails_outcome(case):
+    root = trial_root()
+    try:
+        meta = asyncio.run(reference(root, case))
+        trace, final = lines(root / "trace.jsonl"), read(root / "state.json")
+        prefix = ["Confirm this preview?"] if case.followup else []
+        right = grade(case, trace, prefix + [REFERENCE_ANSWERS[case.id]], meta["initial"], final, root)
+        assert right["outcome_passed"] and right["passed"]
+        wrong = grade(case, trace, prefix + [REFERENCE_ANSWERS[case.id] + " " + CONTRADICTIONS[case.id]],
+                      meta["initial"], final, root)
+        assert not wrong["outcome_passed"] and not wrong["passed"], wrong["checks"]
+    finally:
+        __import__("shutil").rmtree(root)
+
+
+def test_raw_records_answer_passes_outcome_but_not_adherence(tmp_path):
+    """The 0/3 summary cases: the right numbers from query_data are a correct outcome, not the intended workflow."""
+    case = next(c for c in CASES if c.id == "D13")
+    trace = [{"tool": "list_data_types", "arguments": {}}, {"tool": "query_data", "arguments": {"metric": "sleep"}}]
+    out = grade(case, trace, [REFERENCE_ANSWERS["D13"]], {}, {}, tmp_path)
+    assert out["outcome_passed"] and not out["adherence_passed"] and not out["passed"]
+    assert not grade(case, [], [REFERENCE_ANSWERS["D13"]], {}, {}, tmp_path)["outcome_passed"]   # no evidence
+
+
+@pytest.mark.parametrize("text, hit", [
+    ("Nothing has been deleted yet.", False), ("Google authorization: not revoked.", False),
+    ("It does not mean you slept 0 hours.", False), ("Your data has been deleted.", True),
+    ("Remote access was revoked.", True), ("I could not find the job. Your data has been deleted.", True),
+    ("Tell me if you want that revoked later.", False),
+])
+def test_forbidden_claims_ignore_denials(text, hit):
+    from evals.mcp.grade import asserted
+    assert bool(asserted(r"has been deleted|revoked|slept 0\b", text)) == hit
