@@ -1,0 +1,242 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "list_data_types, query_data"
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": false,
+      "detail": "workout-0"
+    },
+    "answer_fact_2": {
+      "pass": false,
+      "detail": "workout-1"
+    },
+    "answer_fact_3": {
+      "pass": false,
+      "detail": "workout-2"
+    },
+    "answer_fact_4": {
+      "pass": false,
+      "detail": "workout-3"
+    },
+    "answer_fact_5": {
+      "pass": false,
+      "detail": "workout-4"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "page_limits": {
+      "pass": false,
+      "detail": ""
+    },
+    "complete_unique_records": {
+      "pass": false,
+      "detail": ""
+    },
+    "cursor_filters_stable": {
+      "pass": false,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D10",
+  "split": "dev",
+  "trial": 0,
+  "mode": "null",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [],
+  "cost_usd": 0,
+  "latency_s": 0.82,
+  "error": null,
+  "answers": [
+    "I cannot verify this without using tools."
+  ],
+  "trace": [],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 20.0,
+        "unit": "min",
+        "record_key": "workout-0",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 30.0,
+        "unit": "min",
+        "record_key": "workout-1",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 40.0,
+        "unit": "min",
+        "record_key": "workout-2",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 50.0,
+        "unit": "min",
+        "record_key": "workout-3",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-03",
+        "value": 60.0,
+        "unit": "min",
+        "record_key": "workout-4",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 20.0,
+        "unit": "min",
+        "record_key": "workout-0",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 30.0,
+        "unit": "min",
+        "record_key": "workout-1",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 40.0,
+        "unit": "min",
+        "record_key": "workout-2",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 50.0,
+        "unit": "min",
+        "record_key": "workout-3",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-03",
+        "value": 60.0,
+        "unit": "min",
+        "record_key": "workout-4",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 0,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [],
+  "discovered_schema_sha256": null
+}

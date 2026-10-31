@@ -1,0 +1,139 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01FLNSufpSrysMgYNAezBPSB",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01DdPCjNMhWHvxVDRnuuPqm5",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "blood_glucose",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't tell you your blood glucose for October 2, 2026, because there's no blood glucose data in your local records.\n\n- **Blood glucose:** No records exist for any date. The category is listed as having no local data, and a direct query for October 2 returned no records.\n- **Local data:** The only data I have is step counts from Google, covering October 1\u20133, 2026 (3 days).\n\nBlood glucose may not have been imported yet, or it may not be shared with the connected Google account. I can start an import for that category if you want, but I'd need to know whether you're connected to Google. A missing day here doesn't mean a glucose reading of zero. It just means nothing was recorded locally. For questions about your glucose values, please check with your clinician or your glucose meter's app."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't tell you your blood glucose for October 2, 2026, because there's no blood glucose data in your local records.\n\n- **Blood glucose:** No records exist for any date. The category is listed as having no local data, and a direct query for October 2 returned no records.\n- **Local data:** The only data I have is step counts from Google, covering October 1\u20133, 2026 (3 days).\n\nBlood glucose may not have been imported yet, or it may not be shared with the connected Google account. I can start an import for that category if you want, but I'd need to know whether you're connected to Google. A missing day here doesn't mean a glucose reading of zero. It just means nothing was recorded locally. For questions about your glucose values, please check with your clinician or your glucose meter's app.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 574,
+        "cacheReadInputTokens": 19372,
+        "cacheCreationInputTokens": 1791,
+        "webSearchRequests": 0,
+        "costUSD": 0.00083952,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 170,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1791,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00083952,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1791,
+      "cache_read_input_tokens": 19372,
+      "output_tokens": 574,
+      "output_tokens_details": {
+        "thinking_tokens": 170
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1791,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 242,
+          "cache_read_input_tokens": 7134,
+          "cache_creation_input_tokens": 304,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 304
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,179 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01D5qYxUemxuE2VuNJBQBMz5",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01SoMRq5uc2bkhZZW1Afnp5x",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HXHpQZihgYGdLhnqAPifuB",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMSIsImlkIjo1LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019jKmwPrYXhoxz9fjfoXyWv",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjo3LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "There are 5 Google workouts from October 1 through October 3, 2026, all from the local database:\n\n| Date | Start (local) | Source ID | Duration |\n|---|---|---|---|\n| Oct 1, 2026 | 10:00 | workout-0 | 20 min |\n| Oct 1, 2026 | 10:00 | workout-1 | 30 min |\n| Oct 2, 2026 | 10:00 | workout-2 | 40 min |\n| Oct 2, 2026 | 10:00 | workout-3 | 50 min |\n| Oct 3, 2026 | 10:00 | workout-4 | 60 min |\n\nEach record is an active, unrevised session-level duration. Total time is 200 minutes across the three days.\n\nI retrieved the records in pages of two, which took three requests. The data is from the local copy, so it reflects what has been imported, not a live check against Google. The start times are shown as 10:00 for every record, which is how the local data stores them. I didn't verify those against the source."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "There are 5 Google workouts from October 1 through October 3, 2026, all from the local database:\n\n| Date | Start (local) | Source ID | Duration |\n|---|---|---|---|\n| Oct 1, 2026 | 10:00 | workout-0 | 20 min |\n| Oct 1, 2026 | 10:00 | workout-1 | 30 min |\n| Oct 2, 2026 | 10:00 | workout-2 | 40 min |\n| Oct 2, 2026 | 10:00 | workout-3 | 50 min |\n| Oct 3, 2026 | 10:00 | workout-4 | 60 min |\n\nEach record is an active, unrevised session-level duration. Total time is 200 minutes across the three days.\n\nI retrieved the records in pages of two, which took three requests. The data is from the local copy, so it reflects what has been imported, not a live check against Google. The start times are shown as 10:00 for every record, which is how the local data stores them. I didn't verify those against the source.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1118,
+        "cacheReadInputTokens": 38766,
+        "cacheCreationInputTokens": 3604,
+        "webSearchRequests": 0,
+        "costUSD": 0.0016684600000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 118,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3604,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0016684600000000003,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 3604,
+      "cache_read_input_tokens": 38766,
+      "output_tokens": 1118,
+      "output_tokens_details": {
+        "thinking_tokens": 118
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3604,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 330,
+          "cache_read_input_tokens": 9230,
+          "cache_creation_input_tokens": 543,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 543
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

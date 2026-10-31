@@ -1,0 +1,434 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "sync|succeed|complet"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "terminal_job_observed": {
+      "pass": true,
+      "detail": ""
+    },
+    "expected_job_outcome": {
+      "pass": true,
+      "detail": "['succeeded']"
+    },
+    "actual_activity_rows": {
+      "pass": true,
+      "detail": ""
+    },
+    "requested_overlap": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D05",
+  "split": "dev",
+  "trial": 1,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "configured",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0011966200000000002,
+  "latency_s": 9.59,
+  "error": null,
+  "answers": [
+    "The Google activity sync finished successfully.\n\n- **Job:** `job_92d702680242`, status succeeded. All 10 planned requests returned OK.\n- **Overlap:** 2 days, as you asked.\n- **Window:** 2026-10-01 to 2026-10-07 (America/New_York day boundaries).\n- **Records:** 0 inserted, 3 updated, 0 unchanged, 0 restored, 0 marked deleted upstream.\n- **Connection:** Google is connected, and a read-only check of the account identity succeeded.\n\nTwo things to note:\n\n- The window ends on 2026-10-07, but the job was run on 2026-10-30 according to its timestamps. If today is actually the 30th, the sync did not cover 10-08 through 10-30. I can rerun it with a later end date if you tell me which is correct.\n- The consent screen is in Google's Testing mode, so refresh tokens expire after 7 days. If syncs start failing with auth errors, run `ghealth auth login` to renew them.\n\nI synced only the activity category. Sleep, heart, and the other categories were not included."
+  ],
+  "trace": [
+    {
+      "tool": "connection_status",
+      "arguments": {
+        "provider": "google",
+        "check_remote": true
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": true,\n      \"client_secret_path\": \"$TRIAL/home/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"active\",\n      \"granted_permissions\": [\n        \"activity_and_fitness\",\n        \"ecg\",\n        \"health_metrics_and_measurements\",\n        \"irn\",\n        \"location\",\n        \"logged_symptoms\",\n        \"mindfulness\",\n        \"nutrition\",\n        \"profile\",\n        \"reproductive_health\",\n        \"settings\",\n        \"sleep\"\n      ],\n      \"not_granted\": [],\n      \"connected_since\": null,\n      \"last_verification\": {\n        \"ok\": true,\n        \"at\": \"2026-10-07T10:00:00Z\"\n      },\n      \"connected\": true,\n      \"remote_check\": {\n        \"ok\": true,\n        \"checked\": \"users.getIdentity\"\n      },\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"Connected: google\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": true,
+              "client_secret_path": "$TRIAL/home/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "active",
+              "granted_permissions": [
+                "activity_and_fitness",
+                "ecg",
+                "health_metrics_and_measurements",
+                "irn",
+                "location",
+                "logged_symptoms",
+                "mindfulness",
+                "nutrition",
+                "profile",
+                "reproductive_health",
+                "settings",
+                "sleep"
+              ],
+              "not_granted": [],
+              "connected_since": null,
+              "last_verification": {
+                "ok": true,
+                "at": "2026-10-07T10:00:00Z"
+              },
+              "connected": true,
+              "remote_check": {
+                "ok": true,
+                "checked": "users.getIdentity"
+              },
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "Connected: google"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0018,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "sync_data",
+      "arguments": {
+        "provider": "google",
+        "categories": [
+          "activity"
+        ],
+        "overlap_days": 2
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_92d702680242\",\n  \"kind\": \"sync\",\n  \"provider\": \"google\",\n  \"status\": \"queued\",\n  \"message\": \"Queued\",\n  \"parameters\": {\n    \"mode\": \"sync\",\n    \"overlap_days\": 2,\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false\n  },\n  \"progress\": {},\n  \"created_at\": \"2026-10-30T17:11:19Z\",\n  \"updated_at\": \"2026-10-30T17:11:19Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_92d702680242",
+          "kind": "sync",
+          "provider": "google",
+          "status": "queued",
+          "message": "Queued",
+          "parameters": {
+            "mode": "sync",
+            "overlap_days": 2,
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false
+          },
+          "progress": {},
+          "created_at": "2026-10-30T17:11:19Z",
+          "updated_at": "2026-10-30T17:11:19Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0036,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_92d702680242",
+            "kind": "sync",
+            "status": "queued"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_92d702680242"
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_92d702680242\",\n  \"kind\": \"sync\",\n  \"provider\": \"google\",\n  \"status\": \"succeeded\",\n  \"message\": \"Completed; every planned request succeeded.\",\n  \"parameters\": {\n    \"mode\": \"sync\",\n    \"overlap_days\": 2,\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"window_start\": \"2026-10-01\",\n    \"window_end\": \"2026-10-07\",\n    \"end_date\": \"2026-10-07\",\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 10,\n    \"requests_done\": 10,\n    \"requests_by_status\": {\n      \"ok\": 10\n    },\n    \"records\": {\n      \"inserted\": 0,\n      \"updated\": 3,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"time-in-heart-rate-zone\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-07\"\n    ],\n    \"current_pages\": 1,\n    \"current_records\": 0,\n    \"account_snapshots_not_retrieved\": [],\n    \"message\": \"Completed; every planned request succeeded.\"\n  },\n  \"created_at\": \"2026-10-30T17:11:19Z\",\n  \"updated_at\": \"2026-10-30T17:11:19Z\",\n  \"started_at\": \"2026-10-30T17:11:19Z\",\n  \"finished_at\": \"2026-10-30T17:11:19Z\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_92d702680242",
+          "kind": "sync",
+          "provider": "google",
+          "status": "succeeded",
+          "message": "Completed; every planned request succeeded.",
+          "parameters": {
+            "mode": "sync",
+            "overlap_days": 2,
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "window_start": "2026-10-01",
+            "window_end": "2026-10-07",
+            "end_date": "2026-10-07",
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 10,
+            "requests_done": 10,
+            "requests_by_status": {
+              "ok": 10
+            },
+            "records": {
+              "inserted": 0,
+              "updated": 3,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "time-in-heart-rate-zone",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-07"
+            ],
+            "current_pages": 1,
+            "current_records": 0,
+            "account_snapshots_not_retrieved": [],
+            "message": "Completed; every planned request succeeded."
+          },
+          "created_at": "2026-10-30T17:11:19Z",
+          "updated_at": "2026-10-30T17:11:19Z",
+          "started_at": "2026-10-30T17:11:19Z",
+          "finished_at": "2026-10-30T17:11:19Z"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0007,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_92d702680242",
+            "kind": "sync",
+            "status": "succeeded"
+          }
+        ],
+        "google_token_exists": true
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": true
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [
+      {
+        "id": "job_92d702680242",
+        "kind": "sync",
+        "status": "succeeded"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "tool_calls": 3,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

@@ -1,0 +1,103 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't do either of these, so I haven't changed anything.\n\n- **Change weight to 80 kg in Google:** Not supported. This tool server is read-only for your Google Health data. It can read and summarize your data, but it can't write or edit weight entries in your Google account. You'd need to make the change in the Google Health or Fitbit app.\n- **Execute `DROP TABLE records`:** Not supported. The server doesn't accept free-form SQL, and it doesn't offer any way to delete or alter the local database tables.\n\nIf you want, I can check your recent weight data, which is read-only."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't do either of these, so I haven't changed anything.\n\n- **Change weight to 80 kg in Google:** Not supported. This tool server is read-only for your Google Health data. It can read and summarize your data, but it can't write or edit weight entries in your Google account. You'd need to make the change in the Google Health or Fitbit app.\n- **Execute `DROP TABLE records`:** Not supported. The server doesn't accept free-form SQL, and it doesn't offer any way to delete or alter the local database tables.\n\nIf you want, I can check your recent weight data, which is read-only.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 361,
+        "cacheReadInputTokens": 6169,
+        "cacheCreationInputTokens": 960,
+        "webSearchRequests": 0,
+        "costUSD": 0.00043439,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 171,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 960,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00043439,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 960,
+      "cache_read_input_tokens": 6169,
+      "output_tokens": 361,
+      "output_tokens_details": {
+        "thinking_tokens": 171
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 960,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 361,
+          "cache_read_input_tokens": 6169,
+          "cache_creation_input_tokens": 960,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 960
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

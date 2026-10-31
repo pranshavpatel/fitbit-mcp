@@ -1,0 +1,68 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "job_status"
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": false,
+      "detail": "not found|unknown|does not exist|no .*job"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D08",
+  "split": "dev",
+  "trial": 0,
+  "mode": "null",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [],
+  "cost_usd": 0,
+  "latency_s": 0.94,
+  "error": null,
+  "answers": [
+    "I cannot verify this without using tools."
+  ],
+  "trace": [],
+  "initial": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 0,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [],
+  "discovered_schema_sha256": null
+}

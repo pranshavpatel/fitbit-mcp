@@ -1,0 +1,158 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01EjT2X7VBL9LCZ4XQHYzZDt",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01FBNLNjWrJC9Mwm77mkQW3o",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01GtqwFqmCV3i8ZiMAmhCy4u",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes, the cached data is still readable. Your Google connection is not working, though, so these numbers are a local snapshot and won't update until you reconnect.\n\n**Cached Google steps, Oct 1\u20133, 2026**\n\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\nThe mean is 2,000 steps per day, and all three calendar days have data (100% coverage). With only three days, there is no trend line.\n\n**Connection limitation**\n\n- The Google connection is marked `invalid_reconnect_required`. The app can't reach Google, so it can't fetch newer data or verify the link right now.\n- Google's consent screen for this project is in Testing mode, and refresh tokens in that mode expire after 7 days. That's the most likely cause of the expiry.\n- To fix it, run `ghealth auth login` in your terminal. The server will pick up the new credentials. I can then check the connection and sync again if you want.\n\n**Other caveats**\n\n- The stored record covers only these three days. Any other date range returns nothing from the cache, and a missing day means no data, not zero steps.\n- Dates follow your account's time zone (America/New_York for day boundaries).\n- Only steps are cached from Google so far. Sleep, heart, and other categories have no local records."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Yes, the cached data is still readable. Your Google connection is not working, though, so these numbers are a local snapshot and won't update until you reconnect.\n\n**Cached Google steps, Oct 1\u20133, 2026**\n\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\nThe mean is 2,000 steps per day, and all three calendar days have data (100% coverage). With only three days, there is no trend line.\n\n**Connection limitation**\n\n- The Google connection is marked `invalid_reconnect_required`. The app can't reach Google, so it can't fetch newer data or verify the link right now.\n- Google's consent screen for this project is in Testing mode, and refresh tokens in that mode expire after 7 days. That's the most likely cause of the expiry.\n- To fix it, run `ghealth auth login` in your terminal. The server will pick up the new credentials. I can then check the connection and sync again if you want.\n\n**Other caveats**\n\n- The stored record covers only these three days. Any other date range returns nothing from the cache, and a missing day means no data, not zero steps.\n- Dates follow your account's time zone (America/New_York for day boundaries).\n- Only steps are cached from Google so far. Sleep, heart, and other categories have no local records.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 996,
+        "cacheReadInputTokens": 21603,
+        "cacheCreationInputTokens": 2890,
+        "webSearchRequests": 0,
+        "costUSD": 0.00129263,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 265,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2890,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00129263,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2890,
+      "cache_read_input_tokens": 21603,
+      "output_tokens": 996,
+      "output_tokens_details": {
+        "thinking_tokens": 265
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2890,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 550,
+          "cache_read_input_tokens": 8308,
+          "cache_creation_input_tokens": 751,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 751
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

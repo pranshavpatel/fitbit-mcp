@@ -1,0 +1,120 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01MsUeGLfEUqAzfYNY2gDmtU",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google account is not connected. I checked the status without connecting it.\n\n- **Connection:** No verified API connection. There are no saved tokens for Google.\n- **Local setup:** The Google client configuration is not set up in this environment, and no existing `ghealth` CLI credentials were found.\n- **Availability:** Google is not onboarding new projects. If the consent screen is in Testing mode, refresh tokens expire after 7 days, so a connection may need to be renewed periodically.\n- **Alternative:** If API access isn't available, you can import a Google Takeout export instead.\n\nI haven't changed anything. If you want to connect later, tell me and I'll start the connection."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google account is not connected. I checked the status without connecting it.\n\n- **Connection:** No verified API connection. There are no saved tokens for Google.\n- **Local setup:** The Google client configuration is not set up in this environment, and no existing `ghealth` CLI credentials were found.\n- **Availability:** Google is not onboarding new projects. If the consent screen is in Testing mode, refresh tokens expire after 7 days, so a connection may need to be renewed periodically.\n- **Alternative:** If API access isn't available, you can import a Google Takeout export instead.\n\nI haven't changed anything. If you want to connect later, tell me and I'll start the connection.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 351,
+        "cacheReadInputTokens": 6581,
+        "cacheCreationInputTokens": 7072,
+        "webSearchRequests": 0,
+        "costUSD": 0.0016561100000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 47,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 7072,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0016561100000000001,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 7072,
+      "cache_read_input_tokens": 6581,
+      "output_tokens": 351,
+      "output_tokens_details": {
+        "thinking_tokens": 47
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7072,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 218,
+          "cache_read_input_tokens": 6581,
+          "cache_creation_input_tokens": 491,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 491
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]
