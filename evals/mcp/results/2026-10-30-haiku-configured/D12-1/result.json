@@ -1,0 +1,668 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "workout-3"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "workout-4"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "filtered_answer": {
+      "pass": false,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D12",
+  "split": "dev",
+  "trial": 1,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "configured",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.00122568,
+  "latency_s": 6.5,
+  "error": null,
+  "answers": [
+    "Two Google workouts from October 2\u20133, 2026 were longer than 45 minutes:\n\n| Date | Start (local) | Duration | Source ID |\n|---|---|---|---|\n| Oct 2, 2026 | 10:00 | 50 min | workout-3 |\n| Oct 3, 2026 | 10:00 | 60 min | workout-4 |\n\nA third workout on Oct 2 (workout-2, 40 min, source ID workout-2) is excluded because it's under 45 minutes.\n\nCaveats:\n- These come from the local database only. I didn't sync, so they reflect the last import, not necessarily what's currently in your Google account.\n- Google's connection currently shows as not connected (no token), so I couldn't check for new or changed workouts. If you want a fresh pull, run `ghealth auth login` and I can sync.\n- Exercise data in the local store covers only Oct 1\u20133, 2026, so there's nothing to compare these against beyond that window."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    },\n    {\n      \"provider\": \"google\",\n      \"category\": \"exercise\",\n      \"metric\": \"duration\",\n      \"granularity\": \"session\",\n      \"unit\": \"min\",\n      \"records\": 5,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            },
+            {
+              "provider": "google",
+              "category": "exercise",
+              "metric": "duration",
+              "granularity": "session",
+              "unit": "min",
+              "records": 5,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0011,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-01",
+            "value": 20.0,
+            "unit": "min",
+            "record_key": "workout-0",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-01",
+            "value": 30.0,
+            "unit": "min",
+            "record_key": "workout-1",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-02",
+            "value": 40.0,
+            "unit": "min",
+            "record_key": "workout-2",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-02",
+            "value": 50.0,
+            "unit": "min",
+            "record_key": "workout-3",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-03",
+            "value": 60.0,
+            "unit": "min",
+            "record_key": "workout-4",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "connection_status",
+      "arguments": {
+        "provider": "google"
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": false,\n      \"client_secret_path\": \"$TRIAL/ghealth/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"No verified API connection.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": false,
+              "client_secret_path": "$TRIAL/ghealth/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "No verified API connection."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0014,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-01",
+            "value": 20.0,
+            "unit": "min",
+            "record_key": "workout-0",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-01",
+            "value": 30.0,
+            "unit": "min",
+            "record_key": "workout-1",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-02",
+            "value": 40.0,
+            "unit": "min",
+            "record_key": "workout-2",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-02",
+            "value": 50.0,
+            "unit": "min",
+            "record_key": "workout-3",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-03",
+            "value": 60.0,
+            "unit": "min",
+            "record_key": "workout-4",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "query_data",
+      "arguments": {
+        "category": "exercise",
+        "provider": "google",
+        "start_date": "2026-10-02",
+        "end_date": "2026-10-03",
+        "limit": 100
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"count\": 3,\n  \"total_matching\": 3,\n  \"records\": [\n    {\n      \"id\": 6,\n      \"provider\": \"google\",\n      \"category\": \"exercise\",\n      \"metric\": \"duration\",\n      \"granularity\": \"session\",\n      \"local_date\": \"2026-10-02\",\n      \"start_local\": \"2026-10-02T10:00:00\",\n      \"time_basis\": \"local\",\n      \"value\": 40.0,\n      \"unit\": \"min\",\n      \"source_id\": \"workout-2\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:57Z\",\n      \"updated_at\": \"2026-10-30T17:11:57Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 7,\n      \"provider\": \"google\",\n      \"category\": \"exercise\",\n      \"metric\": \"duration\",\n      \"granularity\": \"session\",\n      \"local_date\": \"2026-10-02\",\n      \"start_local\": \"2026-10-02T10:00:00\",\n      \"time_basis\": \"local\",\n      \"value\": 50.0,\n      \"unit\": \"min\",\n      \"source_id\": \"workout-3\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:57Z\",\n      \"updated_at\": \"2026-10-30T17:11:57Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 8,\n      \"provider\": \"google\",\n      \"category\": \"exercise\",\n      \"metric\": \"duration\",\n      \"granularity\": \"session\",\n      \"local_date\": \"2026-10-03\",\n      \"start_local\": \"2026-10-03T10:00:00\",\n      \"time_basis\": \"local\",\n      \"value\": 60.0,\n      \"unit\": \"min\",\n      \"source_id\": \"workout-4\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:57Z\",\n      \"updated_at\": \"2026-10-30T17:11:57Z\",\n      \"parser\": \"eval-synthetic\"\n    }\n  ],\n  \"notes\": [\n    \"local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.\",\n    \"Records marked deleted_upstream are hidden unless include_deleted=true.\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "count": 3,
+          "total_matching": 3,
+          "records": [
+            {
+              "id": 6,
+              "provider": "google",
+              "category": "exercise",
+              "metric": "duration",
+              "granularity": "session",
+              "local_date": "2026-10-02",
+              "start_local": "2026-10-02T10:00:00",
+              "time_basis": "local",
+              "value": 40.0,
+              "unit": "min",
+              "source_id": "workout-2",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:57Z",
+              "updated_at": "2026-10-30T17:11:57Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 7,
+              "provider": "google",
+              "category": "exercise",
+              "metric": "duration",
+              "granularity": "session",
+              "local_date": "2026-10-02",
+              "start_local": "2026-10-02T10:00:00",
+              "time_basis": "local",
+              "value": 50.0,
+              "unit": "min",
+              "source_id": "workout-3",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:57Z",
+              "updated_at": "2026-10-30T17:11:57Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 8,
+              "provider": "google",
+              "category": "exercise",
+              "metric": "duration",
+              "granularity": "session",
+              "local_date": "2026-10-03",
+              "start_local": "2026-10-03T10:00:00",
+              "time_basis": "local",
+              "value": 60.0,
+              "unit": "min",
+              "source_id": "workout-4",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:57Z",
+              "updated_at": "2026-10-30T17:11:57Z",
+              "parser": "eval-synthetic"
+            }
+          ],
+          "notes": [
+            "local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.",
+            "Records marked deleted_upstream are hidden unless include_deleted=true."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0013,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-01",
+            "value": 20.0,
+            "unit": "min",
+            "record_key": "workout-0",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-01",
+            "value": 30.0,
+            "unit": "min",
+            "record_key": "workout-1",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-02",
+            "value": 40.0,
+            "unit": "min",
+            "record_key": "workout-2",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-02",
+            "value": 50.0,
+            "unit": "min",
+            "record_key": "workout-3",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "duration",
+            "local_date": "2026-10-03",
+            "value": 60.0,
+            "unit": "min",
+            "record_key": "workout-4",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 20.0,
+        "unit": "min",
+        "record_key": "workout-0",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 30.0,
+        "unit": "min",
+        "record_key": "workout-1",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 40.0,
+        "unit": "min",
+        "record_key": "workout-2",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 50.0,
+        "unit": "min",
+        "record_key": "workout-3",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-03",
+        "value": 60.0,
+        "unit": "min",
+        "record_key": "workout-4",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 20.0,
+        "unit": "min",
+        "record_key": "workout-0",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-01",
+        "value": 30.0,
+        "unit": "min",
+        "record_key": "workout-1",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 40.0,
+        "unit": "min",
+        "record_key": "workout-2",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-02",
+        "value": 50.0,
+        "unit": "min",
+        "record_key": "workout-3",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "duration",
+        "local_date": "2026-10-03",
+        "value": 60.0,
+        "unit": "min",
+        "record_key": "workout-4",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 3,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

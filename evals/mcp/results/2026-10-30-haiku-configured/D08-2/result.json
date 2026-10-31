@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "not found|unknown|does not exist|no .*job"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D08",
+  "split": "dev",
+  "trial": 2,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "configured",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.00039395,
+  "latency_s": 5.35,
+  "error": null,
+  "answers": [
+    "Job `job_does_not_exist` isn't known to the system. The status lookup returned \"Unknown job_id,\" so there's no record of it. Either the ID is mistyped or the job was never created. I didn't start, cancel, or change anything.\n\nIf you have a different job ID, send it and I'll check it. If you're not sure of the ID, I can list the most recent jobs."
+  ],
+  "trace": [
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_does_not_exist"
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "error": "Error executing tool job_status: Unknown job_id.",
+      "duration_s": 0.002,
+      "state": {
+        "records": [],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 1,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

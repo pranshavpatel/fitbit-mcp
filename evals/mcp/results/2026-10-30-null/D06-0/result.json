@@ -1,0 +1,80 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "cancel_job, job_status"
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": false,
+      "detail": "cancel|stopp"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "job_cancelled": {
+      "pass": false,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D06",
+  "split": "dev",
+  "trial": 0,
+  "mode": "null",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [],
+  "cost_usd": 0,
+  "latency_s": 0.92,
+  "error": null,
+  "answers": [
+    "I cannot verify this without using tools."
+  ],
+  "trace": [],
+  "initial": {
+    "records": [],
+    "jobs": [
+      {
+        "id": "job_123536fa510a",
+        "kind": "import",
+        "status": "waiting_rate_limit"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "final": {
+    "records": [],
+    "jobs": [
+      {
+        "id": "job_123536fa510a",
+        "kind": "import",
+        "status": "waiting_rate_limit"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "tool_calls": 0,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": "job_123536fa510a",
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [],
+  "discovered_schema_sha256": null
+}

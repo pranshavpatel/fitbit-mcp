@@ -1,0 +1,200 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I'll check which Google data is available locally first. Note: the system date is Monday, 2026-11-02, but another note in this session says 2026-10-30. I'll use 2026-11-02 for now and flag the conflict in my answer."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Cm8WdALRgQXtZKo3AZyedK",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TAu7pZPZfHSQTSSYd8DyN3",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Local step data covers 2026-10-01 to 2026-11-01. I'll pull last week's range, Oct 26 through Nov 1."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01DnFyEz8X9RqiGEaEZfPNGu",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "activity",
+          "metric": "steps",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RwnfUGajitJGEjCZB1b847",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "period": "week",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google steps for last week (Monday, October 26, 2026 through Sunday, November 1, 2026) were 2,000 steps on each of the 7 days, for a total of 14,000 steps and a daily average of 2,000.\n\nThings to check before you rely on this:\n\n- **The values look suspicious.** All seven days show exactly 2,000 steps, and the records were labeled with the parser `eval-synthetic`. That suggests placeholder or test data rather than your real activity. I'd verify against the Google Health app before trusting these numbers.\n- **The Google connection isn't active.** Google reports as not configured, with no token and no verified API connection. The records above came from data already stored locally, not from a live fetch. A new sync would require reconnecting, and in Testing mode Google refresh tokens expire after 7 days.\n- **The date is ambiguous.** The system date is Monday, November 2, 2026, so last week is October 26 to November 1. Another note in this session gives today as October 30, which would make last week October 19 to 25. I have no local step records for October 19 to 25, so if that's the intended week, there's nothing to summarize yet. Tell me which date is correct and I can redo the summary."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google steps for last week (Monday, October 26, 2026 through Sunday, November 1, 2026) were 2,000 steps on each of the 7 days, for a total of 14,000 steps and a daily average of 2,000.\n\nThings to check before you rely on this:\n\n- **The values look suspicious.** All seven days show exactly 2,000 steps, and the records were labeled with the parser `eval-synthetic`. That suggests placeholder or test data rather than your real activity. I'd verify against the Google Health app before trusting these numbers.\n- **The Google connection isn't active.** Google reports as not configured, with no token and no verified API connection. The records above came from data already stored locally, not from a live fetch. A new sync would require reconnecting, and in Testing mode Google refresh tokens expire after 7 days.\n- **The date is ambiguous.** The system date is Monday, November 2, 2026, so last week is October 26 to November 1. Another note in this session gives today as October 30, which would make last week October 19 to 25. I have no local step records for October 19 to 25, so if that's the intended week, there's nothing to summarize yet. Tell me which date is correct and I can redo the summary.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1783,
+        "cacheReadInputTokens": 22242,
+        "cacheCreationInputTokens": 4300,
+        "webSearchRequests": 0,
+        "costUSD": 0.0019745200000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 831,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4300,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0019745200000000004,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 4300,
+      "cache_read_input_tokens": 22242,
+      "output_tokens": 1783,
+      "output_tokens_details": {
+        "thinking_tokens": 831
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4300,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 596,
+          "cache_read_input_tokens": 8660,
+          "cache_creation_input_tokens": 2098,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2098
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

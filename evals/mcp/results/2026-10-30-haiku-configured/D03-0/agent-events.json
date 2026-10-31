@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01EqMXEBDiedwykmzrpT56jf",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01UanNUJeBqhDprTearYW18s",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01En9JJd9BG8v2oQwEjbiLyM",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_30d1b98998e8"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Google connection did not work. The ghealth credentials loaded and all 12 read-only permissions were granted, but the test request failed with `ACCOUNT_NOT_LINKED`: the Google account behind those credentials has no linked Google Health identity. Nothing is connected and no data has been imported.\n\nTo fix this, the Google account used for `ghealth` needs to be linked to a Google Health (Fitbit) profile. Check that the account has Google Health or Fitbit set up and that it's the same account you signed in with for `ghealth`. Then re-run `ghealth auth login` and ask me to connect again.\n\nOther limitations:\n- The Google Health API project is in Testing mode, so refresh tokens expire after 7 days. You may need to run `ghealth auth login` again periodically.\n- Google isn't onboarding new projects, so this depends on the existing ghealth setup.\n- If the API connection keeps failing, `import_takeout` works without API access. You could export a Takeout or Fitbit archive and import that instead."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Google connection did not work. The ghealth credentials loaded and all 12 read-only permissions were granted, but the test request failed with `ACCOUNT_NOT_LINKED`: the Google account behind those credentials has no linked Google Health identity. Nothing is connected and no data has been imported.\n\nTo fix this, the Google account used for `ghealth` needs to be linked to a Google Health (Fitbit) profile. Check that the account has Google Health or Fitbit set up and that it's the same account you signed in with for `ghealth`. Then re-run `ghealth auth login` and ask me to connect again.\n\nOther limitations:\n- The Google Health API project is in Testing mode, so refresh tokens expire after 7 days. You may need to run `ghealth auth login` again periodically.\n- Google isn't onboarding new projects, so this depends on the existing ghealth setup.\n- If the API connection keeps failing, `import_takeout` works without API access. You could export a Takeout or Fitbit archive and import that instead.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 766,
+        "cacheReadInputTokens": 21238,
+        "cacheCreationInputTokens": 2576,
+        "webSearchRequests": 0,
+        "costUSD": 0.00111118,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 191,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2576,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00111118,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2576,
+      "cache_read_input_tokens": 21238,
+      "output_tokens": 766,
+      "output_tokens_details": {
+        "thinking_tokens": 191
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2576,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 526,
+          "cache_read_input_tokens": 7953,
+          "cache_creation_input_tokens": 792,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 792
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

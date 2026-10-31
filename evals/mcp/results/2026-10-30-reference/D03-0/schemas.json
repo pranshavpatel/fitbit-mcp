@@ -1,0 +1,975 @@
+[
+  {
+    "name": "connection_status",
+    "title": null,
+    "description": "Report which provider is connected, granted permissions and connection health. Never returns tokens.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "default": "all",
+          "enum": [
+            "google",
+            "fitbit",
+            "all"
+          ],
+          "title": "Provider",
+          "type": "string"
+        },
+        "check_remote": {
+          "default": false,
+          "description": "Make one read-only API request to confirm the connection works",
+          "title": "Check Remote",
+          "type": "boolean"
+        }
+      },
+      "title": "connection_statusArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "connection_statusDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": null
+  },
+  {
+    "name": "connect_account",
+    "title": null,
+    "description": "Connect a provider and verify it with a read-only API call. Google reuses the `ghealth` CLI's OAuth\n        credentials when available; otherwise the system browser opens (OAuth with PKCE + state, loopback on\n        127.0.0.1). Returns a job_id; poll job_status until it succeeds (only then is the account verified).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "anyOf": [
+            {
+              "enum": [
+                "google",
+                "fitbit"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Omit to pick the configured, currently available provider",
+          "title": "Provider"
+        },
+        "permissions": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional subset of read-only permission names (see connection_status). Default: all supported read-only permissions; you can still decline any on the consent screen.",
+          "title": "Permissions"
+        },
+        "timeout_seconds": {
+          "default": 300,
+          "maximum": 900,
+          "minimum": 60,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        },
+        "method": {
+          "default": "auto",
+          "description": "Google: 'auto' reuses the ghealth CLI's existing credentials (as health-coach-app does) when present, otherwise opens the browser",
+          "enum": [
+            "auto",
+            "ghealth_cli",
+            "browser"
+          ],
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "title": "connect_accountArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "connect_accountDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  },
+  {
+    "name": "disconnect_account",
+    "title": null,
+    "description": "Remove local tokens. Optionally revoke the app's authorization at the provider and/or delete local data.\n        Imported data is kept unless delete_local_data is true. Revocation or deletion requires a two-step\n        confirmation: call once to get a confirmation_token, ask the user, then call again with it.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "enum": [
+            "google",
+            "fitbit"
+          ],
+          "title": "Provider",
+          "type": "string"
+        },
+        "revoke_remote_authorization": {
+          "default": false,
+          "title": "Revoke Remote Authorization",
+          "type": "boolean"
+        },
+        "delete_local_data": {
+          "default": false,
+          "description": "Also delete this provider's imported records and raw files",
+          "title": "Delete Local Data",
+          "type": "boolean"
+        },
+        "include_takeout_data": {
+          "default": false,
+          "title": "Include Takeout Data",
+          "type": "boolean"
+        },
+        "confirmation_token": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Only after the user explicitly agreed to the actions returned by a first call without this token",
+          "title": "Confirmation Token"
+        }
+      },
+      "required": [
+        "provider"
+      ],
+      "title": "disconnect_accountArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "disconnect_accountDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  },
+  {
+    "name": "start_import",
+    "title": null,
+    "description": "Import history into the local database as a background job. Without dates: all API-accessible history\n        (Fitbit from the account's memberSince date; Google: each type's first day is discovered by walking back\n        until the data runs out). Returns a job_id.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "anyOf": [
+            {
+              "enum": [
+                "google",
+                "fitbit"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "start_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Date"
+        },
+        "end_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Date"
+        },
+        "categories": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "activity",
+                  "blood_glucose",
+                  "body",
+                  "cardio_fitness",
+                  "ecg",
+                  "exercise",
+                  "heart",
+                  "irn",
+                  "nutrition",
+                  "reproductive_health",
+                  "sleep",
+                  "spo2_breathing_temperature",
+                  "symptoms_and_mood"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Default: all categories the provider supports",
+          "title": "Categories"
+        },
+        "include_intraday": {
+          "default": false,
+          "description": "Fitbit only: minute/second samples (10 requests per day of history)",
+          "title": "Include Intraday",
+          "type": "boolean"
+        },
+        "full_heart_rate": {
+          "default": false,
+          "description": "Google only: whole-day heart rate (~37 MB/day) instead of exercise windows",
+          "title": "Full Heart Rate",
+          "type": "boolean"
+        },
+        "include_unverified_types": {
+          "default": true,
+          "description": "Google only: include the 21 types defined by Google's API description but not yet confirmed against a live account (nutrition, ECG, IRN, moods, symptoms, reproductive health, body fat, ...). Default true; false limits the run to the 23 live-verified types.",
+          "title": "Include Unverified Types",
+          "type": "boolean"
+        }
+      },
+      "title": "start_importArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "start_importDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  },
+  {
+    "name": "sync_data",
+    "title": null,
+    "description": "Fetch new and recently changed records: re-requests the overlap window (never served from cache),\n        updates changed records, de-duplicates by provider IDs and flags records the provider no longer returns\n        as deleted_upstream. Returns a job_id.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "anyOf": [
+            {
+              "enum": [
+                "google",
+                "fitbit"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "overlap_days": {
+          "default": 3,
+          "description": "Days before the last sync to re-fetch for late or edited data",
+          "maximum": 90,
+          "minimum": 1,
+          "title": "Overlap Days",
+          "type": "integer"
+        },
+        "categories": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "activity",
+                  "blood_glucose",
+                  "body",
+                  "cardio_fitness",
+                  "ecg",
+                  "exercise",
+                  "heart",
+                  "irn",
+                  "nutrition",
+                  "reproductive_health",
+                  "sleep",
+                  "spo2_breathing_temperature",
+                  "symptoms_and_mood"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Categories"
+        },
+        "include_intraday": {
+          "default": false,
+          "title": "Include Intraday",
+          "type": "boolean"
+        },
+        "full_heart_rate": {
+          "default": false,
+          "description": "Google only: whole-day heart rate for yesterday and today (~11 MB/day) instead of exercise windows only",
+          "title": "Full Heart Rate",
+          "type": "boolean"
+        }
+      },
+      "title": "sync_dataArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "sync_dataDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  },
+  {
+    "name": "import_takeout",
+    "title": null,
+    "description": "Import a downloaded Google Takeout / Fitbit data export (use when API access is unavailable). Extracts\n        safely with size and path checks, detects supported files by content, and reports unsupported ones.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Local path to a Takeout/Fitbit export .zip or .tgz, a folder of archive parts, or an extracted folder",
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "import_takeoutArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "import_takeoutDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  },
+  {
+    "name": "job_status",
+    "title": null,
+    "description": "Status and progress of one job, or the most recent jobs when job_id is omitted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Job Id"
+        },
+        "limit": {
+          "default": 10,
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "job_statusArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "job_statusDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": null
+  },
+  {
+    "name": "cancel_job",
+    "title": null,
+    "description": "Request cancellation; the job stops at the next safe point (including during rate-limit waits).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "title": "Job Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "job_id"
+      ],
+      "title": "cancel_jobArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "cancel_jobDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  },
+  {
+    "name": "resume_job",
+    "title": null,
+    "description": "Resume an interrupted, cancelled, failed or partial import/sync/takeout job. Completed requests are\n        skipped; failed ones are retried.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "title": "Job Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "job_id"
+      ],
+      "title": "resume_jobArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "resume_jobDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  },
+  {
+    "name": "list_data_types",
+    "title": null,
+    "description": "Local categories and metrics with record counts, date coverage and units, plus categories that are\n        missing, denied, not granted or failed, and file/response formats that could not be parsed.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "title": "list_data_typesArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "list_data_typesDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": null
+  },
+  {
+    "name": "query_data",
+    "title": null,
+    "description": "Filter local records (dates are inclusive calendar dates). Paginate with next_cursor.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "metric": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric"
+        },
+        "start_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Date"
+        },
+        "end_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Date"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "enum": [
+                "fitbit",
+                "google",
+                "fitbit_takeout",
+                "google_takeout"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "granularity": {
+          "anyOf": [
+            {
+              "enum": [
+                "sample",
+                "interval",
+                "session",
+                "daily"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Granularity"
+        },
+        "min_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Value"
+        },
+        "max_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Value"
+        },
+        "include_deleted": {
+          "default": false,
+          "title": "Include Deleted",
+          "type": "boolean"
+        },
+        "include_original": {
+          "default": false,
+          "title": "Include Original",
+          "type": "boolean"
+        },
+        "order": {
+          "default": "asc",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "title": "Order",
+          "type": "string"
+        },
+        "limit": {
+          "default": 100,
+          "maximum": 500,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cursor"
+        }
+      },
+      "title": "query_dataArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "query_dataDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": null
+  },
+  {
+    "name": "summarize_data",
+    "title": null,
+    "description": "Descriptive statistics and trend for one metric, with its definition, coverage and exclusions.\n        Default range: the 30 days ending at the latest local data.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "metric": {
+          "enum": [
+            "steps",
+            "distance",
+            "calories_out",
+            "sleep",
+            "resting_heart_rate",
+            "hrv",
+            "heart_rate",
+            "weight"
+          ],
+          "title": "Metric",
+          "type": "string"
+        },
+        "start_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Date"
+        },
+        "end_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Date"
+        },
+        "period": {
+          "default": "week",
+          "enum": [
+            "day",
+            "week",
+            "month"
+          ],
+          "title": "Period",
+          "type": "string"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "enum": [
+                "fitbit",
+                "google",
+                "fitbit_takeout",
+                "google_takeout"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        }
+      },
+      "required": [
+        "metric"
+      ],
+      "title": "summarize_dataArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "summarize_dataDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": null
+  },
+  {
+    "name": "export_data",
+    "title": null,
+    "description": "Write matching local records to a JSON or CSV file in the local exports folder; returns its path.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "csv",
+          "enum": [
+            "json",
+            "csv"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "metric": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric"
+        },
+        "start_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Date"
+        },
+        "end_date": {
+          "anyOf": [
+            {
+              "description": "YYYY-MM-DD",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Date"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "enum": [
+                "fitbit",
+                "google",
+                "fitbit_takeout",
+                "google_takeout"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "granularity": {
+          "anyOf": [
+            {
+              "enum": [
+                "sample",
+                "interval",
+                "session",
+                "daily"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Granularity"
+        },
+        "include_deleted": {
+          "default": false,
+          "title": "Include Deleted",
+          "type": "boolean"
+        },
+        "include_original": {
+          "default": false,
+          "title": "Include Original",
+          "type": "boolean"
+        }
+      },
+      "title": "export_dataArguments"
+    },
+    "execution": null,
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "export_dataDictOutput",
+      "type": "object"
+    },
+    "icons": null,
+    "annotations": {
+      "title": null,
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "_meta": null
+  }
+]

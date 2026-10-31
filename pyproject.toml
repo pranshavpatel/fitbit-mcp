@@ -31,7 +31,7 @@ filterwarnings = ["ignore::pytest.PytestUnhandledThreadExceptionWarning"]
 [tool.ruff]
 target-version = "py310"
 line-length = 130
-src = ["src", ".claude/skills/stats/scripts", ".claude/skills/stats/evals", ".claude/skills/stats/tests", "tests"]
+src = ["src", "evals", ".claude/skills/stats/scripts", ".claude/skills/stats/evals", ".claude/skills/stats/tests", "tests"]
 
 [tool.ruff.lint]
 # pyflakes + pycodestyle errors + bugbear: real bugs (unused names, shadowed tests, late-binding closures)

@@ -1,0 +1,369 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "\\.csv"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "export_contents": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D19",
+  "split": "dev",
+  "trial": 1,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "configured",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0010588300000000002,
+  "latency_s": 5.1,
+  "error": null,
+  "answers": [
+    "The export is done. It contains 2 records, the Google daily step counts for October 1\u20132, 2026.\n\n**File path:** `$TRIAL/home/exports/fitbit-google-activity-steps-20261030-131253.csv`\n\nThe file is stored locally with owner-only permissions and isn't uploaded anywhere.\n\nLimitations:\n- The local database has Google step data only for October 1\u20133, 2026. October 3 wasn't in your requested range, so it's not in the file.\n- Google isn't currently connected through the API here (`connection_status` shows no verified connection and no stored tokens). The export comes from data already stored locally, so it won't include anything newer than the last import."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0014,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "connection_status",
+      "arguments": {
+        "provider": "google"
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": false,\n      \"client_secret_path\": \"$TRIAL/ghealth/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"No verified API connection.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": false,
+              "client_secret_path": "$TRIAL/ghealth/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "No verified API connection."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.001,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "export_data",
+      "arguments": {
+        "provider": "google",
+        "category": "activity",
+        "metric": "steps",
+        "granularity": "daily",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-02",
+        "format": "csv"
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"path\": \"$TRIAL/home/exports/fitbit-google-activity-steps-20261030-131253.csv\",\n  \"format\": \"csv\",\n  \"records\": 2,\n  \"bytes\": 523,\n  \"note\": \"File is stored locally with owner-only permissions; it is not uploaded anywhere.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "path": "$TRIAL/home/exports/fitbit-google-activity-steps-20261030-131253.csv",
+          "format": "csv",
+          "records": 2,
+          "bytes": 523,
+          "note": "File is stored locally with owner-only permissions; it is not uploaded anywhere."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0038,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 3,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

@@ -1,0 +1,970 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "2026-10-26|oct(?:ober)?\\s*26"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "2026-11-01|nov(?:ember)?\\s*1"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "local_last_week": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D17",
+  "split": "dev",
+  "trial": 2,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "configured",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0019745200000000004,
+  "latency_s": 10.09,
+  "error": null,
+  "answers": [
+    "Your Google steps for last week (Monday, October 26, 2026 through Sunday, November 1, 2026) were 2,000 steps on each of the 7 days, for a total of 14,000 steps and a daily average of 2,000.\n\nThings to check before you rely on this:\n\n- **The values look suspicious.** All seven days show exactly 2,000 steps, and the records were labeled with the parser `eval-synthetic`. That suggests placeholder or test data rather than your real activity. I'd verify against the Google Health app before trusting these numbers.\n- **The Google connection isn't active.** Google reports as not configured, with no token and no verified API connection. The records above came from data already stored locally, not from a live fetch. A new sync would require reconnecting, and in Testing mode Google refresh tokens expire after 7 days.\n- **The date is ambiguous.** The system date is Monday, November 2, 2026, so last week is October 26 to November 1. Another note in this session gives today as October 30, which would make last week October 19 to 25. I have no local step records for October 19 to 25, so if that's the intended week, there's nothing to summarize yet. Tell me which date is correct and I can redo the summary."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 10,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-11-01\",\n      \"days_with_data\": 10\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 10,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-11-01",
+              "days_with_data": 10
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0008,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-26",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-26",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-27",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-27",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-28",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-28",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-29",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-29",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-30",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-30",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-31",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-31",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-11-01",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-11-01",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "connection_status",
+      "arguments": {
+        "provider": "google"
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": false,\n      \"client_secret_path\": \"$TRIAL/ghealth/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"No verified API connection.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": false,
+              "client_secret_path": "$TRIAL/ghealth/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "No verified API connection."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0009,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-26",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-26",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-27",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-27",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-28",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-28",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-29",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-29",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-30",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-30",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-31",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-31",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-11-01",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-11-01",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "query_data",
+      "arguments": {
+        "category": "activity",
+        "metric": "steps",
+        "provider": "google",
+        "start_date": "2026-10-26",
+        "end_date": "2026-11-01",
+        "limit": 100
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"count\": 7,\n  \"total_matching\": 7,\n  \"records\": [\n    {\n      \"id\": 4,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-26\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:39Z\",\n      \"updated_at\": \"2026-10-30T17:12:39Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 5,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-27\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:39Z\",\n      \"updated_at\": \"2026-10-30T17:12:39Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 6,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-28\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:39Z\",\n      \"updated_at\": \"2026-10-30T17:12:39Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 7,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-29\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:39Z\",\n      \"updated_at\": \"2026-10-30T17:12:39Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 8,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-30\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:39Z\",\n      \"updated_at\": \"2026-10-30T17:12:39Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 9,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-10-31\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:39Z\",\n      \"updated_at\": \"2026-10-30T17:12:39Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 10,\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"local_date\": \"2026-11-01\",\n      \"time_basis\": \"date_only\",\n      \"value\": 2000.0,\n      \"unit\": \"count\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:12:39Z\",\n      \"updated_at\": \"2026-10-30T17:12:39Z\",\n      \"parser\": \"eval-synthetic\"\n    }\n  ],\n  \"notes\": [\n    \"local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.\",\n    \"Records marked deleted_upstream are hidden unless include_deleted=true.\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "count": 7,
+          "total_matching": 7,
+          "records": [
+            {
+              "id": 4,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-26",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:39Z",
+              "updated_at": "2026-10-30T17:12:39Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 5,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-27",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:39Z",
+              "updated_at": "2026-10-30T17:12:39Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 6,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-28",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:39Z",
+              "updated_at": "2026-10-30T17:12:39Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 7,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-29",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:39Z",
+              "updated_at": "2026-10-30T17:12:39Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 8,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-30",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:39Z",
+              "updated_at": "2026-10-30T17:12:39Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 9,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-10-31",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:39Z",
+              "updated_at": "2026-10-30T17:12:39Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 10,
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "local_date": "2026-11-01",
+              "time_basis": "date_only",
+              "value": 2000.0,
+              "unit": "count",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:12:39Z",
+              "updated_at": "2026-10-30T17:12:39Z",
+              "parser": "eval-synthetic"
+            }
+          ],
+          "notes": [
+            "local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.",
+            "Records marked deleted_upstream are hidden unless include_deleted=true."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0017,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-26",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-26",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-27",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-27",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-28",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-28",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-29",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-29",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-30",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-30",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-31",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-31",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-11-01",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-11-01",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "summarize_data",
+      "arguments": {
+        "metric": "steps",
+        "provider": "google",
+        "period": "week",
+        "start_date": "2026-10-26",
+        "end_date": "2026-11-01"
+      },
+      "user_turn": 1,
+      "index": 4,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metric\": \"steps\",\n  \"unit\": \"steps\",\n  \"provider_used\": \"google\",\n  \"other_providers_with_data\": [],\n  \"start_date\": \"2026-10-26\",\n  \"end_date\": \"2026-11-01\",\n  \"period\": \"week\",\n  \"overall\": {\n    \"days_with_data\": 7,\n    \"calendar_days\": 7,\n    \"coverage_pct\": 100.0,\n    \"mean\": 2000.0,\n    \"median\": 2000.0,\n    \"min\": 2000.0,\n    \"max\": 2000.0\n  },\n  \"periods\": [\n    {\n      \"period\": \"week of 2026-10-26\",\n      \"days_with_data\": 7,\n      \"calendar_days\": 7,\n      \"mean\": 2000.0,\n      \"min\": 2000.0,\n      \"max\": 2000.0,\n      \"total_of_days_with_data\": 14000.0\n    }\n  ],\n  \"trend\": {\n    \"available\": true,\n    \"method\": \"ordinary least squares on days with data (gaps are not filled)\",\n    \"slope_per_week\": 0.0,\n    \"first_half_mean\": 2000.0,\n    \"second_half_mean\": 2000.0,\n    \"days_used\": 7,\n    \"caution\": \"Descriptive only; not adjusted for seasonality, device changes or missing days.\"\n  },\n  \"definition\": \"Daily step total. Uses the provider's daily total when present (Fitbit daily series or Google's steps daily roll-up); otherwise the sum of that day's interval step counts from one data source (the source with the most records that day). Days with no records are missing, not zero. Fitbit days with 0 steps and a full day (or unknown) sedentary time are treated as no-wear and excluded.\",\n  \"exclusions\": {},\n  \"caveats\": [\n    \"Means are over days with data only; missing days are not treated as zero.\",\n    \"Dates are the provider's calendar dates (account/device time zone).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metric": "steps",
+          "unit": "steps",
+          "provider_used": "google",
+          "other_providers_with_data": [],
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "period": "week",
+          "overall": {
+            "days_with_data": 7,
+            "calendar_days": 7,
+            "coverage_pct": 100.0,
+            "mean": 2000.0,
+            "median": 2000.0,
+            "min": 2000.0,
+            "max": 2000.0
+          },
+          "periods": [
+            {
+              "period": "week of 2026-10-26",
+              "days_with_data": 7,
+              "calendar_days": 7,
+              "mean": 2000.0,
+              "min": 2000.0,
+              "max": 2000.0,
+              "total_of_days_with_data": 14000.0
+            }
+          ],
+          "trend": {
+            "available": true,
+            "method": "ordinary least squares on days with data (gaps are not filled)",
+            "slope_per_week": 0.0,
+            "first_half_mean": 2000.0,
+            "second_half_mean": 2000.0,
+            "days_used": 7,
+            "caution": "Descriptive only; not adjusted for seasonality, device changes or missing days."
+          },
+          "definition": "Daily step total. Uses the provider's daily total when present (Fitbit daily series or Google's steps daily roll-up); otherwise the sum of that day's interval step counts from one data source (the source with the most records that day). Days with no records are missing, not zero. Fitbit days with 0 steps and a full day (or unknown) sedentary time are treated as no-wear and excluded.",
+          "exclusions": {},
+          "caveats": [
+            "Means are over days with data only; missing days are not treated as zero.",
+            "Dates are the provider's calendar dates (account/device time zone)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0013,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-26",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-26",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-27",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-27",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-28",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-28",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-29",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-29",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-30",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-30",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-31",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-31",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-11-01",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-11-01",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-26",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-26",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-27",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-27",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-28",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-28",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-29",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-29",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-30",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-30",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-31",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-31",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-11-01",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-11-01",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-26",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-26",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-27",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-27",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-28",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-28",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-29",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-29",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-30",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-30",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-31",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-31",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-11-01",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-11-01",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 4,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-11-02",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

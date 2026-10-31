@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01ACgyWrtrZ4tS5LNSrSgJFG",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01FpGFoyopxeh21WvrhfrQoE",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012Lozqta7FrdT4kVmYsstMd",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_8b717c542e3c"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "No, it doesn't work yet. Your Google account is not connected.\n\nThe job failed at the validation step. The ghealth CLI credentials loaded and were granted all 12 read-only Google Health scopes, but the test request returned `ACCOUNT_NOT_LINKED`: no Google Health identity is linked to the Google account behind those credentials. Nothing was imported, and no data is available from the API.\n\nTo fix it, you could:\n\n1. **Link the account in Google Health.** Make sure the Google account used for `ghealth auth login` has a Google Health profile with your Fitbit or Google Health data linked to it. Then run `ghealth auth login` again. I can retry the connection afterward.\n2. **Check which Google account the CLI is signed into.** If it's a different account from the one with your health data, log in with the correct one and retry.\n3. **Use a Google Takeout export instead.** If API access stays unavailable, download your Google Takeout or Fitbit export and I can import it with `import_takeout`. This works without API access.\n\nOne caveat: the Google project is in Testing mode, so refresh tokens expire after 7 days. You'll need to rerun `ghealth auth login` about weekly."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "No, it doesn't work yet. Your Google account is not connected.\n\nThe job failed at the validation step. The ghealth CLI credentials loaded and were granted all 12 read-only Google Health scopes, but the test request returned `ACCOUNT_NOT_LINKED`: no Google Health identity is linked to the Google account behind those credentials. Nothing was imported, and no data is available from the API.\n\nTo fix it, you could:\n\n1. **Link the account in Google Health.** Make sure the Google account used for `ghealth auth login` has a Google Health profile with your Fitbit or Google Health data linked to it. Then run `ghealth auth login` again. I can retry the connection afterward.\n2. **Check which Google account the CLI is signed into.** If it's a different account from the one with your health data, log in with the correct one and retry.\n3. **Use a Google Takeout export instead.** If API access stays unavailable, download your Google Takeout or Fitbit export and I can import it with `import_takeout`. This works without API access.\n\nOne caveat: the Google project is in Testing mode, so refresh tokens expire after 7 days. You'll need to rerun `ghealth auth login` about weekly.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 735,
+        "cacheReadInputTokens": 21505,
+        "cacheCreationInputTokens": 2289,
+        "webSearchRequests": 0,
+        "costUSD": 0.0010409500000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 107,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2289,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0010409500000000001,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2289,
+      "cache_read_input_tokens": 21505,
+      "output_tokens": 735,
+      "output_tokens_details": {
+        "thinking_tokens": 107
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2289,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 495,
+          "cache_read_input_tokens": 7942,
+          "cache_creation_input_tokens": 796,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 796
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

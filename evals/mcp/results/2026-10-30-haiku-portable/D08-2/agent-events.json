@@ -1,0 +1,115 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01NM9Xp8nPtgp8qSoWQZ34hx",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_does_not_exist"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "There's no job with the ID `job_does_not_exist`. The status check returned \"Unknown job_id,\" so the job is either misspelled or was never created on this machine. I didn't start or change anything.\n\nIf you have a different ID, send it and I'll check it. If you want to see the most recent jobs, I can list those instead."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "There's no job with the ID `job_does_not_exist`. The status check returned \"Unknown job_id,\" so the job is either misspelled or was never created on this machine. I didn't start or change anything.\n\nIf you have a different ID, send it and I'll check it. If you want to see the most recent jobs, I can list those instead.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 169,
+        "cacheReadInputTokens": 12504,
+        "cacheCreationInputTokens": 820,
+        "webSearchRequests": 0,
+        "costUSD": 0.00037394,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 820,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00037394,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 820,
+      "cache_read_input_tokens": 12504,
+      "output_tokens": 169,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 820,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 101,
+          "cache_read_input_tokens": 6586,
+          "cache_creation_input_tokens": 152,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 152
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]
