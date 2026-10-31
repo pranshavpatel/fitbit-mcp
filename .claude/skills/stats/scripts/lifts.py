@@ -62,7 +62,9 @@ def save(home: Path, days: dict[str, list[dict]]) -> None:
 
 def parse(tokens: list[str], at: str) -> list[dict]:
     """Words build an exercise name; each set pattern after it adds a set group to that exercise."""
-    entries, name, pending = [], [], False
+    entries: list[dict] = []
+    name: list[str] = []
+    pending = False
     for tok in tokens:
         m = SET_RE.match(tok.strip(","))
         if not m:

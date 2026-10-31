@@ -11,7 +11,7 @@ import math
 import statistics
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
-from typing import Iterable, Sequence
+from typing import Iterable, Sequence, overload
 
 FORMULA_VERSION = "stats-scores v1.5"
 
@@ -33,6 +33,10 @@ def baseline(values: Iterable[float | None], min_n: int = 7) -> Baseline | None:
     return Baseline(statistics.fmean(vals), statistics.pstdev(vals), len(vals))
 
 
+@overload
+def zscore(value: float, base: Baseline, min_sd: float) -> float: ...
+@overload
+def zscore(value: float | None, base: Baseline | None, min_sd: float) -> float | None: ...
 def zscore(value: float | None, base: Baseline | None, min_sd: float) -> float | None:
     """z against a baseline, with an SD floor so a very steady baseline can't blow small changes up."""
     if value is None or base is None:
@@ -101,7 +105,8 @@ def sleeping_rhr(samples: Sequence[tuple[str, float]], night_minutes: float | No
         return None
     lo_m, hi_m = min(per), max(per)
     mean = {m: statistics.fmean(v) for m, v in per.items()}
-    run_sum, run_n, low = 0.0, 0, None
+    run_sum, run_n = 0.0, 0
+    low: float | None = None
     for m in range(lo_m, hi_m + 1):           # window = the w minutes ending at m
         if m in mean:
             run_sum, run_n = run_sum + mean[m], run_n + 1
@@ -333,7 +338,9 @@ def baseline_sleep_need(nights: Sequence[float | None], fixed: float | None = No
         vals = [a for a in nights[1:] if a is not None]
     if len(vals) < 7:
         return NEED_DEFAULT_MIN, False
-    return clamp(percentile(vals, 0.75), NEED_MIN, NEED_MAX), True
+    p75 = percentile(vals, 0.75)
+    assert p75 is not None                     # 7+ nights
+    return clamp(p75, NEED_MIN, NEED_MAX), True
 
 
 def sleep_debt(nights: Sequence[float | None], base_need: float) -> float:
@@ -557,15 +564,17 @@ def dedupe_sessions(sessions: Sequence[dict]) -> list[dict]:
 
 def union_minutes(intervals: Iterable[tuple[float, float]]) -> float:
     """Total minutes covered by (start_s, end_s) intervals, overlaps counted once."""
-    total, cur_s, cur_e = 0.0, None, None
+    total = 0.0
+    cur_s: float | None = None
+    cur_e: float | None = None
     for s, e in sorted(intervals):
         if cur_e is None or s > cur_e:
-            if cur_e is not None:
+            if cur_s is not None and cur_e is not None:
                 total += cur_e - cur_s
             cur_s, cur_e = s, e
         else:
             cur_e = max(cur_e, e)
-    if cur_e is not None:
+    if cur_s is not None and cur_e is not None:
         total += cur_e - cur_s
     return total / 60.0
 
@@ -774,6 +783,7 @@ def sleep_stress_pct(night_hrv: Sequence[float], baseline_hrv: Sequence[float]) 
     if len(night) < STRESS_MIN_SAMPLES or len(base) < STRESS_MIN_BASELINE:
         return None
     cut = percentile(base, STRESS_PERCENTILE)
+    assert cut is not None                     # STRESS_MIN_BASELINE samples
     return round(100.0 * sum(1 for v in night if v < cut) / len(night), 1)
 
 

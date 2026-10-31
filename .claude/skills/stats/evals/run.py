@@ -8,6 +8,7 @@
     uv run --script evals/run.py --variants v1 --models default,haiku           # Claude calls
     uv run --script evals/run.py --variants rules                               # rule-based fallback only
     uv run --script evals/run.py --report evals/results/<file>.json [--md]      # re-print a saved run
+    uv run --script evals/run.py --task workout --variants shipped,rules        # the workout review
 
 Variants are system prompts in evals/prompts/<name>.txt; "shipped" is coach.INSIGHTS_SYSTEM as it is
 now, and "rules" is the rule-based fallback (no model). The user message is exactly the one
@@ -32,13 +33,17 @@ sys.path.insert(0, str(HERE))
 import checks as K  # noqa: E402
 import scenarios as SC  # noqa: E402
 import coach as CO  # noqa: E402  (scenarios put scripts/ on the path)
+import workout_checks as W  # noqa: E402
+import workout_scenarios as WS  # noqa: E402
+
+GROUPS = {**K.GROUP, **W.GROUP}
 
 RESULTS = HERE / "results"
 
 
-def system_prompt(variant: str) -> str:
+def system_prompt(variant: str, task: str = "insights") -> str:
     if variant == "shipped":
-        return CO.INSIGHTS_SYSTEM
+        return CO.WORKOUT_SYSTEM if task == "workout" else CO.INSIGHTS_SYSTEM
     return (HERE / "prompts" / (variant + ".txt")).read_text()
 
 
@@ -65,6 +70,23 @@ def call(system: str, user: str, model: str, timeout: float) -> dict:
             "model_id": models[0] if models else None, "error": None if not out.get("is_error") else out.get("result")}
 
 
+def one_workout(sc: WS.WorkoutScenario, variant: str, model: str, trial: int, timeout: float) -> dict:
+    m, ctx, entries = WS.build(sc)
+    if variant == "rules":
+        res = {"raw": json.dumps({"workout": CO.fallback_workout(ctx, entries)}), "cost_usd": 0.0, "latency_s": 0.0,
+               "model_id": "rules", "error": None}
+    else:   # the user message is exactly the one `fitdash insights --workout` sends
+        res = call(system_prompt(variant, "workout"), "My most recent workout (JSON):\n" + json.dumps(ctx, default=str),
+                   model, timeout)
+    raw = res.get("raw") or ""
+    parsed = CO.parse_workout(raw) if raw else None
+    graded = W.run(raw, parsed, ctx, sc) if not res.get("error") else \
+        {n: (False, "call failed: " + str(res["error"])) for n in W.GENERIC + tuple("w_" + c for c in sc.checks)}
+    return {"task": "workout", "scenario": sc.id, "split": sc.split, "variant": variant,
+            "model": "rules" if variant == "rules" else model, "trial": trial, **res, "parsed": parsed,
+            "checks": {k: list(v) for k, v in graded.items()}}
+
+
 def one(sc: SC.Scenario, variant: str, model: str, trial: int, timeout: float) -> dict:
     m, ctx, now = SC.build(sc)
     if variant == "rules":
@@ -85,40 +107,59 @@ def one(sc: SC.Scenario, variant: str, model: str, trial: int, timeout: float) -
 
 def summarize(runs: list[dict]) -> list[dict]:
     rows = []
-    runs = [r for r in runs if r.get("checks")]           # calls that never ran don't count either way
+    errored = [r for r in runs if r.get("error")]
+    runs = [r for r in runs if r.get("checks") and not r.get("error")]   # failed or unrun calls don't count either way
+    n_trials = len({r.get("trial", 0) for r in runs + errored}) or 1
     keys = sorted({(r.get("split", "dev"), r["variant"], r["model"]) for r in runs},
                   key=lambda k: (k[0] != "dev", k[1] != "rules", k))
     for split, variant, model in keys:
         rs = [r for r in runs if (r.get("split", "dev"), r["variant"], r["model"]) == (split, variant, model)]
-        def rate(pred):
+        def rate(pred, rs=rs):
             return 100.0 * sum(1 for r in rs if pred(r)) / len(rs)
         def group_ok(r, g):
-            return all(v[0] for k, v in r["checks"].items() if K.GROUP[k] == g)
+            return all(v[0] for k, v in r["checks"].items() if GROUPS[k] == g)
         fails: dict[str, int] = {}
         for r in rs:
             for k, v in r["checks"].items():
                 if not v[0]:
                     fails[k] = fails.get(k, 0) + 1
-        safety_n = sum(1 for r in rs if any(K.GROUP[k] == "safety" for k in r["checks"]))
-        unsafe = sum(1 for r in rs if not group_ok(r, "safety") and any(K.GROUP[k] == "safety" for k in r["checks"]))
+        safety_n = sum(1 for r in rs if any(GROUPS[k] == "safety" for k in r["checks"]))
+        unsafe = sum(1 for r in rs if not group_ok(r, "safety") and any(GROUPS[k] == "safety" for k in r["checks"]))
+        def passes(r):
+            return all(v[0] for v in r["checks"].values())
+        trials = sorted({r.get("trial", 0) for r in rs})
+        per_trial = [100.0 * sum(1 for r in rs if r.get("trial", 0) == t and passes(r)) /
+                     max(1, sum(1 for r in rs if r.get("trial", 0) == t)) for t in trials]
+        by_sc: dict[str, list[bool]] = {}
+        for r in rs:
+            by_sc.setdefault(r["scenario"], []).append(passes(r))
         lat = [r["latency_s"] for r in rs if r.get("latency_s")]
         rows.append({
             "split": split, "variant": variant, "model": model, "model_id": next((r["model_id"] for r in rs if r.get("model_id")), None),
             "runs": len(rs), "all_pass": rate(lambda r: all(v[0] for v in r["checks"].values())),
             **{g: rate(lambda r, g=g: group_ok(r, g)) for g in ("format", "honesty", "safety", "usefulness")},
-            "unsafe": "{}/{}".format(unsafe, safety_n), "errors": sum(1 for r in rs if r.get("error")),
+            "unsafe": "{}/{}".format(unsafe, safety_n), "errors": sum(1 for r in errored if (r.get("split", "dev"), r["variant"], r["model"]) == (split, variant, model)),
             "latency_p50": st.median(lat) if lat else 0.0, "cost_total": sum(r.get("cost_usd") or 0 for r in rs),
+            "trials": len(trials), "trial_rates": per_trial,
+            # a scenario with a missing (errored) trial hasn't passed every trial
+            "every_trial": 100.0 * sum(1 for v in by_sc.values() if len(v) == n_trials and all(v)) / len(by_sc),
             "fails": dict(sorted(fails.items(), key=lambda kv: -kv[1]))})
     return rows
 
 
 def print_summary(rows: list[dict], md: bool = False) -> None:
-    head = ["split", "variant", "model", "runs", "all checks", "format", "honesty", "safety", "useful", "unsafe", "p50 s", "cost $"]
+    multi = any(r.get("trials", 1) > 1 for r in rows)
+    head = ["split", "variant", "model", "runs", "all checks"] + (["per trial", "every trial"] if multi else []) + \
+        ["format", "honesty", "safety", "useful", "unsafe", "p50 s", "cost $"]
     lines = []
     for r in rows:
+        tr = r.get("trial_rates") or [r["all_pass"]]
+        spread = ["{:.0f}–{:.0f}%".format(min(tr), max(tr)), "{:.0f}%".format(r.get("every_trial", r["all_pass"]))] if multi else []
         lines.append([r["split"], r["variant"], r["model_id"] or r["model"], str(r["runs"]), "{:.0f}%".format(r["all_pass"]),
-                      *("{:.0f}%".format(r[g]) for g in ("format", "honesty", "safety", "usefulness")),
+                      *spread, *("{:.0f}%".format(r[g]) for g in ("format", "honesty", "safety", "usefulness")),
                       r["unsafe"], "{:.1f}".format(r["latency_p50"]), "{:.3f}".format(r["cost_total"])])
+        if r.get("errors"):
+            lines[-1][3] += " (+{} errored)".format(r["errors"])
     if md:
         print("| " + " | ".join(head) + " |\n|" + "---|" * len(head))
         for ln in lines:
@@ -135,6 +176,8 @@ def print_summary(rows: list[dict], md: bool = False) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--task", default="insights", choices=("insights", "workout"),
+                    help="insights: fitdash insights (today + week); workout: fitdash insights --workout")
     ap.add_argument("--variants", default="shipped", help="comma-separated: shipped, rules, or evals/prompts/<name>.txt")
     ap.add_argument("--models", default="default", help="comma-separated: default (the CLI's), sonnet, haiku, opus…")
     ap.add_argument("--scenarios", help="comma-separated scenario ids (default: all in --split)")
@@ -156,12 +199,18 @@ def main() -> None:
         saved = json.loads(a.report.read_text())
         if a.regrade:
             by = {s.id: s for s in SC.SCENARIOS}
+            wby = {s.id: s for s in WS.WORKOUT_SCENARIOS}
             for r in saved["runs"]:
-                if r.get("error") or r["scenario"] not in by:
+                if r.get("error"):
                     continue
-                sc = by[r["scenario"]]
-                r["checks"] = {k: list(v) for k, v in K.run(r["raw"], CO.parse_insights(r["raw"]), SC.build(sc)[1],
-                                                            sc.checks).items()}
+                if r.get("task") == "workout" and r["scenario"] in wby:
+                    ws = wby[r["scenario"]]
+                    r["checks"] = {k: list(v) for k, v in W.run(r["raw"], CO.parse_workout(r["raw"]), WS.build(ws)[1],
+                                                                ws).items()}
+                elif r.get("task", "insights") == "insights" and r["scenario"] in by:
+                    sc = by[r["scenario"]]
+                    r["checks"] = {k: list(v) for k, v in K.run(r["raw"], CO.parse_insights(r["raw"]), SC.build(sc)[1],
+                                                                sc.checks).items()}
         print_summary(summarize(saved["runs"]), a.md)
         return
     kept: list[dict] = []
@@ -170,8 +219,10 @@ def main() -> None:
         kept = [r for r in saved["runs"] if not r.get("error")]
         for k in ("variants", "models", "scenarios", "split", "trials"):      # the grid the saved run asked for
             setattr(a, k, saved["args"][k])
+        a.task = saved["args"].get("task", "insights")
         a.out = a.resume
-    scs = SC.by_id(a.scenarios, a.split)
+    scs = WS.by_id(a.scenarios, a.split) if a.task == "workout" else SC.by_id(a.scenarios, a.split)
+    run_one = one_workout if a.task == "workout" else one
     SC.base_model()                                   # build the fixture once, before the threads start
     jobs = [(sc, v, ("rules" if v == "rules" else mo), t) for v in a.variants.split(",")
             for mo in (["rules"] if v == "rules" else a.models.split(",")) for sc in scs for t in range(a.trials)]
@@ -184,7 +235,7 @@ def main() -> None:
     done = []
     limited = False
     with ThreadPoolExecutor(max_workers=a.jobs) as pool:
-        futs = [pool.submit(one, by[sid], v, mo, t, a.timeout) for sid, v, mo, t in jobs]
+        futs = [pool.submit(run_one, by[sid], v, mo, t, a.timeout) for sid, v, mo, t in jobs]
         for i, f in enumerate(futs, 1):
             r = f.result()
             done.append(r)
@@ -200,7 +251,7 @@ def main() -> None:
                 print("  {}/{}".format(i, len(futs)), file=sys.stderr)
     done = [r for r in done if r is not None]
     finished = {(r["scenario"], r["variant"], r["model"], r["trial"]) for r in done}
-    done += [{"scenario": sid, "split": by[sid].split, "variant": v, "model": mo, "trial": t, "error": "not run (usage limit)",
+    done += [{"task": a.task, "scenario": sid, "split": by[sid].split, "variant": v, "model": mo, "trial": t, "error": "not run (usage limit)",
               "raw": "", "parsed": None, "checks": {}} for sid, v, mo, t in jobs if (sid, v, mo, t) not in finished]
     done = kept + done
     out = a.out or RESULTS / (datetime.now().strftime("%Y%m%d-%H%M%S") + ".json")

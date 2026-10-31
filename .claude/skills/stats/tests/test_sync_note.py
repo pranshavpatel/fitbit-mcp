@@ -44,7 +44,7 @@ def test_missing_night_in_the_morning():
     assert D._night_sync_note(nights, asleep, DAY, MORNING.replace(hour=16), True) is None
 
 
-def test_warning_tops_needs_attention_and_shows_in_sleep(model):
+def test_warning_tops_needs_attention_and_shows_in_sleep(model):  # noqa: F811  (pytest fixture)
     m = dict(model)
     m["sleep"] = dict(m["sleep"], sync_note={"kind": "partial", "text": "Last night may still be syncing: test"})
     att = D.attention(m)

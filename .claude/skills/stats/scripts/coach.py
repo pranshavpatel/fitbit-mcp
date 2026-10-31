@@ -38,7 +38,6 @@ import subprocess
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 from tz import local_zone
 
@@ -178,7 +177,7 @@ def due(m: dict, notes: list[dict], now: datetime) -> tuple[str, dict | None] | 
     todays = [n for n in notes if n.get("date") == today]
     kinds_done = {n.get("kind") for n in todays}
     triggers = {n.get("trigger") for n in notes if n.get("trigger")}
-    last_at = max((_local(n["at"]) for n in notes if _local(n.get("at"))), default=None)
+    last_at = max((t for t in (_local(n.get("at")) for n in notes) if t is not None), default=None)
     for w in sorted(_workouts_today(m), key=lambda w: w["end"], reverse=True):
         end = _local(w.get("end"))
         if not end or (w.get("minutes") or 0) < 10 or "workout:" + w["start"] in triggers:
@@ -624,7 +623,7 @@ def fallback_insights(m: dict, now: datetime) -> dict:
     head = ((m.get("verdict") or {}).get("headline") or "").rstrip(".")
     if note and not (head and head in note):
         band = (m.get("recovery") or {}).get("band")
-        today.insert(0, item({"green": "good", "red": "flag"}.get(band, "watch"), note,
+        today.insert(0, item({"green": "good", "red": "flag"}.get(band or "", "watch"), note,
                              "Follow today's plan in the Today box."))
     target = (m.get("strain") or {}).get("target")
     for lvl, t in (m.get("verdict") or {}).get("reasons") or []:          # pad with what's going well
@@ -687,41 +686,54 @@ recent workout. You get the session in full (JSON): every logged set, how each e
 time they did it and with their best, the previous session of the same kind, heart rate and strain from their
 Fitbit, weekly sets per muscle, muscle freshness, today's recovery and their profile.
 
-OUTPUT. Your whole reply is one JSON object: the first character is { and the last is }. No code fence, no text
-before or after. Exactly this shape:
+OUTPUT. Your whole reply is one flat JSON object: the first character is { and the last is }. No code fence, no
+text before or after, no wrapper key. Exactly this shape:
 
-{"workout": {"headline": "...", "rating": "great|good|mixed|tough", "summary": "...",
-  "exercises": [{"exercise": "...", "level": "good|watch|flag", "note": "...", "next": "..."}],
-  "tips": [{"level": "good|watch|flag", "finding": "...", "action": "..."}]}}
+{"headline": "...", "rating": "great|good|mixed|tough", "summary": "...",
+ "exercises": [{"exercise": "...", "level": "good|watch|flag", "note": "...", "next": "..."}],
+ "tips": [{"level": "good|watch|flag", "finding": "...", "action": "..."}]}
 
-- headline: at most 16 words. The single most important takeaway.
-- rating: great = clear progress (PRs, more weight or reps than last time) and full volume; good = solid, on
-  par with last time; mixed = some lifts up, some down; tough = clearly below last time or cut short.
-- summary: 2 or 3 sentences, at most 60 words: what the session was (kind, sets, volume), how it compares with
-  the previous session of the same kind, and the standout.
-- exercises: one per logged exercise, in the order done. note, at most 30 words: what the sets show (weight and
-  reps across sets, where reps dropped off, estimated 1RM vs last time, a PR). next, at most 25 words: a concrete
-  target for next time as weight x reps. If every set at the top weight reached the rep target, add the
+LENGTH. Hard limits, counted in words; going over is an error. Cut adjectives before facts.
+- headline: at most 14 words. summary: at most 50 words. note and finding: at most 26 words, at most 3 numbers.
+  next and action: at most 20 words.
+
+RATING. Rate the session itself against the last time, using only exercises done both times (each one's
+`last_time`). An exercise logged for the first time is a baseline: it counts neither up nor down. Today's
+recovery, sleep or training load never lower the rating; they belong in the tips.
+- great: clear progress (a PR, or more weight or reps) on the shared exercises, and no fewer sets on them.
+- good: on par with last time, or progress with fewer sets.
+- mixed: some shared exercises up and some down.
+- tough: most shared exercises below last time, or the session clearly cut short.
+- previous_same_kind may have used different exercises: compare its sets or volume only when the exercises
+  match, and never call a session short because it had fewer exercises than a different one.
+
+EXERCISES. One per logged exercise, in the order done; use the exercise names as logged.
+- note: what the sets show: weight and reps across sets, where reps dropped off, estimated 1RM against last
+  time, a PR. Bodyweight exercises progress by reps (`reps_change`, `pr`). First time logged: describe the sets
+  and call them the baseline to beat, with no comparison.
+- next: a target for next time as weight x reps, in the unit the exercise was logged in (pounds stay pounds;
+  bodyweight stays bodyweight, with a rep target). If every set at the top weight reached its reps, add the
   smallest step (5 lb, 2.5 kg, or one cable plate); if reps fell off sharply, keep the weight and aim for 1-2
-  more reps; if it is the first time logged, call it the baseline to beat.
-- tips: 2 to 4 points about the session as a whole: volume per muscle against the weekly 10-20 hard-set range,
-  balance and exercise order, when these muscles will be ready again (freshness), and recovery tonight (sleep,
-  protein) when the data supports it. Each action has an amount or a time. At most 30 words per finding and 25
-  per action.
+  more reps.
 
-TONE. When the session looks good, say so with energy and be specific about why: name the PR, the extra reps,
-the volume beat. Earned praise, not generic cheering. When it doesn't, be honest and constructive, never
-scolding: name the likely cause only if the data shows one (short sleep, red recovery, high load), and say what
-will fix it. Talk to them directly, like a coach who watched the session.
+TIPS. 2 to 4 points about the session as a whole: weekly sets per muscle against the 10-20 range, when these
+muscles will be ready again (freshness), and recovery tonight (sleep, protein) when the data supports it.
+Every action names an amount or a time: a number (sets, minutes, grams, hours), a clock time, "today",
+"tonight", "tomorrow", a weekday or "next week". "Next session" alone is not a time: say which day.
 
-NUMBERS. Every number comes from the data or simple arithmetic on it. Keep weights in the unit the user logged
-(lb or kg). Cable and dumbbell weights are per hand or per side, as logged. With no earlier session of an
-exercise, there is nothing to compare: don't invent one.
+TONE. When the session went well, say so with energy and say exactly why: name the PR, the extra reps, the
+heavier top set. Earned praise, not generic cheering. When it didn't, be honest and constructive, never
+scolding: name a likely cause only if the data shows one (short sleep, red recovery, high load) and what will
+fix it. No superlatives about a session rated mixed or tough. Talk to them directly.
+
+NUMBERS. Every number comes from the data or simple arithmetic on it (a difference, a sum, a percentage).
+Cable and dumbbell weights are per hand or per side, as logged.
 
 SAFETY. If the profile or `training.impact_spike_knee` flags the knee, never suggest running, jumping or soccer.
-If `training.load_zone` is "caution" or "high", don't suggest extra sessions or volume this week. Pain is not
-something to train through: for joint pain, suggest a clinician. With no logged sets (only a Fitbit session),
-review duration, heart rate, zones and strain, leave exercises empty and suggest logging sets with fitdash lift.
+If `training.load_zone` is "caution" or "high", don't suggest extra sessions, sets or volume this week. On a red
+recovery day, nothing hard today. Pain is not something to train through: for joint pain, suggest a clinician.
+With no logged sets (only a Fitbit session), review duration, heart rate, zones and strain, leave exercises
+empty, and suggest logging the sets with fitdash lift.
 
 STYLE. Plain text in the strings: no markdown, no emoji. Dates as weekdays.
 """
@@ -747,7 +759,7 @@ def _ex_summary(group: list[dict]) -> dict:
     v = S.e1rm(best.get("kg"), best["reps"])
     return {"sets": sum(e["sets"] for e in group), "set_list": ["{}x{}@{}".format(e["sets"], e["reps"], _wt(e)) for e in group],
             "top_set": "{} x {}".format(_wt(best), best["reps"]), "e1rm_kg": None if v is None else round(v, 1),
-            "volume_kg": round(S.tonnage(group))}
+            "volume_kg": round(S.tonnage(group)), "total_reps": sum(e["sets"] * e["reps"] for e in group)}
 
 
 def latest_workout(m: dict, lift_sets: dict, upto: str) -> dict | None:
@@ -792,6 +804,11 @@ def workout_context(m: dict, lift_sets: dict, now: datetime, profile: str = "") 
                 if row["e1rm_kg"] and prev["e1rm_kg"]:
                     row["e1rm_change_pct"] = round(100 * (row["e1rm_kg"] - prev["e1rm_kg"]) / prev["e1rm_kg"], 1)
                 row["pr"] = bool(row["e1rm_kg"] and best and row["e1rm_kg"] >= best + 0.05)
+                if row["e1rm_kg"] is None and prev["e1rm_kg"] is None:    # bodyweight: progress is reps
+                    top_reps = max(e["reps"] for e in group)
+                    best_reps = max(e["reps"] for _, g in past for e in g)
+                    row["reps_change"] = row["total_reps"] - prev["total_reps"]
+                    row["pr"] = top_reps > best_reps
                 row["times_logged_before"] = len(past)
             else:
                 row["last_time"] = None
@@ -839,21 +856,47 @@ def workout_context(m: dict, lift_sets: dict, now: datetime, profile: str = "") 
     return ctx
 
 
+def _close_json(text: str) -> str:
+    """Append the closing brackets a reply forgot (the commonest way an LLM's JSON breaks: the last
+    "}" of a nested object). Brackets inside strings are skipped."""
+    stack, in_str, esc = [], False, False
+    for ch in text:
+        if in_str:
+            esc, in_str = (not esc and ch == "\\"), (in_str if esc or ch != '"' else False)
+        elif ch == '"':
+            in_str = True
+        elif ch in "{[":
+            stack.append("}" if ch == "{" else "]")
+        elif ch in "}]" and stack:
+            stack.pop()
+    return text + "".join(reversed(stack))
+
+
 def parse_workout(raw: str | None) -> dict | None:
-    """The {"workout": …} object out of Claude's reply, cleaned; None if it isn't there."""
+    """The workout review out of Claude's reply, cleaned; None if it isn't there. Takes the flat
+    shape ({"headline", …}) or one wrapped in {"workout": …}, and repairs missing closing brackets
+    (the eval still marks such a reply as not strict JSON)."""
     if not raw:
         return None
-    a, b = raw.find("{"), raw.rfind("}")
-    try:
-        data = json.loads(raw[a:b + 1]) if 0 <= a < b else None
-    except ValueError:
+    a = raw.find("{")
+    if a < 0:
         return None
-    w = data.get("workout") if isinstance(data, dict) else None
+    b = raw.rfind("}")
+    body = raw[a:b + 1] if b > a else raw[a:]               # no closing brace at all: let _close_json add it
+    data = None
+    for cand in (body, _close_json(body)):
+        try:
+            data = json.loads(cand)
+            break
+        except ValueError:
+            continue
+    w = (data.get("workout") if isinstance(data.get("workout"), dict) else data) if isinstance(data, dict) else None
     if not isinstance(w, dict) or not str(w.get("headline") or "").strip():
         return None
     def s(v):
         return " ".join(str(v or "").split())
-    lvl = lambda v: v if v in INSIGHT_LEVELS else "watch"
+    def lvl(v):
+        return v if v in INSIGHT_LEVELS else "watch"
     def items(key):
         v = w.get(key)
         return [x for x in v if isinstance(x, dict)] if isinstance(v, list) else []
@@ -867,8 +910,14 @@ def parse_workout(raw: str | None) -> dict | None:
             "summary": s(w.get("summary")), "exercises": exercises[:15], "tips": tips[:5]}
 
 
-def generate_workout(ctx: dict, timeout: float = 240) -> dict | None:
-    return parse_workout(ask(WORKOUT_SYSTEM, "My most recent workout (JSON):\n" + json.dumps(ctx, default=str), timeout))
+# Chosen by the workout eval (docs/coach-eval.md): with prompt wv2, Haiku had the best dev score (88 %, holdout
+# 83 %) at about 1/17 of Opus's cost. Override with "workout_model" in stats.json.
+WORKOUT_MODEL = "haiku"
+
+
+def generate_workout(ctx: dict, timeout: float = 240, model: str | None = WORKOUT_MODEL) -> dict | None:
+    return parse_workout(ask(WORKOUT_SYSTEM, "My most recent workout (JSON):\n" + json.dumps(ctx, default=str),
+                             timeout, model))
 
 
 def _next_target(group: list[dict]) -> str:
@@ -897,7 +946,8 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
         return {"headline": "{} on {}".format(w.get("what", "Workout"), ctx["workout_date"].split()[0]), "rating": "good",
                 "summary": finding, "exercises": [],
                 "tips": [{"level": "watch", "finding": "No sets are logged for this session, so there's nothing to compare.",
-                          "action": "Log your sets today with fitdash lift, e.g. fitdash lift yesterday bench 3x8@60."}]}
+                          "action": "Log your sets today with fitdash lift, e.g. fitdash lift yesterday bench 3x8@60."},
+                         _recovery_tip(ctx)]}
     exercises, ups, downs = [], 0, 0
     for r in ses["exercises"]:
         sets = r["set_list"]
@@ -905,21 +955,39 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
             lvl, note = "good", "First time logged: {}. Top set {}.".format(", ".join(sets), r["top_set"])
         else:
             ch = r.get("e1rm_change_pct")
-            if r.get("pr"):
-                lvl, note = "good", "New best: estimated 1RM {:g} kg from {}.".format(r["e1rm_kg"], r["top_set"]); ups += 1
+            if r.get("pr") and r.get("e1rm_kg") is None:
+                lvl, note = "good", "New best: {} ({:+d} reps in total on last time).".format(r["top_set"], r.get("reps_change") or 0)
+                ups += 1
+            elif r.get("pr"):
+                lvl, note = "good", "New best: estimated 1RM {:g} kg from {}.".format(r["e1rm_kg"], r["top_set"])
+                ups += 1
             elif ch is not None and ch > 0:
-                lvl, note = "good", "Estimated 1RM up {:.1f}% on last time ({}).".format(ch, r["last_time"]["top_set"]); ups += 1
+                lvl, note = "good", "Estimated 1RM up {:.1f}% on last time ({}).".format(ch, r["last_time"]["top_set"])
+                ups += 1
             elif ch is not None and ch < -3:
-                lvl, note = "watch", "Estimated 1RM down {:.1f}% on last time ({}).".format(-ch, r["last_time"]["top_set"]); downs += 1
+                lvl, note = "watch", "Estimated 1RM down {:.1f}% on last time ({}).".format(-ch, r["last_time"]["top_set"])
+                downs += 1
+            elif (r["total_reps"] < 0.85 * r["last_time"]["total_reps"]):     # same top set, fewer reps overall
+                lvl, note = "watch", "Fewer reps than last time: {} vs {}.".format(
+                    ", ".join(sets), ", ".join(r["last_time"]["set_list"]))
+                downs += 1
             else:
                 lvl, note = "good", "On par with last time: top set {} vs {}.".format(r["top_set"], r["last_time"]["top_set"])
         exercises.append({"exercise": r["exercise"], "level": lvl, "note": note, "next": _next_target([e for e in entries if e["exercise"] == r["exercise"]])})
     prev = ctx.get("previous_same_kind")
     prs = ses.get("prs") or []
-    cut = bool(prev and prev.get("volume_kg") and ses["volume_kg"] < 0.8 * prev["volume_kg"])   # a short session
-    if prs and not downs and not cut:
-        headline, rating = "{} new best{} on {} day: {}. Great session.".format(len(prs), "s" if len(prs) > 1 else "",
-                                                                                 ses["kind"], ", ".join(prs)), "great"
+    # a short session: less volume on the exercises done both times (different exercises aren't comparable)
+    shared = [r for r in ses["exercises"] if r.get("last_time")]
+    vol_now, vol_then = sum(r["volume_kg"] for r in shared), sum(r["last_time"]["volume_kg"] for r in shared)
+    cut = bool(vol_then and vol_now < 0.8 * vol_then)
+    fewer_sets = sum(r["sets"] for r in shared) < sum(r["last_time"]["sets"] for r in shared)
+    if prs and not downs and not cut and fewer_sets:          # progress with fewer sets: good, not great
+        headline, rating = "New best{} on {}, with fewer sets than last time.".format(
+            "s" if len(prs) > 1 else "", ", ".join(prs)), "good"
+    elif prs and not downs and not cut:
+        named = ", ".join(prs) if len(prs) <= 2 else "including " + prs[0]
+        headline, rating = "{} new best{} on {} day, {}. Great session.".format(
+            len(prs), "s" if len(prs) > 1 else "", ses["kind"], named).replace("day, including", "day including"), "great"
     elif prs:
         headline, rating = "Mixed {} day: new best on {}, but {}.".format(
             ses["kind"], ", ".join(prs), "volume was down on last time" if cut else
@@ -929,7 +997,7 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
     else:
         headline, rating = "Solid {} day: {} sets, {:,} kg moved.".format(ses["kind"], ses["sets"], ses["volume_kg"]), "good"
     summary = "{} sets and {:,} kg of volume across {} exercises.".format(ses["sets"], ses["volume_kg"], len(exercises))
-    if prev:
+    if prev and shared:                                       # without shared exercises the totals aren't comparable
         summary += " Last {} day ({}): {} sets, {:,} kg.".format(ses["kind"], prev["date"].split()[0], prev["sets"], prev["volume_kg"])
     tips = []
     load_high = (ctx.get("training") or {}).get("load_zone") in ("caution", "high")
@@ -944,7 +1012,7 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
             continue
         if n < lo and not load_high:
             tips.append({"level": "watch", "finding": "{} has {:g} hard sets in the last 7 days, under the {}-{} range.".format(mu.title(), n, lo, hi),
-                         "action": "Add {:g} sets of {} before the week is out.".format(lo - n, mu)})
+                         "action": "Add {:g} set{} of {} before the week is out.".format(lo - n, "" if lo - n == 1 else "s", mu)})
         elif n > hi:
             tips.append({"level": "watch", "finding": "{} has {:g} hard sets in the last 7 days, over the {}-{} range.".format(mu.title(), n, lo, hi),
                          "action": "Hold {} at about {} sets next week.".format(mu, hi)})
@@ -957,7 +1025,25 @@ def fallback_workout(ctx: dict, entries: list[dict]) -> dict:
     if not tips:
         tips.append({"level": "good", "finding": "Weekly sets for these muscles are within the {}-{} range.".format(lo, hi),
                      "action": "Keep the same volume next week and push the targets above."})
-    return {"headline": headline, "rating": rating, "summary": summary, "exercises": exercises, "tips": tips[:4]}
+    return {"headline": headline, "rating": rating, "summary": summary, "exercises": exercises,
+            "tips": tips[:3] + [_recovery_tip(ctx)]}         # the recovery tip always keeps its slot
+
+
+def _recovery_tip(ctx: dict) -> dict:
+    """Sleep and protein tonight: what turns a session into progress."""
+    sl = ctx.get("sleep_last_night") or {}
+    prot = (ctx.get("nutrition") or {}).get("protein_target_g")
+    lo = prot[0] if isinstance(prot, (list, tuple)) and prot else prot
+    known = bool(sl.get("asleep") and sl.get("need"))
+    finding = "Last night: {} asleep against a need of {}.".format(sl["asleep"], sl["need"]) if known else \
+        "Muscle is built in the recovery after the session."
+    action = "Tonight: aim for {} of sleep".format(sl["need"] if known else "8 h") + \
+        (" and at least {} g of protein today.".format(lo) if lo else ".")
+    def mins(hm: str) -> int:                            # "7h11" -> 431
+        h, _, m = hm.partition("h")
+        return int(h) * 60 + int(m or 0)
+    short = known and mins(sl["asleep"]) < mins(sl["need"])
+    return {"level": "watch" if short else "good", "finding": finding, "action": action}
 
 
 def workout_insights_path(home: Path) -> Path:

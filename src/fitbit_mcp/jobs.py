@@ -15,6 +15,7 @@ desktop app each start one, and a client may start two at once). So:
 """
 from __future__ import annotations
 
+import builtins
 import json
 import os
 import queue
@@ -23,7 +24,7 @@ import threading
 import time
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 from .client import NetworkError, RateLimitExhausted
 from .oauth import AuthError, AuthRequired, Cancelled
@@ -56,6 +57,13 @@ class JobContext:
         job = manager.get(job_id)
         if job and job.get("progress"):
             self._progress = dict(job["progress"])
+
+    @property
+    def account(self) -> str:
+        """The provider of a connect, import or sync job, which always has one."""
+        if self.provider is None:
+            raise ValueError("job {} has no provider".format(self.id))
+        return self.provider
 
     def _cancel_requested(self) -> bool:
         if self.cancel_event.is_set():
@@ -111,7 +119,7 @@ Runner = Callable[[JobContext], dict]
 
 
 class JobManager:
-    def __init__(self, store: Store, runners: dict[str, Runner]):
+    def __init__(self, store: Store, runners: Mapping[str, Runner]):
         self.store, self.runners = store, runners
         self.owner = "{}:{}:{}".format(socket.gethostname(), os.getpid(), uuid.uuid4().hex[:8])
         self.heartbeat_seconds = _env_float("FITBIT_MCP_JOB_HEARTBEAT_SECONDS", 15.0)
@@ -212,13 +220,21 @@ class JobManager:
                               (job.get("heartbeat") or 0) < time.time() - self.stale_seconds)
         return job
 
-    def list(self, limit: int = 20) -> list[dict[str, Any]]:
+    def _job(self, job_id: str) -> dict[str, Any]:
+        """A job this manager just wrote or read: it is there, so a missing row is a bug, not a None."""
+        job = self.get(job_id)
+        if job is None:
+            raise KeyError(job_id)
+        return job
+
+    def list(self, limit: int = 20) -> builtins.list[dict[str, Any]]:
         with self.store.connect() as conn:
             ids = [r["id"] for r in conn.execute("SELECT id FROM jobs ORDER BY created_at DESC LIMIT ?", (limit,))]
-        return [self.get(i) for i in ids]
+        return [j for j in (self.get(i) for i in ids) if j is not None]
 
-    def active(self, kind: str | None = None, provider: str | None = None) -> list[dict[str, Any]]:
-        sql, args = "SELECT id FROM jobs WHERE status IN ('queued','running','waiting_rate_limit')", []
+    def active(self, kind: str | None = None, provider: str | None = None) -> builtins.list[dict[str, Any]]:
+        sql = "SELECT id FROM jobs WHERE status IN ('queued','running','waiting_rate_limit')"
+        args: builtins.list[str] = []
         if kind:
             sql, args = sql + " AND kind=?", args + [kind]
         if provider:
@@ -243,7 +259,7 @@ class JobManager:
                          "'[]', ?, ?)", (job_id, kind, provider, json.dumps(dict(params, _lane=lane)), now, now,
                                          self.owner, time.time()))
         self._enqueue(job_id, lane)
-        return self.get(job_id)
+        return self._job(job_id)
 
     def _enqueue(self, job_id: str, lane: str) -> None:
         self.start()
@@ -275,7 +291,7 @@ class JobManager:
             elif not queued:
                 conn.execute("UPDATE jobs SET cancel_requested=1, updated_at=?, message='Cancellation requested; "
                              "stopping at the next safe point' WHERE id=?", (utcnow(), job_id))
-        return self.get(job_id)
+        return self._job(job_id)
 
     def resume(self, job_id: str) -> dict[str, Any]:
         job = self.get(job_id)
@@ -295,11 +311,11 @@ class JobManager:
                 "finished_at=NULL, wait_until=NULL, owner=?, heartbeat=?, updated_at=? WHERE id=? AND status=?",
                 (self.owner, time.time(), utcnow(), job_id, job["status"])).rowcount
             if not claimed:   # another process resumed it first
-                return self.get(job_id)
+                return self._job(job_id)
             # retry failed requests too; completed ones are skipped by the runner
             conn.execute("UPDATE job_requests SET status='pending' WHERE job_id=? AND status='error'", (job_id,))
         self._enqueue(job_id, job["params"].get("_lane", "default"))
-        return self.get(job_id)
+        return self._job(job_id)
 
     def wait_for(self, job_id: str, timeout: float = 30.0, statuses: tuple[str, ...] = FINAL) -> dict[str, Any]:
         """Test helper: block until the job reaches one of `statuses`."""
@@ -344,7 +360,7 @@ class JobManager:
             if job and job["status"] == "queued" and job["cancel_requested"]:
                 self._update(job_id, status="cancelled", finished_at=utcnow(), message="Cancelled")
             return
-        job = self.get(job_id)
+        job = self._job(job_id)
         context = JobContext(self, job_id, job["params"], job["provider"])
         try:
             result = self.runners[job["kind"]](context) or {}

@@ -257,7 +257,8 @@ def _workouts(group: str, payload: Any, context: dict) -> ParseResult:
             out.unsupported.append((group, "Workout without logId; raw response retained"))
             continue
         moment = parse_rfc3339(item.get("startTime"))
-        offset = int(moment.utcoffset().total_seconds()) if moment and moment.utcoffset() is not None else None
+        utc_off = moment.utcoffset() if moment else None
+        offset = int(utc_off.total_seconds()) if utc_off is not None else None
         start_local = moment.replace(tzinfo=None).isoformat() if moment else None
         duration_ms = to_number(item.get("duration"))
         end_local = None

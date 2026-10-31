@@ -1,0 +1,48 @@
+{
+ "headline": "Row and curl both set PRs, a great pull session.",
+ "rating": "great",
+ "summary": "Row and curl both beat last time with no fewer sets, so this is a strong pull session. Pull-ups and hammer curls are new baselines at 8 and 12 reps. Sleep was short, so protect recovery tonight.",
+ "exercises": [
+  {
+   "exercise": "row",
+   "level": "good",
+   "note": "All four sets 52.5kg for 10 reps. Estimated 1RM up 4.9%, a new PR.",
+   "next": "55kg x 10 on all four sets."
+  },
+  {
+   "exercise": "pull up",
+   "level": "good",
+   "note": "First time logged: four sets of 8 bodyweight, 32 reps total. This is the baseline to beat.",
+   "next": "Bodyweight x 9 reps on every set."
+  },
+  {
+   "exercise": "curl",
+   "level": "good",
+   "note": "All three sets at 14kg for 12 reps. Estimated 1RM up 16.7%, a PR.",
+   "next": "16.5kg x 12 on all three sets."
+  },
+  {
+   "exercise": "hammer curl",
+   "level": "good",
+   "note": "First time logged: three sets of 12kg for 12 reps, 36 total. Baseline to beat.",
+   "next": "12kg x 13 reps on all three sets."
+  }
+ ],
+ "tips": [
+  {
+   "level": "watch",
+   "finding": "Sleep was under six hours, far below your ten-hour need, and recovery is yellow.",
+   "action": "Be in bed by 22:30 tonight to bank about 9 hours."
+  },
+  {
+   "level": "watch",
+   "finding": "Protein is at 40g today; your floor is 113g, so you're at the low edge.",
+   "action": "Eat at least 73g more protein today, spread across dinner and a snack."
+  },
+  {
+   "level": "watch",
+   "finding": "Chest sits at 7 weekly sets, under the 10-set floor, with triceps close behind.",
+   "action": "Train chest and triceps Saturday for at least 10 sets across both muscles."
+  }
+ ]
+}

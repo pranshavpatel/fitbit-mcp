@@ -27,3 +27,17 @@ testpaths = ["tests"]
 addopts = "-q"
 # the restart-recovery tests deliberately kill a worker thread to simulate a dying server process
 filterwarnings = ["ignore::pytest.PytestUnhandledThreadExceptionWarning"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 130
+src = ["src", ".claude/skills/stats/scripts", ".claude/skills/stats/evals", ".claude/skills/stats/tests", "tests"]
+
+[tool.ruff.lint]
+# pyflakes + pycodestyle errors + bugbear: real bugs (unused names, shadowed tests, late-binding closures)
+select = ["E4", "E7", "E9", "F", "B"]
+ignore = ["B905"]   # zip() without strict=: the default (False) is what every call here means
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true

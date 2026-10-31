@@ -152,8 +152,9 @@ def _time(kind: str, body: dict, day_from: str) -> dict[str, Any]:
         if start is not None and offset is not None and start_civil is None:
             local = start.astimezone(timezone(timedelta(seconds=offset)))
             start_civil, start_day = local.replace(tzinfo=None).isoformat(), local.date().isoformat()
-        if end is not None and (end_offset if end_offset is not None else offset) is not None and end_civil is None:
-            local = end.astimezone(timezone(timedelta(seconds=end_offset if end_offset is not None else offset)))
+        eoff = end_offset if end_offset is not None else offset
+        if end is not None and eoff is not None and end_civil is None:
+            local = end.astimezone(timezone(timedelta(seconds=eoff)))
             end_civil, end_day = local.replace(tzinfo=None).isoformat(), local.date().isoformat()
         info.update(start_utc=to_utc_z(start), end_utc=to_utc_z(end), utc_offset_seconds=offset,
                     start_local=start_civil, end_local=end_civil,
@@ -344,8 +345,8 @@ def parse_datapoint(kind: str, point: dict, provider_tag: str = "google") -> Par
                 continue
             if to_number(value) is None:
                 continue
-            unit = infer_unit(field)
-            emit(snake(field), value, unit or "unknown", ["unit_inferred_from_field_name"] if unit else ["unit_unknown"])
+            guess = infer_unit(field)
+            emit(snake(field), value, guess or "unknown", ["unit_inferred_from_field_name"] if guess else ["unit_unknown"])
             numeric += 1
         if numeric == 0:
             enums = {k: v for k, v in body.items() if k not in _TIME_FIELDS and isinstance(v, (str, bool))}

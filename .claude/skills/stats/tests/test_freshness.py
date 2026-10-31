@@ -1,8 +1,8 @@
-import re
 """Muscle Freshness: the fatigue model, the dots, the icons, snapshots and the tag command."""
 import io
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 

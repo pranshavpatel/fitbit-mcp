@@ -558,7 +558,7 @@ def timing_chart(nights: Sequence[dict], w: int, marks: Sequence[tuple[float, st
                  window: tuple[float, float] = (21 * 60, 13 * 60)) -> list[Text]:
     """One row per night: a bar from fell-asleep to woke on a 9 pm → 1 pm axis, with vertical
     markers (minutes after midnight, glyph, color) for the bedtime goal, step target and wake anchor."""
-    from data import local_dt  # noqa: avoid a hard dependency at import time
+    from data import local_dt  # noqa: E402  (avoid a hard dependency at import time)
     lab_w, tail_w = 10, 7
     plot_w = max(16, w - lab_w - tail_w)
     span_min = (window[1] - window[0]) % (24 * 60)

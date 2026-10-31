@@ -1,0 +1,1179 @@
+{
+ "created": "2026-10-29T14:12:00",
+ "args": {
+  "task": "workout",
+  "variants": "rules",
+  "models": "default",
+  "scenarios": null,
+  "split": "all",
+  "trials": 1,
+  "jobs": 6,
+  "timeout": 240,
+  "out": "evals/results/workout-rules.json",
+  "report": null,
+  "md": false,
+  "resume": null,
+  "regrade": false
+ },
+ "runs": [
+  {
+   "task": "workout",
+   "scenario": "pr_day",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"4 new bests on push day including bench press. Great session.\", \"rating\": \"great\", \"summary\": \"12 sets and 3,683 kg of volume across 4 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"bench press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 79.2 kg from 62.5kg x 8.\", \"next\": \"Next time: stay at 62.5kg and aim for 8 reps on every set.\"}, {\"exercise\": \"incline dumbbell press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 33.2 kg from 55lb x 10.\", \"next\": \"Next time: try 60lb for 10 reps.\"}, {\"exercise\": \"lateral raise\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 12.6 kg from 9kg x 12.\", \"next\": \"Next time: try 11.5kg for 12 reps.\"}, {\"exercise\": \"triceps pushdown\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 44.8 kg from 32kg x 12.\", \"next\": \"Next time: try 34.5kg for 12 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 6 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 4 sets of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 7.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 2.5 sets of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Triceps has 6 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 4 sets of triceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "4 new bests on push day including bench press. Great session.",
+    "rating": "great",
+    "summary": "12 sets and 3,683 kg of volume across 4 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "bench press",
+      "level": "good",
+      "note": "New best: estimated 1RM 79.2 kg from 62.5kg x 8.",
+      "next": "Next time: stay at 62.5kg and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "incline dumbbell press",
+      "level": "good",
+      "note": "New best: estimated 1RM 33.2 kg from 55lb x 10.",
+      "next": "Next time: try 60lb for 10 reps."
+     },
+     {
+      "exercise": "lateral raise",
+      "level": "good",
+      "note": "New best: estimated 1RM 12.6 kg from 9kg x 12.",
+      "next": "Next time: try 11.5kg for 12 reps."
+     },
+     {
+      "exercise": "triceps pushdown",
+      "level": "good",
+      "note": "New best: estimated 1RM 44.8 kg from 32kg x 12.",
+      "next": "Next time: try 34.5kg for 12 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 6 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 4 sets of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 7.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 2.5 sets of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Triceps has 6 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 4 sets of triceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_praises_progress": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "tough_day",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"A tougher push day: more lifts down than up on last time.\", \"rating\": \"tough\", \"summary\": \"7 sets and 2,043 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"bench press\", \"level\": \"watch\", \"note\": \"Fewer reps than last time: 1x8@60kg, 1x6@60kg, 1x4@60kg vs 3x8@60kg.\", \"next\": \"Next time: stay at 60kg and aim for 6 reps on every set.\"}, {\"exercise\": \"incline dumbbell press\", \"level\": \"watch\", \"note\": \"Estimated 1RM down 5.0% on last time (50lb x 10).\", \"next\": \"Next time: stay at 50lb and aim for 8 reps on every set.\"}, {\"exercise\": \"triceps pushdown\", \"level\": \"watch\", \"note\": \"Estimated 1RM down 4.8% on last time (30kg x 12).\", \"next\": \"Next time: try 32.5kg for 10 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 5 sets of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 4 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 6 sets of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Triceps has 4.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 5.5 sets of triceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h10 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "A tougher push day: more lifts down than up on last time.",
+    "rating": "tough",
+    "summary": "7 sets and 2,043 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "bench press",
+      "level": "watch",
+      "note": "Fewer reps than last time: 1x8@60kg, 1x6@60kg, 1x4@60kg vs 3x8@60kg.",
+      "next": "Next time: stay at 60kg and aim for 6 reps on every set."
+     },
+     {
+      "exercise": "incline dumbbell press",
+      "level": "watch",
+      "note": "Estimated 1RM down 5.0% on last time (50lb x 10).",
+      "next": "Next time: stay at 50lb and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "triceps pushdown",
+      "level": "watch",
+      "note": "Estimated 1RM down 4.8% on last time (30kg x 12).",
+      "next": "Next time: try 32.5kg for 10 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 5 sets of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 4 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 6 sets of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Triceps has 4.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 5.5 sets of triceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h10 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_no_hard_today": [
+     true,
+     ""
+    ],
+    "w_no_hype": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "first_time",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"Solid push day: 9 sets, 1,080 kg moved.\", \"rating\": \"good\", \"summary\": \"9 sets and 1,080 kg of volume across 3 exercises.\", \"exercises\": [{\"exercise\": \"dumbbell press\", \"level\": \"good\", \"note\": \"First time logged: 3x10@24kg. Top set 24kg x 10.\", \"next\": \"Next time: try 26.5kg for 10 reps.\"}, {\"exercise\": \"chest fly\", \"level\": \"good\", \"note\": \"First time logged: 3x12@10kg. Top set 10kg x 12.\", \"next\": \"Next time: try 12.5kg for 12 reps.\"}, {\"exercise\": \"dip\", \"level\": \"good\", \"note\": \"First time logged: 3x8@bodyweight. Top set bodyweight x 8.\", \"next\": \"Next time: add 1-2 reps per set.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 9 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 1 set of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 4.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 5.5 sets of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Triceps has 4.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 5.5 sets of triceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "Solid push day: 9 sets, 1,080 kg moved.",
+    "rating": "good",
+    "summary": "9 sets and 1,080 kg of volume across 3 exercises.",
+    "exercises": [
+     {
+      "exercise": "dumbbell press",
+      "level": "good",
+      "note": "First time logged: 3x10@24kg. Top set 24kg x 10.",
+      "next": "Next time: try 26.5kg for 10 reps."
+     },
+     {
+      "exercise": "chest fly",
+      "level": "good",
+      "note": "First time logged: 3x12@10kg. Top set 10kg x 12.",
+      "next": "Next time: try 12.5kg for 12 reps."
+     },
+     {
+      "exercise": "dip",
+      "level": "good",
+      "note": "First time logged: 3x8@bodyweight. Top set bodyweight x 8.",
+      "next": "Next time: add 1-2 reps per set."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 9 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 1 set of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 4.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 5.5 sets of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Triceps has 4.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 5.5 sets of triceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_no_false_comparison": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "mixed_day",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"Mixed push day: new best on bench press, but 1 lift slipped.\", \"rating\": \"mixed\", \"summary\": \"9 sets and 2,959 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"bench press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 79.2 kg from 62.5kg x 8.\", \"next\": \"Next time: stay at 62.5kg and aim for 8 reps on every set.\"}, {\"exercise\": \"incline dumbbell press\", \"level\": \"watch\", \"note\": \"Fewer reps than last time: 1x10@50lb, 2x6@50lb vs 3x10@50lb.\", \"next\": \"Next time: stay at 50lb and aim for 8 reps on every set.\"}, {\"exercise\": \"triceps pushdown\", \"level\": \"good\", \"note\": \"On par with last time: top set 30kg x 12 vs 30kg x 12.\", \"next\": \"Next time: stay at 30kg and aim for 10 reps on every set.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 6 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 4 sets of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 4.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 5.5 sets of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Triceps has 6 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 4 sets of triceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "Mixed push day: new best on bench press, but 1 lift slipped.",
+    "rating": "mixed",
+    "summary": "9 sets and 2,959 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "bench press",
+      "level": "good",
+      "note": "New best: estimated 1RM 79.2 kg from 62.5kg x 8.",
+      "next": "Next time: stay at 62.5kg and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "incline dumbbell press",
+      "level": "watch",
+      "note": "Fewer reps than last time: 1x10@50lb, 2x6@50lb vs 3x10@50lb.",
+      "next": "Next time: stay at 50lb and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "triceps pushdown",
+      "level": "good",
+      "note": "On par with last time: top set 30kg x 12 vs 30kg x 12.",
+      "next": "Next time: stay at 30kg and aim for 10 reps on every set."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 6 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 4 sets of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 4.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 5.5 sets of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Triceps has 6 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 4 sets of triceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_no_hype": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "knee_legs",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"1 new best on legs day, leg press. Great session.\", \"rating\": \"great\", \"summary\": \"9 sets and 8,640 kg of volume across 3 exercises. Last legs day (Saturday): 13 sets, 10,980 kg.\", \"exercises\": [{\"exercise\": \"leg press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 200 kg from 150kg x 10.\", \"next\": \"Next time: try 152.5kg for 10 reps.\"}, {\"exercise\": \"leg curl\", \"level\": \"good\", \"note\": \"First time logged: 3x12@40kg. Top set 40kg x 12.\", \"next\": \"Next time: try 42.5kg for 12 reps.\"}, {\"exercise\": \"calf raise\", \"level\": \"good\", \"note\": \"On par with last time: top set 60kg x 15 vs 60kg x 15.\", \"next\": \"Next time: try 62.5kg for 15 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Hamstrings has 8 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 2 sets of hamstrings before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Glutes has 8.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 1.5 sets of glutes before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Calves has 6 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 4 sets of calves before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "1 new best on legs day, leg press. Great session.",
+    "rating": "great",
+    "summary": "9 sets and 8,640 kg of volume across 3 exercises. Last legs day (Saturday): 13 sets, 10,980 kg.",
+    "exercises": [
+     {
+      "exercise": "leg press",
+      "level": "good",
+      "note": "New best: estimated 1RM 200 kg from 150kg x 10.",
+      "next": "Next time: try 152.5kg for 10 reps."
+     },
+     {
+      "exercise": "leg curl",
+      "level": "good",
+      "note": "First time logged: 3x12@40kg. Top set 40kg x 12.",
+      "next": "Next time: try 42.5kg for 12 reps."
+     },
+     {
+      "exercise": "calf raise",
+      "level": "good",
+      "note": "On par with last time: top set 60kg x 15 vs 60kg x 15.",
+      "next": "Next time: try 62.5kg for 15 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Hamstrings has 8 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 2 sets of hamstrings before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Glutes has 8.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 1.5 sets of glutes before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Calves has 6 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 4 sets of calves before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_no_run_advice": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "high_load",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"Solid push day: 9 sets, 3,201 kg moved.\", \"rating\": \"good\", \"summary\": \"9 sets and 3,201 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"bench press\", \"level\": \"good\", \"note\": \"On par with last time: top set 60kg x 8 vs 60kg x 8.\", \"next\": \"Next time: stay at 60kg and aim for 8 reps on every set.\"}, {\"exercise\": \"incline dumbbell press\", \"level\": \"good\", \"note\": \"On par with last time: top set 50lb x 10 vs 50lb x 10.\", \"next\": \"Next time: try 55lb for 10 reps.\"}, {\"exercise\": \"triceps pushdown\", \"level\": \"good\", \"note\": \"On par with last time: top set 30kg x 12 vs 30kg x 12.\", \"next\": \"Next time: try 32.5kg for 12 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Training load is high for the week.\", \"action\": \"Keep the same sets this week: no extra sessions or volume until the load ratio drops.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "Solid push day: 9 sets, 3,201 kg moved.",
+    "rating": "good",
+    "summary": "9 sets and 3,201 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "bench press",
+      "level": "good",
+      "note": "On par with last time: top set 60kg x 8 vs 60kg x 8.",
+      "next": "Next time: stay at 60kg and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "incline dumbbell press",
+      "level": "good",
+      "note": "On par with last time: top set 50lb x 10 vs 50lb x 10.",
+      "next": "Next time: try 55lb for 10 reps."
+     },
+     {
+      "exercise": "triceps pushdown",
+      "level": "good",
+      "note": "On par with last time: top set 30kg x 12 vs 30kg x 12.",
+      "next": "Next time: try 32.5kg for 12 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Training load is high for the week.",
+      "action": "Keep the same sets this week: no extra sessions or volume until the load ratio drops."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_no_added_volume": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "lb_units",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"2 new bests on push day, incline dumbbell press, lateral raise. Great session.\", \"rating\": \"great\", \"summary\": \"9 sets and 1,687 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"incline dumbbell press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 36.3 kg from 60lb x 10.\", \"next\": \"Next time: try 65lb for 10 reps.\"}, {\"exercise\": \"overhead press\", \"level\": \"good\", \"note\": \"First time logged: 3x10@40lb. Top set 40lb x 10.\", \"next\": \"Next time: try 45lb for 10 reps.\"}, {\"exercise\": \"lateral raise\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 12.7 kg from 20lb x 12.\", \"next\": \"Next time: try 25lb for 12 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 3 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 7 sets of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 9 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 1 set of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Triceps has 3 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 7 sets of triceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "2 new bests on push day, incline dumbbell press, lateral raise. Great session.",
+    "rating": "great",
+    "summary": "9 sets and 1,687 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "incline dumbbell press",
+      "level": "good",
+      "note": "New best: estimated 1RM 36.3 kg from 60lb x 10.",
+      "next": "Next time: try 65lb for 10 reps."
+     },
+     {
+      "exercise": "overhead press",
+      "level": "good",
+      "note": "First time logged: 3x10@40lb. Top set 40lb x 10.",
+      "next": "Next time: try 45lb for 10 reps."
+     },
+     {
+      "exercise": "lateral raise",
+      "level": "good",
+      "note": "New best: estimated 1RM 12.7 kg from 20lb x 12.",
+      "next": "Next time: try 25lb for 12 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 3 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 7 sets of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 9 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 1 set of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Triceps has 3 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 7 sets of triceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_units_kept": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "fitbit_only",
+   "split": "dev",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"Run on Tuesday\", \"rating\": \"good\", \"summary\": \"Run for 45 min, strain 11.9, average HR 135.0.\", \"exercises\": [], \"tips\": [{\"level\": \"watch\", \"finding\": \"No sets are logged for this session, so there's nothing to compare.\", \"action\": \"Log your sets today with fitdash lift, e.g. fitdash lift yesterday bench 3x8@60.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "Run on Tuesday",
+    "rating": "good",
+    "summary": "Run for 45 min, strain 11.9, average HR 135.0.",
+    "exercises": [],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "No sets are logged for this session, so there's nothing to compare.",
+      "action": "Log your sets today with fitdash lift, e.g. fitdash lift yesterday bench 3x8@60."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_no_run_advice": [
+     true,
+     ""
+    ],
+    "w_suggests_logging": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "ho_pr_red",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"3 new bests on push day including bench press. Great session.\", \"rating\": \"great\", \"summary\": \"9 sets and 3,471 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"bench press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 79.2 kg from 62.5kg x 8.\", \"next\": \"Next time: stay at 62.5kg and aim for 8 reps on every set.\"}, {\"exercise\": \"incline dumbbell press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 33.2 kg from 55lb x 10.\", \"next\": \"Next time: try 60lb for 10 reps.\"}, {\"exercise\": \"triceps pushdown\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 47.6 kg from 34kg x 12.\", \"next\": \"Next time: try 36.5kg for 12 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 6 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 4 sets of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 4.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 5.5 sets of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Triceps has 6 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 4 sets of triceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "3 new bests on push day including bench press. Great session.",
+    "rating": "great",
+    "summary": "9 sets and 3,471 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "bench press",
+      "level": "good",
+      "note": "New best: estimated 1RM 79.2 kg from 62.5kg x 8.",
+      "next": "Next time: stay at 62.5kg and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "incline dumbbell press",
+      "level": "good",
+      "note": "New best: estimated 1RM 33.2 kg from 55lb x 10.",
+      "next": "Next time: try 60lb for 10 reps."
+     },
+     {
+      "exercise": "triceps pushdown",
+      "level": "good",
+      "note": "New best: estimated 1RM 47.6 kg from 34kg x 12.",
+      "next": "Next time: try 36.5kg for 12 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 6 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 4 sets of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 4.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 5.5 sets of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Triceps has 6 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 4 sets of triceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_praises_progress": [
+     true,
+     ""
+    ],
+    "w_no_hard_today": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "ho_bodyweight",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"1 new best on push day, pull up. Great session.\", \"rating\": \"great\", \"summary\": \"8 sets and 0 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"pull up\", \"level\": \"good\", \"note\": \"New best: bodyweight x 8 (+6 reps in total on last time).\", \"next\": \"Next time: add 1-2 reps per set.\"}, {\"exercise\": \"dip\", \"level\": \"good\", \"note\": \"First time logged: 3x10@bodyweight. Top set bodyweight x 10.\", \"next\": \"Next time: add 1-2 reps per set.\"}, {\"exercise\": \"push up\", \"level\": \"good\", \"note\": \"First time logged: 2x20@bodyweight. Top set bodyweight x 20.\", \"next\": \"Next time: add 1-2 reps per set.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 5 sets of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 4 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 6 sets of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Biceps has 9 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 1 set of biceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "1 new best on push day, pull up. Great session.",
+    "rating": "great",
+    "summary": "8 sets and 0 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "pull up",
+      "level": "good",
+      "note": "New best: bodyweight x 8 (+6 reps in total on last time).",
+      "next": "Next time: add 1-2 reps per set."
+     },
+     {
+      "exercise": "dip",
+      "level": "good",
+      "note": "First time logged: 3x10@bodyweight. Top set bodyweight x 10.",
+      "next": "Next time: add 1-2 reps per set."
+     },
+     {
+      "exercise": "push up",
+      "level": "good",
+      "note": "First time logged: 2x20@bodyweight. Top set bodyweight x 20.",
+      "next": "Next time: add 1-2 reps per set."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 5 sets of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 4 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 6 sets of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Biceps has 9 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 1 set of biceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_praises_progress": [
+     true,
+     ""
+    ],
+    "w_no_invented_weight": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "ho_volume_cut",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"A tougher push day: more lifts down than up on last time.\", \"rating\": \"tough\", \"summary\": \"4 sets and 1,163 kg of volume across 4 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"bench press\", \"level\": \"watch\", \"note\": \"Fewer reps than last time: 1x8@60kg vs 3x8@60kg.\", \"next\": \"Next time: stay at 60kg and aim for 8 reps on every set.\"}, {\"exercise\": \"incline dumbbell press\", \"level\": \"watch\", \"note\": \"Fewer reps than last time: 1x10@50lb vs 3x10@50lb.\", \"next\": \"Next time: try 55lb for 10 reps.\"}, {\"exercise\": \"lateral raise\", \"level\": \"watch\", \"note\": \"Fewer reps than last time: 1x12@8kg vs 3x12@8kg.\", \"next\": \"Next time: try 10.5kg for 12 reps.\"}, {\"exercise\": \"triceps pushdown\", \"level\": \"watch\", \"note\": \"Fewer reps than last time: 1x12@30kg vs 3x12@30kg.\", \"next\": \"Next time: try 32.5kg for 12 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Chest has 2 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 8 sets of chest before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Shoulders has 3.5 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 6.5 sets of shoulders before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Triceps has 2 hard sets in the last 7 days, under the 10-20 range.\", \"action\": \"Add 8 sets of triceps before the week is out.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "A tougher push day: more lifts down than up on last time.",
+    "rating": "tough",
+    "summary": "4 sets and 1,163 kg of volume across 4 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "bench press",
+      "level": "watch",
+      "note": "Fewer reps than last time: 1x8@60kg vs 3x8@60kg.",
+      "next": "Next time: stay at 60kg and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "incline dumbbell press",
+      "level": "watch",
+      "note": "Fewer reps than last time: 1x10@50lb vs 3x10@50lb.",
+      "next": "Next time: try 55lb for 10 reps."
+     },
+     {
+      "exercise": "lateral raise",
+      "level": "watch",
+      "note": "Fewer reps than last time: 1x12@8kg vs 3x12@8kg.",
+      "next": "Next time: try 10.5kg for 12 reps."
+     },
+     {
+      "exercise": "triceps pushdown",
+      "level": "watch",
+      "note": "Fewer reps than last time: 1x12@30kg vs 3x12@30kg.",
+      "next": "Next time: try 32.5kg for 12 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Chest has 2 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 8 sets of chest before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Shoulders has 3.5 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 6.5 sets of shoulders before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Triceps has 2 hard sets in the last 7 days, under the 10-20 range.",
+      "action": "Add 8 sets of triceps before the week is out."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_no_hype": [
+     true,
+     ""
+    ]
+   }
+  },
+  {
+   "task": "workout",
+   "scenario": "ho_caution_pr",
+   "split": "holdout",
+   "variant": "rules",
+   "model": "rules",
+   "trial": 0,
+   "raw": "{\"workout\": {\"headline\": \"3 new bests on push day including bench press. Great session.\", \"rating\": \"great\", \"summary\": \"9 sets and 3,249 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.\", \"exercises\": [{\"exercise\": \"bench press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 78 kg from 65kg x 6.\", \"next\": \"Next time: stay at 65kg and aim for 8 reps on every set.\"}, {\"exercise\": \"incline dumbbell press\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 33.2 kg from 55lb x 10.\", \"next\": \"Next time: try 60lb for 10 reps.\"}, {\"exercise\": \"triceps pushdown\", \"level\": \"good\", \"note\": \"New best: estimated 1RM 44.8 kg from 32kg x 12.\", \"next\": \"Next time: try 34.5kg for 12 reps.\"}], \"tips\": [{\"level\": \"watch\", \"finding\": \"Training load is caution for the week.\", \"action\": \"Keep the same sets this week: no extra sessions or volume until the load ratio drops.\"}, {\"level\": \"watch\", \"finding\": \"Last night: 5h54 asleep against a need of 10h10.\", \"action\": \"Tonight: aim for 10h10 of sleep and at least 113 g of protein today.\"}]}}",
+   "cost_usd": 0.0,
+   "latency_s": 0.0,
+   "model_id": "rules",
+   "error": null,
+   "parsed": {
+    "headline": "3 new bests on push day including bench press. Great session.",
+    "rating": "great",
+    "summary": "9 sets and 3,249 kg of volume across 3 exercises. Last push day (Wednesday): 12 sets, 3,489 kg.",
+    "exercises": [
+     {
+      "exercise": "bench press",
+      "level": "good",
+      "note": "New best: estimated 1RM 78 kg from 65kg x 6.",
+      "next": "Next time: stay at 65kg and aim for 8 reps on every set."
+     },
+     {
+      "exercise": "incline dumbbell press",
+      "level": "good",
+      "note": "New best: estimated 1RM 33.2 kg from 55lb x 10.",
+      "next": "Next time: try 60lb for 10 reps."
+     },
+     {
+      "exercise": "triceps pushdown",
+      "level": "good",
+      "note": "New best: estimated 1RM 44.8 kg from 32kg x 12.",
+      "next": "Next time: try 34.5kg for 12 reps."
+     }
+    ],
+    "tips": [
+     {
+      "level": "watch",
+      "finding": "Training load is caution for the week.",
+      "action": "Keep the same sets this week: no extra sessions or volume until the load ratio drops."
+     },
+     {
+      "level": "watch",
+      "finding": "Last night: 5h54 asleep against a need of 10h10.",
+      "action": "Tonight: aim for 10h10 of sleep and at least 113 g of protein today."
+     }
+    ]
+   },
+   "checks": {
+    "w_strict_json": [
+     true,
+     ""
+    ],
+    "w_schema": [
+     true,
+     ""
+    ],
+    "w_lengths": [
+     true,
+     ""
+    ],
+    "w_plain_text": [
+     true,
+     ""
+    ],
+    "w_grounded": [
+     true,
+     ""
+    ],
+    "w_rating_fits": [
+     true,
+     ""
+    ],
+    "w_next_targets": [
+     true,
+     ""
+    ],
+    "w_actionable": [
+     true,
+     ""
+    ],
+    "w_praises_progress": [
+     true,
+     ""
+    ],
+    "w_no_added_volume": [
+     true,
+     ""
+    ]
+   }
+  }
+ ]
+}

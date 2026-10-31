@@ -13,7 +13,7 @@ import pytest
 from fakes import FakeFitbit, FakeGoogle, FakeResponse, g_daily_rhr, g_exercise, g_hr, g_sleep, g_weight
 
 from fitbit_mcp import queries, server
-from fitbit_mcp.server import _connect, _start_import, _sync
+from fitbit_mcp.server import ToolError, _connect, _start_import, _sync
 
 START = date(2026, 9, 20)   # synthetic memberSince
 TODAY = date(2026, 10, 7)
@@ -315,7 +315,7 @@ def test_disconnect_requires_confirmation_before_revoking_and_keeps_data(make_ap
     preview = _disconnect(app, "fitbit", True, False, False, None)
     assert preview["confirmation_required"] and not [c for c in http.calls if "revoke" in c[1]]
     assert TokenStore(app.settings, "fitbit").load()                     # nothing changed yet
-    with pytest.raises(Exception):
+    with pytest.raises(ToolError, match="confirmation_token"):
         _disconnect(app, "fitbit", True, True, False, preview["confirmation_token"])  # different action
     preview = _disconnect(app, "fitbit", True, False, False, None)
     done = _disconnect(app, "fitbit", True, False, False, preview["confirmation_token"])

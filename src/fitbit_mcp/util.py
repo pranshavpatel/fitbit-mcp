@@ -106,7 +106,7 @@ def civil_to_str(civil: Any) -> tuple[str | None, str | None]:
     """Google CivilDateTime {'date': {'year','month','day'}, 'time': {...}} -> (date, datetime)."""
     if not isinstance(civil, dict):
         return None, None
-    d = civil.get("date") if "date" in civil else civil
+    d: Any = civil.get("date") if "date" in civil else civil
     try:
         day = date(int(d["year"]), int(d["month"]), int(d["day"])).isoformat()
     except (KeyError, TypeError, ValueError):

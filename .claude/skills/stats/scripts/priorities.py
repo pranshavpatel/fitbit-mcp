@@ -258,11 +258,11 @@ def cli(argv: list[str], home: Path, now: datetime, interactive: bool) -> int:
         print(__doc__)
         return 2
     days = load(home)
-    e = days.get(d.isoformat())
+    today_entry = days.get(d.isoformat())
     if not interactive:
-        print("{}:\n{}".format(d.isoformat(), describe(e)))
+        print("{}:\n{}".format(d.isoformat(), describe(today_entry)))
         return 0
-    if e and e.get("items") and (now.hour >= 12 or now.hour < ROLLOVER_H):
+    if today_entry and today_entry.get("items") and (now.hour >= 12 or now.hour < ROLLOVER_H):
         run_prompt(home, now, "review", out=sys.stdout)
     else:
         run_prompt(home, now, "set", out=sys.stdout)

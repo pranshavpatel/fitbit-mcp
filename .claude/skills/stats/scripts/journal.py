@@ -20,7 +20,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 # good: True = a healthy habit (doing it is the goal), False = one to avoid, None = neutral (just track it)
-DEFAULT_HABITS = [
+DEFAULT_HABITS: list[dict] = [
     {"key": "alcohol", "label": "alcohol", "good": False},
     {"key": "late-caffeine", "label": "caffeine after 2pm", "good": False},
     {"key": "late-meal", "label": "ate within 2 h of bed", "good": False},
@@ -150,13 +150,13 @@ def describe(entry: dict, hs: list[dict]) -> str:
 def ask(hs: list[dict], prev: dict, inp=input, out=sys.stdout) -> tuple[dict[str, bool], str | None]:
     """Interactive: y / n / Enter to skip (keeps what's already logged), then a note."""
     marks: dict[str, bool] = {}
-    order = []
-    for title, code, group in grouped(hs):
-        order.append((title, code, None))
+    order: list[tuple[str | None, str | None, dict | None]] = []
+    for g_title, g_code, group in grouped(hs):
+        order.append((g_title, g_code, None))
         order += [(None, None, h) for h in group]
     for title, code, h in order:
-        if h is None:
-            out.write(_paint(title.upper(), code, out) + "\n")
+        if h is None:                            # a group heading
+            out.write(_paint((title or "").upper(), code or "", out) + "\n")
             continue
         cur = prev.get("habits", {}).get(h["key"])
         hint = "" if cur is None else " (now {})".format("yes" if cur else "no")

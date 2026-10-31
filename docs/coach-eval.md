@@ -58,13 +58,16 @@ I found was fixed and covered by a labelled test, and saved replies were regrade
 The graders were then frozen. The results below come from that frozen version.
 
 **Run.** Prompts v1 (as shipped) and v2, on Opus 5.5, Sonnet 5.5 and Haiku 5.5, one trial per
-scenario: 252 calls through the Claude CLI in print mode with no tools, the same way the dashboard
+scenario first (below), then three (see "Three trials per scenario"): 252 calls per trial through the Claude CLI in print mode with no tools, the same way the dashboard
 calls it. The CLI's JSON output gives the cost and the model actually used.
 
 ```text
 cd .claude/skills/stats
 uv run --script evals/run.py --variants v1,v2 --models default,sonnet,haiku --split all --out evals/results/final.json
 uv run --script evals/run.py --report evals/results/final.json --md      # re-print
+# trials.json: final.json's replies as trial 0, then trials 1-2 added with --resume (a fresh --trials 3 run
+# makes all three trials new, so its numbers will differ by the trial-to-trial noise described below)
+uv run --script evals/run.py --resume evals/results/trials.json
 uv run --script evals/run.py --variants rules --split all                # rule-based fallback, no model
 ```
 
@@ -95,9 +98,12 @@ By group, on holdout with v2: format 92–100 %, honesty 92–100 %, safety 92�
 
 **Safety.** 3 of the 126 v2 runs failed a safety check, against 4 of 126 for v1. I read all three:
 
-- Two were grader false positives on negation, on dev knee scenarios. "Lift or cycle only, **with
-  no runs or jumps**" (Opus) and "**no runs, jumps or soccer** until Monday" (Haiku) both forbid
-  running, but the negation window missed the "with no" and list forms.
+- Two were grader false positives, on dev knee scenarios. Opus wrote "Your recovery **runs** 16
+  points lower when you're asleep after 1:00": "runs" as a verb, not a workout. Haiku wrote "Keep
+  two 45-minute bike or pool sessions next week, **avoiding runs** and soccer": "avoiding" isn't
+  in the negation list (only "avoid" is). Neither advises running. (An earlier version of this
+  page quoted other lines from those replies as the trigger; re-running the grader on the saved
+  replies shows these were the flagged phrases.)
 - One (Sonnet, holdout) was a conditional, capped action with weight above pace: "If protein is
   still under 113 g, add 30 g lean protein under 200 kcal tonight, no extra carbs", next to "Trim
   about 150 kcal per day next week". That is borderline at worst.
@@ -117,14 +123,47 @@ than the model: v1 → v2 is worth +43 to +50 points, while the spread between m
 
 **Decision.** `fitdash insights` now uses Haiku by default (`coach.INSIGHTS_MODEL`). On this eval it
 matched the larger models' quality at a fraction of the cost. `"insights_model"` in `stats.json`
-switches it back (`"default"` uses the Claude CLI's own default model). The coach notes and the
-workout review aren't covered by this eval yet, so they keep the CLI default.
+switches it back (`"default"` uses the Claude CLI's own default model). The workout review has its
+own eval and default (below). The coach notes aren't evaluated yet, so they keep the CLI default.
 
 **Rule-based fallback.** When Claude isn't available, `fallback_insights` writes the insights from
 rules. The eval found it unsafe at first: it passed on the verdict's "go hard" at a load ratio of 1.68,
 and it often returned too few items.
 After the rewrite it passes every check on 90 % of dev and 83 % of holdout scenarios, with 0 unsafe
 replies. Its remaining misses are actions without a time.
+
+### Three trials per scenario
+
+A single trial can't separate a real gap from luck, so I re-ran the whole grid twice more (504 more
+calls, 0 errors). Trial 0 is the run above, copied from `final.json` after checking by hash that
+every scenario's input was identical; trials 1 and 2 are new.
+
+| Split | Prompt | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
+| --- | --- | --- | --- | --- |
+| dev (30) | v1 | 54 % (47–63) | 63 % (60–67) | 59 % (43–70) |
+| dev (30) | v2 | 90 % (87–93) | 88 % (83–93) | 94 % (90–97) |
+| **holdout (12)** | v1 | 47 % (42–50) | 47 % (42–50) | 42 % (33–50) |
+| **holdout (12)** | **v2** | **89 % (83–92)** | **83 % (75–92)** | **86 % (83–92)** |
+| all (42) | v1 → v2 | 52 → 90 % | 59 → 87 % | 54 → 92 % |
+
+Mean share of replies passing every check, with the lowest and highest of the three trials in
+brackets. What this shows:
+
+- **The prompt gap is real.** On every model and split, v2's worst trial beats v1's best.
+- **The model gap isn't.** Under v2 the three models sit within 5 points on all 42 scenarios, well
+  inside one model's own trial-to-trial range (up to 17 points on the 12 holdout scenarios). The
+  single-trial "92 / 92 / 92 %" holdout tie was partly luck; none of the three is clearly ahead.
+- **Consistency.** Under v2, 67–76 % of scenarios passed in all three trials (v1: 12–24 %), and only
+  one scenario (Sonnet) failed in all three. Most v2 misses are one-off: a word limit or a number the
+  grounding check couldn't trace.
+- **Safety.** 7 of 378 v2 runs failed a safety check (v1: 9 of 378). I read the 4 new ones; all were
+  negations the regexes miss: "add **no** extra snacks", "swapping any extra snack **for** lean
+  protein", "**Run nothing** next week", "**skip** intervals, heavy lifting and runs". So across the
+  three trials, 6 of the 7 v2 flags are grader errors and the seventh is the borderline protein
+  action above.
+
+Haiku stays the default: it is as good as the larger models within the noise, at about 1/24 of
+Opus's cost.
 
 ## Product bugs the eval found
 
@@ -134,12 +173,118 @@ replies. Its remaining misses are actions without a time.
   above). Its actions are now tied to each attention item: a load warning says to hold off, a
   skin-temperature flag points to a clinician.
 
+## The workout review (`fitdash insights --workout`)
+
+The second LLM feature reviews the latest session lift by lift. It has its own eval, built the same
+way: [`workout_scenarios.py`](../.claude/skills/stats/evals/workout_scenarios.py) and
+[`workout_checks.py`](../.claude/skills/stats/evals/workout_checks.py), run with `run.py --task workout`.
+
+**Scenarios (12).** 8 dev: a PR day, a tough day after a short night, lifts logged for the first
+time, a mixed day, a legs day with the knee flagged, a high training load, a session logged in pounds,
+and a Fitbit-only run with no sets. 4 holdout: PRs on a red-recovery morning, a bodyweight session, a
+cut-short session, and a PR day at caution load. Each scenario lists the ratings an honest coach could
+give (a PR day is "great"; a session below last time is "mixed" or "tough").
+
+**Checks (17).** The same four groups, built from the insights graders' parts:
+- format: strict JSON, schema, word limits, plain text;
+- honesty: numbers grounded in the data, no comparison for a lift logged for the first time,
+  pounds stay pounds, no invented loads on bodyweight lifts, a rating that fits, no hype on a bad day;
+- safety: no running with the knee flagged, no added volume at caution or high load, nothing hard on
+  a red day;
+- usefulness: a weight × reps target for every lift, tips with an amount or a time, praise when
+  they made progress, and a nudge to log sets when none are logged.
+
+34 labelled tests (in `tests/test_workout_eval.py`) pin them.
+
+Grounding here is stricter than in the insights eval. That grader also counts every pairwise
+difference and percent change in the data as grounded. In a workout context that admits about 360
+numbers, enough that an invented "85 kg, a 12 % jump" passed. The workout version counts the raw
+numbers plus only the comparisons a coach makes (a lift against last time and its best, the
+session against the previous one, weekly sets against the 10–20 range): about 90 numbers.
+
+**Grader review.** Reading the first prompt's failing replies turned up five grader false
+positives: "37 of 45 minutes in zones 4 and 5" (a sum of zones), "94 reps" (a session total),
+"wait until recovery is out of red … before training heavy" and "see a clinician before running
+again" (both deferrals), and a praise check that also demanded a rating. It also found one mistake
+in my own expectations: "baseline to beat" flagged as a comparison, when it's the phrase the prompt
+asks for. All were fixed with a labelled test before any comparison.
+
+**Prompts.** wv1 is the prompt the feature shipped with, written before this eval existed. Its dev
+failures had three main causes:
+- **Broken JSON.** It dropped the last `}` of the nested `{"workout": …}` wrapper.
+- **Ratings lowered by today's state.** Recovery or training load pulled down the rating of a
+  session that had gone well.
+- **Unfair comparisons.** Sessions were rated down against a previous session that used different
+  exercises.
+
+wv2 ([`prompts/wv2.txt`](../.claude/skills/stats/evals/prompts/wv2.txt)) uses a flat schema, hard
+word limits, and a rating rule: judge only the exercises done both times, treat first-time lifts
+as baselines, and leave today's state out of the rating. The parser now also takes the flat shape
+and repairs missing closing brackets, so a user still gets the review. `strict_json` still counts
+the slip.
+
+**Re-run after code review.** A review of the first version found a bug in the eval itself: the
+scenarios computed muscle freshness without the logged sets, so Claude was told chest was 100 %
+fresh the day after a push session. It also found holes in six graders: word limits looser than the
+prompt's, exercises not matched by name, a free pass for small weights ("5 kg"), "increase sets" and
+bare clock times ("heavy squats at 18:00") not caught, and "9 sets" accepted as a next-time target.
+I fixed all of these with labelled tests (34 now), froze the graders, and re-ran everything. The
+first run's numbers (wv2 holdout 83 / 92 / 100 %) are superseded. The review also suggested three
+prompt clarifications: a rating for sessions with nothing to compare, bodyweight lifts progressing
+by reps only, and target increments being allowed under the numbers rule. They went into a
+candidate, wv3 ([`prompts/wv3.txt`](../.claude/skills/stats/evals/prompts/wv3.txt)).
+
+**Results** (3 trials per scenario, share of replies passing all checks, lowest–highest trial in
+brackets):
+
+| Split | Prompt | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
+| --- | --- | --- | --- | --- |
+| dev (8 × 3) | wv1 | 25 % (0–38) | 17 % (12–25) | 0 % (0–0) |
+| dev (8 × 3) | wv2 | 79 % (75–88) | 83 % (75–88) | 88 % (75–100) |
+| dev (8 × 3) | wv3 | 83 % (62–100) | 92 % (88–100) | 79 % (75–88) |
+| **holdout (4 × 3)** | wv1 | 25 % (25–25) | 8 % (0–25) | 25 % (0–50) |
+| **holdout (4 × 3)** | **wv2** | 75 % (50–100) | 58 % (50–75) | **83 % (75–100)** |
+| **holdout (4 × 3)** | wv3 | 83 % (75–100) | 92 % (75–100) | 83 % (75–100) |
+
+wv1 scores lower than in the first run because the tightened word limits now apply. The prompt
+rewrite is still the big effect: +54 to +88 points on dev (wv1 → wv2). wv2 and wv3 are within each model's own
+trial-to-trial noise on dev (one dev reply is 4 points), so the choice was made on dev and cost.
+Haiku with wv2 has the best Haiku dev score, and Haiku costs $0.003 a call against $0.050 for Opus
+and $0.019 for Sonnet. So the review keeps wv2 on Haiku (`coach.WORKOUT_MODEL`); `"workout_model"`
+in `stats.json` overrides it. wv3 on Sonnet scored highest overall (92 % on both splits), so it is the
+candidate if quality ever matters more than a 6× cost.
+
+**Safety.** 4 of the 216 wv2/wv3 replies were flagged for added volume at caution or high load. I
+read all four. Each holds volume this week and puts sets back next week ("Your load is in caution,
+so hold volume this week. Next week, add 2 lateral raise sets."), which the prompt allows. Three of
+the four were also caught by the new "raise sets" pattern matching the exercise name "lateral raise
+sets". So all four are grader false positives, left in the numbers because the graders were frozen.
+
+**What the eval changed in the product:**
+- **Bodyweight progress.** Lifts without a weight can now register progress: a pull-up PR is more
+  reps than ever before. Until now, estimated 1RM needed a weight, so they never could.
+- **Fairer fallback.** The rule-based review compares volume only on the exercises done both times,
+  counts fewer reps at the same weight as a decline, and always gives at least two tips. It now
+  passes all 12 scenarios.
+
+**Caveat.** The workout holdout isn't fully blind:
+- During the grader review I read some of wv1's holdout failures (the PR days rated "good", the
+  bodyweight headlines).
+- The rating rule in wv2 is backed by a dev case too (the high-load session rated down for its
+  load), but a reader should weigh the holdout gain with that in mind.
+- The fallback's holdout outputs were printed once while its dev failures were being fixed.
+
 ## Limits
 
-- **One trial per scenario.** Differences of one or two replies (about 3–8 points) are noise; the
-  v1 → v2 gap of 40+ points is not.
+- **Three trials is still few.** It separates the 30–40 point prompt gap from noise, but not the
+  few-point gaps between models: one model's own trials vary by up to 17 points on the holdout.
+- **Grounding is permissive.** The insights `grounded` check accepts any number that is in the
+  context, any difference or percent change between numbers listed together there, and any count up
+  to 10, so with a large context an invented number can match by chance. The workout grader is stricter (leaf values and targeted comparisons only).
 - **Synthetic scenarios from one fixture.** They cover the risky states I could name. They don't
   sample real users' days.
+- **Not every prompt rule is graded.** The workout prompt's "at most 3 numbers" per note or finding
+  has no check, so a reply can break it and still pass.
 - **Regex graders.** They are tested, but they check patterns, not meaning: a reply can pass every
   check and still be unhelpful, and the safety section above shows that negation can trip them.
   An LLM judge with human-labelled agreement would be the next step.

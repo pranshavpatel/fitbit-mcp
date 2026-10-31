@@ -6,6 +6,7 @@
 """Regenerate the screenshots in docs/demo from SYNTHETIC data.
 
     uv run --script docs/demo/make_demos.py            # terminal SVGs (phone app: make_app_demos.py)
+    uv run --script docs/demo/make_demos.py --refresh-workout   # also ask Claude for a new workout review
 
 Nothing here reads your own ~/.fitbit-mcp: it builds a throwaway data home with the test suite's
 synthetic Fitbit history (fixture_db.py), a made-up lift log, journal and coach note, then renders
@@ -19,7 +20,7 @@ import random
 import shutil
 import sys
 import tempfile
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -36,7 +37,6 @@ import dashboard  # noqa: E402
 import data as D  # noqa: E402
 import journal as J  # noqa: E402
 import lifts as L  # noqa: E402
-import web as W  # noqa: E402
 from rich.console import Console  # noqa: E402
 from rich.terminal_theme import TerminalTheme  # noqa: E402
 
@@ -98,6 +98,26 @@ def make_home() -> None:
                     "text": text, "source": "claude"}])
 
 
+WORKOUT_REPLY = HERE / "workout_reply.json"
+
+
+def workout_shot(m: dict) -> None:
+    """fitdash insights --workout on the synthetic pull day. The review is a real Claude reply to that
+    session, generated once with --refresh-workout and kept in workout_reply.json, so the picture is
+    reproducible without a Claude call."""
+    sets = L.load(HOME)
+    ctx = CO.workout_context(m, sets, NOW, "")
+    wo = CO.latest_workout(m, sets, m["date"])
+    if "--refresh-workout" in sys.argv or not WORKOUT_REPLY.exists():
+        got = CO.generate_workout(ctx)
+        if not got:
+            raise SystemExit("the Claude CLI is needed once to write docs/demo/workout_reply.json")
+        WORKOUT_REPLY.write_text(json.dumps(got, indent=1) + "\n")
+    result = dict(json.loads(WORKOUT_REPLY.read_text()), date=wo["date"], kind=ctx["session"]["kind"],
+                  at=NOW.strftime("%Y-%m-%dT%H:%M"), source="claude")
+    svg("workout", 100, lambda con: dashboard.render_workout(result, con, 100), "fitdash insights --workout")
+
+
 def model() -> dict:
     store = D.open_store(HOME)
     try:
@@ -136,6 +156,7 @@ def main() -> int:
         m56 = D.build_model(store, DAY, D.load_config(HOME), days=56, now=NOW)
     finally:
         store.close()
+    workout_shot(m)
     for section in ("sleep", "lifting"):
         svg(section + "_extended", 100, lambda con, s=section: dashboard.render(m56, con, 100, s),
             "fitdash --section " + section)

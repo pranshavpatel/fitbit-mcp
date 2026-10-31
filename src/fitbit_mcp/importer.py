@@ -73,7 +73,7 @@ class Importer:
 
     # ------------------------------------------------------------------ connect
     def run_connect(self, ctx: JobContext) -> dict:
-        provider = ctx.provider
+        provider = ctx.account
         scopes = ctx.params["scopes"]
         if ctx.params.get("method") == "ghealth_cli":
             ctx.progress(force=True, stage="importing_ghealth_cli_credentials")
@@ -121,6 +121,8 @@ class Importer:
                     result = {"ok": True, "check": "users.getIdentity",
                               "account_fingerprint": sha256_bytes(identity["healthUserId"].encode())[:12]}
             else:
+                path: str | None
+                check: str | None
                 if "profile" in granted:
                     path, check = "/1/user/-/profile.json", "profile"
                 else:
@@ -176,8 +178,7 @@ class Importer:
             params.update(window_start=start.isoformat(), window_end=today.isoformat())
             ctx.manager._update(ctx.id, params=json.dumps(params))
             return start, today
-        start, end = parse_date(params.get("start_date"), "start_date"), parse_date(params.get("end_date"), "end_date")
-        return start, end
+        return parse_date(params.get("start_date"), "start_date"), parse_date(params.get("end_date"), "end_date")
 
     def _plan_fitbit(self, ctx: JobContext, client: ApiClient) -> None:
         params = ctx.params
@@ -203,7 +204,7 @@ class Importer:
         if start > end:
             raise ValueError("start_date must be on or before end_date")
         params.setdefault("end_date", end.isoformat())
-        ranged = []
+        ranged: list[dict[str, Any]] = []
         for grp, category, scope, template, max_days in catalog.FITBIT_RANGES:
             if category not in categories:
                 continue
@@ -255,7 +256,9 @@ class Importer:
             rows.append(dict(grp="snapshot-pairedDevices", category="snapshot", scope=None,
                              path="/v4/users/me/pairedDevices", params={}))
         floor = self.settings.history_floor()
-        ranged, exercise_scoped, origins = [], [], {}
+        ranged: list[dict[str, Any]] = []
+        exercise_scoped: list[dict[str, Any]] = []
+        origins: dict[str, Any] = {}
         for spec in specs:
             scope = catalog.google_scope(spec.scope_name)
             base = "/v4/users/me/dataTypes/" + spec.id + "/dataPoints"
@@ -296,7 +299,7 @@ class Importer:
                 since_utc = full_hr_since(self.get_meta(FULL_HR_MARK), reg.local_midnight_utc(spec_start, tz))
             for chunk_start, chunk_end in chunks(spec_start, end, spec.max_chunk_days):
                 if spec.operation == reg.DAILY_ROLLUP:
-                    row_params = {"op": "rollup"}
+                    row_params: dict[str, Any] = {"op": "rollup"}
                     path = base + ":dailyRollUp"
                 else:
                     # The filter is built at execution time, so a fallback form found for one chunk
@@ -403,7 +406,7 @@ class Importer:
 
     # --------------------------------------------------------------- execution
     def run_api(self, ctx: JobContext) -> dict:
-        provider = ctx.provider
+        provider = ctx.account
         if provider == "fitbit":
             check_fitbit_available(self.settings)
         client = self.client(provider, ctx)
@@ -470,7 +473,7 @@ class Importer:
                          [fields[n] for n in names] + [ctx.id, key])
 
     def _execute(self, ctx: JobContext, client: ApiClient, row: dict, granted: set[str], totals: dict) -> None:
-        provider, grp, key = ctx.provider, row["grp"], row["key"]
+        provider, grp, key = ctx.account, row["grp"], row["key"]
         params = json.loads(row["params"])
         ctx.progress(force=True, current=grp, current_window=[row["window_start"], row["window_end"]],
                      current_pages=row["pages"], current_records=row["records"])
