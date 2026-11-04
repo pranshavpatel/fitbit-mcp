@@ -2,8 +2,8 @@
 
 This eval starts from prepared dashboard context. It does not evaluate an agent's
 selection or use of the MCP tools. The separate
-[MCP tool-use eval](mcp-tool-use-eval.md) has its own
-[synthetic baseline results](mcp-tool-use-results.md).
+[MCP tool-use eval](mcp-eval.md) has its own
+[synthetic baseline results](mcp-eval.md).
 
 `fitdash insights` sends the day's stats to Claude and shows back 3–4 insights about today and
 3–5 about the week, each a finding plus an action. Reading a few replies doesn't tell you how often

@@ -1,0 +1,147 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012C29mNnrUBYLTpccvzS3X8",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "limit": 10
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01M1zxTyQbVeaPCSq47rK7Ze",
+        "name": "mcp__fitbit_eval__cancel_job",
+        "input": {
+          "job_id": "job_5f7d0cb1de67"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_017vtyVpLUsyvNLJkP7fXoUS",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_5f7d0cb1de67"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I cancelled your Google import (job `job_5f7d0cb1de67`). A second status check shows it as **cancelled**, so it has stopped.\n\n- **What it was:** an import of activity data for 2026-10-01 to 2026-10-03. It had been paused for about 10 minutes by a provider rate limit.\n- **How far it got:** 4 of 18 requests had finished, and 14 were still pending. It hadn't inserted or updated any records, so nothing changed in your local data.\n- **Resuming:** the 4 completed requests are kept. If you want to continue later, `resume_job` picks up from there."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I cancelled your Google import (job `job_5f7d0cb1de67`). A second status check shows it as **cancelled**, so it has stopped.\n\n- **What it was:** an import of activity data for 2026-10-01 to 2026-10-03. It had been paused for about 10 minutes by a provider rate limit.\n- **How far it got:** 4 of 18 requests had finished, and 14 were still pending. It hadn't inserted or updated any records, so nothing changed in your local data.\n- **Resuming:** the 4 completed requests are kept. If you want to continue later, `resume_job` picks up from there.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 407,
+        "cacheReadInputTokens": 27879,
+        "cacheCreationInputTokens": 2260,
+        "webSearchRequests": 0,
+        "costUSD": 0.0159139,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2260,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0159139,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2260,
+      "cache_read_input_tokens": 27879,
+      "output_tokens": 407,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2260,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 201,
+          "cache_read_input_tokens": 7792,
+          "cache_creation_input_tokens": 527,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 527
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

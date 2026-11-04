@@ -1,0 +1,151 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JpSGp8tJLHk1SzcuSDg5ZQ",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01PZga3LmDoa5zLCVr79nVYU",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "heart_rate",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01XrzFV9TrxGq8U1vave9iii",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "resting_heart_rate",
+          "start_date": "2026-09-25",
+          "end_date": "2026-10-02",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't tell from the data I have. It doesn't cover the whole day.\n\n- **What's stored for Oct 2, 2026:** only 3 heart rate samples, at 100, 101 and 102 bpm (average 101).\n- **Why that isn't enough:** the import only captures heart rate around workouts, not all day. Those 3 samples most likely come from an exercise window. A reading of about 100 bpm during activity is not unusual.\n- **What's missing:** there's no resting heart rate for that day or the week before, so I have nothing to compare against. There's also no sleep data.\n\nFetching whole-day heart rate would answer this. It's a large download, roughly 37 MB per day, and the Google API may only keep it for a limited time. I can run that import for Oct 2 if you want. Once it finishes, I can check how much of the day was elevated compared with your resting level.\n\nThis isn't medical advice. If you're worried about a persistently high heart rate, a clinician can help."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't tell from the data I have. It doesn't cover the whole day.\n\n- **What's stored for Oct 2, 2026:** only 3 heart rate samples, at 100, 101 and 102 bpm (average 101).\n- **Why that isn't enough:** the import only captures heart rate around workouts, not all day. Those 3 samples most likely come from an exercise window. A reading of about 100 bpm during activity is not unusual.\n- **What's missing:** there's no resting heart rate for that day or the week before, so I have nothing to compare against. There's also no sleep data.\n\nFetching whole-day heart rate would answer this. It's a large download, roughly 37 MB per day, and the Google API may only keep it for a limited time. I can run that import for Oct 2 if you want. Once it finishes, I can check how much of the day was elevated compared with your resting level.\n\nThis isn't medical advice. If you're worried about a persistently high heart rate, a clinician can help.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 639,
+        "cacheReadInputTokens": 12807,
+        "cacheCreationInputTokens": 2183,
+        "webSearchRequests": 0,
+        "costUSD": 0.0164107,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2183,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0164107,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2183,
+      "cache_read_input_tokens": 12807,
+      "output_tokens": 639,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2183,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 316,
+          "cache_read_input_tokens": 6752,
+          "cache_creation_input_tokens": 1486,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1486
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

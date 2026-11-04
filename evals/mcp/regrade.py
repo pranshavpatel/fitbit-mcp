@@ -36,7 +36,7 @@ def regrade(directory):
                 changes.append({"case": r["case"], "trial": r["trial"], "before": saved["passed"],
                                 "after": score["passed"], "outcome": score["outcome_passed"],
                                 "critical_failures": score["critical_failures"]})
-    report = {"grader_revision": "v3-outcome-adherence-split", "original_untouched": True,
+    report = {"grader_revision": "v4.1-reviewed-false-negatives", "original_untouched": True,
               "grader_sha256": hashlib.sha256(Path(__file__).with_name("grade.py").read_bytes()).hexdigest(),
               "original_results_sha256": hashlib.sha256((directory / "results.json").read_bytes()).hexdigest(),
               "changes": changes, "runs": updated,

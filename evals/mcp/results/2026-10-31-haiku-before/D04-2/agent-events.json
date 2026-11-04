@@ -1,0 +1,198 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01MR654BBVAUXHzzBPWynBQb",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google is connected and the remote check passed. I'll start the import for activity and sleep, limited to October 1\u20133, 2026."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012pZpUhxB3XDnC6HPDRCbNn",
+        "name": "mcp__fitbit_eval__start_import",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity",
+            "sleep"
+          ],
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014qex3RMcV1vhPyPY2m5whG",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_40c23cf9bc44"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The import finished as partial. I'll check which categories failed."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01XD5soGjxrgKeNFuPCgevZv",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The import finished with partial results. Activity imported for October 1\u20133, but sleep did not.\n\n**What came in**\n- **Activity, steps:** 3 daily records, one for each of October 1, 2, and 3. This is the only activity metric that returned data.\n\n**What's missing**\n- **Sleep: denied.** Google returned HTTP 403 PERMISSION_DENIED for the sleep request, so no sleep data was saved for these dates. This is odd because the connection status lists `sleep` as a granted permission. The token may not carry that scope, or the scope may have been revoked. Retrying won't fix a permission denial. To get sleep, you'd need to reconnect Google and approve the sleep permission on the consent screen. I can start that if you want. Note that while the Google consent screen is in Testing mode, the credentials expire after 7 days.\n- **Other activity metrics (distance, active minutes, active zone minutes, floors, calories, activity level, sedentary periods, and others):** each request succeeded but returned no records for this window. That could mean there was no data, or that your device or app didn't record these metrics for those days. I can't tell which from here.\n\nSync state now shows Google synced through October 3, 2026."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The import finished with partial results. Activity imported for October 1\u20133, but sleep did not.\n\n**What came in**\n- **Activity, steps:** 3 daily records, one for each of October 1, 2, and 3. This is the only activity metric that returned data.\n\n**What's missing**\n- **Sleep: denied.** Google returned HTTP 403 PERMISSION_DENIED for the sleep request, so no sleep data was saved for these dates. This is odd because the connection status lists `sleep` as a granted permission. The token may not carry that scope, or the scope may have been revoked. Retrying won't fix a permission denial. To get sleep, you'd need to reconnect Google and approve the sleep permission on the consent screen. I can start that if you want. Note that while the Google consent screen is in Testing mode, the credentials expire after 7 days.\n- **Other activity metrics (distance, active minutes, active zone minutes, floors, calories, activity level, sedentary periods, and others):** each request succeeded but returned no records for this window. That could mean there was no data, or that your device or app didn't record these metrics for those days. I can't tell which from here.\n\nSync state now shows Google synced through October 3, 2026.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 991,
+        "cacheReadInputTokens": 35646,
+        "cacheCreationInputTokens": 3818,
+        "webSearchRequests": 0,
+        "costUSD": 0.00161656,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 194,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3818,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00161656,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 3818,
+      "cache_read_input_tokens": 35646,
+      "output_tokens": 991,
+      "output_tokens_details": {
+        "thinking_tokens": 194
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3818,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 555,
+          "cache_read_input_tokens": 8254,
+          "cache_creation_input_tokens": 1500,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1500
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

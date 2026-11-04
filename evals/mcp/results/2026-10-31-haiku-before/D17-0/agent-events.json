@@ -1,0 +1,162 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CkQrcNSbKWfbE15rUbeVKk",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01R7iFUdnXceyERTK4Y4GUze",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01PiJuYtFz1y4BBrHwQcZnbR",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "activity",
+          "metric": "steps",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Google steps, last week (Monday, October 26, 2026 through Sunday, November 1, 2026):**\n\n- **Total:** 14,000 steps across 7 days\n- **Daily average:** 2,000 steps\n- **Daily values:** 2,000 steps on every day, Oct 26 through Nov 1\n\n**Limitations:**\n\n- **The values look like test data.** Every day is exactly 2,000 steps, and the records are tagged with a parser named \"eval-synthetic.\" They may not be your real activity. Before relying on these numbers, check them against your Google Health app.\n- **The data is local, and the Google connection is not active.** The connection status shows no verified Google connection, so I could not check for newer records. The local copy only covers October 1 through November 1, so any later days are not included.\n- **Date assumption:** I used today as Monday, November 2, which is the date in the system context. Another note in my instructions says October 31, which is a Saturday. If that were the correct date, last week would be October 19 through October 25, and the local database has no step records for those days."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Google steps, last week (Monday, October 26, 2026 through Sunday, November 1, 2026):**\n\n- **Total:** 14,000 steps across 7 days\n- **Daily average:** 2,000 steps\n- **Daily values:** 2,000 steps on every day, Oct 26 through Nov 1\n\n**Limitations:**\n\n- **The values look like test data.** Every day is exactly 2,000 steps, and the records are tagged with a parser named \"eval-synthetic.\" They may not be your real activity. Before relying on these numbers, check them against your Google Health app.\n- **The data is local, and the Google connection is not active.** The connection status shows no verified Google connection, so I could not check for newer records. The local copy only covers October 1 through November 1, so any later days are not included.\n- **Date assumption:** I used today as Monday, November 2, which is the date in the system context. Another note in my instructions says October 31, which is a Saturday. If that were the correct date, last week would be October 19 through October 25, and the local database has no step records for those days.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1443,
+        "cacheReadInputTokens": 20204,
+        "cacheCreationInputTokens": 3841,
+        "webSearchRequests": 0,
+        "costUSD": 0.00169234,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 819,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3841,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00169234,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 3841,
+      "cache_read_input_tokens": 20204,
+      "output_tokens": 1443,
+      "output_tokens_details": {
+        "thinking_tokens": 819
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3841,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 535,
+          "cache_read_input_tokens": 8053,
+          "cache_creation_input_tokens": 1335,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1335
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

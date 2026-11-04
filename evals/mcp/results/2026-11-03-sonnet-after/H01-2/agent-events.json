@@ -1,0 +1,135 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013u616qtpzudeMVWBUmub7Z",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01AgWMuVpJq8Bk1eNuGa2GFg",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes. I can summarize the cached data, because it's stored locally and doesn't need a live connection.\n\n**Google steps, Oct 1\u20133, 2026**\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\n- The total is 6,000 steps, and the average is 2,000 steps a day.\n- All 3 days have data, so coverage is 100%.\n- Three days is too few to show a trend.\n\n**Connection limitation**\n- Your suspicion was right. The Google token is marked `invalid_reconnect_required`, so there is no verified API connection right now.\n- The numbers above come from the local database, which holds whatever was imported before the token expired. I can't sync new or edited data until you reconnect. Any changes Google made to these days after the last sync won't appear here.\n- The ghealth CLI credentials weren't found. If your Google consent screen is in Testing mode, refresh tokens expire after 7 days. To fix that, run `ghealth auth login`, and the server will pick up the new credentials. I can also start a reconnect from here if you'd like.\n- Another option is to import a Google Takeout export. That works without API access."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Yes. I can summarize the cached data, because it's stored locally and doesn't need a live connection.\n\n**Google steps, Oct 1\u20133, 2026**\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\n- The total is 6,000 steps, and the average is 2,000 steps a day.\n- All 3 days have data, so coverage is 100%.\n- Three days is too few to show a trend.\n\n**Connection limitation**\n- Your suspicion was right. The Google token is marked `invalid_reconnect_required`, so there is no verified API connection right now.\n- The numbers above come from the local database, which holds whatever was imported before the token expired. I can't sync new or edited data until you reconnect. Any changes Google made to these days after the last sync won't appear here.\n- The ghealth CLI credentials weren't found. If your Google consent screen is in Testing mode, refresh tokens expire after 7 days. To fix that, run `ghealth auth login`, and the server will pick up the new credentials. I can also start a reconnect from here if you'd like.\n- Another option is to import a Google Takeout export. That works without API access.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 628,
+        "cacheReadInputTokens": 12845,
+        "cacheCreationInputTokens": 1966,
+        "webSearchRequests": 0,
+        "costUSD": 0.0154365,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1966,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0154365,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1966,
+      "cache_read_input_tokens": 12845,
+      "output_tokens": 628,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1966,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 408,
+          "cache_read_input_tokens": 6771,
+          "cache_creation_input_tokens": 1269,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1269
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

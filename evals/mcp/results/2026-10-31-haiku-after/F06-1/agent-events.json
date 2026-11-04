@@ -1,0 +1,103 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Resting heart rate (RHR)** is how many times your heart beats per minute while you're at complete rest, usually measured after waking or during sleep. It's a snapshot of how hard your heart works when it isn't being asked to do anything. Lower values, within the normal range, often reflect good cardiovascular fitness, since a fitter heart can pump more blood per beat. A sudden sustained rise can signal stress, illness, poor sleep, dehydration, or overtraining.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, not the beats per minute. Even at rest, the gap between beats changes slightly from one beat to the next, driven by the autonomic nervous system. The \"rest and digest\" branch (parasympathetic) tends to increase variability, and the \"fight or flight\" branch (sympathetic) tends to reduce it. HRV is usually reported in milliseconds (often as RMSSD or a similar measure). Higher HRV generally indicates better recovery and adaptability, and it's very individual, so what matters most is your own trend relative to your baseline.\n\n**How they differ:**\n\n- **What they measure:** RHR measures the *rate* of heartbeats. HRV measures the *variation* between beats.\n- **Direction:** Lower RHR is usually better (within normal limits). Higher HRV is usually better.\n- **Typical use:** RHR shows baseline cardiovascular fitness and long-term changes. HRV is often used as a sensitive indicator of recovery, stress, and readiness to train.\n- **Variability between people:** RHR ranges are fairly consistent across people. HRV varies enormously between individuals, so comparing your HRV to someone else's isn't meaningful.\n- **Responsiveness:** HRV tends to react more quickly to day-to-day changes like poor sleep, alcohol, or hard training. RHR changes more gradually, though both can shift together during illness.\n\n**Limitations:** Wearable readings depend on the device, when they're taken, and how well the sensor fits. Single readings are noisy, so trends over several days or weeks are more informative than any one day. Neither metric diagnoses anything on its own. If you notice persistent changes or symptoms like chest pain, dizziness, or fainting, talk to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Resting heart rate (RHR)** is how many times your heart beats per minute while you're at complete rest, usually measured after waking or during sleep. It's a snapshot of how hard your heart works when it isn't being asked to do anything. Lower values, within the normal range, often reflect good cardiovascular fitness, since a fitter heart can pump more blood per beat. A sudden sustained rise can signal stress, illness, poor sleep, dehydration, or overtraining.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, not the beats per minute. Even at rest, the gap between beats changes slightly from one beat to the next, driven by the autonomic nervous system. The \"rest and digest\" branch (parasympathetic) tends to increase variability, and the \"fight or flight\" branch (sympathetic) tends to reduce it. HRV is usually reported in milliseconds (often as RMSSD or a similar measure). Higher HRV generally indicates better recovery and adaptability, and it's very individual, so what matters most is your own trend relative to your baseline.\n\n**How they differ:**\n\n- **What they measure:** RHR measures the *rate* of heartbeats. HRV measures the *variation* between beats.\n- **Direction:** Lower RHR is usually better (within normal limits). Higher HRV is usually better.\n- **Typical use:** RHR shows baseline cardiovascular fitness and long-term changes. HRV is often used as a sensitive indicator of recovery, stress, and readiness to train.\n- **Variability between people:** RHR ranges are fairly consistent across people. HRV varies enormously between individuals, so comparing your HRV to someone else's isn't meaningful.\n- **Responsiveness:** HRV tends to react more quickly to day-to-day changes like poor sleep, alcohol, or hard training. RHR changes more gradually, though both can shift together during illness.\n\n**Limitations:** Wearable readings depend on the device, when they're taken, and how well the sensor fits. Single readings are noisy, so trends over several days or weeks are more informative than any one day. Neither metric diagnoses anything on its own. If you notice persistent changes or symptoms like chest pain, dizziness, or fainting, talk to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 809,
+        "cacheReadInputTokens": 6068,
+        "cacheCreationInputTokens": 718,
+        "webSearchRequests": 0,
+        "costUSD": 0.0006089800000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 56,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 718,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0006089800000000001,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 718,
+      "cache_read_input_tokens": 6068,
+      "output_tokens": 809,
+      "output_tokens_details": {
+        "thinking_tokens": 56
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 718,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 809,
+          "cache_read_input_tokens": 6068,
+          "cache_creation_input_tokens": 718,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 718
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

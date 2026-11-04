@@ -1,0 +1,140 @@
+{
+  "passed": true,
+  "outcome_passed": true,
+  "adherence_passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "variab|beat.to.beat|between (?:heart ?)?beats|interval"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "\\brest"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_unneeded_lookup": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "F06",
+  "split": "fresh",
+  "trial": 1,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0005451200000000001,
+  "latency_s": 5.56,
+  "error": null,
+  "answers": [
+    "**Resting heart rate (RHR)** is how many times your heart beats per minute while you're at rest, usually measured during sleep or after you've been still for a while. It's a single number, typically in beats per minute (bpm). Lower values often reflect better cardiovascular fitness, since a stronger heart can pump more blood per beat. Trends matter more than any one reading. A sustained rise can reflect illness, stress, poor sleep, alcohol, dehydration, or overtraining.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, measured in milliseconds. It's not how fast your heart beats but how much the gaps between beats change from one beat to the next. A healthy heart constantly adjusts its rhythm in response to breathing and the autonomic nervous system, which has two branches: the \"rest and digest\" parasympathetic system and the \"fight or flight\" sympathetic system. Higher HRV generally indicates that the parasympathetic side is strongly active, which is linked to good recovery and resilience. Lower HRV can mean the body is under more strain. HRV is very individual, so what matters is your own baseline and how it shifts. Wearables usually report it as RMSSD or as a nightly average.\n\n**How they differ:**\n- **RHR** is a rate: how fast the heart beats. **HRV** is a variability: how much the timing between beats fluctuates.\n- **RHR** tends to go up under stress or strain. **HRV** tends to go down.\n- Both reflect the autonomic nervous system, so they often move in opposite directions, but not always.\n- RHR is more stable and easier to compare across people. HRV varies widely between individuals and is sensitive to measurement conditions, such as time of day, breathing, and how the device reads the signal.\n\n**Limitations:** Consumer wearables estimate both metrics, and their accuracy varies. Neither number diagnoses anything on its own. If you notice a sustained change, or symptoms like chest pain, fainting, or palpitations, talk to a clinician."
+  ],
+  "trace": [],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 0,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

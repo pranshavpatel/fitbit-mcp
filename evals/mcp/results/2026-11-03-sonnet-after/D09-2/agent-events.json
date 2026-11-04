@@ -1,0 +1,127 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013bVgik3B3hMMkneGPFjcnz",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014dzbWwTUbFxb1zC9jgWAYi",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Metrics you have**\n- Only one: **steps**, from Google. It's a daily count (unit: steps), with 3 records on 3 days, 2026-10-01 to 2026-10-03.\n\n**Denied**\n- **Sleep** (Google) is recorded as denied. The reason given is \"Synthetic permissions denied\", last updated 2026-11-04 02:06 UTC.\n\n**Unsupported or unparsed**\n- One Google **body** item (a weight file or request) couldn't be read. The reason given is \"Synthetic unknown weight format\". The raw data is kept on disk, but no body or weight metrics are available.\n\n**Categories with no local records**\nThese may be not yet imported, not granted, or truly empty. The tool can't say which.\n- **Google:** blood_glucose, body, cardio_fitness, ecg, exercise, heart, irn, nutrition, reproductive_health, sleep, spo2_breathing_temperature, symptoms_and_mood.\n- **Fitbit:** activity, body, cardio_fitness, ecg, exercise, heart, irn, nutrition, sleep, spo2_breathing_temperature.\n\n**Limitations**\n- Neither Google nor Fitbit currently has a verified API connection. The status shows no tokens. Google's ghealth CLI credentials weren't found, and Fitbit isn't configured.\n- The legacy Fitbit Web API was scheduled to shut off on 2026-10-30, which has already passed. A Google Takeout import is an alternative if API access isn't possible.\n- No sync state is recorded, so the 3 days of steps may be only a partial import.\n- Some dates here don't line up. The sleep denial is stamped 2026-11-04, and the connection status refers to 2026-10-30 as 23 days away, which implies a date of about 2026-10-07. I haven't tried to resolve this."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Metrics you have**\n- Only one: **steps**, from Google. It's a daily count (unit: steps), with 3 records on 3 days, 2026-10-01 to 2026-10-03.\n\n**Denied**\n- **Sleep** (Google) is recorded as denied. The reason given is \"Synthetic permissions denied\", last updated 2026-11-04 02:06 UTC.\n\n**Unsupported or unparsed**\n- One Google **body** item (a weight file or request) couldn't be read. The reason given is \"Synthetic unknown weight format\". The raw data is kept on disk, but no body or weight metrics are available.\n\n**Categories with no local records**\nThese may be not yet imported, not granted, or truly empty. The tool can't say which.\n- **Google:** blood_glucose, body, cardio_fitness, ecg, exercise, heart, irn, nutrition, reproductive_health, sleep, spo2_breathing_temperature, symptoms_and_mood.\n- **Fitbit:** activity, body, cardio_fitness, ecg, exercise, heart, irn, nutrition, sleep, spo2_breathing_temperature.\n\n**Limitations**\n- Neither Google nor Fitbit currently has a verified API connection. The status shows no tokens. Google's ghealth CLI credentials weren't found, and Fitbit isn't configured.\n- The legacy Fitbit Web API was scheduled to shut off on 2026-10-30, which has already passed. A Google Takeout import is an alternative if API access isn't possible.\n- No sync state is recorded, so the 3 days of steps may be only a partial import.\n- Some dates here don't line up. The sleep denial is stamped 2026-11-04, and the connection status refers to 2026-10-30 as 23 days away, which implies a date of about 2026-10-07. I haven't tried to resolve this.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 692,
+        "cacheReadInputTokens": 12822,
+        "cacheCreationInputTokens": 1759,
+        "webSearchRequests": 0,
+        "costUSD": 0.0152462,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1759,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0152462,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1759,
+      "cache_read_input_tokens": 12822,
+      "output_tokens": 692,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1759,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 616,
+          "cache_read_input_tokens": 6759,
+          "cache_creation_input_tokens": 1063,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1063
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

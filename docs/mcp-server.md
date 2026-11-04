@@ -9,9 +9,9 @@ except for the read-only requests to Fitbit/Google that you start.
 > coach notes, phone page) start at the [README](../README.md).
 
 Evaluation coverage: automated tests exercise server behavior and the real stdio
-transport. The separate [end-to-end agent tool-use eval](mcp-tool-use-eval.md)
+transport. The separate [end-to-end agent tool-use eval](mcp-eval.md)
 implements synthetic natural-language workflows, real stdio calls and trace/state
-grading. See [baseline results](mcp-tool-use-results.md) for measured outcomes
+grading. See [baseline results](mcp-eval.md) for measured outcomes
 and limits. Coach eval results do not measure MCP tool-use quality.
 
 ## 1. Which route can you use?

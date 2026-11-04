@@ -1,0 +1,119 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01MqRRxDdneNZGRBQ3CaLpbt",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-03",
+          "granularity": "session"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google had two workouts longer than 45 minutes between October 2 and October 3, 2026:\n\n| Date | Start | Duration | Source ID |\n|---|---|---|---|\n| Oct 2 | 10:00 | 50 min | workout-3 |\n| Oct 3 | 10:00 | 60 min | workout-4 |\n\nI left out workout-2 from Oct 2 because it was only 40 minutes.\n\nThe records don't include a workout type or name, only the duration. Both of the listed workouts are active records."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Google had two workouts longer than 45 minutes between October 2 and October 3, 2026:\n\n| Date | Start | Duration | Source ID |\n|---|---|---|---|\n| Oct 2 | 10:00 | 50 min | workout-3 |\n| Oct 3 | 10:00 | 60 min | workout-4 |\n\nI left out workout-2 from Oct 2 because it was only 40 minutes.\n\nThe records don't include a workout type or name, only the duration. Both of the listed workouts are active records.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 331,
+        "cacheReadInputTokens": 12837,
+        "cacheCreationInputTokens": 1465,
+        "webSearchRequests": 0,
+        "costUSD": 0.0104617,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1465,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0104617,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1465,
+      "cache_read_input_tokens": 12837,
+      "output_tokens": 331,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1465,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 169,
+          "cache_read_input_tokens": 6767,
+          "cache_creation_input_tokens": 768,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 768
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

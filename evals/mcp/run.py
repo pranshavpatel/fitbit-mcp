@@ -309,6 +309,13 @@ def one(case, trial, mode, model, profile, timeout, destination):
     return result
 
 
+def _boot(rates):
+    """95 % interval of the mean over cases, resampling cases (trials of one case are correlated)."""
+    rng = random.Random(20261029)
+    boot = sorted(statistics.fmean(rng.choices(rates, k=len(rates))) for _ in range(2000))
+    return [boot[49], boot[1949]]
+
+
 def summary(runs, trials, scheduled_cases=()):
     output = []
     for split in ("dev", "holdout", "fresh", "all"):
@@ -338,7 +345,8 @@ def summary(runs, trials, scheduled_cases=()):
                       "mean_success": sum(bool(r.get(key)) for r in rows) / (len(by_case) * trials),
                       "at_least_one": sum(any(r.get(key) for r in rs) for rs in by_case.values()) / len(by_case),
                       "all_trials": sum(len(rs) == trials and all(r.get(key) for r in rs) for rs in by_case.values()) / len(by_case),
-                      "per_case": {c: str(sum(bool(r.get(key)) for r in rs)) + "/" + str(trials) for c, rs in sorted(by_case.items())}}
+                      "per_case": {c: str(sum(bool(r.get(key)) for r in rs)) + "/" + str(trials) for c, rs in sorted(by_case.items())},
+                      "case_bootstrap_95_interval": _boot([sum(bool(r.get(key)) for r in rs) / trials for rs in by_case.values()])}
                for name, key in (("outcome", "outcome_passed"), ("adherence", "adherence_passed"))},
             "tools_observed": sorted({e["tool"] for r in rows for e in r["trace"]})})
     return output

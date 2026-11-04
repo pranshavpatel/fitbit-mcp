@@ -1,0 +1,123 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0116bU9YJUEZXAgUQm8NkMyc",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your average daily Google step count for October 1\u20133, 2026 was **2,000 steps**.\n\n- October 1: 1,000 steps\n- October 2: 2,000 steps\n- October 3: 3,000 steps\n\nAll three days have data, so nothing was left out. The average is based on only three days, so it's a small sample. The dates follow the calendar in your Google account's time zone."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your average daily Google step count for October 1\u20133, 2026 was **2,000 steps**.\n\n- October 1: 1,000 steps\n- October 2: 2,000 steps\n- October 3: 3,000 steps\n\nAll three days have data, so nothing was left out. The average is based on only three days, so it's a small sample. The dates follow the calendar in your Google account's time zone.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 458,
+        "cacheReadInputTokens": 12823,
+        "cacheCreationInputTokens": 1642,
+        "webSearchRequests": 0,
+        "costUSD": 0.00068603,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 173,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1642,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00068603,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1642,
+      "cache_read_input_tokens": 12823,
+      "output_tokens": 458,
+      "output_tokens_details": {
+        "thinking_tokens": 173
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1642,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 122,
+          "cache_read_input_tokens": 6770,
+          "cache_creation_input_tokens": 925,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 925
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

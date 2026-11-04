@@ -1,0 +1,99 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're fully at rest. It's usually measured during sleep or quiet wakefulness. It's an average rate, so a lower number often means a more efficient heart and better cardiovascular fitness. Typical adult values are about 60\u2013100 bpm, and fit people are often lower. It rises with stress, illness, poor sleep, dehydration, alcohol, or heat, and it falls gradually with consistent aerobic training.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, measured in milliseconds. Your heart doesn't tick like a metronome. The gaps between beats vary slightly, and that variation reflects how your autonomic nervous system is balancing \"fight or flight\" (sympathetic) and \"rest and recover\" (parasympathetic) activity. Higher HRV generally suggests a more relaxed, recovered, adaptable state. Lower HRV can reflect stress, fatigue, illness, or poor sleep.\n\n**Key differences**\n\n| | Resting heart rate | HRV |\n|---|---|---|\n| Measures | Beats per minute (speed) | Variation between beats (timing) |\n| Unit | bpm | ms (often RMSSD) |\n| Better direction | Generally lower | Generally higher |\n| Variability between people | Moderate | Very large (age, genetics, and fitness all matter) |\n| Responsiveness | Changes more slowly | Often reacts faster to stress, sleep, and training load |\n\n**Practical points**\n- They often move in opposite directions. When you're stressed or under-recovered, RHR tends to go up and HRV down.\n- HRV is highly individual, so comparing your own trend over weeks is more useful than comparing your number with someone else's.\n- Single-day readings are noisy. Look at multi-day averages and trends.\n- Wearable measurements are estimates, and the algorithms differ between devices.\n\nThis is general information, not medical advice. If you notice persistent unusual changes or have symptoms like palpitations or dizziness, check with a clinician.\n\nI can look at your own RHR and HRV trends if you'd like."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're fully at rest. It's usually measured during sleep or quiet wakefulness. It's an average rate, so a lower number often means a more efficient heart and better cardiovascular fitness. Typical adult values are about 60\u2013100 bpm, and fit people are often lower. It rises with stress, illness, poor sleep, dehydration, alcohol, or heat, and it falls gradually with consistent aerobic training.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, measured in milliseconds. Your heart doesn't tick like a metronome. The gaps between beats vary slightly, and that variation reflects how your autonomic nervous system is balancing \"fight or flight\" (sympathetic) and \"rest and recover\" (parasympathetic) activity. Higher HRV generally suggests a more relaxed, recovered, adaptable state. Lower HRV can reflect stress, fatigue, illness, or poor sleep.\n\n**Key differences**\n\n| | Resting heart rate | HRV |\n|---|---|---|\n| Measures | Beats per minute (speed) | Variation between beats (timing) |\n| Unit | bpm | ms (often RMSSD) |\n| Better direction | Generally lower | Generally higher |\n| Variability between people | Moderate | Very large (age, genetics, and fitness all matter) |\n| Responsiveness | Changes more slowly | Often reacts faster to stress, sleep, and training load |\n\n**Practical points**\n- They often move in opposite directions. When you're stressed or under-recovered, RHR tends to go up and HRV down.\n- HRV is highly individual, so comparing your own trend over weeks is more useful than comparing your number with someone else's.\n- Single-day readings are noisy. Look at multi-day averages and trends.\n- Wearable measurements are estimates, and the algorithms differ between devices.\n\nThis is general information, not medical advice. If you notice persistent unusual changes or have symptoms like palpitations or dizziness, check with a clinician.\n\nI can look at your own RHR and HRV trends if you'd like.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 716,
+        "cacheReadInputTokens": 6068,
+        "cacheCreationInputTokens": 697,
+        "webSearchRequests": 0,
+        "costUSD": 0.0105588,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 697,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0105588,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 697,
+      "cache_read_input_tokens": 6068,
+      "output_tokens": 716,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 697,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 716,
+          "cache_read_input_tokens": 6068,
+          "cache_creation_input_tokens": 697,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 697
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

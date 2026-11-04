@@ -1,0 +1,115 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01LeYazzPPN3Qfdaz9casYgv",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google account isn't connected, and I haven't tried to connect it.\n\n- **Connection:** There is no token (status \"none\").\n- **Setup:** Google isn't configured. The client secret file isn't at `/private/tmp/fitbit-mcp-eval-12yheqbn/ghealth/client_secret.json`, and no `ghealth` CLI credentials were found.\n- **API:** The API is available. The missing piece is the credentials.\n\nIf you want to connect later, you can run `ghealth auth login` and I'll pick up the new credentials. Or I can start the browser sign-in once you say so. If you can't use the API, you can import a Google Takeout or Fitbit export instead."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google account isn't connected, and I haven't tried to connect it.\n\n- **Connection:** There is no token (status \"none\").\n- **Setup:** Google isn't configured. The client secret file isn't at `/private/tmp/fitbit-mcp-eval-12yheqbn/ghealth/client_secret.json`, and no `ghealth` CLI credentials were found.\n- **API:** The API is available. The missing piece is the credentials.\n\nIf you want to connect later, you can run `ghealth auth login` and I'll pick up the new credentials. Or I can start the browser sign-in once you say so. If you can't use the API, you can import a Google Takeout or Fitbit export instead.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 286,
+        "cacheReadInputTokens": 6747,
+        "cacheCreationInputTokens": 7138,
+        "webSearchRequests": 0,
+        "costUSD": 0.032094700000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 7138,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.032094700000000004,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 7138,
+      "cache_read_input_tokens": 6747,
+      "output_tokens": 286,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7138,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 225,
+          "cache_read_input_tokens": 6747,
+          "cache_creation_input_tokens": 391,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 391
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,145 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013jmK64F59VAXBR1zEWhzD6",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012MgyorMiohPxFSUwQqonuK",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01F7a37Br1rjWPH8QfVjqaDd",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "metric": "heart_rate",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't tell. The data I have for October 2, 2026 doesn't cover the whole day.\n\nThere are only three heart rate readings for that date. They are from 10:00, 10:01 and 10:02 AM, and they read 100, 101 and 102 bpm. The data is labeled \"exercise windows only,\" so it covers a few minutes of what looks like activity. It doesn't show the rest of the day.\n\n- **What the readings show:** your heart rate was around 100 bpm and rising slightly during those three minutes. That's plausible for light exercise, but it says nothing about the other hours.\n- **What's missing:** there are no readings for the rest of the day, and no resting heart rate or sleep data to compare against. So I can't say whether your heart rate was elevated at other times.\n- **Connection:** no Fitbit or Google account is currently connected. I only have what was already stored locally. Connecting an account and importing whole-day heart rate (the `full_heart_rate` option) might fill in the gap. The legacy Fitbit API is scheduled to shut off on 2026-10-30, so that route may no longer work. A Google Takeout export is another option.\n\nIf you want to follow up, I can help set up one of those imports. If you're worried about a persistently high heart rate, a clinician can assess that better than this data can."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't tell. The data I have for October 2, 2026 doesn't cover the whole day.\n\nThere are only three heart rate readings for that date. They are from 10:00, 10:01 and 10:02 AM, and they read 100, 101 and 102 bpm. The data is labeled \"exercise windows only,\" so it covers a few minutes of what looks like activity. It doesn't show the rest of the day.\n\n- **What the readings show:** your heart rate was around 100 bpm and rising slightly during those three minutes. That's plausible for light exercise, but it says nothing about the other hours.\n- **What's missing:** there are no readings for the rest of the day, and no resting heart rate or sleep data to compare against. So I can't say whether your heart rate was elevated at other times.\n- **Connection:** no Fitbit or Google account is currently connected. I only have what was already stored locally. Connecting an account and importing whole-day heart rate (the `full_heart_rate` option) might fill in the gap. The legacy Fitbit API is scheduled to shut off on 2026-10-30, so that route may no longer work. A Google Takeout export is another option.\n\nIf you want to follow up, I can help set up one of those imports. If you're worried about a persistently high heart rate, a clinician can assess that better than this data can.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 617,
+        "cacheReadInputTokens": 20376,
+        "cacheCreationInputTokens": 2814,
+        "webSearchRequests": 0,
+        "costUSD": 0.019475600000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2814,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.019475600000000003,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2814,
+      "cache_read_input_tokens": 20376,
+      "output_tokens": 617,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2814,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 421,
+          "cache_read_input_tokens": 7841,
+          "cache_creation_input_tokens": 756,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 756
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

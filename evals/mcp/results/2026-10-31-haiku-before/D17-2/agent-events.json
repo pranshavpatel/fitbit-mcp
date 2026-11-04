@@ -1,0 +1,182 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0129seiM6jh8FUE8dnKpmvG1",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TaLt6geSPboTKSrR2rmPm1",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TkaMDMC1nYya4DwALAdPLZ",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "activity",
+          "metric": "steps",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01YRRiYAc4iLbYY5cfkB3cxd",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "period": "week",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Google steps, Monday October 26 to Sunday November 1, 2026**\n\n- **Total:** 14,000 steps over 7 days\n- **Daily average:** 2,000 steps\n- **Range:** 2,000 (lowest) to 2,000 (highest)\n\nEvery day in the week shows exactly 2,000 steps. That is unusual for real activity data. The local records are tagged with the parser \"eval-synthetic,\" so they look like placeholder or test data rather than your actual steps. I'd check the source before relying on these numbers.\n\nOther caveats:\n\n- **Date choice:** I used the system's current date of November 2, 2026 (a Monday), so \"last week\" is October 26 to November 1. The environment also lists today as October 31, which would make last week October 19 to October 25. Tell me if you meant that week instead.\n- **Connection:** Google is not currently connected. These numbers come from local data already on this machine, not a live pull from your account. Newer data from the Google account would need a fresh connection and sync."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Google steps, Monday October 26 to Sunday November 1, 2026**\n\n- **Total:** 14,000 steps over 7 days\n- **Daily average:** 2,000 steps\n- **Range:** 2,000 (lowest) to 2,000 (highest)\n\nEvery day in the week shows exactly 2,000 steps. That is unusual for real activity data. The local records are tagged with the parser \"eval-synthetic,\" so they look like placeholder or test data rather than your actual steps. I'd check the source before relying on these numbers.\n\nOther caveats:\n\n- **Date choice:** I used the system's current date of November 2, 2026 (a Monday), so \"last week\" is October 26 to November 1. The environment also lists today as October 31, which would make last week October 19 to October 25. Tell me if you meant that week instead.\n- **Connection:** Google is not currently connected. These numbers come from local data already on this machine, not a live pull from your account. Newer data from the Google account would need a fresh connection and sync.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1587,
+        "cacheReadInputTokens": 20574,
+        "cacheCreationInputTokens": 4198,
+        "webSearchRequests": 0,
+        "costUSD": 0.00183944,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 816,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4198,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00183944,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 4198,
+      "cache_read_input_tokens": 20574,
+      "output_tokens": 1587,
+      "output_tokens_details": {
+        "thinking_tokens": 816
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4198,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 495,
+          "cache_read_input_tokens": 8033,
+          "cache_creation_input_tokens": 2102,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2102
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

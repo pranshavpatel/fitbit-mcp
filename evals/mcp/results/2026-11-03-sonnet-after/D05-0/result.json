@@ -1,0 +1,439 @@
+{
+  "passed": true,
+  "outcome_passed": true,
+  "adherence_passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "succe|complet|finished"
+    },
+    "answer_forbidden_1": {
+      "pass": true,
+      "detail": ""
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "terminal_job_observed": {
+      "pass": true,
+      "detail": ""
+    },
+    "expected_job_outcome": {
+      "pass": true,
+      "detail": "['succeeded']"
+    },
+    "actual_activity_rows": {
+      "pass": true,
+      "detail": ""
+    },
+    "requested_overlap": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "D05",
+  "split": "dev",
+  "trial": 0,
+  "mode": "agent",
+  "model": "sonnet",
+  "profile": "portable",
+  "actual_models": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0168814,
+  "latency_s": 7.43,
+  "error": null,
+  "answers": [
+    "The activity sync for your Google account finished successfully. All 10 requests completed with no errors.\n\n- **Records:** 3 were updated. None were inserted, restored, or flagged as deleted upstream.\n- **Window:** The job covered 2026-10-01 to 2026-10-07 (America/New_York). That's wider than the two days you asked for. The tool seems to measure the overlap from the last sync date, not from today. The system date is also inconsistent: the job shows November 2026, but the sync ended at 2026-10-07. So the sync may not include anything newer than October 7.\n- **Scope:** I synced only the activity category, since you asked for activity data. Sleep, heart and other categories were not synced."
+  ],
+  "trace": [
+    {
+      "tool": "connection_status",
+      "arguments": {
+        "provider": "google"
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": true,\n      \"client_secret_path\": \"$TRIAL/home/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"active\",\n      \"granted_permissions\": [\n        \"activity_and_fitness\",\n        \"ecg\",\n        \"health_metrics_and_measurements\",\n        \"irn\",\n        \"location\",\n        \"logged_symptoms\",\n        \"mindfulness\",\n        \"nutrition\",\n        \"profile\",\n        \"reproductive_health\",\n        \"settings\",\n        \"sleep\"\n      ],\n      \"not_granted\": [],\n      \"connected_since\": null,\n      \"last_verification\": {\n        \"ok\": true,\n        \"at\": \"2026-10-07T10:00:00Z\"\n      },\n      \"connected\": true,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"Connected: google\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": true,
+              "client_secret_path": "$TRIAL/home/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "active",
+              "granted_permissions": [
+                "activity_and_fitness",
+                "ecg",
+                "health_metrics_and_measurements",
+                "irn",
+                "location",
+                "logged_symptoms",
+                "mindfulness",
+                "nutrition",
+                "profile",
+                "reproductive_health",
+                "settings",
+                "sleep"
+              ],
+              "not_granted": [],
+              "connected_since": null,
+              "last_verification": {
+                "ok": true,
+                "at": "2026-10-07T10:00:00Z"
+              },
+              "connected": true,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "Connected: google"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0016,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "sync_data",
+      "arguments": {
+        "provider": "google",
+        "categories": [
+          "activity"
+        ],
+        "overlap_days": 2
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_7d1ddaff23ef\",\n  \"kind\": \"sync\",\n  \"provider\": \"google\",\n  \"status\": \"queued\",\n  \"message\": \"Queued\",\n  \"parameters\": {\n    \"mode\": \"sync\",\n    \"overlap_days\": 2,\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false\n  },\n  \"progress\": {},\n  \"created_at\": \"2026-11-04T02:05:57Z\",\n  \"updated_at\": \"2026-11-04T02:05:57Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_7d1ddaff23ef",
+          "kind": "sync",
+          "provider": "google",
+          "status": "queued",
+          "message": "Queued",
+          "parameters": {
+            "mode": "sync",
+            "overlap_days": 2,
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false
+          },
+          "progress": {},
+          "created_at": "2026-11-04T02:05:57Z",
+          "updated_at": "2026-11-04T02:05:57Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.004,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_7d1ddaff23ef",
+            "kind": "sync",
+            "status": "running"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_7d1ddaff23ef"
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_7d1ddaff23ef\",\n  \"kind\": \"sync\",\n  \"provider\": \"google\",\n  \"status\": \"succeeded\",\n  \"message\": \"Completed; every planned request succeeded.\",\n  \"parameters\": {\n    \"mode\": \"sync\",\n    \"overlap_days\": 2,\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"window_start\": \"2026-10-01\",\n    \"window_end\": \"2026-10-07\",\n    \"end_date\": \"2026-10-07\",\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 10,\n    \"requests_done\": 10,\n    \"requests_by_status\": {\n      \"ok\": 10\n    },\n    \"records\": {\n      \"inserted\": 0,\n      \"updated\": 3,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"time-in-heart-rate-zone\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-07\"\n    ],\n    \"current_pages\": 1,\n    \"current_records\": 0,\n    \"account_snapshots_not_retrieved\": [],\n    \"message\": \"Completed; every planned request succeeded.\"\n  },\n  \"created_at\": \"2026-11-04T02:05:57Z\",\n  \"updated_at\": \"2026-11-04T02:05:57Z\",\n  \"started_at\": \"2026-11-04T02:05:57Z\",\n  \"finished_at\": \"2026-11-04T02:05:57Z\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_7d1ddaff23ef",
+          "kind": "sync",
+          "provider": "google",
+          "status": "succeeded",
+          "message": "Completed; every planned request succeeded.",
+          "parameters": {
+            "mode": "sync",
+            "overlap_days": 2,
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "window_start": "2026-10-01",
+            "window_end": "2026-10-07",
+            "end_date": "2026-10-07",
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 10,
+            "requests_done": 10,
+            "requests_by_status": {
+              "ok": 10
+            },
+            "records": {
+              "inserted": 0,
+              "updated": 3,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "time-in-heart-rate-zone",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-07"
+            ],
+            "current_pages": 1,
+            "current_records": 0,
+            "account_snapshots_not_retrieved": [],
+            "message": "Completed; every planned request succeeded."
+          },
+          "created_at": "2026-11-04T02:05:57Z",
+          "updated_at": "2026-11-04T02:05:57Z",
+          "started_at": "2026-11-04T02:05:57Z",
+          "finished_at": "2026-11-04T02:05:57Z"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0008,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_7d1ddaff23ef",
+            "kind": "sync",
+            "status": "succeeded"
+          }
+        ],
+        "google_token_exists": true
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": true
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [
+      {
+        "id": "job_7d1ddaff23ef",
+        "kind": "sync",
+        "status": "succeeded"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "tool_calls": 3,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "0719114de309e0053410996840d67643c33cbf8932a0c29ddef737a6817843bd"
+}

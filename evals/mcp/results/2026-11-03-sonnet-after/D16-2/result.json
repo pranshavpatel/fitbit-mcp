@@ -1,0 +1,326 @@
+{
+  "passed": false,
+  "outcome_passed": true,
+  "adherence_passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "list_data_types"
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "72\\.57|72\\.6"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "unknown|unrecognized"
+    },
+    "answer_fact_3": {
+      "pass": true,
+      "detail": "exclud"
+    },
+    "discovery_before_data": {
+      "pass": false,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "D16",
+  "split": "dev",
+  "trial": 2,
+  "mode": "agent",
+  "model": "sonnet",
+  "profile": "portable",
+  "actual_models": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.011458900000000001,
+  "latency_s": 6.08,
+  "error": null,
+  "answers": [
+    "**Weight for October 1\u20132, 2026 (kg)**\n\n- **Oct 1:** 72.57 kg. This is the only day with a usable measurement.\n- **Oct 2:** no usable measurement.\n- Coverage is 1 of 2 days (50%). The mean, median, min and max are all 72.57 kg, because only one value exists. A trend isn't available, since that needs at least 6 days of data.\n\n**Excluded measurements**\n- **One measurement was excluded because its unit was unknown.** This can happen with some Takeout files. The tool can't tell whether the number is kilograms or pounds, so it left the value out instead of guessing. The summary doesn't say which day it fell on. If it was on Oct 2, that would explain the gap. I haven't confirmed that.\n- **Oct 1 had more than one reading.** The tool uses the last reading of the day, and that is the 72.57 kg figure.\n\nAll the data came from a Fitbit Takeout import. No other source had data for these dates. Oct 2 is a gap, not a zero.\n\nI can pull the raw records for these two days to see the excluded entry, if you'd like."
+  ],
+  "trace": [
+    {
+      "tool": "summarize_data",
+      "arguments": {
+        "metric": "weight",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-02",
+        "period": "day"
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metric\": \"weight\",\n  \"unit\": \"kg\",\n  \"provider_used\": \"fitbit_takeout\",\n  \"other_providers_with_data\": [],\n  \"start_date\": \"2026-10-01\",\n  \"end_date\": \"2026-10-02\",\n  \"period\": \"day\",\n  \"overall\": {\n    \"days_with_data\": 1,\n    \"calendar_days\": 2,\n    \"coverage_pct\": 50.0,\n    \"mean\": 72.57,\n    \"median\": 72.57,\n    \"min\": 72.57,\n    \"max\": 72.57\n  },\n  \"periods\": [\n    {\n      \"period\": \"2026-10-01\",\n      \"days_with_data\": 1,\n      \"calendar_days\": 1,\n      \"mean\": 72.57,\n      \"min\": 72.57,\n      \"max\": 72.57\n    },\n    {\n      \"period\": \"2026-10-02\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    }\n  ],\n  \"trend\": {\n    \"available\": false,\n    \"reason\": \"fewer than 6 days with data\"\n  },\n  \"definition\": \"Last weight measurement of each day, converted to kilograms. Measurements whose unit is unknown (e.g. some Takeout files) are excluded.\",\n  \"exclusions\": {\n    \"excluded_unknown_unit\": 1,\n    \"days_with_multiple_values_one_used\": 1\n  },\n  \"caveats\": [\n    \"Means are over days with data only; missing days are not treated as zero.\",\n    \"Dates are the provider's calendar dates (account/device time zone).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metric": "weight",
+          "unit": "kg",
+          "provider_used": "fitbit_takeout",
+          "other_providers_with_data": [],
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "period": "day",
+          "overall": {
+            "days_with_data": 1,
+            "calendar_days": 2,
+            "coverage_pct": 50.0,
+            "mean": 72.57,
+            "median": 72.57,
+            "min": 72.57,
+            "max": 72.57
+          },
+          "periods": [
+            {
+              "period": "2026-10-01",
+              "days_with_data": 1,
+              "calendar_days": 1,
+              "mean": 72.57,
+              "min": 72.57,
+              "max": 72.57
+            },
+            {
+              "period": "2026-10-02",
+              "days_with_data": 0,
+              "calendar_days": 1
+            }
+          ],
+          "trend": {
+            "available": false,
+            "reason": "fewer than 6 days with data"
+          },
+          "definition": "Last weight measurement of each day, converted to kilograms. Measurements whose unit is unknown (e.g. some Takeout files) are excluded.",
+          "exclusions": {
+            "excluded_unknown_unit": 1,
+            "days_with_multiple_values_one_used": 1
+          },
+          "caveats": [
+            "Means are over days with data only; missing days are not treated as zero.",
+            "Dates are the provider's calendar dates (account/device time zone)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0021,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit_takeout",
+            "metric": "weight",
+            "local_date": "2026-10-01",
+            "value": 72000.0,
+            "unit": "g",
+            "record_key": "w1",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "weight",
+            "local_date": "2026-10-01",
+            "value": 160.0,
+            "unit": "lb",
+            "record_key": "w2",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "weight",
+            "local_date": "2026-10-02",
+            "value": 158.0,
+            "unit": "unknown",
+            "record_key": "w3",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "fitbit_takeout",
+        "metric": "weight",
+        "local_date": "2026-10-01",
+        "value": 72000.0,
+        "unit": "g",
+        "record_key": "w1",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "weight",
+        "local_date": "2026-10-01",
+        "value": 160.0,
+        "unit": "lb",
+        "record_key": "w2",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "weight",
+        "local_date": "2026-10-02",
+        "value": 158.0,
+        "unit": "unknown",
+        "record_key": "w3",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "fitbit_takeout",
+        "metric": "weight",
+        "local_date": "2026-10-01",
+        "value": 72000.0,
+        "unit": "g",
+        "record_key": "w1",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "weight",
+        "local_date": "2026-10-01",
+        "value": 160.0,
+        "unit": "lb",
+        "record_key": "w2",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "weight",
+        "local_date": "2026-10-02",
+        "value": 158.0,
+        "unit": "unknown",
+        "record_key": "w3",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 1,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "0719114de309e0053410996840d67643c33cbf8932a0c29ddef737a6817843bd"
+}

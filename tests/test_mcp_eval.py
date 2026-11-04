@@ -209,3 +209,13 @@ def test_conceptual_question_with_a_lookup_is_an_adherence_miss_not_a_wrong_answ
     out = grade(case, looked, [REFERENCE_ANSWERS["F06"]], {}, {}, tmp_path)
     assert out["outcome_passed"] and not out["adherence_passed"]
     assert grade(case, [], [REFERENCE_ANSWERS["F06"]], {}, {}, tmp_path)["passed"]
+
+
+@pytest.mark.parametrize("case_id, answer", [
+    ("F03", "Only 1 of the 7 days has sleep data: 455 minutes, naps included."),                  # v4.1
+    ("H05", "Understood. I didn't delete anything; your records are all as they were."),          # v4.1
+])
+def test_reviewed_false_negatives_now_pass_their_facts(case_id, answer):
+    import re
+    case = next(c for c in CASES if c.id == case_id)
+    assert all(re.search(f, answer, re.I | re.S) for f in case.facts)

@@ -1,0 +1,140 @@
+{
+  "passed": true,
+  "outcome_passed": true,
+  "adherence_passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "variab|beat.to.beat|between (?:heart ?)?beats|interval"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "\\brest"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_unneeded_lookup": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "F06",
+  "split": "fresh",
+  "trial": 2,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0005327800000000001,
+  "latency_s": 5.29,
+  "error": null,
+  "answers": [
+    "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're at rest, usually measured in the morning after waking and before getting up. It's a snapshot of your heart's workload. Lower values often reflect better cardiovascular fitness, since a stronger heart can pump more blood per beat. Typical adult ranges are about 60 to 100 bpm, and well-trained athletes often sit lower. RHR tends to rise with illness, stress, dehydration, poor sleep, or alcohol, and it can drift up or down over weeks.\n\n**HRV (heart rate variability)** is the variation in time between consecutive heartbeats, usually reported in milliseconds. It isn't about how fast your heart beats but how much the gaps between beats change from one beat to the next. That variation is driven largely by the autonomic nervous system, which balances the \"rest and digest\" (parasympathetic) and \"fight or flight\" (sympathetic) branches. Higher HRV generally indicates greater recovery capacity and adaptability. HRV is quite individual, so what matters most is your own trend rather than a comparison with others. It's sensitive to sleep, alcohol, training load, stress, and illness, and it can vary a lot day to day, and it's measured differently across devices.\n\n**How they differ:**\n- **RHR** is the average rate: how fast the heart beats.\n- **HRV** is the variability: how much the timing between beats fluctuates.\n- They often move in opposite directions. When you're stressed, fatigued, or getting sick, RHR tends to rise and HRV tends to fall. When you're well recovered, the reverse is typical.\n- Looking at both together can give a fuller picture than either alone. Neither is a diagnostic measure on its own.\n\nIf you notice sustained changes or symptoms like chest pain, dizziness, or fainting, check with a clinician."
+  ],
+  "trace": [],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 0,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [],
+  "discovered_schema_sha256": "0719114de309e0053410996840d67643c33cbf8932a0c29ddef737a6817843bd"
+}

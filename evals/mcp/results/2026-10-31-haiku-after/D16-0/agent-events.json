@@ -1,0 +1,146 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01YGyZmijKL5jarAXGYFbDsx",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "weight",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01NCA3DTFTW57mvmFrcqK48E",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "body",
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "include_deleted": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**October 1, 2026: 72.57 kg**\n**October 2, 2026: no usable measurement**\n\nThree weight records exist for these two days, and the summary used one of them:\n\n- **Oct 1, 7:00 AM:** 72.0 kg (stored in grams). Not used, because the daily figure is the last measurement of the day.\n- **Oct 1, 8:00 PM:** 160 lb, which is 72.57 kg. This is the value used for Oct 1.\n- **Oct 2, 7:00 AM:** 158, with no unit recorded. Excluded, because the unit is unknown and I can't convert it reliably. If it were pounds it would be about 71.7 kg, but that's a guess and I haven't counted it.\n\nLimitations:\n- Oct 1 has one day of data, so the 2-day average is just that day's value. Oct 2 is not zero; it has no usable reading.\n- The two Oct 1 readings differ by about 0.6 kg. Different times of day, clothing, or scale differences could explain that.\n- The data comes from a Google Takeout import, and the dates follow the account's time zone."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**October 1, 2026: 72.57 kg**\n**October 2, 2026: no usable measurement**\n\nThree weight records exist for these two days, and the summary used one of them:\n\n- **Oct 1, 7:00 AM:** 72.0 kg (stored in grams). Not used, because the daily figure is the last measurement of the day.\n- **Oct 1, 8:00 PM:** 160 lb, which is 72.57 kg. This is the value used for Oct 1.\n- **Oct 2, 7:00 AM:** 158, with no unit recorded. Excluded, because the unit is unknown and I can't convert it reliably. If it were pounds it would be about 71.7 kg, but that's a guess and I haven't counted it.\n\nLimitations:\n- Oct 1 has one day of data, so the 2-day average is just that day's value. Oct 2 is not zero; it has no usable reading.\n- The two Oct 1 readings differ by about 0.6 kg. Different times of day, clothing, or scale differences could explain that.\n- The data comes from a Google Takeout import, and the dates follow the account's time zone.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 1065,
+        "cacheReadInputTokens": 12567,
+        "cacheCreationInputTokens": 2502,
+        "webSearchRequests": 0,
+        "costUSD": 0.00115897,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 395,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2502,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00115897,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2502,
+      "cache_read_input_tokens": 12567,
+      "output_tokens": 1065,
+      "output_tokens_details": {
+        "thinking_tokens": 395
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2502,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 644,
+          "cache_read_input_tokens": 6784,
+          "cache_creation_input_tokens": 1501,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1501
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

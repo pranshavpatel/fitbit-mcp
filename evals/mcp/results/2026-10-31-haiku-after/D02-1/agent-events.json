@@ -1,0 +1,132 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01UwZLMsSaqWg5Aoi3YVzVA2",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014cBK4FDApDYB3K2bxtYi6d",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_28460bab2e84"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes, verification finished successfully. Your Google account is connected using the existing ghealth CLI credentials, and a read-only API request (users.getIdentity) confirmed the connection works. No browser login was needed.\n\nAll 12 read-only permissions were granted, and none were denied. They cover:\n- Activity and fitness\n- ECG\n- Health metrics and measurements\n- IRN\n- Location\n- Logged symptoms\n- Mindfulness\n- Nutrition\n- Profile\n- Reproductive health\n- Settings\n- Sleep\n\nThe connection is verified, but no data has been imported yet. If you want your history available locally, I can start an import or a sync next."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Yes, verification finished successfully. Your Google account is connected using the existing ghealth CLI credentials, and a read-only API request (users.getIdentity) confirmed the connection works. No browser login was needed.\n\nAll 12 read-only permissions were granted, and none were denied. They cover:\n- Activity and fitness\n- ECG\n- Health metrics and measurements\n- IRN\n- Location\n- Logged symptoms\n- Mindfulness\n- Nutrition\n- Profile\n- Reproductive health\n- Settings\n- Sleep\n\nThe connection is verified, but no data has been imported yet. If you want your history available locally, I can start an import or a sync next.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 372,
+        "cacheReadInputTokens": 19970,
+        "cacheCreationInputTokens": 1798,
+        "webSearchRequests": 0,
+        "costUSD": 0.0007459,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1798,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0007459,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1798,
+      "cache_read_input_tokens": 19970,
+      "output_tokens": 372,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1798,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 215,
+          "cache_read_input_tokens": 7112,
+          "cache_creation_input_tokens": 756,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 756
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

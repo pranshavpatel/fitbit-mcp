@@ -1,0 +1,168 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RjRn8tc5znJ8bZ2EqQCr6B",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01NKLronSxkt3jvJkrjrGJ9F",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Um8Qs8pbbF1FvYpf4569uN",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "period": "week",
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01786nKTgZ6SwX8MGPzoUE55",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google sleep data for October 1\u20137, 2026 is very sparse. Only one day, October 2, has any sleep recorded.\n\n**Coverage:** 1 of 7 days, or 14.3%. October 1 and October 3\u20137 have no sleep records. Those days are missing, not zero hours of sleep. I could only check what's in the local database. Google isn't currently connected: there's no valid API login, so I couldn't sync newer data. Records for the other days may exist upstream but haven't been imported.\n\n**By week** (weeks start Monday, so the range splits in two):\n- **Week of Sept 28 (Oct 1\u20134 in your range):** 1 of 4 days has data. Total sleep on October 2 was **455 minutes (about 7 h 35 min)**. That is the only data point, so there's no real average, range or trend.\n- **Week of Oct 5 (Oct 5\u20137):** 0 of 3 days have data.\n\n**Nights and naps (both on Oct 2):**\n- **Night sleep:** 11:00 pm Oct 1 to 7:00 am Oct 2. That is 420 minutes (7 h) asleep out of an 8-hour window.\n- **Nap:** 2:00\u20132:40 pm, 35 minutes asleep.\n- The two add up to the 455-minute daily total. The summary counts naps in that total, and the night session is the \"main\" sleep at 420 minutes.\n\n**Limitations:** A trend needs at least 6 days with data, and there is only one. These figures don't show your typical sleep. To fill the gaps, reconnect Google (run `ghealth auth login`) or import a Takeout export, then I can sync and redo the summary. I can start that if you like."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google sleep data for October 1\u20137, 2026 is very sparse. Only one day, October 2, has any sleep recorded.\n\n**Coverage:** 1 of 7 days, or 14.3%. October 1 and October 3\u20137 have no sleep records. Those days are missing, not zero hours of sleep. I could only check what's in the local database. Google isn't currently connected: there's no valid API login, so I couldn't sync newer data. Records for the other days may exist upstream but haven't been imported.\n\n**By week** (weeks start Monday, so the range splits in two):\n- **Week of Sept 28 (Oct 1\u20134 in your range):** 1 of 4 days has data. Total sleep on October 2 was **455 minutes (about 7 h 35 min)**. That is the only data point, so there's no real average, range or trend.\n- **Week of Oct 5 (Oct 5\u20137):** 0 of 3 days have data.\n\n**Nights and naps (both on Oct 2):**\n- **Night sleep:** 11:00 pm Oct 1 to 7:00 am Oct 2. That is 420 minutes (7 h) asleep out of an 8-hour window.\n- **Nap:** 2:00\u20132:40 pm, 35 minutes asleep.\n- The two add up to the 455-minute daily total. The summary counts naps in that total, and the night session is the \"main\" sleep at 420 minutes.\n\n**Limitations:** A trend needs at least 6 days with data, and there is only one. These figures don't show your typical sleep. To fill the gaps, reconnect Google (run `ghealth auth login`) or import a Takeout export, then I can sync and redo the summary. I can start that if you like.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 957,
+        "cacheReadInputTokens": 20556,
+        "cacheCreationInputTokens": 2900,
+        "webSearchRequests": 0,
+        "costUSD": 0.023237599999999997,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2900,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.023237599999999997,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2900,
+      "cache_read_input_tokens": 20556,
+      "output_tokens": 957,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2900,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 560,
+          "cache_read_input_tokens": 7720,
+          "cache_creation_input_tokens": 1249,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1249
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

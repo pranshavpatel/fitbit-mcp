@@ -1,0 +1,140 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Y3D4JjtXPbKJTQaFft8wto",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01BFrXYi8nqg3Ag5GXa9c4K2",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_5834d7e8defd"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**No, the Google connection did not work.** Your ghealth CLI credentials loaded and the granted permissions were all accepted, but the read-only test request failed with `ACCOUNT_NOT_LINKED`: there is no Google Health identity linked to that Google account. Nothing is connected, and no data was imported.\n\nThe credentials are valid, so the problem is on the Google Health side. The Google account behind your ghealth CLI login probably hasn't been set up with Google Health (the Fitbit-to-Google Health migration or the Google Health app). Once that's done, we can retry. I haven't retried, since the same credentials would likely fail the same way.\n\nIf you want to try a different sign-in, I can start the browser OAuth flow instead. It opens a browser window and needs you to approve access. Tell me if you want that."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**No, the Google connection did not work.** Your ghealth CLI credentials loaded and the granted permissions were all accepted, but the read-only test request failed with `ACCOUNT_NOT_LINKED`: there is no Google Health identity linked to that Google account. Nothing is connected, and no data was imported.\n\nThe credentials are valid, so the problem is on the Google Health side. The Google account behind your ghealth CLI login probably hasn't been set up with Google Health (the Fitbit-to-Google Health migration or the Google Health app). Once that's done, we can retry. I haven't retried, since the same credentials would likely fail the same way.\n\nIf you want to try a different sign-in, I can start the browser OAuth flow instead. It opens a browser window and needs you to approve access. Tell me if you want that.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 593,
+        "cacheReadInputTokens": 20037,
+        "cacheCreationInputTokens": 1925,
+        "webSearchRequests": 0,
+        "costUSD": 0.00088247,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 169,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1925,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00088247,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1925,
+      "cache_read_input_tokens": 20037,
+      "output_tokens": 593,
+      "output_tokens_details": {
+        "thinking_tokens": 169
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1925,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 357,
+          "cache_read_input_tokens": 7190,
+          "cache_creation_input_tokens": 799,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 799
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

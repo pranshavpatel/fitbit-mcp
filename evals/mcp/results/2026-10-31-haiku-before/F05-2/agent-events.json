@@ -1,0 +1,266 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019Ww1nCtETrN5nZwXUBo5Xu",
+        "name": "mcp__fitbit_eval__disconnect_account",
+        "input": {
+          "provider": "google",
+          "delete_local_data": true,
+          "include_takeout_data": false,
+          "revoke_remote_authorization": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Here's what the removal would do. I haven't run it yet.\n\n**Planned actions (Google only):**\n1. **Remove the locally stored Google tokens.** The app's saved sign-in credentials for Google are deleted from this computer.\n2. **Cancel any active Google jobs** that are still running.\n3. **Permanently delete the local Google records and retained raw responses.** This covers the data the app imported from the Google Health API.\n\n**What stays untouched:**\n- **Your Takeout copy.** I've set the option to keep Takeout data, so it's not included in the deletion.\n- **Google's authorization.** I've set remote revocation to off, so the app's permission at Google is not revoked.\n\n**Things to know:**\n- Deleting the local tokens means the app can't reach Google until you reconnect. Because Google's authorization stays in place, reconnecting later should not require granting access again. I haven't verified that, though.\n- The deletion is permanent for the Google API data. If you want that data back, you'd need to re-import it from Google.\n- I haven't checked how much Google data is stored locally. I can run a quick check first if you want to know what's being removed.\n\nThe confirmation expires in 5 minutes. Reply **yes** to proceed, or tell me what to change."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Here's what the removal would do. I haven't run it yet.\n\n**Planned actions (Google only):**\n1. **Remove the locally stored Google tokens.** The app's saved sign-in credentials for Google are deleted from this computer.\n2. **Cancel any active Google jobs** that are still running.\n3. **Permanently delete the local Google records and retained raw responses.** This covers the data the app imported from the Google Health API.\n\n**What stays untouched:**\n- **Your Takeout copy.** I've set the option to keep Takeout data, so it's not included in the deletion.\n- **Google's authorization.** I've set remote revocation to off, so the app's permission at Google is not revoked.\n\n**Things to know:**\n- Deleting the local tokens means the app can't reach Google until you reconnect. Because Google's authorization stays in place, reconnecting later should not require granting access again. I haven't verified that, though.\n- The deletion is permanent for the Google API data. If you want that data back, you'd need to re-import it from Google.\n- I haven't checked how much Google data is stored locally. I can run a quick check first if you want to know what's being removed.\n\nThe confirmation expires in 5 minutes. Reply **yes** to proceed, or tell me what to change.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 925,
+        "cacheReadInputTokens": 12549,
+        "cacheCreationInputTokens": 1193,
+        "webSearchRequests": 0,
+        "costUSD": 0.00082699,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 371,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1193,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00082699,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1193,
+      "cache_read_input_tokens": 12549,
+      "output_tokens": 925,
+      "output_tokens_details": {
+        "thinking_tokens": 371
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1193,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 601,
+          "cache_read_input_tokens": 6608,
+          "cache_creation_input_tokens": 526,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 526
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  },
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_015qsYsLKMHRyp5Ax5N6WKuE",
+        "name": "mcp__fitbit_eval__disconnect_account",
+        "input": {
+          "provider": "google",
+          "delete_local_data": true,
+          "include_takeout_data": false,
+          "revoke_remote_authorization": false,
+          "confirmation_token": "mysxaMyxbY3097BoW_XHGg"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Wf1NFJJpvaCtPw1WiSCoVF",
+        "name": "mcp__fitbit_eval__disconnect_account",
+        "input": {
+          "provider": "google",
+          "delete_local_data": true,
+          "include_takeout_data": false,
+          "revoke_remote_authorization": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The removal didn't run. My confirmation attempt failed because the first preview's approval window had expired (it lasts 5 minutes). I've requested a new preview, and it lists the same actions:\n\n1. Remove the locally stored Google tokens.\n2. Cancel any active Google jobs.\n3. Permanently delete local Google records and retained raw responses.\n\nStill kept: your Takeout copy, and Google's authorization (remote revocation is off).\n\nThe new confirmation expires in 5 minutes. Reply **yes** and I'll run it right away. If you want me to hold off, just say so."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The removal didn't run. My confirmation attempt failed because the first preview's approval window had expired (it lasts 5 minutes). I've requested a new preview, and it lists the same actions:\n\n1. Remove the locally stored Google tokens.\n2. Cancel any active Google jobs.\n3. Permanently delete local Google records and retained raw responses.\n\nStill kept: your Takeout copy, and Google's authorization (remote revocation is off).\n\nThe new confirmation expires in 5 minutes. Reply **yes** and I'll run it right away. If you want me to hold off, just say so.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1642,
+        "cacheReadInputTokens": 35585,
+        "cacheCreationInputTokens": 2693,
+        "webSearchRequests": 0,
+        "costUSD": 0.00171645,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 560,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2693,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00171645,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1500,
+      "cache_read_input_tokens": 23036,
+      "output_tokens": 717,
+      "output_tokens_details": {
+        "thinking_tokens": 189
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1500,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 191,
+          "cache_read_input_tokens": 8096,
+          "cache_creation_input_tokens": 538,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 538
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

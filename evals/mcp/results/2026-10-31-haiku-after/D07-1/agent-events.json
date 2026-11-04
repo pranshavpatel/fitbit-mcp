@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0154wF2k8Z5ZKttus79aJFFo",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CZnMA5JdQvofitfMMHs34W",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_ea5ffca85366"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01XWQ8YhGhiXGr3yHh6tuod8",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_ea5ffca85366"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Google import finished. I resumed the most recent cancelled job (`job_ea5ffca85366`), and it completed successfully.\n\n- **Status:** succeeded. All 18 planned requests returned OK, and none were left pending or failed.\n- **Scope:** the activity category for 2026-10-01 through 2026-10-03, in the America/New_York timezone. It did not include intraday data or whole-day heart rate.\n- **Records:** 3 new records were inserted. Nothing was updated, unchanged, restored, or marked as deleted upstream.\n\nThe job was cancelled partway through, and I didn't re-check the earlier 4 requests after resuming. The job reports that all 18 succeeded, so I'm relying on that."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Google import finished. I resumed the most recent cancelled job (`job_ea5ffca85366`), and it completed successfully.\n\n- **Status:** succeeded. All 18 planned requests returned OK, and none were left pending or failed.\n- **Scope:** the activity category for 2026-10-01 through 2026-10-03, in the America/New_York timezone. It did not include intraday data or whole-day heart rate.\n- **Records:** 3 new records were inserted. Nothing was updated, unchanged, restored, or marked as deleted upstream.\n\nThe job was cancelled partway through, and I didn't re-check the earlier 4 requests after resuming. The job reports that all 18 succeeded, so I'm relying on that.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 503,
+        "cacheReadInputTokens": 28063,
+        "cacheCreationInputTokens": 2367,
+        "webSearchRequests": 0,
+        "costUSD": 0.00100633,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 83,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2367,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00100633,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2367,
+      "cache_read_input_tokens": 28063,
+      "output_tokens": 503,
+      "output_tokens_details": {
+        "thinking_tokens": 83
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2367,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 239,
+          "cache_read_input_tokens": 7863,
+          "cache_creation_input_tokens": 567,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 567
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

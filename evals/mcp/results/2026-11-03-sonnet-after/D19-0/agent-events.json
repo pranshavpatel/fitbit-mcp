@@ -1,0 +1,135 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01WB9mcReKp43JZSJv2KchgJ",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01LqeQtmWEjyt2C46FSMRU5W",
+        "name": "mcp__fitbit_eval__export_data",
+        "input": {
+          "provider": "google",
+          "category": "activity",
+          "metric": "steps",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "format": "csv"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I exported the Google daily steps for October 1\u20132, 2026 to a CSV file. It has 2 records, one for each day.\n\nPath: `/private/tmp/fitbit-mcp-eval-71ur5_no/home/exports/fitbit-google-activity-steps-20261103-210717.csv`\n\nThe local database also holds October 3, but I left it out because you asked for October 1\u20132 only."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I exported the Google daily steps for October 1\u20132, 2026 to a CSV file. It has 2 records, one for each day.\n\nPath: `/private/tmp/fitbit-mcp-eval-71ur5_no/home/exports/fitbit-google-activity-steps-20261103-210717.csv`\n\nThe local database also holds October 3, but I left it out because you asked for October 1\u20132 only.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 377,
+        "cacheReadInputTokens": 19736,
+        "cacheCreationInputTokens": 1761,
+        "webSearchRequests": 0,
+        "costUSD": 0.0127996,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1761,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0127996,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1761,
+      "cache_read_input_tokens": 19736,
+      "output_tokens": 377,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1761,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 130,
+          "cache_read_input_tokens": 7192,
+          "cache_creation_input_tokens": 352,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 352
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

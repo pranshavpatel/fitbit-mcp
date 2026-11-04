@@ -1,0 +1,151 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_016nasuwHH2V6GnnipXAmu6h",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012W3rtoobVG7PkSw7RyHseN",
+        "name": "mcp__fitbit_eval__sync_data",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity"
+          ],
+          "overlap_days": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01GF7TpKqNvS7KJir6FFtTKe",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_d6031fc03f3f"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The sync succeeded. I ran it for Google, activity category only, with a 2-day overlap. All 10 requests completed without errors.\n\n- **Records:** 3 updated, 0 new, 0 unchanged, 0 restored, 0 marked as deleted upstream.\n- **Window:** The job reported 2026-10-01 to 2026-10-07 (America/New_York), which is wider than 2 days. That is probably because the last sync was earlier than that. I didn't verify this.\n- **Dates:** The sync data ends on 2026-10-07. The system clock shows early November, so nothing newer than 10-07 came back. That could mean no newer data exists or the window just stopped there. I didn't check which.\n- **Scope:** I synced only the activity category. I didn't sync sleep, heart or other categories, and I didn't pull intraday data or whole-day heart rate. I can run those if you want.\n- **Token:** Your Google token is active. While the consent screen is in Testing mode, refresh tokens expire after 7 days. If a later sync fails on authorization, run `ghealth auth login`."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The sync succeeded. I ran it for Google, activity category only, with a 2-day overlap. All 10 requests completed without errors.\n\n- **Records:** 3 updated, 0 new, 0 unchanged, 0 restored, 0 marked as deleted upstream.\n- **Window:** The job reported 2026-10-01 to 2026-10-07 (America/New_York), which is wider than 2 days. That is probably because the last sync was earlier than that. I didn't verify this.\n- **Dates:** The sync data ends on 2026-10-07. The system clock shows early November, so nothing newer than 10-07 came back. That could mean no newer data exists or the window just stopped there. I didn't check which.\n- **Scope:** I synced only the activity category. I didn't sync sleep, heart or other categories, and I didn't pull intraday data or whole-day heart rate. I can run those if you want.\n- **Token:** Your Google token is active. While the consent screen is in Testing mode, refresh tokens expire after 7 days. If a later sync fails on authorization, run `ghealth auth login`.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 605,
+        "cacheReadInputTokens": 27655,
+        "cacheCreationInputTokens": 2056,
+        "webSearchRequests": 0,
+        "costUSD": 0.0170555,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2056,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0170555,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2056,
+      "cache_read_input_tokens": 27655,
+      "output_tokens": 605,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2056,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 361,
+          "cache_read_input_tokens": 7578,
+          "cache_creation_input_tokens": 535,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 535
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

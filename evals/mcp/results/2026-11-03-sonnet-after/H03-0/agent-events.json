@@ -1,0 +1,163 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01DfV6vD5uarN3YZj28Rp1cb",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01AURqq7MQquS4jyB4Pr1GTZ",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjoyLCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01X2mqikkhr5iSwsKw4JSV9M",
+        "name": "mcp__fitbit_eval__export_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "format": "csv"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Here are the Google daily steps for October 1\u20133, 2026. I fetched them in two requests of no more than two records each.\n\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\nI exported those 3 Google records to CSV. I didn't include any Fitbit records.\n\nThe file is at `/private/tmp/fitbit-mcp-eval-5wqv6nx7/home/exports/fitbit-google-steps-20261103-210805.csv`.\n\nThe records are tagged with the parser \"eval-synthetic\", so they look like test data rather than real device readings."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Here are the Google daily steps for October 1\u20133, 2026. I fetched them in two requests of no more than two records each.\n\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\nI exported those 3 Google records to CSV. I didn't include any Fitbit records.\n\nThe file is at `/private/tmp/fitbit-mcp-eval-5wqv6nx7/home/exports/fitbit-google-steps-20261103-210805.csv`.\n\nThe records are tagged with the parser \"eval-synthetic\", so they look like test data rather than real device readings.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 848,
+        "cacheReadInputTokens": 19986,
+        "cacheCreationInputTokens": 2520,
+        "webSearchRequests": 0,
+        "costUSD": 0.0205706,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2520,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0205706,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2520,
+      "cache_read_input_tokens": 19986,
+      "output_tokens": 848,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2520,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 223,
+          "cache_read_input_tokens": 7421,
+          "cache_creation_input_tokens": 882,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 882
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,388 @@
+{
+  "passed": false,
+  "outcome_passed": true,
+  "adherence_passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "list_data_types"
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "2026-10-26|oct(?:ober)?\\s*26"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "2026-11-01|nov(?:ember)?\\s*1"
+    },
+    "answer_fact_3": {
+      "pass": true,
+      "detail": "420|7\\s*(?:h|hours)"
+    },
+    "discovery_before_data": {
+      "pass": false,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "local_last_week": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "H04",
+  "split": "holdout",
+  "trial": 0,
+  "mode": "agent",
+  "model": "sonnet",
+  "profile": "portable",
+  "actual_models": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0205696,
+  "latency_s": 10.26,
+  "error": null,
+  "answers": [
+    "Last week was Monday, Oct 26 through Sunday, Nov 1, 2026 (New York time). Your Google sleep data for that week is very sparse.\n\n- **Nights with data:** 1 of 7 (14% coverage).\n- **Sunday, Nov 1:** 420 minutes asleep (7 hours). This is the only night recorded, so it is also the minimum, maximum and average.\n- **Oct 26\u201331:** no sleep records. These days are missing, not zero hours of sleep.\n- **Trend:** none, because a trend needs at least 6 days of data.\n\n**How overnight dates work:** Sleep is filed under the date you wake up, not the date you fell asleep. The Nov 1 entry is therefore a night that ended on Sunday morning, so you went to bed Saturday night, Oct 31. Sleep from Sunday night, Nov 1, would be filed under Monday, Nov 2, so it falls in this week and not in the week I summarized. The dates follow the provider's calendar, which is New York time here. Naps count toward the total, and the longest session is reported as the main sleep. That session was the whole 420 minutes.\n\n**Limitations:**\n- The connection status shows Google isn't currently connected. There are no valid credentials, and the ghealth CLI credentials weren't found. I could only read what was already stored locally, so the missing nights may just not have been imported. I haven't synced anything.\n- To fill the gaps, you would need to re-authenticate (`ghealth auth login`) and then sync. Alternatively, you could import a Google Takeout export. Tell me if you want to try either.\n- Your system date reads Nov 2 in one place and Nov 3 in another. The week comes out the same either way."
+  ],
+  "trace": [
+    {
+      "tool": "connection_status",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": false,\n      \"client_secret_path\": \"$TRIAL/ghealth/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    },\n    {\n      \"provider\": \"fitbit\",\n      \"configured\": false,\n      \"api_available\": false,\n      \"availability\": \"Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (0 day(s) left). Use an existing working Fitbit developer app only.\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"No verified API connection.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": false,
+              "client_secret_path": "$TRIAL/ghealth/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            },
+            {
+              "provider": "fitbit",
+              "configured": false,
+              "api_available": false,
+              "availability": "Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (0 day(s) left). Use an existing working Fitbit developer app only.",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "No verified API connection."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0012,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-11-01",
+            "value": 420.0,
+            "unit": "min",
+            "record_key": "main",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "summarize_data",
+      "arguments": {
+        "metric": "sleep",
+        "provider": "google",
+        "start_date": "2026-10-26",
+        "end_date": "2026-11-01",
+        "period": "day"
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metric\": \"sleep\",\n  \"unit\": \"minutes asleep\",\n  \"provider_used\": \"google\",\n  \"other_providers_with_data\": [],\n  \"start_date\": \"2026-10-26\",\n  \"end_date\": \"2026-11-01\",\n  \"period\": \"day\",\n  \"overall\": {\n    \"days_with_data\": 1,\n    \"calendar_days\": 7,\n    \"coverage_pct\": 14.3,\n    \"mean\": 420.0,\n    \"median\": 420.0,\n    \"min\": 420.0,\n    \"max\": 420.0\n  },\n  \"periods\": [\n    {\n      \"period\": \"2026-10-26\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    },\n    {\n      \"period\": \"2026-10-27\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    },\n    {\n      \"period\": \"2026-10-28\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    },\n    {\n      \"period\": \"2026-10-29\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    },\n    {\n      \"period\": \"2026-10-30\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    },\n    {\n      \"period\": \"2026-10-31\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    },\n    {\n      \"period\": \"2026-11-01\",\n      \"days_with_data\": 1,\n      \"calendar_days\": 1,\n      \"mean\": 420.0,\n      \"min\": 420.0,\n      \"max\": 420.0\n    }\n  ],\n  \"trend\": {\n    \"available\": false,\n    \"reason\": \"fewer than 6 days with data\"\n  },\n  \"definition\": \"Minutes asleep per wake date (the date a sleep session ends; Fitbit 'dateOfSleep'). Sessions from the same day that overlap in time are de-duplicated (longest kept); naps are included in 'total' and the longest session is reported as 'main'.\",\n  \"exclusions\": {},\n  \"main_sleep_mean_minutes\": 420.0,\n  \"caveats\": [\n    \"Means are over days with data only; missing days are not treated as zero.\",\n    \"Dates are the provider's calendar dates (account/device time zone).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metric": "sleep",
+          "unit": "minutes asleep",
+          "provider_used": "google",
+          "other_providers_with_data": [],
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "period": "day",
+          "overall": {
+            "days_with_data": 1,
+            "calendar_days": 7,
+            "coverage_pct": 14.3,
+            "mean": 420.0,
+            "median": 420.0,
+            "min": 420.0,
+            "max": 420.0
+          },
+          "periods": [
+            {
+              "period": "2026-10-26",
+              "days_with_data": 0,
+              "calendar_days": 1
+            },
+            {
+              "period": "2026-10-27",
+              "days_with_data": 0,
+              "calendar_days": 1
+            },
+            {
+              "period": "2026-10-28",
+              "days_with_data": 0,
+              "calendar_days": 1
+            },
+            {
+              "period": "2026-10-29",
+              "days_with_data": 0,
+              "calendar_days": 1
+            },
+            {
+              "period": "2026-10-30",
+              "days_with_data": 0,
+              "calendar_days": 1
+            },
+            {
+              "period": "2026-10-31",
+              "days_with_data": 0,
+              "calendar_days": 1
+            },
+            {
+              "period": "2026-11-01",
+              "days_with_data": 1,
+              "calendar_days": 1,
+              "mean": 420.0,
+              "min": 420.0,
+              "max": 420.0
+            }
+          ],
+          "trend": {
+            "available": false,
+            "reason": "fewer than 6 days with data"
+          },
+          "definition": "Minutes asleep per wake date (the date a sleep session ends; Fitbit 'dateOfSleep'). Sessions from the same day that overlap in time are de-duplicated (longest kept); naps are included in 'total' and the longest session is reported as 'main'.",
+          "exclusions": {},
+          "main_sleep_mean_minutes": 420.0,
+          "caveats": [
+            "Means are over days with data only; missing days are not treated as zero.",
+            "Dates are the provider's calendar dates (account/device time zone)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0025,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-11-01",
+            "value": 420.0,
+            "unit": "min",
+            "record_key": "main",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "minutes_asleep",
+        "local_date": "2026-11-01",
+        "value": 420.0,
+        "unit": "min",
+        "record_key": "main",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "minutes_asleep",
+        "local_date": "2026-11-01",
+        "value": 420.0,
+        "unit": "min",
+        "record_key": "main",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 2,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-11-02",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "0719114de309e0053410996840d67643c33cbf8932a0c29ddef737a6817843bd"
+}

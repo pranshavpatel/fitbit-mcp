@@ -1,0 +1,308 @@
+{
+  "passed": false,
+  "outcome_passed": true,
+  "adherence_passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "list_data_types"
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "3,?000"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "no.wear|not worn|excluded"
+    },
+    "answer_fact_3": {
+      "pass": true,
+      "detail": "2|two"
+    },
+    "discovery_before_data": {
+      "pass": false,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "D14",
+  "split": "dev",
+  "trial": 1,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.00114073,
+  "latency_s": 8.69,
+  "error": null,
+  "answers": [
+    "For October 1\u20133, 2026, the tool reports an average of **3,000 steps per day**, but the numbers don't fully add up, so treat that figure with caution.\n\n**What the data shows:**\n- **Oct 1:** No data at all. The day is missing, not zero.\n- **Oct 2:** 0 steps, with full sedentary time. The tool treats this as a no-wear day (the device was likely not being worn).\n- **Oct 3:** 6,000 steps.\n\n**The inconsistency:** The tool says it excluded one no-wear day, which should be Oct 2. But the 3,000 average is exactly (0 + 6,000) \u00f7 2, so the zero from Oct 2 appears to have been included anyway. Depending on which treatment is correct:\n- **If Oct 2 is excluded (as the no-wear rule intends):** the average is **6,000 steps** based on the one valid day, Oct 3.\n- **If Oct 2 is included as a real zero:** the average is **3,000 steps**.\n\nI'd lean toward 6,000 as the more accurate reading, since the tool classified Oct 2 as no-wear, but I can't confirm the calculation from the summary alone.\n\n**How missing and no-wear days affect the average:**\n- **Missing days** (like Oct 1) are left out of the average. They are not counted as zero. Only 2 of the 3 calendar days had any data.\n- **No-wear days** are meant to be excluded, because a day with zero steps and no recorded activity usually means the tracker was off or not worn, not that you were inactive. Counting them as zero would drag the average down unfairly.\n- Because only one or two days are involved, a single day can swing the average a lot. Any number from this window is a rough estimate, not a reliable weekly or monthly picture.\n\nIf you want, I can pull a longer range (for example, the full month of October so far) for a more stable average."
+  ],
+  "trace": [
+    {
+      "tool": "summarize_data",
+      "arguments": {
+        "metric": "steps",
+        "period": "day",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-03"
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metric\": \"steps\",\n  \"unit\": \"steps\",\n  \"provider_used\": \"fitbit\",\n  \"other_providers_with_data\": [],\n  \"start_date\": \"2026-10-01\",\n  \"end_date\": \"2026-10-03\",\n  \"period\": \"day\",\n  \"overall\": {\n    \"days_with_data\": 2,\n    \"calendar_days\": 3,\n    \"coverage_pct\": 66.7,\n    \"mean\": 3000.0,\n    \"median\": 3000.0,\n    \"min\": 0.0,\n    \"max\": 6000.0\n  },\n  \"periods\": [\n    {\n      \"period\": \"2026-10-01\",\n      \"days_with_data\": 0,\n      \"calendar_days\": 1\n    },\n    {\n      \"period\": \"2026-10-02\",\n      \"days_with_data\": 1,\n      \"calendar_days\": 1,\n      \"mean\": 0.0,\n      \"min\": 0.0,\n      \"max\": 0.0,\n      \"total_of_days_with_data\": 0.0\n    },\n    {\n      \"period\": \"2026-10-03\",\n      \"days_with_data\": 1,\n      \"calendar_days\": 1,\n      \"mean\": 6000.0,\n      \"min\": 6000.0,\n      \"max\": 6000.0,\n      \"total_of_days_with_data\": 6000.0\n    }\n  ],\n  \"trend\": {\n    \"available\": false,\n    \"reason\": \"fewer than 6 days with data\"\n  },\n  \"definition\": \"Daily step total. Uses the provider's daily total when present (Fitbit daily series or Google's steps daily roll-up); otherwise the sum of that day's interval step counts from one data source (the source with the most records that day). Days with no records are missing, not zero. Fitbit days with 0 steps and a full day (or unknown) sedentary time are treated as no-wear and excluded.\",\n  \"exclusions\": {\n    \"excluded_no_wear_days\": 1\n  },\n  \"caveats\": [\n    \"Means are over days with data only; missing days are not treated as zero.\",\n    \"Dates are the provider's calendar dates (account/device time zone).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metric": "steps",
+          "unit": "steps",
+          "provider_used": "fitbit",
+          "other_providers_with_data": [],
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "period": "day",
+          "overall": {
+            "days_with_data": 2,
+            "calendar_days": 3,
+            "coverage_pct": 66.7,
+            "mean": 3000.0,
+            "median": 3000.0,
+            "min": 0.0,
+            "max": 6000.0
+          },
+          "periods": [
+            {
+              "period": "2026-10-01",
+              "days_with_data": 0,
+              "calendar_days": 1
+            },
+            {
+              "period": "2026-10-02",
+              "days_with_data": 1,
+              "calendar_days": 1,
+              "mean": 0.0,
+              "min": 0.0,
+              "max": 0.0,
+              "total_of_days_with_data": 0.0
+            },
+            {
+              "period": "2026-10-03",
+              "days_with_data": 1,
+              "calendar_days": 1,
+              "mean": 6000.0,
+              "min": 6000.0,
+              "max": 6000.0,
+              "total_of_days_with_data": 6000.0
+            }
+          ],
+          "trend": {
+            "available": false,
+            "reason": "fewer than 6 days with data"
+          },
+          "definition": "Daily step total. Uses the provider's daily total when present (Fitbit daily series or Google's steps daily roll-up); otherwise the sum of that day's interval step counts from one data source (the source with the most records that day). Days with no records are missing, not zero. Fitbit days with 0 steps and a full day (or unknown) sedentary time are treated as no-wear and excluded.",
+          "exclusions": {
+            "excluded_no_wear_days": 1
+          },
+          "caveats": [
+            "Means are over days with data only; missing days are not treated as zero.",
+            "Dates are the provider's calendar dates (account/device time zone)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0017,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit",
+            "metric": "sedentary_minutes",
+            "local_date": "2026-10-01",
+            "value": 1440.0,
+            "unit": "min",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "sedentary_minutes",
+            "local_date": "2026-10-02",
+            "value": 900.0,
+            "unit": "min",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 0.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 0.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 6000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-01",
+        "value": 1440.0,
+        "unit": "min",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-02",
+        "value": 900.0,
+        "unit": "min",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 6000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-01",
+        "value": 1440.0,
+        "unit": "min",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "sedentary_minutes",
+        "local_date": "2026-10-02",
+        "value": 900.0,
+        "unit": "min",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 0.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 6000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 1,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "0719114de309e0053410996840d67643c33cbf8932a0c29ddef737a6817843bd"
+}

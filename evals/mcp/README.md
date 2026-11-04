@@ -44,8 +44,8 @@ The no-tool control is a scripted empty trace, not a second LLM baseline. It
 should fail data-dependent tasks and can pass a refusal that requires no lookup.
 Known-good controls are hand-authored Python MCP client plans, not agent scores.
 
-See [plan](../../docs/mcp-tool-use-eval.md),
-[protocol coverage](../../docs/mcp-protocol-coverage.md), and
-[measured results](../../docs/mcp-tool-use-results.md). These are deterministic
+See [plan](../../docs/mcp-eval.md),
+[protocol coverage](../../docs/mcp-eval/protocol-coverage.md), and
+[measured results](../../docs/mcp-eval.md). These are deterministic
 pilot graders; narrative grounding and security are not human-calibrated, and
 the reserved split is not fully blind after harness validation.

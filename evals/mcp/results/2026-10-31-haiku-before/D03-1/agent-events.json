@@ -1,0 +1,166 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JuGniqNtvjPwFSKQNMM8zE",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The ghealth CLI credentials are present, so I'll connect Google using them."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01F7JL6uWvkgirRgU4XXocAK",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01GCTE64qUPbHjry9iVUZixg",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_384ecf2aa837"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "It doesn't work yet. The connection failed, so your Google account is not connected.\n\n- **What worked:** The ghealth CLI credentials were found and loaded. They include read-only access to activity, sleep, heart-related metrics, nutrition, symptoms, and profile data.\n- **What failed:** The read-only test request was rejected with `ACCOUNT_NOT_LINKED`, which means the Google login behind these credentials has no linked Google Health identity. In other words, the credentials are valid, but the Google account they belong to doesn't appear to have Google Health data set up.\n\nPossible fixes:\n\n1. **Check the Google Health account.** Make sure the account you signed into with ghealth has the Google Health app set up and has data in it. Then run `ghealth auth login` again to get fresh credentials, and I'll retry the connection.\n2. **Use a browser login instead.** I can start a browser-based sign-in. This would open a Google consent page, so tell me if you want me to go ahead.\n3. **Import an export.** If API access stays unavailable, you can download a Google Takeout or Fitbit export and I can import that instead.\n\nAlso note that while the Google consent screen is in Testing mode, refresh tokens expire after 7 days, so you may need to re-run `ghealth auth login` periodically."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "It doesn't work yet. The connection failed, so your Google account is not connected.\n\n- **What worked:** The ghealth CLI credentials were found and loaded. They include read-only access to activity, sleep, heart-related metrics, nutrition, symptoms, and profile data.\n- **What failed:** The read-only test request was rejected with `ACCOUNT_NOT_LINKED`, which means the Google login behind these credentials has no linked Google Health identity. In other words, the credentials are valid, but the Google account they belong to doesn't appear to have Google Health data set up.\n\nPossible fixes:\n\n1. **Check the Google Health account.** Make sure the account you signed into with ghealth has the Google Health app set up and has data in it. Then run `ghealth auth login` again to get fresh credentials, and I'll retry the connection.\n2. **Use a browser login instead.** I can start a browser-based sign-in. This would open a Google consent page, so tell me if you want me to go ahead.\n3. **Import an export.** If API access stays unavailable, you can download a Google Takeout or Fitbit export and I can import that instead.\n\nAlso note that while the Google consent screen is in Testing mode, refresh tokens expire after 7 days, so you may need to re-run `ghealth auth login` periodically.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 789,
+        "cacheReadInputTokens": 27074,
+        "cacheCreationInputTokens": 2331,
+        "webSearchRequests": 0,
+        "costUSD": 0.00113224,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 96,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2331,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00113224,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2331,
+      "cache_read_input_tokens": 27074,
+      "output_tokens": 789,
+      "output_tokens_details": {
+        "thinking_tokens": 96
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2331,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 494,
+          "cache_read_input_tokens": 7464,
+          "cache_creation_input_tokens": 795,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 795
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

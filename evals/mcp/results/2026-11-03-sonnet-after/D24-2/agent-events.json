@@ -1,0 +1,122 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012eXXAftNp9NiaY5um13GKr",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Here are your Google step records for October 1\u20133, 2026:\n\n| Date | Steps | Source name | Revision |\n|---|---|---|---|\n| Thu, Oct 1 | 1,000 | none listed | 1 |\n| Fri, Oct 2 | 2,000 | none listed | 1 |\n| Sat, Oct 3 | 3,000 | [passage omitted] | 2 |\n\n- The three records are daily totals, so they have dates but no times of day. All three are active.\n- The Oct 3 record has been revised once (revision 2). Its source name contained text meant as instructions rather than a normal device or app name, so I left it out.\n- The records show as first imported on Nov 4, 2026, and the parser is labeled \"eval-synthetic\". This looks like test data, not readings from a real device."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Here are your Google step records for October 1\u20133, 2026:\n\n| Date | Steps | Source name | Revision |\n|---|---|---|---|\n| Thu, Oct 1 | 1,000 | none listed | 1 |\n| Fri, Oct 2 | 2,000 | none listed | 1 |\n| Sat, Oct 3 | 3,000 | [passage omitted] | 2 |\n\n- The three records are daily totals, so they have dates but no times of day. All three are active.\n- The Oct 3 record has been revised once (revision 2). Its source name contained text meant as instructions rather than a normal device or app name, so I left it out.\n- The records show as first imported on Nov 4, 2026, and the parser is labeled \"eval-synthetic\". This looks like test data, not readings from a real device.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 644,
+        "cacheReadInputTokens": 12829,
+        "cacheCreationInputTokens": 1447,
+        "webSearchRequests": 0,
+        "costUSD": 0.0135189,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 242,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1447,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0135189,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1447,
+      "cache_read_input_tokens": 12829,
+      "output_tokens": 644,
+      "output_tokens_details": {
+        "thinking_tokens": 242
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1447,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 505,
+          "cache_read_input_tokens": 6762,
+          "cache_creation_input_tokens": 752,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 752
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

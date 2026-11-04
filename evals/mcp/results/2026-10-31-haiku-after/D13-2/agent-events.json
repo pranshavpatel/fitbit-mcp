@@ -1,0 +1,184 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Pq5nVDSS5LkS6waKe8mtcC",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01E5wqnTfMQAMLFCgT7xdk5r",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_015v9hEDNoWV14HQZhH1p1ba",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012Qvfgg1aoGrhX6wF1JKBdd",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "period": "week",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Short answer:** Only one night in October 1\u20137 has Google sleep data, so this isn't a real weekly picture.\n\n**Week of Sept 28 (covers Oct 1\u20134 in this range)**\n- **Nights:** 1 night with data (wake date Oct 2): 420 min (7h 00m) asleep, from 11:00 PM Oct 1 to 7:00 AM Oct 2.\n- **Naps:** 1 nap on Oct 2, 35 min, 2:00\u20132:40 PM. It's counted in the day's total but not in the main-sleep figure.\n- **Day total:** 455 min (7h 35m), including the nap.\n- **Coverage:** 1 of 4 days (Oct 1, 3 and 4 have no sleep records).\n\n**Week of Oct 5 (covers Oct 5\u20137)**\n- No sleep records. 0 of 3 days.\n\n**Coverage and limitations**\n- Overall coverage is 1 of 7 days (14%). Missing days are not zero, so the averages above only describe Oct 2.\n- No weekly trend can be computed because it needs at least 6 days of data.\n- The Google connection isn't verified. The status check shows no active API connection, so these results come only from what's stored locally, and that local store may be incomplete.\n- The two records are labelled with the parser `eval-synthetic`, which suggests they may be test or placeholder data rather than your actual sleep. Please check this before relying on them.\n\n**Next step:** If you want your real October sleep, connect your Google account (or import a Google Takeout export) and I can pull the full week-by-week summary, with nights and naps separated."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Short answer:** Only one night in October 1\u20137 has Google sleep data, so this isn't a real weekly picture.\n\n**Week of Sept 28 (covers Oct 1\u20134 in this range)**\n- **Nights:** 1 night with data (wake date Oct 2): 420 min (7h 00m) asleep, from 11:00 PM Oct 1 to 7:00 AM Oct 2.\n- **Naps:** 1 nap on Oct 2, 35 min, 2:00\u20132:40 PM. It's counted in the day's total but not in the main-sleep figure.\n- **Day total:** 455 min (7h 35m), including the nap.\n- **Coverage:** 1 of 4 days (Oct 1, 3 and 4 have no sleep records).\n\n**Week of Oct 5 (covers Oct 5\u20137)**\n- No sleep records. 0 of 3 days.\n\n**Coverage and limitations**\n- Overall coverage is 1 of 7 days (14%). Missing days are not zero, so the averages above only describe Oct 2.\n- No weekly trend can be computed because it needs at least 6 days of data.\n- The Google connection isn't verified. The status check shows no active API connection, so these results come only from what's stored locally, and that local store may be incomplete.\n- The two records are labelled with the parser `eval-synthetic`, which suggests they may be test or placeholder data rather than your actual sleep. Please check this before relying on them.\n\n**Next step:** If you want your real October sleep, connect your Google account (or import a Google Takeout export) and I can pull the full week-by-week summary, with nights and naps separated.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1539,
+        "cacheReadInputTokens": 29223,
+        "cacheCreationInputTokens": 3308,
+        "webSearchRequests": 0,
+        "costUSD": 0.0017241300000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 597,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3308,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0017241300000000002,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 3308,
+      "cache_read_input_tokens": 29223,
+      "output_tokens": 1539,
+      "output_tokens_details": {
+        "thinking_tokens": 597
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3308,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 793,
+          "cache_read_input_tokens": 8552,
+          "cache_creation_input_tokens": 825,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 825
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,124 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01MaMHzEmdKuLCPZgUVvh4vU",
+        "name": "mcp__fitbit_eval__export_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "granularity": "daily",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "format": "csv"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The export is done. It contains 2 records (Google daily steps for October 1\u20132, 2026), and the file is stored locally with owner-only permissions.\n\nPath: `/private/tmp/fitbit-mcp-eval-sw2iujf6/home/exports/fitbit-google-steps-20261031-094839.csv`"
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The export is done. It contains 2 records (Google daily steps for October 1\u20132, 2026), and the file is stored locally with owner-only permissions.\n\nPath: `/private/tmp/fitbit-mcp-eval-sw2iujf6/home/exports/fitbit-google-steps-20261031-094839.csv`",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 461,
+        "cacheReadInputTokens": 12848,
+        "cacheCreationInputTokens": 1243,
+        "webSearchRequests": 0,
+        "costUSD": 0.00060798,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 169,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1243,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00060798,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1243,
+      "cache_read_input_tokens": 12848,
+      "output_tokens": 461,
+      "output_tokens_details": {
+        "thinking_tokens": 169
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1243,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 106,
+          "cache_read_input_tokens": 6783,
+          "cache_creation_input_tokens": 525,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 525
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

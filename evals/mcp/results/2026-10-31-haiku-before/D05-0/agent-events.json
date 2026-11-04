@@ -1,0 +1,166 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01ASjMfFmw7KdmmV3jHBPnw7",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google is connected and the remote check passed. Starting the sync with a two-day overlap."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01GTFRZQYn6F1QQBs1oWLr2e",
+        "name": "mcp__fitbit_eval__sync_data",
+        "input": {
+          "provider": "google",
+          "overlap_days": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01DEDCcV4mPx9AMWwNyZr8Re",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_f7b79744c180"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Google sync finished successfully. All 23 planned requests returned OK.\n\n- **Window:** October 1 to October 7, 2026 (America/New_York), using a two-day overlap.\n- **Records:** 0 new, 3 updated, 0 unchanged, 0 restored, 0 marked as deleted upstream.\n\nThe sync only covered October 1 to 7. The job's end date came from the current date in my instructions, which is October 7. Another part of my context says October 31, so if that's the correct date, the last three weeks weren't refreshed. I can run it again with a different end date if you tell me which date is right."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Google sync finished successfully. All 23 planned requests returned OK.\n\n- **Window:** October 1 to October 7, 2026 (America/New_York), using a two-day overlap.\n- **Records:** 0 new, 3 updated, 0 unchanged, 0 restored, 0 marked as deleted upstream.\n\nThe sync only covered October 1 to 7. The job's end date came from the current date in my instructions, which is October 7. Another part of my context says October 31, so if that's the correct date, the last three weeks weren't refreshed. I can run it again with a different end date if you tell me which date is right.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 613,
+        "cacheReadInputTokens": 26962,
+        "cacheCreationInputTokens": 2443,
+        "webSearchRequests": 0,
+        "costUSD": 0.00106552,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 146,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2443,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00106552,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2443,
+      "cache_read_input_tokens": 26962,
+      "output_tokens": 613,
+      "output_tokens_details": {
+        "thinking_tokens": 146
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2443,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 310,
+          "cache_read_input_tokens": 7549,
+          "cache_creation_input_tokens": 541,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 541
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

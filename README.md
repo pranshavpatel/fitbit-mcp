@@ -14,20 +14,22 @@ log, habit tracking and an AI coach.**
 
 ## Highlights
 
-- **An LLM coach with its own eval.** 42 synthetic scenarios (red recovery, high training load, a
-  flagged knee, missing sleep…) and 17 deterministic checks for format, grounding, safety and
-  specificity. A prompt rewrite took the share of replies passing every check on **12 untouched
-  holdout scenarios from 42–47 % to 83–89 %** (mean of 3 trials; v2's worst trial beats v1's best),
-  and showed Haiku matching Opus within the noise at **1/24 of the cost**, so Haiku is now the
-  default. A second eval covers the workout review (12 scenarios, 17 checks: holdout 8–25 % →
-  58–83 % with the shipped prompt). The evals also caught the dashboard advising hard training at a high load ratio.
-  [Write-up](docs/coach-eval.md)
-- **Scores checked against WHOOP.** Fed WHOOP's own inputs, fitdash's Recovery formula lands
-  **within 8.2 points out of sample** (14.6 for always guessing the average) and agrees on the
-  green / yellow / red band 73 % of the time. [Method and limits](docs/validation.md)
-- **Read-only and local by design.** OAuth with `.readonly` scopes only, GET-only remote calls,
-  every SQL statement parameterized, secrets redacted from logs, all data in `~/.fitbit-mcp`.
-  600+ tests on synthetic fixtures, with CI on macOS and Ubuntu plus ruff and mypy.
+- **An MCP server evaluated like a production one.** A real model drives the real stdio server
+  through 40 synthetic workflows: connect, import, page through results, summarize, export, and a
+  consented delete. Deterministic graders check the answer, the tool trace, the database and the
+  exported file. The eval traced 3 unapproved deletions in 120 trials to the server's own error
+  message. After the fix there are **0 critical failures**, and Haiku gets **116/120** right (107
+  before), Sonnet **120/120**. It also caught a 46,000-token page that Claude Code would have
+  truncated. [Results and method](docs/mcp-eval.md)
+- **An LLM coach with its own eval.** 42 scenarios (red recovery, high load, a flagged knee…) and
+  17 checks for grounding, safety and specificity. A prompt rewrite took held-out replies passing
+  every check from **42–47 % to 83–89 %**, mean of 3 trials. It also showed Haiku matching Opus at
+  **1/24 of the cost**, so Haiku is the default. [Write-up](docs/coach-eval.md)
+- **Scores checked against WHOOP.** On WHOOP's own inputs, fitdash's Recovery lands **within 8.2
+  points out of sample** (14.6 for guessing the average). [Method and limits](docs/validation.md)
+- **Read-only and local by design.** `.readonly` OAuth scopes, GET-only remote calls,
+  parameterized SQL, redacted logs, all data in `~/.fitbit-mcp`. 720+ tests on synthetic data;
+  CI on macOS and Ubuntu with ruff and mypy.
 
 ```mermaid
 flowchart LR
@@ -37,7 +39,8 @@ flowchart LR
     DB --> C[Claude via MCP tools<br/>query · summarize · export]
     DB --> F[fitdash<br/>scores · charts · lift log]
     F --> CO[LLM coach<br/>insights · workout review]
-    CO -. graded by .-> E[eval harness<br/>scenarios · checks]
+    CO -. graded by .-> E[coach eval<br/>scenarios · checks]
+    C -. graded by .-> ME[MCP eval<br/>40 workflows · trace and state checks]
     F --> P[phone app over Tailscale]
 ```
 
@@ -147,19 +150,10 @@ WHOOP's own inputs into fitdash's formula: out of sample, fitdash's Recovery is 
 WHOOP's on average (14.6 for always guessing the average), agrees on green / yellow / red 73 % of the
 time and ranks days with r 0.94. A small sample, so read it as a sanity check. Method, limits and a script to re-run it: [docs/validation.md](docs/validation.md).
 
-**Is the AI coach safe and accurate?** An eval harness runs 42 synthetic scenarios (red recovery,
-high training load, a flagged knee, missing sleep, weight off pace…) through each prompt version
-and model, and grades every reply with 17 deterministic checks for format, grounding in the data,
-safety and specificity. Rewriting the prompt against 30 dev scenarios raised the share of replies
-passing every check on 12 untouched holdout scenarios from 42–47 % to 83–89 % (mean of 3 trials)
-on Opus, Sonnet and Haiku alike. Haiku does it at about 1/24 of Opus's cost. A second eval does the
-same for the workout review. Details: [docs/coach-eval.md](docs/coach-eval.md).
-
-**Does that evaluate MCP tool use?** No. The server has automated integration tests,
-but the coach eval starts from prepared stats. A dedicated agent eval for tool selection,
-arguments, job completion, pagination and faithful answers is
-[implemented here](docs/mcp-tool-use-eval.md), with a synthetic baseline and
-[results and limits](docs/mcp-tool-use-results.md). This is separate from official MCP conformance.
+**How is the AI evaluated?** Two separate evals. The [MCP eval](docs/mcp-eval.md) measures an
+assistant using the server's tools end to end. The [coach eval](docs/coach-eval.md) measures the
+dashboard's own insights and workout reviews. Both use synthetic data, frozen graders and repeated
+trials, and both report their limits.
 
 ## Design principles
 
@@ -178,6 +172,7 @@ src/fitbit_mcp/          the MCP server (OAuth, importer, jobs, store, queries, 
 tests/                   server tests (synthetic fakes of the Google/Fitbit APIs)
 .claude/skills/stats/    fitdash: scripts/ (dashboard, scores, data, charts, coach, …) and tests/
 .claude/skills/stats/evals/  the coach eval: scenarios, graders, prompt versions and saved results
+evals/mcp/               the MCP tool-use eval: cases, harness, graders and saved runs
 .claude/skills/daily-health-brief/   a lighter one-screen brief
 docs/                    guides, plus demo/ (screenshots and the script that makes them)
 bin/install-fitdash.sh   installs the `fitdash` command
@@ -192,7 +187,7 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Bo
 run offline on synthetic data:
 
 ```sh
-uv run pytest                                                                         # server: 77 tests
+uv run pytest                                                                         # server: 168 tests
 uv run --no-project --with rich --with pytest pytest .claude/skills/stats/tests       # fitdash: 561 tests
 ```
 

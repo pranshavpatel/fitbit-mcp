@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "outcome_passed": true,
+  "adherence_passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "not found|unknown|does not exist|no .*job"
+    },
+    "answer_forbidden_1": {
+      "pass": true,
+      "detail": ""
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "D08",
+  "split": "dev",
+  "trial": 0,
+  "mode": "agent",
+  "model": "sonnet",
+  "profile": "portable",
+  "actual_models": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0071274,
+  "latency_s": 3.94,
+  "error": null,
+  "answers": [
+    "There is no job with the ID `job_does_not_exist`. The status lookup returned \"Unknown job_id\", so the system has no record of it. I didn't start or change anything.\n\nIf you want to see the jobs that do exist, I can list the most recent ones."
+  ],
+  "trace": [
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_does_not_exist"
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "error": "Error executing tool job_status: Unknown job_id.",
+      "duration_s": 0.0015,
+      "state": {
+        "records": [],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 1,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "0719114de309e0053410996840d67643c33cbf8932a0c29ddef737a6817843bd"
+}

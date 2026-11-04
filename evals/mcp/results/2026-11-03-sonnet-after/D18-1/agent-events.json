@@ -1,0 +1,133 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01SxZjAEo88hayAx8CxXx4XN",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01AcbZ1hiKJR5hXTRbzivXjx",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "heart_rate",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02",
+          "period": "day",
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Summary for October 2, 2026 (Google heart rate)**\n- The data has only 3 samples.\n- The mean and median are both 101 bpm.\n- The range is 100\u2013102 bpm.\n\n**This can't represent your whole day.** The local Google heart rate data covers exercise windows only. It doesn't cover all 24 hours. The import tool describes it as \"HR samples cover exercise windows only, not all day.\" Three readings near 100 bpm most likely come from one short stretch of activity. Your resting, sleeping, and general daytime heart rate aren't in them.\n\n**Sampling limitations**\n- **Selective sampling:** Only samples around workouts were imported. Whole-day heart rate is a separate, much larger download (about 37 MB per day). It wasn't requested, so the data is biased toward higher, activity-related values.\n- **Sample-weighted statistics:** The mean averages the samples, not time. It can't show how long you spent at each heart rate.\n- **Tiny sample size:** Three points can't show variability, peaks, or trends. The trend calculation needs at least 6 days of data.\n- **No resting heart rate or sleep data:** Neither is stored locally, so I can't fill in the gaps from other metrics.\n\nIf you want a fuller picture, I can import the whole-day heart rate for October 2. It's a large download, and I'd only do it if you ask."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Summary for October 2, 2026 (Google heart rate)**\n- The data has only 3 samples.\n- The mean and median are both 101 bpm.\n- The range is 100\u2013102 bpm.\n\n**This can't represent your whole day.** The local Google heart rate data covers exercise windows only. It doesn't cover all 24 hours. The import tool describes it as \"HR samples cover exercise windows only, not all day.\" Three readings near 100 bpm most likely come from one short stretch of activity. Your resting, sleeping, and general daytime heart rate aren't in them.\n\n**Sampling limitations**\n- **Selective sampling:** Only samples around workouts were imported. Whole-day heart rate is a separate, much larger download (about 37 MB per day). It wasn't requested, so the data is biased toward higher, activity-related values.\n- **Sample-weighted statistics:** The mean averages the samples, not time. It can't show how long you spent at each heart rate.\n- **Tiny sample size:** Three points can't show variability, peaks, or trends. The trend calculation needs at least 6 days of data.\n- **No resting heart rate or sleep data:** Neither is stored locally, so I can't fill in the gaps from other metrics.\n\nIf you want a fuller picture, I can import the whole-day heart rate for October 2. It's a large download, and I'd only do it if you ask.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 653,
+        "cacheReadInputTokens": 12843,
+        "cacheCreationInputTokens": 1890,
+        "webSearchRequests": 0,
+        "costUSD": 0.0153823,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1890,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0153823,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1890,
+      "cache_read_input_tokens": 12843,
+      "output_tokens": 653,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1890,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 451,
+          "cache_read_input_tokens": 6770,
+          "cache_creation_input_tokens": 1193,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1193
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

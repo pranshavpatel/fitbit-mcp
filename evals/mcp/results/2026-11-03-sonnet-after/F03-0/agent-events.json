@@ -1,0 +1,118 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TGxKQn6cJ834guGDcx6N9Z",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Only 1 of the 7 days (October 1\u20137, 2026) has sleep data. That day is October 2, and it totals **455 minutes (about 7 hours 35 minutes)**, naps included.\n\n- **Main sleep vs. naps:** The main sleep session was about 420 minutes (7 hours). The other roughly 35 minutes came from a nap or naps.\n- **Typical day:** With a single day of data, 455 minutes is the only figure I have, so it isn't a reliable \"typical\" value. The other 6 days have no records. I haven't counted them as zero.\n- **Gaps:** The local data may be out of date, or the device may not have been worn or synced on those nights. I can run a sync to check whether the missing days fill in. Do you want me to?"
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Only 1 of the 7 days (October 1\u20137, 2026) has sleep data. That day is October 2, and it totals **455 minutes (about 7 hours 35 minutes)**, naps included.\n\n- **Main sleep vs. naps:** The main sleep session was about 420 minutes (7 hours). The other roughly 35 minutes came from a nap or naps.\n- **Typical day:** With a single day of data, 455 minutes is the only figure I have, so it isn't a reliable \"typical\" value. The other 6 days have no records. I haven't counted them as zero.\n- **Gaps:** The local data may be out of date, or the device may not have been worn or synced on those nights. I can run a sync to check whether the missing days fill in. Do you want me to?",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 389,
+        "cacheReadInputTokens": 12555,
+        "cacheCreationInputTokens": 1712,
+        "webSearchRequests": 0,
+        "costUSD": 0.0120015,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1712,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0120015,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1712,
+      "cache_read_input_tokens": 12555,
+      "output_tokens": 389,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1712,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 248,
+          "cache_read_input_tokens": 6772,
+          "cache_creation_input_tokens": 723,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 723
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

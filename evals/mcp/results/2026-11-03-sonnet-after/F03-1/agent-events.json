@@ -1,0 +1,118 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_015vFBqPXQjPSQeYetkZrfiP",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Only 1 of the 7 days (Oct 1\u20137, 2026) has sleep data, so I can't say what a typical day looks like.\n\n- **Day with data:** Oct 2 is the only one. It has 455 minutes asleep (about 7 hours 35 minutes), naps included. The main sleep was 420 minutes (7 hours), so naps added about 35 minutes.\n- **Days without data:** Oct 1 and Oct 3\u20137 have no sleep records. I haven't counted them as zero.\n\nThe 455 minutes is a single night, not an average. Coverage for the week is 14%. The data comes from Google Health, and no other provider has records for this period.\n\nThe missing days could be nights you didn't wear the device, or data that hasn't synced yet. I can run a sync to check for newer records if you'd like."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Only 1 of the 7 days (Oct 1\u20137, 2026) has sleep data, so I can't say what a typical day looks like.\n\n- **Day with data:** Oct 2 is the only one. It has 455 minutes asleep (about 7 hours 35 minutes), naps included. The main sleep was 420 minutes (7 hours), so naps added about 35 minutes.\n- **Days without data:** Oct 1 and Oct 3\u20137 have no sleep records. I haven't counted them as zero.\n\nThe 455 minutes is a single night, not an average. Coverage for the week is 14%. The data comes from Google Health, and no other provider has records for this period.\n\nThe missing days could be nights you didn't wear the device, or data that hasn't synced yet. I can run a sync to check for newer records if you'd like.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 406,
+        "cacheReadInputTokens": 12554,
+        "cacheCreationInputTokens": 1708,
+        "webSearchRequests": 0,
+        "costUSD": 0.0121554,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1708,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0121554,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1708,
+      "cache_read_input_tokens": 12554,
+      "output_tokens": 406,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1708,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 265,
+          "cache_read_input_tokens": 6771,
+          "cache_creation_input_tokens": 720,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 720
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,469 @@
+{
+  "passed": true,
+  "outcome_passed": true,
+  "adherence_passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "evidence_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "exercise|workout"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "only|not .*all.day|can.t|cannot|limited|no data"
+    },
+    "answer_forbidden_1": {
+      "pass": true,
+      "detail": ""
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts, forbidden claims, trace and state checks; narrative completeness is not human-calibrated.",
+  "case": "F07",
+  "split": "fresh",
+  "trial": 0,
+  "mode": "agent",
+  "model": "sonnet",
+  "profile": "portable",
+  "actual_models": [
+    "claude-sonnet-5-5"
+  ],
+  "cost_usd": 0.0142294,
+  "latency_s": 6.1,
+  "error": null,
+  "answers": [
+    "I can't tell from this data. It doesn't cover the whole day.\n\nFor October 2, 2026, I only have 3 heart rate samples. They read 100, 101 and 102 bpm, an average of about 101. The import only pulls heart rate around workouts, not all day. Those readings most likely come from one short exercise window, where a heart rate near 100 is normal.\n\nI don't have your resting heart rate, sleep data or all-day heart rate for that date. Without those, I can't say whether your heart rate stayed high or returned to baseline afterward.\n\nI could try importing the full-day heart rate for October 2. It's a large download, about 37 MB per day, and it requires your Google account to be connected. Would you like me to try? If you're worried about a persistently high heart rate, a clinician is the right person to ask."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    },\n    {\n      \"provider\": \"google\",\n      \"category\": \"heart\",\n      \"metric\": \"heart_rate\",\n      \"granularity\": \"sample\",\n      \"unit\": \"bpm\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-02\",\n      \"last_date\": \"2026-10-02\",\n      \"days_with_data\": 1\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [\n    {\n      \"provider\": \"google\",\n      \"category_hint\": \"heart\",\n      \"reason\": \"HR samples cover exercise windows only, not all day\",\n      \"files_or_requests\": 1,\n      \"occurrences\": 1\n    }\n  ],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            },
+            {
+              "provider": "google",
+              "category": "heart",
+              "metric": "heart_rate",
+              "granularity": "sample",
+              "unit": "bpm",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-02",
+              "last_date": "2026-10-02",
+              "days_with_data": 1
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [
+            {
+              "provider": "google",
+              "category_hint": "heart",
+              "reason": "HR samples cover exercise windows only, not all day",
+              "files_or_requests": 1,
+              "occurrences": 1
+            }
+          ],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0007,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "heart_rate",
+            "local_date": "2026-10-02",
+            "value": 100.0,
+            "unit": "bpm",
+            "record_key": "0",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "heart_rate",
+            "local_date": "2026-10-02",
+            "value": 101.0,
+            "unit": "bpm",
+            "record_key": "1",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "heart_rate",
+            "local_date": "2026-10-02",
+            "value": 102.0,
+            "unit": "bpm",
+            "record_key": "2",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "summarize_data",
+      "arguments": {
+        "metric": "heart_rate",
+        "start_date": "2026-10-02",
+        "end_date": "2026-10-02",
+        "period": "day"
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metric\": \"heart_rate\",\n  \"unit\": \"bpm\",\n  \"provider_used\": \"google\",\n  \"other_providers_with_data\": [],\n  \"start_date\": \"2026-10-02\",\n  \"end_date\": \"2026-10-02\",\n  \"period\": \"day\",\n  \"overall\": {\n    \"days_with_data\": 1,\n    \"calendar_days\": 1,\n    \"coverage_pct\": 100.0,\n    \"mean\": 101.0,\n    \"median\": 101.0,\n    \"min\": 101.0,\n    \"max\": 101.0\n  },\n  \"periods\": [\n    {\n      \"period\": \"2026-10-02\",\n      \"days_with_data\": 1,\n      \"calendar_days\": 1,\n      \"mean\": 101.0,\n      \"min\": 101.0,\n      \"max\": 101.0\n    }\n  ],\n  \"trend\": {\n    \"available\": false,\n    \"reason\": \"fewer than 6 days with data\"\n  },\n  \"definition\": \"Per-day statistics of heart rate samples (bpm). The mean is sample-weighted (not time-weighted) because sampling density varies with activity and device. Google heart rate is imported only around workouts unless full_heart_rate was used, so Google statistics describe exercise periods, not whole days.\",\n  \"exclusions\": {},\n  \"overall_min\": 100.0,\n  \"overall_max\": 102.0,\n  \"samples\": 3,\n  \"caveats\": [\n    \"Means are over days with data only; missing days are not treated as zero.\",\n    \"Dates are the provider's calendar dates (account/device time zone).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metric": "heart_rate",
+          "unit": "bpm",
+          "provider_used": "google",
+          "other_providers_with_data": [],
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02",
+          "period": "day",
+          "overall": {
+            "days_with_data": 1,
+            "calendar_days": 1,
+            "coverage_pct": 100.0,
+            "mean": 101.0,
+            "median": 101.0,
+            "min": 101.0,
+            "max": 101.0
+          },
+          "periods": [
+            {
+              "period": "2026-10-02",
+              "days_with_data": 1,
+              "calendar_days": 1,
+              "mean": 101.0,
+              "min": 101.0,
+              "max": 101.0
+            }
+          ],
+          "trend": {
+            "available": false,
+            "reason": "fewer than 6 days with data"
+          },
+          "definition": "Per-day statistics of heart rate samples (bpm). The mean is sample-weighted (not time-weighted) because sampling density varies with activity and device. Google heart rate is imported only around workouts unless full_heart_rate was used, so Google statistics describe exercise periods, not whole days.",
+          "exclusions": {},
+          "overall_min": 100.0,
+          "overall_max": 102.0,
+          "samples": 3,
+          "caveats": [
+            "Means are over days with data only; missing days are not treated as zero.",
+            "Dates are the provider's calendar dates (account/device time zone)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0007,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "heart_rate",
+            "local_date": "2026-10-02",
+            "value": 100.0,
+            "unit": "bpm",
+            "record_key": "0",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "heart_rate",
+            "local_date": "2026-10-02",
+            "value": 101.0,
+            "unit": "bpm",
+            "record_key": "1",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "heart_rate",
+            "local_date": "2026-10-02",
+            "value": 102.0,
+            "unit": "bpm",
+            "record_key": "2",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "heart_rate",
+        "local_date": "2026-10-02",
+        "value": 100.0,
+        "unit": "bpm",
+        "record_key": "0",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "heart_rate",
+        "local_date": "2026-10-02",
+        "value": 101.0,
+        "unit": "bpm",
+        "record_key": "1",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "heart_rate",
+        "local_date": "2026-10-02",
+        "value": 102.0,
+        "unit": "bpm",
+        "record_key": "2",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "heart_rate",
+        "local_date": "2026-10-02",
+        "value": 100.0,
+        "unit": "bpm",
+        "record_key": "0",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "heart_rate",
+        "local_date": "2026-10-02",
+        "value": 101.0,
+        "unit": "bpm",
+        "record_key": "1",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "heart_rate",
+        "local_date": "2026-10-02",
+        "value": 102.0,
+        "unit": "bpm",
+        "record_key": "2",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 2,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "0719114de309e0053410996840d67643c33cbf8932a0c29ddef737a6817843bd"
+}

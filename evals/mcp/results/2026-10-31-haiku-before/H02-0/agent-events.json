@@ -1,0 +1,255 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HMuYyGHeQ4bioi6qPcSWGB",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google is connected and the sleep and activity permissions are granted. Starting the import for October 1\u20133."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01UFy5mPMt2aKKHLagNEcAYH",
+        "name": "mcp__fitbit_eval__start_import",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity",
+            "sleep"
+          ],
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "include_unverified_types": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RnDxdmEdXpeHaf2QYvtFKh",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_0d5182581ed3"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01XRqFivAZraUgBPmPyejXxc",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01LNduTMBiDuurmBeauEPEjd",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "provider": "google",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The sleep request came back as a 403 permission error. The tool suggests resume_job retries failed requests, so I'll try once before concluding."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01T7VzM5rTstLnSVnjJ8kLMN",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_0d5182581ed3"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012HJyS4C9DcQwG3wRMceVJC",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_0d5182581ed3"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I couldn't get your sleep data for October 1\u20133, so I can't give you an average. This is a permissions failure, not zero sleep.\n\n**What happened**\n- The Google import for October 1\u20133 finished as \"partial.\" Activity imported with 3 daily step records, one for each day.\n- The sleep request returned `HTTP 403: PERMISSION_DENIED`. I retried it once and got the same error.\n- Because sleep failed, there are no sleep records for those dates. The database has no sleep rows at all, so the query returned \"no local records\" rather than a sleep total.\n- Most other activity metrics (distance, calories, active minutes, heart-rate zones, and so on) returned successfully but empty. That's most likely because your device or account has no data for those types in that window, not a permissions problem.\n\n**The conflict**\nThe connection check reports `sleep` as a granted permission, but Google's API rejected the sleep request anyway. The most likely cause is a permission grant that is stale or incomplete on the Google side. Re-authorizing should fix it. The app's Google access also uses a consent screen in Testing mode, where tokens expire after 7 days, so an old token can cause this too.\n\n**Next steps**\n- Run `ghealth auth login` to refresh Google credentials, then tell me and I'll re-import sleep for October 1\u20133. Alternatively, I can start a browser reconnect with `connect_account` if you'd rather do that. I haven't started either one, since both need your action.\n- If the 403 persists after re-authorizing, check that the sleep permission is enabled for this app in your Google account's connected-apps settings.\n- If you can't get API access, you can export your Google Takeout data and import it with `import_takeout`, which includes sleep.\n\nOnce sleep data is in, I'll calculate the average for the nights you asked about."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I couldn't get your sleep data for October 1\u20133, so I can't give you an average. This is a permissions failure, not zero sleep.\n\n**What happened**\n- The Google import for October 1\u20133 finished as \"partial.\" Activity imported with 3 daily step records, one for each day.\n- The sleep request returned `HTTP 403: PERMISSION_DENIED`. I retried it once and got the same error.\n- Because sleep failed, there are no sleep records for those dates. The database has no sleep rows at all, so the query returned \"no local records\" rather than a sleep total.\n- Most other activity metrics (distance, calories, active minutes, heart-rate zones, and so on) returned successfully but empty. That's most likely because your device or account has no data for those types in that window, not a permissions problem.\n\n**The conflict**\nThe connection check reports `sleep` as a granted permission, but Google's API rejected the sleep request anyway. The most likely cause is a permission grant that is stale or incomplete on the Google side. Re-authorizing should fix it. The app's Google access also uses a consent screen in Testing mode, where tokens expire after 7 days, so an old token can cause this too.\n\n**Next steps**\n- Run `ghealth auth login` to refresh Google credentials, then tell me and I'll re-import sleep for October 1\u20133. Alternatively, I can start a browser reconnect with `connect_account` if you'd rather do that. I haven't started either one, since both need your action.\n- If the 403 persists after re-authorizing, check that the sleep permission is enabled for this app in your Google account's connected-apps settings.\n- If you can't get API access, you can export your Google Takeout data and import it with `import_takeout`, which includes sleep.\n\nOnce sleep data is in, I'll calculate the average for the nights you asked about.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 1746,
+        "cacheReadInputTokens": 56055,
+        "cacheCreationInputTokens": 5542,
+        "webSearchRequests": 0,
+        "costUSD": 0.0025433500000000006,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 408,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 5542,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0025433500000000006,
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 5542,
+      "cache_read_input_tokens": 56055,
+      "output_tokens": 1746,
+      "output_tokens_details": {
+        "thinking_tokens": 408
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 5542,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 720,
+          "cache_read_input_tokens": 10593,
+          "cache_creation_input_tokens": 596,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 596
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

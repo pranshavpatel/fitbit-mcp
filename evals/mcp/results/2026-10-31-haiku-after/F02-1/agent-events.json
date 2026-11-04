@@ -1,0 +1,140 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019fbdHm3esfbPo8zubjENCz",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Dzf6UmeGKNYtMR27zN5JQA",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "weight",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Average weight on October 1\u20132, 2026: 72.57 kg**, but that figure comes from October 1 only.\n\n- **October 1:** 72.57 kg. This is the only day with a usable reading.\n- **October 2:** no value counted. The one reading that day has an unknown unit in the Fitbit Takeout export, so it was excluded from the kilogram summary.\n\n**Readings not counted:**\n1. **October 2 reading:** excluded because its unit is unknown. Its actual value can't be determined from the export.\n2. **One October 1 reading:** October 1 has two weight records, one in grams and one in pounds. The summary uses one value per day, the last measurement, so the other was not counted in the average.\n\nBecause October 2 has no usable value, the 72.57 kg figure is a single-day result, not a two-day average."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Average weight on October 1\u20132, 2026: 72.57 kg**, but that figure comes from October 1 only.\n\n- **October 1:** 72.57 kg. This is the only day with a usable reading.\n- **October 2:** no value counted. The one reading that day has an unknown unit in the Fitbit Takeout export, so it was excluded from the kilogram summary.\n\n**Readings not counted:**\n1. **October 2 reading:** excluded because its unit is unknown. Its actual value can't be determined from the export.\n2. **One October 1 reading:** October 1 has two weight records, one in grams and one in pounds. The summary uses one value per day, the last measurement, so the other was not counted in the average.\n\nBecause October 2 has no usable value, the 72.57 kg figure is a single-day result, not a two-day average.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 872,
+        "cacheReadInputTokens": 12851,
+        "cacheCreationInputTokens": 2216,
+        "webSearchRequests": 0,
+        "costUSD": 0.00100811,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 426,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2216,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00100811,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2216,
+      "cache_read_input_tokens": 12851,
+      "output_tokens": 872,
+      "output_tokens_details": {
+        "thinking_tokens": 426
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2216,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 550,
+          "cache_read_input_tokens": 6785,
+          "cache_creation_input_tokens": 1497,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1497
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

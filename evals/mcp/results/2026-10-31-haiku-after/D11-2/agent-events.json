@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Uijh9aUrWiA4g9Gkbd5m2U",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01C1WsfJ1AqyamYtCYjdGQsP",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "blood_glucose",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019i8YJ1SvaDgWFUqSBZUPjL",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't tell you your blood glucose for October 2, 2026, because there is no blood glucose data on this machine.\n\n- **Local data:** The database has no blood glucose records at all. The only data present is step counts for October 1\u20133, 2026.\n- **Connection:** Google Health isn't connected, and the Fitbit provider isn't either. So nothing has been imported from either source.\n\nTo get the reading, you have two options:\n\n1. **Connect your account and import.** I can start the Google connection, then import blood glucose. Be aware that the Google consent screen is in Testing mode, so refresh tokens expire after 7 days. Also, your account may not have blood glucose data at all, since it's only available if you log readings in an app or device that syncs to Google Health.\n2. **Import a Google Takeout export.** If you have one that includes blood glucose, I can import it without API access.\n\nIf you want, tell me which option you'd like and I'll start it."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't tell you your blood glucose for October 2, 2026, because there is no blood glucose data on this machine.\n\n- **Local data:** The database has no blood glucose records at all. The only data present is step counts for October 1\u20133, 2026.\n- **Connection:** Google Health isn't connected, and the Fitbit provider isn't either. So nothing has been imported from either source.\n\nTo get the reading, you have two options:\n\n1. **Connect your account and import.** I can start the Google connection, then import blood glucose. Be aware that the Google consent screen is in Testing mode, so refresh tokens expire after 7 days. Also, your account may not have blood glucose data at all, since it's only available if you log readings in an app or device that syncs to Google Health.\n2. **Import a Google Takeout export.** If you have one that includes blood glucose, I can import it without API access.\n\nIf you want, tell me which option you'd like and I'll start it.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 666,
+        "cacheReadInputTokens": 20162,
+        "cacheCreationInputTokens": 2085,
+        "webSearchRequests": 0,
+        "costUSD": 0.0009522200000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 169,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2085,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0009522200000000001,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2085,
+      "cache_read_input_tokens": 20162,
+      "output_tokens": 666,
+      "output_tokens_details": {
+        "thinking_tokens": 169
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2085,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 299,
+          "cache_read_input_tokens": 7326,
+          "cache_creation_input_tokens": 818,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 818
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

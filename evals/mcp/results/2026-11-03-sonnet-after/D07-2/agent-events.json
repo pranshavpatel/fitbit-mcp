@@ -1,0 +1,147 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TipzETAbCmKUAMLVRQFMgs",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "limit": 10
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0124dju3ZGnDMJMb6VZ4Xtdg",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_d14b6c749914"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011QVRwnKKEvvwQ9bisFy5Xr",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_d14b6c749914"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your cancelled Google import (job_d14b6c749914) has been resumed and has finished. It succeeded.\n\n- **Scope:** activity data for 2026-10-01 to 2026-10-03.\n- **Requests:** all 18 completed. 4 had finished before the cancellation, and the other 14 ran after the resume.\n- **Records:** 3 new records were inserted. None were updated or marked as deleted.\n\nIt finished within a few seconds of resuming, so you don't need to wait on anything."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your cancelled Google import (job_d14b6c749914) has been resumed and has finished. It succeeded.\n\n- **Scope:** activity data for 2026-10-01 to 2026-10-03.\n- **Requests:** all 18 completed. 4 had finished before the cancellation, and the other 14 ran after the resume.\n- **Records:** 3 new records were inserted. None were updated or marked as deleted.\n\nIt finished within a few seconds of resuming, so you don't need to wait on anything.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 363,
+        "cacheReadInputTokens": 27857,
+        "cacheCreationInputTokens": 2212,
+        "webSearchRequests": 0,
+        "costUSD": 0.015279699999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2212,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.015279699999999998,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2212,
+      "cache_read_input_tokens": 27857,
+      "output_tokens": 363,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2212,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 164,
+          "cache_read_input_tokens": 7754,
+          "cache_creation_input_tokens": 521,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 521
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

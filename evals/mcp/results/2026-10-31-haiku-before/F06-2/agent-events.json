@@ -1,0 +1,103 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're at rest, usually measured after you've been still or asleep for a while. It's a single number, typically taken as an average over a period, and a lower RHR generally means your heart is working less hard at rest. It tends to fall with regular aerobic fitness and rise with stress, illness, poor sleep, dehydration, alcohol, or heat.\n\n**Heart rate variability (HRV)** is the variation in the time between consecutive heartbeats, measured in milliseconds. A beat-to-beat interval that changes more (higher HRV) generally reflects a nervous system that's flexibly switching between its \"rest and recover\" and \"fight or flight\" branches. HRV is usually reported as a rolling average, often from overnight readings, and it's very person-specific, so what matters most is your trend against your own baseline. It's typically lower with fatigue, stress, illness, or heavy training load, and higher with good recovery.\n\n**The key differences:**\n\n- **What they measure:** RHR is the *rate* (how fast your heart beats). HRV is the *variability* (how much the spacing between beats changes).\n- **Direction:** Good recovery usually means a lower RHR and a higher HRV. Both often move in the opposite direction when you're stressed or run down, but not always.\n- **Interpretation:** RHR is somewhat easier to compare across people, with a common adult range of roughly 60\u2013100 bpm and lower values often seen in fit people. HRV has no universal \"normal\" number, so it's only meaningful relative to your own history.\n- **Sensitivity:** HRV tends to react more quickly and more sensitively to day-to-day changes in stress, sleep, and training. RHR changes more slowly and is steadier.\n- **Measurement:** RHR is simple to measure. HRV depends on the method, timing, and device, and readings can be noisy, so single readings are less reliable than trends.\n\nNeither metric is a diagnosis. If you notice a sustained change in resting heart rate or other symptoms like dizziness, chest pain, or shortness of breath, it's worth talking to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're at rest, usually measured after you've been still or asleep for a while. It's a single number, typically taken as an average over a period, and a lower RHR generally means your heart is working less hard at rest. It tends to fall with regular aerobic fitness and rise with stress, illness, poor sleep, dehydration, alcohol, or heat.\n\n**Heart rate variability (HRV)** is the variation in the time between consecutive heartbeats, measured in milliseconds. A beat-to-beat interval that changes more (higher HRV) generally reflects a nervous system that's flexibly switching between its \"rest and recover\" and \"fight or flight\" branches. HRV is usually reported as a rolling average, often from overnight readings, and it's very person-specific, so what matters most is your trend against your own baseline. It's typically lower with fatigue, stress, illness, or heavy training load, and higher with good recovery.\n\n**The key differences:**\n\n- **What they measure:** RHR is the *rate* (how fast your heart beats). HRV is the *variability* (how much the spacing between beats changes).\n- **Direction:** Good recovery usually means a lower RHR and a higher HRV. Both often move in the opposite direction when you're stressed or run down, but not always.\n- **Interpretation:** RHR is somewhat easier to compare across people, with a common adult range of roughly 60\u2013100 bpm and lower values often seen in fit people. HRV has no universal \"normal\" number, so it's only meaningful relative to your own history.\n- **Sensitivity:** HRV tends to react more quickly and more sensitively to day-to-day changes in stress, sleep, and training. RHR changes more slowly and is steadier.\n- **Measurement:** RHR is simple to measure. HRV depends on the method, timing, and device, and readings can be noisy, so single readings are less reliable than trends.\n\nNeither metric is a diagnosis. If you notice a sustained change in resting heart rate or other symptoms like dizziness, chest pain, or shortness of breath, it's worth talking to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 776,
+        "cacheReadInputTokens": 5932,
+        "cacheCreationInputTokens": 667,
+        "webSearchRequests": 0,
+        "costUSD": 0.00058092,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 74,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 667,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00058092,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 667,
+      "cache_read_input_tokens": 5932,
+      "output_tokens": 776,
+      "output_tokens_details": {
+        "thinking_tokens": 74
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 667,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 776,
+          "cache_read_input_tokens": 5932,
+          "cache_creation_input_tokens": 667,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 667
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

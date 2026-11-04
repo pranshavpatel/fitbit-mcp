@@ -1,0 +1,169 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_018Rcr8teZ4NhTust6GaAZHC",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01GTCPt9gV4aW5Q5CyBTusMs",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMSIsImlkIjo1LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01WmXrFSY6uPL1AcSLmasyLx",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "exercise",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjo3LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "There are five Google workouts from October 1 through October 3, 2026. Each one's duration is recorded in minutes.\n\n| Date | Source ID | Duration |\n|---|---|---|\n| Oct 1, 2026 | workout-0 | 20 min |\n| Oct 1, 2026 | workout-1 | 30 min |\n| Oct 2, 2026 | workout-2 | 40 min |\n| Oct 2, 2026 | workout-3 | 50 min |\n| Oct 3, 2026 | workout-4 | 60 min |\n\nI fetched the records in three requests of at most two each, and the last page had no further cursor, so the list is complete for this local data. Total workout time across the five is 200 minutes.\n\nThe local data only covers what has been imported, so workouts that haven't synced won't appear here. The records also carry a \"synthetic\" parser tag, which suggests they may be test data rather than your real workouts."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "There are five Google workouts from October 1 through October 3, 2026. Each one's duration is recorded in minutes.\n\n| Date | Source ID | Duration |\n|---|---|---|\n| Oct 1, 2026 | workout-0 | 20 min |\n| Oct 1, 2026 | workout-1 | 30 min |\n| Oct 2, 2026 | workout-2 | 40 min |\n| Oct 2, 2026 | workout-3 | 50 min |\n| Oct 3, 2026 | workout-4 | 60 min |\n\nI fetched the records in three requests of at most two each, and the last page had no further cursor, so the list is complete for this local data. Total workout time across the five is 200 minutes.\n\nThe local data only covers what has been imported, so workouts that haven't synced won't appear here. The records also carry a \"synthetic\" parser tag, which suggests they may be test data rather than your real workouts.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1095,
+        "cacheReadInputTokens": 27905,
+        "cacheCreationInputTokens": 3100,
+        "webSearchRequests": 0,
+        "costUSD": 0.00144735,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 165,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3100,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00144735,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 3100,
+      "cache_read_input_tokens": 27905,
+      "output_tokens": 1095,
+      "output_tokens_details": {
+        "thinking_tokens": 165
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3100,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 319,
+          "cache_read_input_tokens": 8208,
+          "cache_creation_input_tokens": 539,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 539
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,179 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01QEBmSoHUJ3uAQG8ZgRNNot",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RvMwPxFqjxiTjarsPEPYfW",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013JJA5iJomL81T9WmhW7jpr",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMSIsImlkIjo1LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019CKxhPw5u4NNKVsEm9LpcE",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjo3LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "There are five Google workouts from October 1 through October 3, 2026. I pulled them two at a time, and the last page returned one record, so nothing is missing.\n\n| Date | Source ID | Duration |\n|---|---|---|\n| Oct 1, 2026 (10:00 AM) | workout-0 | 20 min |\n| Oct 1, 2026 (10:00 AM) | workout-1 | 30 min |\n| Oct 2, 2026 (10:00 AM) | workout-2 | 40 min |\n| Oct 2, 2026 (10:00 AM) | workout-3 | 50 min |\n| Oct 3, 2026 (10:00 AM) | workout-4 | 60 min |\n\nAll five records are active and unrevised. The start times are local times as recorded by Google. The durations are the session durations stored locally, and I did not compute any totals or averages from them."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "There are five Google workouts from October 1 through October 3, 2026. I pulled them two at a time, and the last page returned one record, so nothing is missing.\n\n| Date | Source ID | Duration |\n|---|---|---|\n| Oct 1, 2026 (10:00 AM) | workout-0 | 20 min |\n| Oct 1, 2026 (10:00 AM) | workout-1 | 30 min |\n| Oct 2, 2026 (10:00 AM) | workout-2 | 40 min |\n| Oct 2, 2026 (10:00 AM) | workout-3 | 50 min |\n| Oct 3, 2026 (10:00 AM) | workout-4 | 60 min |\n\nAll five records are active and unrevised. The start times are local times as recorded by Google. The durations are the session durations stored locally, and I did not compute any totals or averages from them.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1088,
+        "cacheReadInputTokens": 37381,
+        "cacheCreationInputTokens": 3383,
+        "webSearchRequests": 0,
+        "costUSD": 0.0015954100000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 131,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3383,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0015954100000000002,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 3383,
+      "cache_read_input_tokens": 37381,
+      "output_tokens": 1088,
+      "output_tokens_details": {
+        "thinking_tokens": 131
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3383,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 287,
+          "cache_read_input_tokens": 8911,
+          "cache_creation_input_tokens": 546,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 546
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

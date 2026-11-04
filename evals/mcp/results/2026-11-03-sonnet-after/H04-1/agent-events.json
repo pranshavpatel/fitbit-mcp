@@ -1,0 +1,182 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014ZGySUEGRRMjXNYkHKuHy2",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01KLLoywffs3iNvbGt2HnwZo",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google isn't connected, but some local sleep data exists. I'll summarize that."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0146U1YQjUW77jqLF6v1kfug",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01KLTo3FhFkFKC6wNbNaAegn",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-25",
+          "end_date": "2026-11-02",
+          "include_original": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Sleep summary for Mon Oct 26 \u2013 Sun Nov 1, 2026 (Google, New York time)**\n\nOnly one night of sleep data is stored for that week, so this isn't a full weekly picture.\n\n- **Night with data:** You slept 7 hours (420 minutes) from 11:00 PM Sat Oct 31 to 7:00 AM Sun Nov 1. It's filed under **Sunday, Nov 1**.\n- **No data:** There are no records for Oct 26\u201331. These days are missing, not zero sleep. I left them out of the average.\n- **Coverage:** 1 of 7 days (14%). The 7-hour figure is that single night, not a weekly average. There are too few days to show a trend.\n\n**How overnight dates work:** Each sleep session is filed under the date you woke up, not the date you went to bed. The Saturday-night sleep therefore counts as Sunday, Nov 1. A Sunday-night (Nov 1) sleep would be filed under Monday, Nov 2, which is outside last week. Sleep that began on Sunday, Oct 25 and ended on Monday, Oct 26 would count in your week.\n\n**Limitations:**\n- Google isn't currently connected. Its credentials weren't found, so I couldn't sync newer data. The stored record may be incomplete.\n- The one record is labeled as a synthetic evaluation record by its parser. I'd treat it as test data rather than a real measurement.\n- The record has no sleep-stage detail, only total minutes asleep.\n\nTo fill in the other nights, reconnect Google by running `ghealth auth login` or by using the browser connect option. Then I can sync and re-run the summary. If you have a Takeout export, I can import that instead."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Sleep summary for Mon Oct 26 \u2013 Sun Nov 1, 2026 (Google, New York time)**\n\nOnly one night of sleep data is stored for that week, so this isn't a full weekly picture.\n\n- **Night with data:** You slept 7 hours (420 minutes) from 11:00 PM Sat Oct 31 to 7:00 AM Sun Nov 1. It's filed under **Sunday, Nov 1**.\n- **No data:** There are no records for Oct 26\u201331. These days are missing, not zero sleep. I left them out of the average.\n- **Coverage:** 1 of 7 days (14%). The 7-hour figure is that single night, not a weekly average. There are too few days to show a trend.\n\n**How overnight dates work:** Each sleep session is filed under the date you woke up, not the date you went to bed. The Saturday-night sleep therefore counts as Sunday, Nov 1. A Sunday-night (Nov 1) sleep would be filed under Monday, Nov 2, which is outside last week. Sleep that began on Sunday, Oct 25 and ended on Monday, Oct 26 would count in your week.\n\n**Limitations:**\n- Google isn't currently connected. Its credentials weren't found, so I couldn't sync newer data. The stored record may be incomplete.\n- The one record is labeled as a synthetic evaluation record by its parser. I'd treat it as test data rather than a real measurement.\n- The record has no sleep-stage detail, only total minutes asleep.\n\nTo fill in the other nights, reconnect Google by running `ghealth auth login` or by using the browser connect option. Then I can sync and re-run the summary. If you have a Takeout export, I can import that instead.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1360,
+        "cacheReadInputTokens": 20619,
+        "cacheCreationInputTokens": 3550,
+        "webSearchRequests": 0,
+        "costUSD": 0.0298739,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 342,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3550,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0298739,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 3550,
+      "cache_read_input_tokens": 20619,
+      "output_tokens": 1360,
+      "output_tokens_details": {
+        "thinking_tokens": 342
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3550,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 570,
+          "cache_read_input_tokens": 8064,
+          "cache_creation_input_tokens": 1269,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1269
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

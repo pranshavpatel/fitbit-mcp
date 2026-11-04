@@ -1,0 +1,162 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Wfwb4qSjCjmBkyPFZz38k6",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0128kWhNhPc4KohB2BMKcuGo",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013RbeV7vRAP5Zk8CNtk9w7C",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "sleep",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't give you a full week summary yet. Your Google account isn't connected, and the only local sleep data is one night.\n\n**What's available for Monday, Oct 26 through Sunday, Nov 1:**\n- **Nov 1 (Sunday):** one sleep session, 420 minutes (7 hours) asleep. It ran from 11:00 PM Saturday, Oct 31 to 7:00 AM Sunday, Nov 1.\n- **Oct 26 through Oct 31:** no local records. These days are missing, not zero.\n\n**How overnight sleep is dated:** Google assigns each sleep session to the calendar date it ends on. A night that starts Saturday at 11 PM and ends Sunday at 7 AM counts as Sunday. So \"last week's\" sleep includes the Saturday-night sleep that ends on Sunday, Nov 1, but not the Sunday-night sleep that ends Monday, Nov 2.\n\n**Other limitations:**\n- The one record is labeled with the parser \"eval-synthetic,\" so it may not be a real export from your account. Please check it before relying on it.\n- Your system date is Nov 2, so I treated \"last week\" as Oct 26 to Nov 1. The environment note said Oct 31, which would make this week incomplete.\n\n**To get the full week:** Google needs a verified connection first. I can start the connection, but it opens a browser sign-in that you have to complete. Or you can run `ghealth auth login` yourself, which I can then pick up. Once connected, I'll sync and rerun the summary. Should I start the connection?"
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't give you a full week summary yet. Your Google account isn't connected, and the only local sleep data is one night.\n\n**What's available for Monday, Oct 26 through Sunday, Nov 1:**\n- **Nov 1 (Sunday):** one sleep session, 420 minutes (7 hours) asleep. It ran from 11:00 PM Saturday, Oct 31 to 7:00 AM Sunday, Nov 1.\n- **Oct 26 through Oct 31:** no local records. These days are missing, not zero.\n\n**How overnight sleep is dated:** Google assigns each sleep session to the calendar date it ends on. A night that starts Saturday at 11 PM and ends Sunday at 7 AM counts as Sunday. So \"last week's\" sleep includes the Saturday-night sleep that ends on Sunday, Nov 1, but not the Sunday-night sleep that ends Monday, Nov 2.\n\n**Other limitations:**\n- The one record is labeled with the parser \"eval-synthetic,\" so it may not be a real export from your account. Please check it before relying on it.\n- Your system date is Nov 2, so I treated \"last week\" as Oct 26 to Nov 1. The environment note said Oct 31, which would make this week incomplete.\n\n**To get the full week:** Google needs a verified connection first. I can start the connection, but it opens a browser sign-in that you have to complete. Or you can run `ghealth auth login` yourself, which I can then pick up. Once connected, I'll sync and rerun the summary. Should I start the connection?",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1716,
+        "cacheReadInputTokens": 20663,
+        "cacheCreationInputTokens": 2771,
+        "webSearchRequests": 0,
+        "costUSD": 0.00161943,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 916,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2771,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00161943,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2771,
+      "cache_read_input_tokens": 20663,
+      "output_tokens": 1716,
+      "output_tokens_details": {
+        "thinking_tokens": 916
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2771,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 813,
+          "cache_read_input_tokens": 8116,
+          "cache_creation_input_tokens": 595,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 595
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

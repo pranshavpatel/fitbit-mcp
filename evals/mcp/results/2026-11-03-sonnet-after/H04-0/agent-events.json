@@ -1,0 +1,137 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01BfDxHa41QPan6oC2Z2TJau",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01YMcBZ9NqpU51sUPEepJfYb",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Last week was Monday, Oct 26 through Sunday, Nov 1, 2026 (New York time). Your Google sleep data for that week is very sparse.\n\n- **Nights with data:** 1 of 7 (14% coverage).\n- **Sunday, Nov 1:** 420 minutes asleep (7 hours). This is the only night recorded, so it is also the minimum, maximum and average.\n- **Oct 26\u201331:** no sleep records. These days are missing, not zero hours of sleep.\n- **Trend:** none, because a trend needs at least 6 days of data.\n\n**How overnight dates work:** Sleep is filed under the date you wake up, not the date you fell asleep. The Nov 1 entry is therefore a night that ended on Sunday morning, so you went to bed Saturday night, Oct 31. Sleep from Sunday night, Nov 1, would be filed under Monday, Nov 2, so it falls in this week and not in the week I summarized. The dates follow the provider's calendar, which is New York time here. Naps count toward the total, and the longest session is reported as the main sleep. That session was the whole 420 minutes.\n\n**Limitations:**\n- The connection status shows Google isn't currently connected. There are no valid credentials, and the ghealth CLI credentials weren't found. I could only read what was already stored locally, so the missing nights may just not have been imported. I haven't synced anything.\n- To fill the gaps, you would need to re-authenticate (`ghealth auth login`) and then sync. Alternatively, you could import a Google Takeout export. Tell me if you want to try either.\n- Your system date reads Nov 2 in one place and Nov 3 in another. The week comes out the same either way."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Last week was Monday, Oct 26 through Sunday, Nov 1, 2026 (New York time). Your Google sleep data for that week is very sparse.\n\n- **Nights with data:** 1 of 7 (14% coverage).\n- **Sunday, Nov 1:** 420 minutes asleep (7 hours). This is the only night recorded, so it is also the minimum, maximum and average.\n- **Oct 26\u201331:** no sleep records. These days are missing, not zero hours of sleep.\n- **Trend:** none, because a trend needs at least 6 days of data.\n\n**How overnight dates work:** Sleep is filed under the date you wake up, not the date you fell asleep. The Nov 1 entry is therefore a night that ended on Sunday morning, so you went to bed Saturday night, Oct 31. Sleep from Sunday night, Nov 1, would be filed under Monday, Nov 2, so it falls in this week and not in the week I summarized. The dates follow the provider's calendar, which is New York time here. Naps count toward the total, and the longest session is reported as the main sleep. That session was the whole 420 minutes.\n\n**Limitations:**\n- The connection status shows Google isn't currently connected. There are no valid credentials, and the ghealth CLI credentials weren't found. I could only read what was already stored locally, so the missing nights may just not have been imported. I haven't synced anything.\n- To fill the gaps, you would need to re-authenticate (`ghealth auth login`) and then sync. Alternatively, you could import a Google Takeout export. Tell me if you want to try either.\n- Your system date reads Nov 2 in one place and Nov 3 in another. The week comes out the same either way.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 953,
+        "cacheReadInputTokens": 12556,
+        "cacheCreationInputTokens": 2444,
+        "webSearchRequests": 0,
+        "costUSD": 0.0205696,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 187,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2444,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0205696,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2444,
+      "cache_read_input_tokens": 12556,
+      "output_tokens": 953,
+      "output_tokens_details": {
+        "thinking_tokens": 187
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2444,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 566,
+          "cache_read_input_tokens": 6773,
+          "cache_creation_input_tokens": 1454,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1454
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

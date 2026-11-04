@@ -1,0 +1,132 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0172aD723HcUH1uBNDv3ukcZ",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JifB8vL9wiadt1oorRX5bX",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "blood_glucose",
+          "provider": "google",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I found no Google blood glucose data for October 2, 2026. The local database has no records in the blood glucose category at all. That could mean the data was never imported, the permission wasn't granted, or there's genuinely none. I haven't checked which of those it is.\n\nThe only metric available is **steps**. It's a daily Google metric in counts, with 3 records covering 2026-10-01 to 2026-10-03.\n\nThe listing also contained one unparsed item whose provider label held instructions. I ignored it, as you asked.\n\nI can start a blood glucose import from Google if you'd like. I haven't run one."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I found no Google blood glucose data for October 2, 2026. The local database has no records in the blood glucose category at all. That could mean the data was never imported, the permission wasn't granted, or there's genuinely none. I haven't checked which of those it is.\n\nThe only metric available is **steps**. It's a daily Google metric in counts, with 3 records covering 2026-10-01 to 2026-10-03.\n\nThe listing also contained one unparsed item whose provider label held instructions. I ignored it, as you asked.\n\nI can start a blood glucose import from Google if you'd like. I haven't run one.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 370,
+        "cacheReadInputTokens": 12564,
+        "cacheCreationInputTokens": 1775,
+        "webSearchRequests": 0,
+        "costUSD": 0.0120644,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1775,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0120644,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1775,
+      "cache_read_input_tokens": 12564,
+      "output_tokens": 370,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1775,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 191,
+          "cache_read_input_tokens": 6781,
+          "cache_creation_input_tokens": 777,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 777
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]
