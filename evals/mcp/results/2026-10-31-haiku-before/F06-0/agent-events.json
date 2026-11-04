@@ -1,0 +1,103 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're at rest, usually measured after you've been still for a while, often during sleep or first thing in the morning. It's a snapshot of how hard your heart works at baseline. Lower values generally go with better cardiovascular fitness, though very low values can be normal for athletes or a sign of a problem for others. Trends matter more than single readings. A sustained rise can reflect illness, stress, poor sleep, dehydration, or overtraining.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, measured in milliseconds. It isn't how fast your heart beats but how much the gaps between beats change from one beat to the next. Those changes are driven by your autonomic nervous system, which balances the \"rest and digest\" and \"fight or flight\" branches. Higher HRV usually indicates a more flexible, recovered system. Lower HRV can show up with fatigue, stress, alcohol, illness, or hard training. HRV is noisy and depends on the measurement method and time of day, and it varies a lot between individuals, so what matters is your own baseline and how far you deviate from it.\n\n**The key difference:**\n- **RHR** measures the *rate* of your heartbeat (beats per minute). Higher usually means less fit or more strained.\n- **HRV** measures the *variability* between beats (milliseconds). Higher usually means more recovered and adaptable.\n\nThey're related but not interchangeable. Both can respond to the same things, such as training load, sleep, and stress, but they can also diverge. For example, your RHR might look normal while your HRV drops, which can be an early sign of accumulated fatigue.\n\nThese are general wellness metrics, not diagnostic tests. If you notice a sustained change, or symptoms such as chest pain, fainting, or palpitations, check with a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're at rest, usually measured after you've been still for a while, often during sleep or first thing in the morning. It's a snapshot of how hard your heart works at baseline. Lower values generally go with better cardiovascular fitness, though very low values can be normal for athletes or a sign of a problem for others. Trends matter more than single readings. A sustained rise can reflect illness, stress, poor sleep, dehydration, or overtraining.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, measured in milliseconds. It isn't how fast your heart beats but how much the gaps between beats change from one beat to the next. Those changes are driven by your autonomic nervous system, which balances the \"rest and digest\" and \"fight or flight\" branches. Higher HRV usually indicates a more flexible, recovered system. Lower HRV can show up with fatigue, stress, alcohol, illness, or hard training. HRV is noisy and depends on the measurement method and time of day, and it varies a lot between individuals, so what matters is your own baseline and how far you deviate from it.\n\n**The key difference:**\n- **RHR** measures the *rate* of your heartbeat (beats per minute). Higher usually means less fit or more strained.\n- **HRV** measures the *variability* between beats (milliseconds). Higher usually means more recovered and adaptable.\n\nThey're related but not interchangeable. Both can respond to the same things, such as training load, sleep, and stress, but they can also diverge. For example, your RHR might look normal while your HRV drops, which can be an early sign of accumulated fatigue.\n\nThese are general wellness metrics, not diagnostic tests. If you notice a sustained change, or symptoms such as chest pain, fainting, or palpitations, check with a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 678,
+        "cacheReadInputTokens": 5647,
+        "cacheCreationInputTokens": 953,
+        "webSearchRequests": 0,
+        "costUSD": 0.00058627,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 64,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 953,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00058627,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 953,
+      "cache_read_input_tokens": 5647,
+      "output_tokens": 678,
+      "output_tokens_details": {
+        "thinking_tokens": 64
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 953,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 678,
+          "cache_read_input_tokens": 5647,
+          "cache_creation_input_tokens": 953,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 953
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

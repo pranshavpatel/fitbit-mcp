@@ -37,6 +37,8 @@ INSTRUCTIONS = """Local, read-only access to the user's own Fitbit / Google Heal
 - Remote access is read-only. disconnect_account needs a confirmation_token that you obtain in a first call
   and may only send after the user explicitly agrees in the conversation.
 - Use list_data_types before querying. query_data and summarize_data read only the local database.
+- For averages, totals or trends use summarize_data, not raw query_data: only the summary applies the
+  no-wear, unit, provider and sleep rules.
 - Summaries explain their definition, coverage and exclusions; relay those caveats. Missing days are not zero.
 - This is not medical advice; suggest a clinician for health concerns."""
 
@@ -248,7 +250,9 @@ def create_server(app: App | None = None) -> MCPServer:
                    order: Literal["asc", "desc"] = "asc",
                    limit: Annotated[int, Field(ge=1, le=queries.MAX_QUERY_LIMIT)] = 100,
                    cursor: str | None = None) -> dict[str, Any]:
-        """Filter local records (dates are inclusive calendar dates). Paginate with next_cursor."""
+        """Raw local records (dates are inclusive calendar dates), paginated with next_cursor. For an average,
+        total, trend or day count use summarize_data instead: only it excludes no-wear days, converts or
+        excludes units, picks one provider when several overlap, and separates main sleep from naps."""
         return _wrap(queries.query)(app.store, category=category, metric=metric, start_date=start_date,
                                     end_date=end_date, provider=provider, granularity=granularity,
                                     min_value=min_value, max_value=max_value, include_deleted=include_deleted,
@@ -261,7 +265,9 @@ def create_server(app: App | None = None) -> MCPServer:
                        period: Literal["day", "week", "month"] = "week",
                        provider: Literal["fitbit", "google", "fitbit_takeout", "google_takeout"] | None = None
                        ) -> dict[str, Any]:
-        """Descriptive statistics and trend for one metric, with its definition, coverage and exclusions.
+        """Averages, totals and trend for one metric: use this, not query_data, for any statistic. Applies the
+        metric's definition (no-wear days excluded, units converted or unknown ones excluded, one provider
+        when several overlap, main sleep vs naps) and reports coverage and exclusions; relay them.
         Default range: the 30 days ending at the latest local data."""
         return _wrap(summaries.summarize)(app.store, metric, start_date, end_date, period, provider,
                                           app.settings.today())
@@ -546,10 +552,14 @@ def _disconnect(app: App, provider: str, revoke_remote: bool, delete_local: bool
                 return {"confirmation_required": True, "actions": actions, "confirmation_token": new,
                         "expires_in_seconds": 300,
                         "instruction": "Show these actions to the user. Only if they explicitly confirm, call "
-                                       "disconnect_account again with the same arguments and this token."}
+                                       "disconnect_account again with the same arguments and this token. Their "
+                                       "approval covers this token only, never a later one."}
             entry = pending.pop(token, None)
             if entry is None or entry[0] != fingerprint:
-                raise ToolError("Invalid or expired confirmation_token for these arguments; request a new one.")
+                raise ToolError("This confirmation_token is invalid or has expired, so nothing was changed. The "
+                                "user's approval covered only that token: to continue, call disconnect_account "
+                                "without a token for a fresh preview, show it to the user and wait for them to "
+                                "confirm again before sending the new token.")
     for job in app.jobs.active(provider=provider):
         app.jobs.cancel(job["id"])
     result: dict[str, Any] = {"provider": provider, "actions_performed": []}

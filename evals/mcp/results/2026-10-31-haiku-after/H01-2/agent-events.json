@@ -1,0 +1,144 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0113gPCdkP1JGFhq4m3f8Jyf",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013ofTpXpjrMqdPLnPDVDmQg",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes, the cached data is still readable, but your Google connection needs to be renewed before anything can be refreshed.\n\n**Steps, Google, October 1\u20133, 2026 (from local cache):**\n\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\nThe average was 2,000 steps per day, and all three days have data. The total for the three days is 6,000.\n\n**Connection limitation:** The connection check reports the Google token as invalid and reconnect-required, so there is no verified API connection right now. Google's consent screen is in Testing mode, and refresh tokens expire after 7 days in that mode. That's the likely cause of the expiry.\n\nThis means:\n- I can only read what was saved locally. I can't sync or check whether these numbers are the latest.\n- If the device or Google has newer or edited step data for these dates, it won't appear until you reconnect and sync.\n\n**To fix it:** Run `ghealth auth login` in your terminal. The server should pick up the new credentials after that. Once you've done that, I can verify the connection and re-sync October 1\u20133. Or, if you'd rather I start the reconnect from here, I can open a connection flow, which will ask you to approve in a browser."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Yes, the cached data is still readable, but your Google connection needs to be renewed before anything can be refreshed.\n\n**Steps, Google, October 1\u20133, 2026 (from local cache):**\n\n| Date | Steps |\n|---|---|\n| Oct 1 | 1,000 |\n| Oct 2 | 2,000 |\n| Oct 3 | 3,000 |\n\nThe average was 2,000 steps per day, and all three days have data. The total for the three days is 6,000.\n\n**Connection limitation:** The connection check reports the Google token as invalid and reconnect-required, so there is no verified API connection right now. Google's consent screen is in Testing mode, and refresh tokens expire after 7 days in that mode. That's the likely cause of the expiry.\n\nThis means:\n- I can only read what was saved locally. I can't sync or check whether these numbers are the latest.\n- If the device or Google has newer or edited step data for these dates, it won't appear until you reconnect and sync.\n\n**To fix it:** Run `ghealth auth login` in your terminal. The server should pick up the new credentials after that. Once you've done that, I can verify the connection and re-sync October 1\u20133. Or, if you'd rather I start the reconnect from here, I can open a connection flow, which will ask you to approve in a browser.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 917,
+        "cacheReadInputTokens": 12865,
+        "cacheCreationInputTokens": 2150,
+        "webSearchRequests": 0,
+        "costUSD": 0.0010175499999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 248,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2150,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0010175499999999999,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2150,
+      "cache_read_input_tokens": 12865,
+      "output_tokens": 917,
+      "output_tokens_details": {
+        "thinking_tokens": 248
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2150,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 551,
+          "cache_read_input_tokens": 6791,
+          "cache_creation_input_tokens": 1433,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1433
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

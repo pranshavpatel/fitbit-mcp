@@ -1,0 +1,141 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CPS92SEuWRFKXeMA6ytJgW",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TW41WW1wwAC8obHWKgThRA",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "include_deleted": true,
+          "limit": 500
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Weight, October 1\u20132, 2026 (in kilograms)**\n\n- **October 1, morning (7:00 AM):** 72.0 kg. The record is stored in grams (72,000 g).\n- **October 1, evening (8:00 PM):** 72.6 kg. The record is stored in pounds (160 lb), converted at 0.4536 kg per lb.\n- **October 1 average:** about 72.3 kg, from the two readings above.\n- **October 2, morning (7:00 AM):** no kilogram value. The reading is 158, but the unit is unknown.\n\n**Excluded measurement**\n\nThe October 2 reading (158, unit unknown) is left out of the kilogram figures. The import didn't record whether it was kilograms or pounds. If it were pounds, it would be about 71.7 kg; if kilograms, it would be 158 kg, which is far from the other readings. Check the original Fitbit entry to confirm the unit.\n\n**Other notes**\n\n- The two October 1 readings are about 0.6 kg apart, which is normal day-to-day variation for a scale.\n- All records come from a Google Takeout import, not a live API connection, so they reflect only what was in that export.\n- This is a summary of your logged data, not medical advice. If your weight is changing in a way that concerns you, a clinician can help interpret it."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Weight, October 1\u20132, 2026 (in kilograms)**\n\n- **October 1, morning (7:00 AM):** 72.0 kg. The record is stored in grams (72,000 g).\n- **October 1, evening (8:00 PM):** 72.6 kg. The record is stored in pounds (160 lb), converted at 0.4536 kg per lb.\n- **October 1 average:** about 72.3 kg, from the two readings above.\n- **October 2, morning (7:00 AM):** no kilogram value. The reading is 158, but the unit is unknown.\n\n**Excluded measurement**\n\nThe October 2 reading (158, unit unknown) is left out of the kilogram figures. The import didn't record whether it was kilograms or pounds. If it were pounds, it would be about 71.7 kg; if kilograms, it would be 158 kg, which is far from the other readings. Check the original Fitbit entry to confirm the unit.\n\n**Other notes**\n\n- The two October 1 readings are about 0.6 kg apart, which is normal day-to-day variation for a scale.\n- All records come from a Google Takeout import, not a live API connection, so they reflect only what was in that export.\n- This is a summary of your logged data, not medical advice. If your weight is changing in a way that concerns you, a clinician can help interpret it.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 1054,
+        "cacheReadInputTokens": 12245,
+        "cacheCreationInputTokens": 2605,
+        "webSearchRequests": 0,
+        "costUSD": 0.00117085,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 418,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2605,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00117085,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2605,
+      "cache_read_input_tokens": 12245,
+      "output_tokens": 1054,
+      "output_tokens_details": {
+        "thinking_tokens": 418
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2605,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 740,
+          "cache_read_input_tokens": 6598,
+          "cache_creation_input_tokens": 1654,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1654
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

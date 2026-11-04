@@ -1,0 +1,137 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01K9thoCGcZ36DNiFDo2JQW1",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Choqkn1QMosTY9PXAMbCck",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "all"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Metrics you have locally: one.**\n\n- **Steps** (Google provider, category `activity`): 3 daily records, from 2026-10-01 to 2026-10-03, unit: count. Those are the only dates with data.\n\n**Denied:**\n- **Google sleep:** the permission was denied (\"Synthetic permissions denied\"), last updated 2026-10-31.\n\n**No local records (not imported, not granted, denied, or genuinely empty):**\n- **Fitbit:** activity, body, cardio fitness, ECG, exercise, heart, IRN, nutrition, sleep, SpO2/breathing/temperature.\n- **Google:** blood glucose, body, cardio fitness, ECG, exercise, heart, IRN, nutrition, reproductive health, sleep, SpO2/breathing/temperature, symptoms and mood.\n\nThe tool doesn't say which of these are missing because they were never imported and which were simply not granted, so I can't tell them apart from this output.\n\n**Unsupported or unparsed:**\n- One Google body/weight file used a format the tool doesn't recognize. It's kept on disk, but none of its data is in the database.\n\n**Connection status:**\n- Neither provider is connected. Google has no tokens, and Fitbit has no tokens and is not configured.\n- The Fitbit legacy API is scheduled to shut off on 2026-10-30.\n- The steps data is from an earlier import, so it won't update until you reconnect.\n\nTwo notes: the system details give two different current dates (2026-10-07 and 2026-10-31), and the Fitbit shutoff countdown implies the earlier one. If you want more data, I can reconnect Google or import a Google Takeout export."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Metrics you have locally: one.**\n\n- **Steps** (Google provider, category `activity`): 3 daily records, from 2026-10-01 to 2026-10-03, unit: count. Those are the only dates with data.\n\n**Denied:**\n- **Google sleep:** the permission was denied (\"Synthetic permissions denied\"), last updated 2026-10-31.\n\n**No local records (not imported, not granted, denied, or genuinely empty):**\n- **Fitbit:** activity, body, cardio fitness, ECG, exercise, heart, IRN, nutrition, sleep, SpO2/breathing/temperature.\n- **Google:** blood glucose, body, cardio fitness, ECG, exercise, heart, IRN, nutrition, reproductive health, sleep, SpO2/breathing/temperature, symptoms and mood.\n\nThe tool doesn't say which of these are missing because they were never imported and which were simply not granted, so I can't tell them apart from this output.\n\n**Unsupported or unparsed:**\n- One Google body/weight file used a format the tool doesn't recognize. It's kept on disk, but none of its data is in the database.\n\n**Connection status:**\n- Neither provider is connected. Google has no tokens, and Fitbit has no tokens and is not configured.\n- The Fitbit legacy API is scheduled to shut off on 2026-10-30.\n- The steps data is from an earlier import, so it won't update until you reconnect.\n\nTwo notes: the system details give two different current dates (2026-10-07 and 2026-10-31), and the Fitbit shutoff countdown implies the earlier one. If you want more data, I can reconnect Google or import a Google Takeout export.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 1048,
+        "cacheReadInputTokens": 12519,
+        "cacheCreationInputTokens": 1834,
+        "webSearchRequests": 0,
+        "costUSD": 0.00101639,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 391,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1834,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00101639,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1834,
+      "cache_read_input_tokens": 12519,
+      "output_tokens": 1048,
+      "output_tokens_details": {
+        "thinking_tokens": 391
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1834,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 887,
+          "cache_read_input_tokens": 6592,
+          "cache_creation_input_tokens": 1169,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1169
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

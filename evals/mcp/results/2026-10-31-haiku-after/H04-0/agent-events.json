@@ -1,0 +1,181 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01UsWr8yUEcyBxWouH3dY3zK",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01D2wgJzgYbp3qzBGHmUJrc8",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01R4oMtUebFxSSccEioACt6G",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "period": "week",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Sx1vg2BE3LD9fvSopqhRgY",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Only one night of Google sleep data is stored locally for last week, so I can't give you a weekly summary.\n\n**Last week (Monday, Oct 26 to Sunday, Nov 1):**\n- **Nights with data:** 1 of 7 (Nov 1 only).\n- **That night:** 420 minutes (7 hours) asleep, from about 11:00 PM on Oct 31 to 7:00 AM on Nov 1.\n- **Missing days:** The other six days have no records. They aren't zeros, so I haven't averaged them in, and a weekly average or trend would not be meaningful from this.\n\n**Why the data is thin:** Your Google account isn't connected to this tool, so nothing has been synced from it. The only sleep record here is one session, and its source is labeled \"eval-synthetic,\" so it may not be your real sleep data. I'd check that before relying on it.\n\n**How overnight dates work:** Sleep is filed under the date you wake up, not the date you go to bed. The 11 PM to 7 AM session above counts as Nov 1 even though most of it happened on Oct 31. Naps are filed the same way, by the day they end.\n\n**Date assumption:** I treated today as Monday, Nov 2, so \"last week\" is Oct 26 to Nov 1. One of my instructions gave the date as Oct 31, which would make last week Oct 19 to 25 instead. Tell me if that's the right week.\n\n**Next step:** If you want the full week, I can connect your Google account and import your sleep history. That opens a browser sign-in, so I'll wait for your go-ahead. Google's test-mode consent screen also expires tokens after 7 days, so you may need to re-authorize periodically."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Only one night of Google sleep data is stored locally for last week, so I can't give you a weekly summary.\n\n**Last week (Monday, Oct 26 to Sunday, Nov 1):**\n- **Nights with data:** 1 of 7 (Nov 1 only).\n- **That night:** 420 minutes (7 hours) asleep, from about 11:00 PM on Oct 31 to 7:00 AM on Nov 1.\n- **Missing days:** The other six days have no records. They aren't zeros, so I haven't averaged them in, and a weekly average or trend would not be meaningful from this.\n\n**Why the data is thin:** Your Google account isn't connected to this tool, so nothing has been synced from it. The only sleep record here is one session, and its source is labeled \"eval-synthetic,\" so it may not be your real sleep data. I'd check that before relying on it.\n\n**How overnight dates work:** Sleep is filed under the date you wake up, not the date you go to bed. The 11 PM to 7 AM session above counts as Nov 1 even though most of it happened on Oct 31. Naps are filed the same way, by the day they end.\n\n**Date assumption:** I treated today as Monday, Nov 2, so \"last week\" is Oct 26 to Nov 1. One of my instructions gave the date as Oct 31, which would make last week Oct 19 to 25 instead. Tell me if that's the right week.\n\n**Next step:** If you want the full week, I can connect your Google account and import your sleep history. That opens a browser sign-in, so I'll wait for your go-ahead. Google's test-mode consent screen also expires tokens after 7 days, so you may need to re-authorize periodically.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1656,
+        "cacheReadInputTokens": 20642,
+        "cacheCreationInputTokens": 3522,
+        "webSearchRequests": 0,
+        "costUSD": 0.00173942,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 678,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3522,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00173942,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 3522,
+      "cache_read_input_tokens": 20642,
+      "output_tokens": 1656,
+      "output_tokens_details": {
+        "thinking_tokens": 678
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3522,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 784,
+          "cache_read_input_tokens": 8066,
+          "cache_creation_input_tokens": 1239,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1239
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

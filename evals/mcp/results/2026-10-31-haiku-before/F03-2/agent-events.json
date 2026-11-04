@@ -1,0 +1,158 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01BEdmjwtHJywWh2LY11Hn6w",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01BX8EXbff4oSJjuLsfZd2Fq",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_016xXTs7JJrJirXAZF6fXuZJ",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Total sleep on October 2 (the only day with data): 7 hours 35 minutes (455 minutes)**\n\n- Main sleep: 420 minutes (7 h), from 11:00 PM on Oct 1 to 7:00 AM on Oct 2\n- Nap: 35 minutes, 2:00 to 2:40 PM on Oct 2\n\n**Days with sleep data: 1 of 7** (Oct 2 only). Oct 1 and Oct 3\u20137 have no sleep records. That is missing data, not zero sleep, so I can't give a \"typical day\" average from this. One day is not enough to describe a pattern.\n\nLimitations:\n- The local database has only these two sleep records for the week. I haven't confirmed a live connection to your account (no verified connection right now), so there may be newer sleep data I can't see. Syncing after reconnecting would be needed to fill the gaps.\n- The records are labeled with the parser `eval-synthetic`, which suggests they may be test data rather than your actual Google Health readings. Please check the source before relying on them.\n- This is general information, not medical advice. If sleep is a concern, talk with a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Total sleep on October 2 (the only day with data): 7 hours 35 minutes (455 minutes)**\n\n- Main sleep: 420 minutes (7 h), from 11:00 PM on Oct 1 to 7:00 AM on Oct 2\n- Nap: 35 minutes, 2:00 to 2:40 PM on Oct 2\n\n**Days with sleep data: 1 of 7** (Oct 2 only). Oct 1 and Oct 3\u20137 have no sleep records. That is missing data, not zero sleep, so I can't give a \"typical day\" average from this. One day is not enough to describe a pattern.\n\nLimitations:\n- The local database has only these two sleep records for the week. I haven't confirmed a live connection to your account (no verified connection right now), so there may be newer sleep data I can't see. Syncing after reconnecting would be needed to fill the gaps.\n- The records are labeled with the parser `eval-synthetic`, which suggests they may be test data rather than your actual Google Health readings. Please check the source before relying on them.\n- This is general information, not medical advice. If sleep is a concern, talk with a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1111,
+        "cacheReadInputTokens": 20296,
+        "cacheCreationInputTokens": 2483,
+        "webSearchRequests": 0,
+        "costUSD": 0.00125566,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 516,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2483,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00125566,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2483,
+      "cache_read_input_tokens": 20296,
+      "output_tokens": 1111,
+      "output_tokens_details": {
+        "thinking_tokens": 516
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2483,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 771,
+          "cache_read_input_tokens": 7752,
+          "cache_creation_input_tokens": 669,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 669
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

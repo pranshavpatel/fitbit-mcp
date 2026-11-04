@@ -1,0 +1,154 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_018EL29pXc1hWhUpGUSFQ9Ri",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01U3qycGEMsis2nHJgcBs4Nt",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013xvUQdgjhdkBdgTkUkvBLg",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes, the cached Google steps for October 1\u20133, 2026 are available. Your Google connection is not currently working, so this is local data only and nothing was refreshed.\n\n**Connection status:** Google reports `token_status: invalid_reconnect_required` and `connected: false`. The cached records are still on disk and can be read. Nothing new can be fetched until you reconnect. The Google consent screen is in Testing mode, so refresh tokens expire after about 7 days. To fix it, run `ghealth auth login` and the server will pick up the new credentials.\n\n**Daily steps (Google, cached):**\n\n| Date | Steps |\n|---|---|\n| Oct 1, 2026 | 1,000 |\n| Oct 2, 2026 | 2,000 |\n| Oct 3, 2026 | 3,000 |\n\nAll three days have data (100% coverage). The average is 2,000 steps per day, and the total for the three days is 6,000.\n\n**Caveats:**\n- Google's daily step total is used when present. Dates follow your account's time zone (America/New_York for day boundaries).\n- Only three days are cached, so no trend is calculated. A trend needs at least six days.\n- These figures reflect the data as it was when last synced. Any changes made on Google's side after that won't appear until you reconnect and sync again.\n\nThis is general information about your activity data, not medical advice. If you have health concerns, please talk to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Yes, the cached Google steps for October 1\u20133, 2026 are available. Your Google connection is not currently working, so this is local data only and nothing was refreshed.\n\n**Connection status:** Google reports `token_status: invalid_reconnect_required` and `connected: false`. The cached records are still on disk and can be read. Nothing new can be fetched until you reconnect. The Google consent screen is in Testing mode, so refresh tokens expire after about 7 days. To fix it, run `ghealth auth login` and the server will pick up the new credentials.\n\n**Daily steps (Google, cached):**\n\n| Date | Steps |\n|---|---|\n| Oct 1, 2026 | 1,000 |\n| Oct 2, 2026 | 2,000 |\n| Oct 3, 2026 | 3,000 |\n\nAll three days have data (100% coverage). The average is 2,000 steps per day, and the total for the three days is 6,000.\n\n**Caveats:**\n- Google's daily step total is used when present. Dates follow your account's time zone (America/New_York for day boundaries).\n- Only three days are cached, so no trend is calculated. A trend needs at least six days.\n- These figures reflect the data as it was when last synced. Any changes made on Google's side after that won't appear until you reconnect and sync again.\n\nThis is general information about your activity data, not medical advice. If you have health concerns, please talk to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 838,
+        "cacheReadInputTokens": 21821,
+        "cacheCreationInputTokens": 2527,
+        "webSearchRequests": 0,
+        "costUSD": 0.00114321,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 92,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2527,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00114321,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2527,
+      "cache_read_input_tokens": 21821,
+      "output_tokens": 838,
+      "output_tokens_details": {
+        "thinking_tokens": 92
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2527,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 461,
+          "cache_read_input_tokens": 8236,
+          "cache_creation_input_tokens": 750,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 750
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

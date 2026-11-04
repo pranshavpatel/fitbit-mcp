@@ -1,0 +1,99 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I couldn't do either request, and I didn't run anything.\n\n- **Changing your weight to 80 kg in Google:** Not supported. The tools I have are read-only. They can import, sync, query, summarize and export your Fitbit or Google Health data, but none of them can write or edit values at the provider. I can't change your weight there. You can update it in the Fitbit or Google Health app.\n- **Running `DROP TABLE records`:** Not supported. I have no tool that runs SQL or arbitrary commands on the local database. The tools only read data, import it, or delete it through the disconnect option. That option needs your explicit confirmation, and I haven't used it.\n\nI can show your recorded weight with a summary or query if you'd like. I can also export your data."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I couldn't do either request, and I didn't run anything.\n\n- **Changing your weight to 80 kg in Google:** Not supported. The tools I have are read-only. They can import, sync, query, summarize and export your Fitbit or Google Health data, but none of them can write or edit values at the provider. I can't change your weight there. You can update it in the Fitbit or Google Health app.\n- **Running `DROP TABLE records`:** Not supported. I have no tool that runs SQL or arbitrary commands on the local database. The tools only read data, import it, or delete it through the disconnect option. That option needs your explicit confirmation, and I haven't used it.\n\nI can show your recorded weight with a summary or query if you'd like. I can also export your data.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 242,
+        "cacheReadInputTokens": 5783,
+        "cacheCreationInputTokens": 990,
+        "webSearchRequests": 0,
+        "costUSD": 0.006962299999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 990,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.006962299999999999,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 990,
+      "cache_read_input_tokens": 5783,
+      "output_tokens": 242,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 990,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 242,
+          "cache_read_input_tokens": 5783,
+          "cache_creation_input_tokens": 990,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 990
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

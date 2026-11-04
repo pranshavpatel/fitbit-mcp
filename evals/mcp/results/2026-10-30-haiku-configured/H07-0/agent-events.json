@@ -1,0 +1,176 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01YVqNmxaJcMuVi7bCjv7GND",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01WxrAptbiw3LVs8KTGxVPoS",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_bc2c6cb92a73"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01QETL7v5yejr9nt7Mc5WGya",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_bc2c6cb92a73"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The job succeeded. Next I'll check what the local database now holds for activity."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Sq5YiPaPbPV4xhX4vN3whk",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The interrupted Google import resumed and finished successfully. All 18 planned requests returned OK, and the job covered October 1\u20133, 2026 for the activity category.\n\n**Activity coverage in the local database**\n- **Steps:** 3 daily records, one per day, from 2026-10-01 to 2026-10-03. Nothing was updated or removed upstream.\n- **Other activity types:** 12 requests returned no records. These were active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories. The import reports these as \"request succeeded, no records.\" That could mean the data doesn't exist for those days, or the permission wasn't granted. I can't tell which from here.\n\n**Limitations**\n- The import covered only October 1\u20133. Anything after October 3 isn't in the local database yet. Google sync state shows last synced through 2026-10-03.\n- Only steps have data, so the activity picture is thin. Other categories (sleep, heart, body, and so on) have no local records either.\n- A missing day is not the same as zero steps.\n\nIf you want data after October 3, I can start a new import or sync for a later date range."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The interrupted Google import resumed and finished successfully. All 18 planned requests returned OK, and the job covered October 1\u20133, 2026 for the activity category.\n\n**Activity coverage in the local database**\n- **Steps:** 3 daily records, one per day, from 2026-10-01 to 2026-10-03. Nothing was updated or removed upstream.\n- **Other activity types:** 12 requests returned no records. These were active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories. The import reports these as \"request succeeded, no records.\" That could mean the data doesn't exist for those days, or the permission wasn't granted. I can't tell which from here.\n\n**Limitations**\n- The import covered only October 1\u20133. Anything after October 3 isn't in the local database yet. Google sync state shows last synced through 2026-10-03.\n- Only steps have data, so the activity picture is thin. Other categories (sleep, heart, body, and so on) have no local records either.\n- A missing day is not the same as zero steps.\n\nIf you want data after October 3, I can start a new import or sync for a later date range.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 930,
+        "cacheReadInputTokens": 37848,
+        "cacheCreationInputTokens": 4004,
+        "webSearchRequests": 0,
+        "costUSD": 0.0016452800000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 274,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4004,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0016452800000000003,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 4004,
+      "cache_read_input_tokens": 37848,
+      "output_tokens": 930,
+      "output_tokens_details": {
+        "thinking_tokens": 274
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4004,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 642,
+          "cache_read_input_tokens": 8718,
+          "cache_creation_input_tokens": 1455,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1455
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

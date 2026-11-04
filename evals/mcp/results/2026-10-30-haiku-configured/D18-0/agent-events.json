@@ -1,0 +1,174 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012rrGABAoW4XTMKP448wPYd",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_016G8rLyEwypD2xjdzaPLjav",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CztTm1ALESHurP9ckGZhKQ",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "heart",
+          "metric": "heart_rate",
+          "provider": "google",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02",
+          "limit": 500
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0183h8BWvRvrq6S4s8NYqnqb",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "heart_rate",
+          "provider": "google",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "On October 2, 2026, your local Google data has only **3 heart rate readings**: 100, 101, and 102 bpm, at 10:00, 10:01, and 10:02 local time. The mean and median are both 101 bpm.\n\n**This can't represent your whole day.** Google heart rate was imported only for exercise windows, not continuously. Those three readings cover about three minutes in the late morning, which probably reflects a workout. They say nothing about your resting rate, overnight readings, or heart rate for the rest of the day. A day with no readings outside those windows isn't a zero or a normal value; those hours simply weren't captured.\n\n**Sampling limitations:**\n- **Scope:** Google heart rate was imported only around workouts unless a whole-day import was run. The record itself is tagged \"exercise windows only.\"\n- **Density:** Sampling is one reading per minute during that window, so three readings is a very short slice.\n- **Weighting:** The summary's mean is sample-weighted, not time-weighted. Where the device recorded more often, those readings count more.\n- **Time zone:** Dates use your account's calendar day in America/New_York.\n\n**Connection status:** The local records came from an earlier import. Google currently shows no verified token, so I couldn't check for newer data. If you want a whole-day view, you'd need to reconnect Google (`ghealth auth login` if you use the CLI) and re-import heart rate with the full heart rate option. Note that this option is large, roughly 37 MB per day of history.\n\nThis is general information, not medical advice. If you have concerns about your heart rate, talk to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "On October 2, 2026, your local Google data has only **3 heart rate readings**: 100, 101, and 102 bpm, at 10:00, 10:01, and 10:02 local time. The mean and median are both 101 bpm.\n\n**This can't represent your whole day.** Google heart rate was imported only for exercise windows, not continuously. Those three readings cover about three minutes in the late morning, which probably reflects a workout. They say nothing about your resting rate, overnight readings, or heart rate for the rest of the day. A day with no readings outside those windows isn't a zero or a normal value; those hours simply weren't captured.\n\n**Sampling limitations:**\n- **Scope:** Google heart rate was imported only around workouts unless a whole-day import was run. The record itself is tagged \"exercise windows only.\"\n- **Density:** Sampling is one reading per minute during that window, so three readings is a very short slice.\n- **Weighting:** The summary's mean is sample-weighted, not time-weighted. Where the device recorded more often, those readings count more.\n- **Time zone:** Dates use your account's calendar day in America/New_York.\n\n**Connection status:** The local records came from an earlier import. Google currently shows no verified token, so I couldn't check for newer data. If you want a whole-day view, you'd need to reconnect Google (`ghealth auth login` if you use the CLI) and re-import heart rate with the full heart rate option. Note that this option is large, roughly 37 MB per day of history.\n\nThis is general information, not medical advice. If you have concerns about your heart rate, talk to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1191,
+        "cacheReadInputTokens": 21446,
+        "cacheCreationInputTokens": 3448,
+        "webSearchRequests": 0,
+        "costUSD": 0.00150016,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 222,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3448,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00150016,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 3448,
+      "cache_read_input_tokens": 21446,
+      "output_tokens": 1191,
+      "output_tokens_details": {
+        "thinking_tokens": 222
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3448,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 745,
+          "cache_read_input_tokens": 8152,
+          "cache_creation_input_tokens": 1465,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1465
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

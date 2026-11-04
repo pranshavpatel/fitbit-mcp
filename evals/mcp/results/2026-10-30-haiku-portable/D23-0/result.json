@@ -1,0 +1,382 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "delet|remov"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "confirmation_preview": {
+      "pass": true,
+      "detail": ""
+    },
+    "asks_before_followup": {
+      "pass": true,
+      "detail": ""
+    },
+    "exact_deletion": {
+      "pass": true,
+      "detail": ""
+    },
+    "confirmed_on_later_turn": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D23",
+  "split": "dev",
+  "trial": 0,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0016145400000000002,
+  "latency_s": 11.63,
+  "error": null,
+  "answers": [
+    "Here's what deleting your local Google data would do. Nothing has been changed yet.\n\n**Local Google data that would be deleted**\n- **Steps (Google, daily):** 3 records covering Oct 1\u20133, 2026. This is the only Google data stored locally.\n- **Google tokens:** the locally stored sign-in tokens would be removed.\n- **Active Google jobs:** any running Google import or sync would be cancelled.\n- **Raw Google responses:** the retained raw API responses would be permanently deleted.\n\n**What stays**\n- **Google Takeout data:** kept, as you asked. That's 1 steps record for Oct 1, 2026.\n- **Fitbit data:** untouched. It's a separate provider.\n\n**What this does not do**\n- **Google account access is not revoked.** The app's authorization stays active at Google, and you could re-import later. If you want to revoke it too, tell me and I'll preview that as well.\n\nDo you want me to go ahead and permanently delete the local Google data as described above? Reply \"yes\" to confirm. The confirmation token expires in about 5 minutes, so I'll request a fresh preview if you wait longer.",
+    "The local Google API data has been deleted.\n\n- **Records deleted:** 3 Google steps records (Oct 1\u20133, 2026).\n- **Raw files deleted:** 0. The system reported no raw Google files to remove.\n- **Tokens:** no local Google tokens were stored, so there was nothing to remove.\n- **Takeout data:** kept, including the 1 steps record for Oct 1, 2026.\n- **Fitbit data:** not touched.\n- **Google authorization:** not revoked. The app is still authorized at Google, so you can re-import later if you want."
+  ],
+  "trace": [
+    {
+      "tool": "disconnect_account",
+      "arguments": {
+        "provider": "google",
+        "delete_local_data": true,
+        "include_takeout_data": false,
+        "revoke_remote_authorization": false
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"confirmation_required\": true,\n  \"actions\": [\n    \"Remove locally stored google tokens\",\n    \"Cancel active google jobs\",\n    \"Permanently delete local google records and retained raw responses\"\n  ],\n  \"confirmation_token\": \"t6P0CgWPGa9JI3x14Ffx6w\",\n  \"expires_in_seconds\": 300,\n  \"instruction\": \"Show these actions to the user. Only if they explicitly confirm, call disconnect_account again with the same arguments and this token.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "confirmation_required": true,
+          "actions": [
+            "Remove locally stored google tokens",
+            "Cancel active google jobs",
+            "Permanently delete local google records and retained raw responses"
+          ],
+          "confirmation_token": "t6P0CgWPGa9JI3x14Ffx6w",
+          "expires_in_seconds": 300,
+          "instruction": "Show these actions to the user. Only if they explicitly confirm, call disconnect_account again with the same arguments and this token."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0002,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          },
+          {
+            "provider": "google_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 777.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    },\n    {\n      \"provider\": \"google_takeout\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-01\",\n      \"days_with_data\": 1\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            },
+            {
+              "provider": "google_takeout",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-01",
+              "days_with_data": 1
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0017,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          },
+          {
+            "provider": "google_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 777.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "disconnect_account",
+      "arguments": {
+        "provider": "google",
+        "delete_local_data": true,
+        "include_takeout_data": false,
+        "revoke_remote_authorization": false,
+        "confirmation_token": "t6P0CgWPGa9JI3x14Ffx6w"
+      },
+      "user_turn": 2,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"provider\": \"google\",\n  \"actions_performed\": [\n    \"no local tokens were stored\",\n    \"local data deleted\"\n  ],\n  \"deleted\": {\n    \"records_deleted\": 3,\n    \"raw_files_deleted\": 0\n  }\n}"
+          }
+        ],
+        "structuredContent": {
+          "provider": "google",
+          "actions_performed": [
+            "no local tokens were stored",
+            "local data deleted"
+          ],
+          "deleted": {
+            "records_deleted": 3,
+            "raw_files_deleted": 0
+          }
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0073,
+      "state": {
+        "records": [
+          {
+            "provider": "google_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 777.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      },
+      {
+        "provider": "google_takeout",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 777.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google_takeout",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 777.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 3,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

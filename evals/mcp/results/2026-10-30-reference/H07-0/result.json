@@ -1,0 +1,852 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "succeed|complet|finish"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "steps|activity"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "terminal_job_observed": {
+      "pass": true,
+      "detail": ""
+    },
+    "expected_job_outcome": {
+      "pass": true,
+      "detail": "['succeeded']"
+    },
+    "actual_activity_rows": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "H07",
+  "split": "holdout",
+  "trial": 0,
+  "mode": "reference",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [],
+  "cost_usd": 0,
+  "latency_s": 0.98,
+  "error": null,
+  "answers": [
+    "Import completed; steps activity coverage available."
+  ],
+  "trace": [
+    {
+      "tool": "connection_status",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": true,\n      \"client_secret_path\": \"$TRIAL/home/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"active\",\n      \"granted_permissions\": [\n        \"activity_and_fitness\",\n        \"ecg\",\n        \"health_metrics_and_measurements\",\n        \"irn\",\n        \"location\",\n        \"logged_symptoms\",\n        \"mindfulness\",\n        \"nutrition\",\n        \"profile\",\n        \"reproductive_health\",\n        \"settings\",\n        \"sleep\"\n      ],\n      \"not_granted\": [],\n      \"connected_since\": null,\n      \"last_verification\": {\n        \"ok\": true,\n        \"at\": \"2026-10-07T10:00:00Z\"\n      },\n      \"connected\": true,\n      \"active_jobs\": []\n    },\n    {\n      \"provider\": \"fitbit\",\n      \"configured\": false,\n      \"api_available\": true,\n      \"availability\": \"Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (23 day(s) left). Use an existing working Fitbit developer app only.\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"Connected: google\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": true,
+              "client_secret_path": "$TRIAL/home/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "active",
+              "granted_permissions": [
+                "activity_and_fitness",
+                "ecg",
+                "health_metrics_and_measurements",
+                "irn",
+                "location",
+                "logged_symptoms",
+                "mindfulness",
+                "nutrition",
+                "profile",
+                "reproductive_health",
+                "settings",
+                "sleep"
+              ],
+              "not_granted": [],
+              "connected_since": null,
+              "last_verification": {
+                "ok": true,
+                "at": "2026-10-07T10:00:00Z"
+              },
+              "connected": true,
+              "active_jobs": []
+            },
+            {
+              "provider": "fitbit",
+              "configured": false,
+              "api_available": true,
+              "availability": "Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (23 day(s) left). Use an existing working Fitbit developer app only.",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "Connected: google"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0032,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_bb4873e0214f",
+            "kind": "import",
+            "status": "interrupted"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"activity\",\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "activity",
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0012,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_bb4873e0214f",
+            "kind": "import",
+            "status": "interrupted"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "resume_job",
+      "arguments": {
+        "job_id": "job_bb4873e0214f"
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_bb4873e0214f\",\n  \"kind\": \"import\",\n  \"provider\": \"google\",\n  \"status\": \"running\",\n  \"message\": \"Running\",\n  \"parameters\": {\n    \"mode\": \"import\",\n    \"start_date\": \"2026-10-01\",\n    \"end_date\": \"2026-10-03\",\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"include_unverified\": true,\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 18,\n    \"requests_done\": 4,\n    \"requests_by_status\": {\n      \"ok\": 4,\n      \"pending\": 14\n    },\n    \"records\": {\n      \"inserted\": 0,\n      \"updated\": 0,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"active-zone-minutes\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-03\"\n    ],\n    \"current_pages\": 0,\n    \"current_records\": 0\n  },\n  \"created_at\": \"2026-10-30T17:11:00Z\",\n  \"updated_at\": \"2026-10-30T17:11:00Z\",\n  \"started_at\": \"2026-10-30T17:11:00Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_bb4873e0214f",
+          "kind": "import",
+          "provider": "google",
+          "status": "running",
+          "message": "Running",
+          "parameters": {
+            "mode": "import",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-03",
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "include_unverified": true,
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 18,
+            "requests_done": 4,
+            "requests_by_status": {
+              "ok": 4,
+              "pending": 14
+            },
+            "records": {
+              "inserted": 0,
+              "updated": 0,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "active-zone-minutes",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-03"
+            ],
+            "current_pages": 0,
+            "current_records": 0
+          },
+          "created_at": "2026-10-30T17:11:00Z",
+          "updated_at": "2026-10-30T17:11:00Z",
+          "started_at": "2026-10-30T17:11:00Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0032,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_bb4873e0214f",
+            "kind": "import",
+            "status": "running"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_bb4873e0214f"
+      },
+      "user_turn": 1,
+      "index": 4,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_bb4873e0214f\",\n  \"kind\": \"import\",\n  \"provider\": \"google\",\n  \"status\": \"running\",\n  \"message\": \"Running\",\n  \"parameters\": {\n    \"mode\": \"import\",\n    \"start_date\": \"2026-10-01\",\n    \"end_date\": \"2026-10-03\",\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"include_unverified\": true,\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 18,\n    \"requests_done\": 4,\n    \"requests_by_status\": {\n      \"ok\": 4,\n      \"pending\": 14\n    },\n    \"records\": {\n      \"inserted\": 0,\n      \"updated\": 0,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"active-zone-minutes\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-03\"\n    ],\n    \"current_pages\": 0,\n    \"current_records\": 0\n  },\n  \"created_at\": \"2026-10-30T17:11:00Z\",\n  \"updated_at\": \"2026-10-30T17:11:00Z\",\n  \"started_at\": \"2026-10-30T17:11:00Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_bb4873e0214f",
+          "kind": "import",
+          "provider": "google",
+          "status": "running",
+          "message": "Running",
+          "parameters": {
+            "mode": "import",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-03",
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "include_unverified": true,
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 18,
+            "requests_done": 4,
+            "requests_by_status": {
+              "ok": 4,
+              "pending": 14
+            },
+            "records": {
+              "inserted": 0,
+              "updated": 0,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "active-zone-minutes",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-03"
+            ],
+            "current_pages": 0,
+            "current_records": 0
+          },
+          "created_at": "2026-10-30T17:11:00Z",
+          "updated_at": "2026-10-30T17:11:00Z",
+          "started_at": "2026-10-30T17:11:00Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0039,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_bb4873e0214f",
+            "kind": "import",
+            "status": "running"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_bb4873e0214f"
+      },
+      "user_turn": 1,
+      "index": 5,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_bb4873e0214f\",\n  \"kind\": \"import\",\n  \"provider\": \"google\",\n  \"status\": \"running\",\n  \"message\": \"Running\",\n  \"parameters\": {\n    \"mode\": \"import\",\n    \"start_date\": \"2026-10-01\",\n    \"end_date\": \"2026-10-03\",\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"include_unverified\": true,\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 18,\n    \"requests_done\": 15,\n    \"requests_by_status\": {\n      \"ok\": 15,\n      \"pending\": 3\n    },\n    \"records\": {\n      \"inserted\": 3,\n      \"updated\": 0,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"basal-energy-burned\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-03\"\n    ],\n    \"current_pages\": 0,\n    \"current_records\": 0\n  },\n  \"created_at\": \"2026-10-30T17:11:00Z\",\n  \"updated_at\": \"2026-10-30T17:11:00Z\",\n  \"started_at\": \"2026-10-30T17:11:00Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_bb4873e0214f",
+          "kind": "import",
+          "provider": "google",
+          "status": "running",
+          "message": "Running",
+          "parameters": {
+            "mode": "import",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-03",
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "include_unverified": true,
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 18,
+            "requests_done": 15,
+            "requests_by_status": {
+              "ok": 15,
+              "pending": 3
+            },
+            "records": {
+              "inserted": 3,
+              "updated": 0,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "basal-energy-burned",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-03"
+            ],
+            "current_pages": 0,
+            "current_records": 0
+          },
+          "created_at": "2026-10-30T17:11:00Z",
+          "updated_at": "2026-10-30T17:11:00Z",
+          "started_at": "2026-10-30T17:11:00Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0008,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_bb4873e0214f",
+            "kind": "import",
+            "status": "running"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_bb4873e0214f"
+      },
+      "user_turn": 1,
+      "index": 6,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_bb4873e0214f\",\n  \"kind\": \"import\",\n  \"provider\": \"google\",\n  \"status\": \"succeeded\",\n  \"message\": \"Completed; every planned request succeeded.\",\n  \"parameters\": {\n    \"mode\": \"import\",\n    \"start_date\": \"2026-10-01\",\n    \"end_date\": \"2026-10-03\",\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"include_unverified\": true,\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 18,\n    \"requests_done\": 18,\n    \"requests_by_status\": {\n      \"ok\": 18\n    },\n    \"records\": {\n      \"inserted\": 3,\n      \"updated\": 0,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"calories-in-heart-rate-zone\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-03\"\n    ],\n    \"current_pages\": 1,\n    \"current_records\": 0,\n    \"account_snapshots_not_retrieved\": [],\n    \"message\": \"Completed; every planned request succeeded.\"\n  },\n  \"created_at\": \"2026-10-30T17:11:00Z\",\n  \"updated_at\": \"2026-10-30T17:11:00Z\",\n  \"started_at\": \"2026-10-30T17:11:00Z\",\n  \"finished_at\": \"2026-10-30T17:11:00Z\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_bb4873e0214f",
+          "kind": "import",
+          "provider": "google",
+          "status": "succeeded",
+          "message": "Completed; every planned request succeeded.",
+          "parameters": {
+            "mode": "import",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-03",
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "include_unverified": true,
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 18,
+            "requests_done": 18,
+            "requests_by_status": {
+              "ok": 18
+            },
+            "records": {
+              "inserted": 3,
+              "updated": 0,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "calories-in-heart-rate-zone",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-03"
+            ],
+            "current_pages": 1,
+            "current_records": 0,
+            "account_snapshots_not_retrieved": [],
+            "message": "Completed; every planned request succeeded."
+          },
+          "created_at": "2026-10-30T17:11:00Z",
+          "updated_at": "2026-10-30T17:11:00Z",
+          "started_at": "2026-10-30T17:11:00Z",
+          "finished_at": "2026-10-30T17:11:00Z"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0011,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_bb4873e0214f",
+            "kind": "import",
+            "status": "succeeded"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 7,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    }\n  ],\n  \"missing_denied_or_failed\": [\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"active-energy-burned\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"active-minutes\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"active-zone-minutes\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"activity-level\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"altitude\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"basal-energy-burned\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"calories-in-heart-rate-zone\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"distance\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"floors\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"sedentary-period\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"swim-lengths-data\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"time-in-heart-rate-zone\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    },\n    {\n      \"provider\": \"google\",\n      \"request_group\": \"total-calories\",\n      \"category\": \"activity\",\n      \"status\": \"empty\",\n      \"reason\": \"Request succeeded with no records\",\n      \"updated_at\": \"2026-10-30T17:11:00Z\"\n    }\n  ],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [\n    {\n      \"provider\": \"google\",\n      \"last_synced_through\": \"2026-10-03\",\n      \"last_sync_at\": \"2026-10-30T17:11:00Z\"\n    }\n  ],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            }
+          ],
+          "missing_denied_or_failed": [
+            {
+              "provider": "google",
+              "request_group": "active-energy-burned",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "active-minutes",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "active-zone-minutes",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "activity-level",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "altitude",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "basal-energy-burned",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "calories-in-heart-rate-zone",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "distance",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "floors",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "sedentary-period",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "swim-lengths-data",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "time-in-heart-rate-zone",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            },
+            {
+              "provider": "google",
+              "request_group": "total-calories",
+              "category": "activity",
+              "status": "empty",
+              "reason": "Request succeeded with no records",
+              "updated_at": "2026-10-30T17:11:00Z"
+            }
+          ],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [
+            {
+              "provider": "google",
+              "last_synced_through": "2026-10-03",
+              "last_sync_at": "2026-10-30T17:11:00Z"
+            }
+          ],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.001,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_bb4873e0214f",
+            "kind": "import",
+            "status": "succeeded"
+          }
+        ],
+        "google_token_exists": true
+      }
+    }
+  ],
+  "initial": {
+    "records": [],
+    "jobs": [
+      {
+        "id": "job_bb4873e0214f",
+        "kind": "import",
+        "status": "interrupted"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [
+      {
+        "id": "job_bb4873e0214f",
+        "kind": "import",
+        "status": "succeeded"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "tool_calls": 7,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": "job_bb4873e0214f",
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+}

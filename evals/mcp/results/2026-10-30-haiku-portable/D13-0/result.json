@@ -1,0 +1,519 @@
+{
+  "passed": false,
+  "checks": {
+    "required_tools": {
+      "pass": false,
+      "detail": "summarize_data"
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "455|7\\s*(?:h|hours).*35"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "420|7\\s*(?:h|hours)"
+    },
+    "answer_fact_3": {
+      "pass": true,
+      "detail": "nap"
+    },
+    "answer_fact_4": {
+      "pass": true,
+      "detail": "coverage|1.*7|14\\.3"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D13",
+  "split": "dev",
+  "trial": 0,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0014679,
+  "latency_s": 10.82,
+  "error": null,
+  "answers": [
+    "Your Google sleep data for October 1\u20137, 2026 is almost entirely missing, so I can't give you a real weekly summary yet.\n\n**Connection:** Google isn't connected. The app has no verified Google account and no Google sleep history imported. Only two sleep records exist locally for this period.\n\n**Week of Oct 1\u20137 (one week, so there's only one bucket):**\n\n- **Nights:** One sleep session, from 11:00 PM on Oct 1 to 7:00 AM on Oct 2, totaling 420 minutes (7 hours asleep).\n- **Naps:** One short nap on Oct 2, from 2:00 PM to 2:40 PM, with 35 minutes asleep.\n- **Coverage:** Only 1 of 7 days (Oct 2) has any sleep records. Oct 1 and Oct 3\u20137 have no sleep data. That is missing data, not zero sleep.\n- **Detail:** The records only include total minutes asleep. There are no sleep stages, scores, or heart-rate or HRV data for these nights.\n\n**Caveat on the records:** Both records are tagged with the parser `eval-synthetic`, which suggests they may be test or placeholder data rather than a sync of your real Google Health account. Please check this before relying on the 7-hour figure.\n\n**Next steps (your call):**\n1. Connect your Google account. This opens a browser sign-in, and I'll need your go-ahead to start it. Alternatively, run `ghealth auth login` in a terminal and I'll pick up those credentials.\n2. Once connected, I can sync and re-run this summary.\n3. If you have a Google Takeout export containing sleep data, I can import that instead.\n\nThis is general information from your data, not medical advice. If your sleep is a concern, please talk to a clinician."
+  ],
+  "trace": [
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"google\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"daily\",\n      \"unit\": \"count\",\n      \"records\": 3,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 3\n    },\n    {\n      \"provider\": \"google\",\n      \"category\": \"sleep\",\n      \"metric\": \"minutes_asleep\",\n      \"granularity\": \"session\",\n      \"unit\": \"min\",\n      \"records\": 2,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-02\",\n      \"last_date\": \"2026-10-02\",\n      \"days_with_data\": 1\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "google",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "daily",
+              "unit": "count",
+              "records": 3,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-03",
+              "days_with_data": 3
+            },
+            {
+              "provider": "google",
+              "category": "sleep",
+              "metric": "minutes_asleep",
+              "granularity": "session",
+              "unit": "min",
+              "records": 2,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-02",
+              "last_date": "2026-10-02",
+              "days_with_data": 1
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0064,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 420.0,
+            "unit": "min",
+            "record_key": "main",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 35.0,
+            "unit": "min",
+            "record_key": "nap",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "connection_status",
+      "arguments": {
+        "provider": "google"
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": false,\n      \"client_secret_path\": \"$TRIAL/ghealth/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"No verified API connection.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": false,
+              "client_secret_path": "$TRIAL/ghealth/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "No verified API connection."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0172,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 420.0,
+            "unit": "min",
+            "record_key": "main",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 35.0,
+            "unit": "min",
+            "record_key": "nap",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "query_data",
+      "arguments": {
+        "provider": "google",
+        "category": "sleep",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-07",
+        "limit": 100
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"count\": 2,\n  \"total_matching\": 2,\n  \"records\": [\n    {\n      \"id\": 4,\n      \"provider\": \"google\",\n      \"category\": \"sleep\",\n      \"metric\": \"minutes_asleep\",\n      \"granularity\": \"session\",\n      \"local_date\": \"2026-10-02\",\n      \"start_local\": \"2026-10-01T23:00:00\",\n      \"end_local\": \"2026-10-02T07:00:00\",\n      \"time_basis\": \"local\",\n      \"value\": 420.0,\n      \"unit\": \"min\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:34Z\",\n      \"updated_at\": \"2026-10-30T17:11:34Z\",\n      \"parser\": \"eval-synthetic\"\n    },\n    {\n      \"id\": 5,\n      \"provider\": \"google\",\n      \"category\": \"sleep\",\n      \"metric\": \"minutes_asleep\",\n      \"granularity\": \"session\",\n      \"local_date\": \"2026-10-02\",\n      \"start_local\": \"2026-10-02T14:00:00\",\n      \"end_local\": \"2026-10-02T14:40:00\",\n      \"time_basis\": \"local\",\n      \"value\": 35.0,\n      \"unit\": \"min\",\n      \"status\": \"active\",\n      \"revision\": 1,\n      \"first_seen\": \"2026-10-30T17:11:34Z\",\n      \"updated_at\": \"2026-10-30T17:11:34Z\",\n      \"parser\": \"eval-synthetic\"\n    }\n  ],\n  \"notes\": [\n    \"local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.\",\n    \"Records marked deleted_upstream are hidden unless include_deleted=true.\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "count": 2,
+          "total_matching": 2,
+          "records": [
+            {
+              "id": 4,
+              "provider": "google",
+              "category": "sleep",
+              "metric": "minutes_asleep",
+              "granularity": "session",
+              "local_date": "2026-10-02",
+              "start_local": "2026-10-01T23:00:00",
+              "end_local": "2026-10-02T07:00:00",
+              "time_basis": "local",
+              "value": 420.0,
+              "unit": "min",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:34Z",
+              "updated_at": "2026-10-30T17:11:34Z",
+              "parser": "eval-synthetic"
+            },
+            {
+              "id": 5,
+              "provider": "google",
+              "category": "sleep",
+              "metric": "minutes_asleep",
+              "granularity": "session",
+              "local_date": "2026-10-02",
+              "start_local": "2026-10-02T14:00:00",
+              "end_local": "2026-10-02T14:40:00",
+              "time_basis": "local",
+              "value": 35.0,
+              "unit": "min",
+              "status": "active",
+              "revision": 1,
+              "first_seen": "2026-10-30T17:11:34Z",
+              "updated_at": "2026-10-30T17:11:34Z",
+              "parser": "eval-synthetic"
+            }
+          ],
+          "notes": [
+            "local_date is the provider's calendar date for the record; time_basis explains whether timestamps carry a UTC offset.",
+            "Records marked deleted_upstream are hidden unless include_deleted=true."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0019,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 420.0,
+            "unit": "min",
+            "record_key": "main",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 35.0,
+            "unit": "min",
+            "record_key": "nap",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "minutes_asleep",
+        "local_date": "2026-10-02",
+        "value": 420.0,
+        "unit": "min",
+        "record_key": "main",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "minutes_asleep",
+        "local_date": "2026-10-02",
+        "value": 35.0,
+        "unit": "min",
+        "record_key": "nap",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "minutes_asleep",
+        "local_date": "2026-10-02",
+        "value": 420.0,
+        "unit": "min",
+        "record_key": "main",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "minutes_asleep",
+        "local_date": "2026-10-02",
+        "value": 35.0,
+        "unit": "min",
+        "record_key": "nap",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "tool_calls": 3,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

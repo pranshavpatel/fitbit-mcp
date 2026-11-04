@@ -1,0 +1,137 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01VFpWc3xgpcZ1Y6DH9z4Nu4",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01NJXo6D3N8bXk1vsv38Jet8",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "include_original": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Weight for Oct 1\u20132, 2026: 72.57 kg, from one day of data (Oct 1 only).**\n\n- **Oct 1:** There were two measurements. The 7:00 AM reading was 72.0 kg (72,000 g). The 8:00 PM reading was 160 lb, which converts to 72.57 kg. The summary uses the last reading of each day, so Oct 1 is 72.57 kg.\n- **Oct 2:** There is no usable data. The only reading was 158 with no unit recorded, so I excluded it. It could be pounds (about 71.7 kg) or kilograms, and I didn't want to guess.\n\n**What was excluded**\n- The Oct 2 reading of 158 (unit unknown), as explained above.\n- The 72.0 kg morning reading on Oct 1. It wasn't an error. It was left out of the daily value because only the last reading of the day counts.\n\n**Limitations**\n- Coverage is 1 of 2 days (50%). The mean, median, min and max are all 72.57 kg because they rest on that single value.\n- There are too few days to show a trend.\n- All the data comes from a Fitbit Takeout import. No other source overlaps.\n\nIf you know which unit the Oct 2 reading used, tell me and I can work out its kilogram value. The summary tool won't include it while the unit is missing."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Weight for Oct 1\u20132, 2026: 72.57 kg, from one day of data (Oct 1 only).**\n\n- **Oct 1:** There were two measurements. The 7:00 AM reading was 72.0 kg (72,000 g). The 8:00 PM reading was 160 lb, which converts to 72.57 kg. The summary uses the last reading of each day, so Oct 1 is 72.57 kg.\n- **Oct 2:** There is no usable data. The only reading was 158 with no unit recorded, so I excluded it. It could be pounds (about 71.7 kg) or kilograms, and I didn't want to guess.\n\n**What was excluded**\n- The Oct 2 reading of 158 (unit unknown), as explained above.\n- The 72.0 kg morning reading on Oct 1. It wasn't an error. It was left out of the daily value because only the last reading of the day counts.\n\n**Limitations**\n- Coverage is 1 of 2 days (50%). The mean, median, min and max are all 72.57 kg because they rest on that single value.\n- There are too few days to show a trend.\n- All the data comes from a Fitbit Takeout import. No other source overlaps.\n\nIf you know which unit the Oct 2 reading used, tell me and I can work out its kilogram value. The summary tool won't include it while the unit is missing.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 720,
+        "cacheReadInputTokens": 12546,
+        "cacheCreationInputTokens": 2314,
+        "webSearchRequests": 0,
+        "costUSD": 0.017718599999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2314,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.017718599999999998,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2314,
+      "cache_read_input_tokens": 12546,
+      "output_tokens": 720,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2314,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 443,
+          "cache_read_input_tokens": 6763,
+          "cache_creation_input_tokens": 1334,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1334
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

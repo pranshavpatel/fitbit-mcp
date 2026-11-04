@@ -1,0 +1,157 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0153J1N3trq8CCH4R9wtakvq",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Uxrw5paazMarhMqonMU5Td",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01BN2phdAZm3XbJhuDcjq1ND",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "provider": "google",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-03",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Two Google workouts from October 2\u20133, 2026 were longer than 45 minutes:\n\n| Date | Start (local) | Duration | Source ID |\n|---|---|---|---|\n| Oct 2, 2026 | 10:00 | 50 min | workout-3 |\n| Oct 3, 2026 | 10:00 | 60 min | workout-4 |\n\nA third workout on Oct 2 (workout-2, 40 min, source ID workout-2) is excluded because it's under 45 minutes.\n\nCaveats:\n- These come from the local database only. I didn't sync, so they reflect the last import, not necessarily what's currently in your Google account.\n- Google's connection currently shows as not connected (no token), so I couldn't check for new or changed workouts. If you want a fresh pull, run `ghealth auth login` and I can sync.\n- Exercise data in the local store covers only Oct 1\u20133, 2026, so there's nothing to compare these against beyond that window."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Two Google workouts from October 2\u20133, 2026 were longer than 45 minutes:\n\n| Date | Start (local) | Duration | Source ID |\n|---|---|---|---|\n| Oct 2, 2026 | 10:00 | 50 min | workout-3 |\n| Oct 3, 2026 | 10:00 | 60 min | workout-4 |\n\nA third workout on Oct 2 (workout-2, 40 min, source ID workout-2) is excluded because it's under 45 minutes.\n\nCaveats:\n- These come from the local database only. I didn't sync, so they reflect the last import, not necessarily what's currently in your Google account.\n- Google's connection currently shows as not connected (no token), so I couldn't check for new or changed workouts. If you want a fresh pull, run `ghealth auth login` and I can sync.\n- Exercise data in the local store covers only Oct 1\u20133, 2026, so there's nothing to compare these against beyond that window.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 883,
+        "cacheReadInputTokens": 21518,
+        "cacheCreationInputTokens": 2842,
+        "webSearchRequests": 0,
+        "costUSD": 0.00122568,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 305,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2842,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00122568,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2842,
+      "cache_read_input_tokens": 21518,
+      "output_tokens": 883,
+      "output_tokens_details": {
+        "thinking_tokens": 305
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2842,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 489,
+          "cache_read_input_tokens": 8227,
+          "cache_creation_input_tokens": 784,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 784
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

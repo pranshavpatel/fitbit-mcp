@@ -1,0 +1,113 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Qp8zikZDxKSewHRL8PpXYJ",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't give you a blood glucose reading for October 2, 2026. The local database has no blood glucose data at all. The only thing stored is daily step counts for Oct 1\u20133, 2026, and you asked me not to substitute another metric.\n\nI haven't tried importing blood glucose, so I can't say whether it exists in your account. The blood glucose category may simply not have been imported yet, or it may not have been granted or may be empty. I can try an import of the blood glucose category for that date, which only reads data. Do you want me to?"
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't give you a blood glucose reading for October 2, 2026. The local database has no blood glucose data at all. The only thing stored is daily step counts for Oct 1\u20133, 2026, and you asked me not to substitute another metric.\n\nI haven't tried importing blood glucose, so I can't say whether it exists in your account. The blood glucose category may simply not have been imported yet, or it may not have been granted or may be empty. I can try an import of the blood glucose category for that date, which only reads data. Do you want me to?",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 208,
+        "cacheReadInputTokens": 12539,
+        "cacheCreationInputTokens": 1401,
+        "webSearchRequests": 0,
+        "costUSD": 0.0089459,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1401,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0089459,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1401,
+      "cache_read_input_tokens": 12539,
+      "output_tokens": 208,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1401,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 168,
+          "cache_read_input_tokens": 6756,
+          "cache_creation_input_tokens": 428,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 428
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

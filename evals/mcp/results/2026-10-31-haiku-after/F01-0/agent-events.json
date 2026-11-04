@@ -1,0 +1,126 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01FkM5ALh4LXDJPzhvLqbLuj",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "You averaged **6,000 steps per day** across October 1\u20133, but that's from only one day of data.\n\n- **October 1:** No step data at all. The watch may not have synced, or it may have been off.\n- **October 2:** 0 steps. The system treated this as a no-wear day and excluded it, which fits your guess that the watch was off.\n- **October 3:** 6,000 steps.\n\nThe tool's overall figure is 3,000 steps per day, which averages October 2's zero with October 3's 6,000. That conflicts with its own exclusion of October 2, so I'd use 6,000 as the average of the days that were actually worn. If you count the zero as a real day, the average is 3,000."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "You averaged **6,000 steps per day** across October 1\u20133, but that's from only one day of data.\n\n- **October 1:** No step data at all. The watch may not have synced, or it may have been off.\n- **October 2:** 0 steps. The system treated this as a no-wear day and excluded it, which fits your guess that the watch was off.\n- **October 3:** 6,000 steps.\n\nThe tool's overall figure is 3,000 steps per day, which averages October 2's zero with October 3's 6,000. That conflicts with its own exclusion of October 2, so I'd use 6,000 as the average of the days that were actually worn. If you count the zero as a real day, the average is 3,000.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 836,
+        "cacheReadInputTokens": 12567,
+        "cacheCreationInputTokens": 1796,
+        "webSearchRequests": 0,
+        "costUSD": 0.0009032700000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 473,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1796,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0009032700000000001,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1796,
+      "cache_read_input_tokens": 12567,
+      "output_tokens": 836,
+      "output_tokens_details": {
+        "thinking_tokens": 473
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1796,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 609,
+          "cache_read_input_tokens": 6784,
+          "cache_creation_input_tokens": 795,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 795
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

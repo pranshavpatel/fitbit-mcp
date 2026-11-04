@@ -1,0 +1,161 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CmXpKqXCwyQ5FjogRfxw5t",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01SKuHquMEaQgKJt8cYa5Ed9",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01L7Uhywr6WkyRakZH2h9wdf",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I couldn't build a Monday-to-Sunday summary because your Google sleep data isn't available here.\n\n**What I found**\n\n- **Google isn't connected.** There's no verified API connection and no stored token. The `ghealth` CLI credentials weren't found.\n- **The local database has one sleep record for the week**, for Sunday, November 1:\n  - Session: 10:00 PM Oct 31 to 7:00 AM Nov 1 (New York time)\n  - Minutes asleep: 420 (7 hours)\n  - The record's parser label is `eval-synthetic`, which suggests it may be test data rather than a real sync. Please check that before relying on it.\n- **Monday, October 26 through Saturday, October 31 have no sleep records.** Those days are missing, not zero.\n\n**Overnight reporting dates**\n\nEach night is filed under the calendar date you wake up on. So the sleep from 10 PM Oct 31 to 7 AM Nov 1 counts toward Sunday, Nov 1, not Oct 31. A Sunday-night sleep that ends Monday morning would count toward Monday.\n\n**Date assumption**\n\nThe system date says November 2, 2026, so I treated \"last week\" as Oct 26 to Nov 1. Another part of the setup says October 30, which would make \"last week\" Oct 19 to 25. Tell me which is right if it's not November 2.\n\n**Next steps**\n\nTo get your real Google sleep data, I can start a connection to Google. That opens an authorization step that needs your approval, so I'll wait for your go-ahead. Once connected, I can import sleep for the week and give you the full summary, with per-night totals and any gaps. This is not medical advice, so bring any sleep concerns to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I couldn't build a Monday-to-Sunday summary because your Google sleep data isn't available here.\n\n**What I found**\n\n- **Google isn't connected.** There's no verified API connection and no stored token. The `ghealth` CLI credentials weren't found.\n- **The local database has one sleep record for the week**, for Sunday, November 1:\n  - Session: 10:00 PM Oct 31 to 7:00 AM Nov 1 (New York time)\n  - Minutes asleep: 420 (7 hours)\n  - The record's parser label is `eval-synthetic`, which suggests it may be test data rather than a real sync. Please check that before relying on it.\n- **Monday, October 26 through Saturday, October 31 have no sleep records.** Those days are missing, not zero.\n\n**Overnight reporting dates**\n\nEach night is filed under the calendar date you wake up on. So the sleep from 10 PM Oct 31 to 7 AM Nov 1 counts toward Sunday, Nov 1, not Oct 31. A Sunday-night sleep that ends Monday morning would count toward Monday.\n\n**Date assumption**\n\nThe system date says November 2, 2026, so I treated \"last week\" as Oct 26 to Nov 1. Another part of the setup says October 30, which would make \"last week\" Oct 19 to 25. Tell me which is right if it's not November 2.\n\n**Next steps**\n\nTo get your real Google sleep data, I can start a connection to Google. That opens an authorization step that needs your approval, so I'll wait for your go-ahead. Once connected, I can import sleep for the week and give you the full summary, with per-night totals and any gaps. This is not medical advice, so bring any sleep concerns to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1650,
+        "cacheReadInputTokens": 20409,
+        "cacheCreationInputTokens": 2508,
+        "webSearchRequests": 0,
+        "costUSD": 0.0015312900000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 821,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2508,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0015312900000000003,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2508,
+      "cache_read_input_tokens": 20409,
+      "output_tokens": 1650,
+      "output_tokens_details": {
+        "thinking_tokens": 821
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2508,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1007,
+          "cache_read_input_tokens": 7861,
+          "cache_creation_input_tokens": 587,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 587
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

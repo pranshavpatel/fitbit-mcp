@@ -1,0 +1,118 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HzikETvGU2hx1CYYSgQE5R",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Only 1 of the 7 days from October 1\u20137, 2026 has sleep data: October 2. On that day you slept **455 minutes (about 7 hours 35 minutes)** in total, naps included. The longest session was 420 minutes (7 hours), so the other 35 minutes came from a nap or shorter sleep.\n\n- **Typical day:** With only one day recorded, 455 minutes is the only figure I have. It isn't a reliable \"typical\" value.\n- **Missing days:** October 1 and 3\u20137 have no sleep data. That could mean the device wasn't worn or the data hasn't synced. I haven't counted those days as zero.\n- **Sync:** The local data may be out of date, since today is November 3. I can run a sync to check whether more of those days show up. Do you want me to?"
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Only 1 of the 7 days from October 1\u20137, 2026 has sleep data: October 2. On that day you slept **455 minutes (about 7 hours 35 minutes)** in total, naps included. The longest session was 420 minutes (7 hours), so the other 35 minutes came from a nap or shorter sleep.\n\n- **Typical day:** With only one day recorded, 455 minutes is the only figure I have. It isn't a reliable \"typical\" value.\n- **Missing days:** October 1 and 3\u20137 have no sleep data. That could mean the device wasn't worn or the data hasn't synced. I haven't counted those days as zero.\n- **Sync:** The local data may be out of date, since today is November 3. I can run a sync to check whether more of those days show up. Do you want me to?",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 401,
+        "cacheReadInputTokens": 12843,
+        "cacheCreationInputTokens": 1418,
+        "webSearchRequests": 0,
+        "costUSD": 0.010974300000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1418,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.010974300000000001,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1418,
+      "cache_read_input_tokens": 12843,
+      "output_tokens": 401,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1418,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 260,
+          "cache_read_input_tokens": 6769,
+          "cache_creation_input_tokens": 723,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 723
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

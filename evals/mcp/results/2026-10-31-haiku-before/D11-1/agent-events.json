@@ -1,0 +1,139 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HwTWtBW8jayYvwFZ26cCDb",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01PFG1NP176jge8cQZo6ygj1",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "blood_glucose",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't tell you your blood glucose for October 2, 2026. There are no blood glucose records in your local data, so there's no value for that date or any other.\n\nHere's what I checked:\n- **Blood glucose:** No records in the local database. The Google blood glucose category has no imported data, so it may not have been imported yet, may not be permitted for this account, or may be empty.\n- **Your local data:** The only records are daily step counts from Google for October 1\u20133, 2026. I did not use steps or any other metric in place of blood glucose.\n\nTo get blood glucose data, you could import your history or sync from Google. If you have a Google Takeout export that includes glucose readings, you could import that instead. If the import completes and still shows no blood glucose records, the account may not have that data or may not have granted access to it."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't tell you your blood glucose for October 2, 2026. There are no blood glucose records in your local data, so there's no value for that date or any other.\n\nHere's what I checked:\n- **Blood glucose:** No records in the local database. The Google blood glucose category has no imported data, so it may not have been imported yet, may not be permitted for this account, or may be empty.\n- **Your local data:** The only records are daily step counts from Google for October 1\u20133, 2026. I did not use steps or any other metric in place of blood glucose.\n\nTo get blood glucose data, you could import your history or sync from Google. If you have a Google Takeout export that includes glucose readings, you could import that instead. If the import completes and still shows no blood glucose records, the account may not have that data or may not have granted access to it.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 572,
+        "cacheReadInputTokens": 19646,
+        "cacheCreationInputTokens": 1503,
+        "webSearchRequests": 0,
+        "costUSD": 0.00078366,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 157,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1503,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00078366,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1503,
+      "cache_read_input_tokens": 19646,
+      "output_tokens": 572,
+      "output_tokens_details": {
+        "thinking_tokens": 157
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1503,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 253,
+          "cache_read_input_tokens": 7134,
+          "cache_creation_input_tokens": 292,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 292
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

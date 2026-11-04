@@ -1,0 +1,141 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012LcstjgEkUHtahHwLHhWcK",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014ZCEbop9QagYjnkE6gpbXe",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "heart",
+          "metric": "heart_rate",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't tell whether your heart rate stayed elevated all day on October 2, 2026. The local data only covers a short window that morning.\n\n- **What I have:** three heart rate readings, at 10:00, 10:01, and 10:02 AM local time, of 100, 101, and 102 bpm.\n- **Why that's not enough:** the provider's heart rate data for your account covers exercise windows only, not the whole day. Those three readings may be from a workout, so they say nothing about the rest of the day.\n- **What's missing:** I have no heart rate readings for the other hours of October 2. That doesn't mean your heart rate was normal or elevated at those times. It just means I don't have the data.\n\nTo check the full day, the Google account would need a whole-day heart rate import. That's a larger download, roughly 37 MB per day, and it's optional. I can start that import for October 2 if you want. Once the data is in, I can summarize the whole day.\n\nThis is general information, not medical advice. If you're concerned about your heart rate, please talk to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't tell whether your heart rate stayed elevated all day on October 2, 2026. The local data only covers a short window that morning.\n\n- **What I have:** three heart rate readings, at 10:00, 10:01, and 10:02 AM local time, of 100, 101, and 102 bpm.\n- **Why that's not enough:** the provider's heart rate data for your account covers exercise windows only, not the whole day. Those three readings may be from a workout, so they say nothing about the rest of the day.\n- **What's missing:** I have no heart rate readings for the other hours of October 2. That doesn't mean your heart rate was normal or elevated at those times. It just means I don't have the data.\n\nTo check the full day, the Google account would need a whole-day heart rate import. That's a larger download, roughly 37 MB per day, and it's optional. I can start that import for October 2 if you want. Once the data is in, I can summarize the whole day.\n\nThis is general information, not medical advice. If you're concerned about your heart rate, please talk to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 796,
+        "cacheReadInputTokens": 19809,
+        "cacheCreationInputTokens": 2211,
+        "webSearchRequests": 0,
+        "costUSD": 0.00103889,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 255,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2211,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00103889,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2211,
+      "cache_read_input_tokens": 19809,
+      "output_tokens": 796,
+      "output_tokens_details": {
+        "thinking_tokens": 255
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2211,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 468,
+          "cache_read_input_tokens": 7304,
+          "cache_creation_input_tokens": 826,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 826
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

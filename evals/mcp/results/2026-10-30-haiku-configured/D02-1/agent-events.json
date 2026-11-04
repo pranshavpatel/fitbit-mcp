@@ -1,0 +1,136 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01GGeKigCaYq9bempoijYuFU",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01MWye5Hs5cY3P7167Zgctre",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_146b70e0ff77"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Yes, verification finished successfully. The job `job_146b70e0ff77` shows `succeeded`.\n\n- **Credential source:** I reused your existing ghealth CLI credentials. No browser window was needed.\n- **Verification:** A read-only request (`users.getIdentity`) worked.\n- **Granted permissions:** All 12 read-only scopes were granted and none were denied. They cover activity and fitness, ECG, health metrics, IRN, location, logged symptoms, mindfulness, nutrition, profile, reproductive health, settings, and sleep.\n\nThis confirms the connection only. No health data has been imported yet. If you want your history pulled into the local database, I can start an import next, and I'd check its job status before reporting results."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Yes, verification finished successfully. The job `job_146b70e0ff77` shows `succeeded`.\n\n- **Credential source:** I reused your existing ghealth CLI credentials. No browser window was needed.\n- **Verification:** A read-only request (`users.getIdentity`) worked.\n- **Granted permissions:** All 12 read-only scopes were granted and none were denied. They cover activity and fitness, ECG, health metrics, IRN, location, logged symptoms, mindfulness, nutrition, profile, reproductive health, settings, and sleep.\n\nThis confirms the connection only. No health data has been imported yet. If you want your history pulled into the local database, I can start an import next, and I'd check its job status before reporting results.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 471,
+        "cacheReadInputTokens": 21031,
+        "cacheCreationInputTokens": 1764,
+        "webSearchRequests": 0,
+        "costUSD": 0.00079921,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 71,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1764,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00079921,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1764,
+      "cache_read_input_tokens": 21031,
+      "output_tokens": 471,
+      "output_tokens_details": {
+        "thinking_tokens": 71
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1764,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 313,
+          "cache_read_input_tokens": 7454,
+          "cache_creation_input_tokens": 765,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 765
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

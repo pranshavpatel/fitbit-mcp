@@ -1,0 +1,153 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RwPMQaaP3ZrNGt4ZnP5pAt",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0172MTDMBn1xKP1xYEc5stA6",
+        "name": "mcp__fitbit_eval__connect_account",
+        "input": {
+          "provider": "google",
+          "method": "ghealth_cli"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01UJZ98EXGofkPLbUQAbBWCg",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_9cf376d8ca2d"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "It doesn't work yet. The connection failed, so your Google account is not connected.\n\n- **What worked:** The server found your ghealth CLI credentials and loaded them, and they were granted read-only scopes for activity, sleep, heart-related data, nutrition, profile and more.\n- **What failed:** The test request returned `ACCOUNT_NOT_LINKED`, meaning the Google account behind these credentials has no linked Google Health identity. In practice, the Google account likely hasn't finished setting up Google Health, or the credentials belong to a different Google account than the one that holds your health data.\n\nNext steps:\n\n1. Check in the Google Health app (or your Google account's health settings) that your Google account is set up and linked, and that it's the same account you used for `ghealth auth login`.\n2. If the account is linked, run `ghealth auth login` again to refresh the credentials, then ask me to retry the connection.\n3. If you'd rather not depend on the API, I can import a Google Takeout or Fitbit export instead.\n\nI haven't tried the browser sign-in method. Tell me if you want me to, and I'll run it."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "It doesn't work yet. The connection failed, so your Google account is not connected.\n\n- **What worked:** The server found your ghealth CLI credentials and loaded them, and they were granted read-only scopes for activity, sleep, heart-related data, nutrition, profile and more.\n- **What failed:** The test request returned `ACCOUNT_NOT_LINKED`, meaning the Google account behind these credentials has no linked Google Health identity. In practice, the Google account likely hasn't finished setting up Google Health, or the credentials belong to a different Google account than the one that holds your health data.\n\nNext steps:\n\n1. Check in the Google Health app (or your Google account's health settings) that your Google account is set up and linked, and that it's the same account you used for `ghealth auth login`.\n2. If the account is linked, run `ghealth auth login` again to refresh the credentials, then ask me to retry the connection.\n3. If you'd rather not depend on the API, I can import a Google Takeout or Fitbit export instead.\n\nI haven't tried the browser sign-in method. Tell me if you want me to, and I'll run it.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 736,
+        "cacheReadInputTokens": 29103,
+        "cacheCreationInputTokens": 2284,
+        "webSearchRequests": 0,
+        "costUSD": 0.00111663,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 127,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2284,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00111663,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2284,
+      "cache_read_input_tokens": 29103,
+      "output_tokens": 736,
+      "output_tokens_details": {
+        "thinking_tokens": 127
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2284,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 491,
+          "cache_read_input_tokens": 7934,
+          "cache_creation_input_tokens": 799,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 799
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

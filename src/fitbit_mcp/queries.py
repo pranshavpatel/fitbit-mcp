@@ -18,6 +18,10 @@ _NAME_RE = re.compile(r"^[a-z0-9_\-]{1,64}$")
 MAX_QUERY_LIMIT = 500
 MAX_EXPORT_ROWS = 2_000_000
 PAYLOAD_CHAR_LIMIT = 4000
+# One tool result should stay well under what MCP hosts accept (Claude Code warns above 10,000 tokens and
+# truncates at 25,000 by default): ~32,000 characters is ~8,000 tokens. A page that would go over is cut
+# short and continues through next_cursor, so nothing is lost; tests/test_mcp_robustness.py measures it.
+RESPONSE_CHAR_BUDGET = 32_000
 
 
 def _validate_name(value: str | None, field: str) -> str | None:
@@ -123,8 +127,20 @@ def query(store: Store, *, limit: int = 100, cursor: str | None = None, order: s
     more = len(rows) > limit
     rows = rows[:limit]
     items = [_row(r, r["payload_json"] if include_original else None) for r in rows]
+    size, keep = 0, len(items)
+    for i, item in enumerate(items):
+        size += len(json.dumps(item, default=str))
+        if size > RESPONSE_CHAR_BUDGET and i > 0:
+            keep = i
+            break
+    trimmed = keep < len(items)
+    if trimmed:
+        items, rows, more = items[:keep], rows[:keep], True
     result: dict[str, Any] = {"count": len(items), "total_matching": total if total <= 100000 else ">100000",
                               "records": items}
+    if trimmed:
+        result["page_trimmed"] = ("Returned {} of the {} requested records to keep this response under the size "
+                                  "budget; continue with next_cursor.".format(len(items), limit))
     if more and rows:
         last = rows[-1]
         result["next_cursor"] = encode_cursor({"d": last["local_date"] or "", "id": last["id"], "order": order})

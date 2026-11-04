@@ -1,0 +1,103 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're at rest, usually measured in the morning after waking and before getting up. It's a snapshot of your heart's workload. Lower values often reflect better cardiovascular fitness, since a stronger heart can pump more blood per beat. Typical adult ranges are about 60 to 100 bpm, and well-trained athletes often sit lower. RHR tends to rise with illness, stress, dehydration, poor sleep, or alcohol, and it can drift up or down over weeks.\n\n**HRV (heart rate variability)** is the variation in time between consecutive heartbeats, usually reported in milliseconds. It isn't about how fast your heart beats but how much the gaps between beats change from one beat to the next. That variation is driven largely by the autonomic nervous system, which balances the \"rest and digest\" (parasympathetic) and \"fight or flight\" (sympathetic) branches. Higher HRV generally indicates greater recovery capacity and adaptability. HRV is quite individual, so what matters most is your own trend rather than a comparison with others. It's sensitive to sleep, alcohol, training load, stress, and illness, and it can vary a lot day to day, and it's measured differently across devices.\n\n**How they differ:**\n- **RHR** is the average rate: how fast the heart beats.\n- **HRV** is the variability: how much the timing between beats fluctuates.\n- They often move in opposite directions. When you're stressed, fatigued, or getting sick, RHR tends to rise and HRV tends to fall. When you're well recovered, the reverse is typical.\n- Looking at both together can give a fuller picture than either alone. Neither is a diagnostic measure on its own.\n\nIf you notice sustained changes or symptoms like chest pain, dizziness, or fainting, check with a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're at rest, usually measured in the morning after waking and before getting up. It's a snapshot of your heart's workload. Lower values often reflect better cardiovascular fitness, since a stronger heart can pump more blood per beat. Typical adult ranges are about 60 to 100 bpm, and well-trained athletes often sit lower. RHR tends to rise with illness, stress, dehydration, poor sleep, or alcohol, and it can drift up or down over weeks.\n\n**HRV (heart rate variability)** is the variation in time between consecutive heartbeats, usually reported in milliseconds. It isn't about how fast your heart beats but how much the gaps between beats change from one beat to the next. That variation is driven largely by the autonomic nervous system, which balances the \"rest and digest\" (parasympathetic) and \"fight or flight\" (sympathetic) branches. Higher HRV generally indicates greater recovery capacity and adaptability. HRV is quite individual, so what matters most is your own trend rather than a comparison with others. It's sensitive to sleep, alcohol, training load, stress, and illness, and it can vary a lot day to day, and it's measured differently across devices.\n\n**How they differ:**\n- **RHR** is the average rate: how fast the heart beats.\n- **HRV** is the variability: how much the timing between beats fluctuates.\n- They often move in opposite directions. When you're stressed, fatigued, or getting sick, RHR tends to rise and HRV tends to fall. When you're well recovered, the reverse is typical.\n- Looking at both together can give a fuller picture than either alone. Neither is a diagnostic measure on its own.\n\nIf you notice sustained changes or symptoms like chest pain, dizziness, or fainting, check with a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 657,
+        "cacheReadInputTokens": 6068,
+        "cacheCreationInputTokens": 717,
+        "webSearchRequests": 0,
+        "costUSD": 0.0005327800000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 46,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 717,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0005327800000000001,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 717,
+      "cache_read_input_tokens": 6068,
+      "output_tokens": 657,
+      "output_tokens_details": {
+        "thinking_tokens": 46
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 717,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 657,
+          "cache_read_input_tokens": 6068,
+          "cache_creation_input_tokens": 717,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 717
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

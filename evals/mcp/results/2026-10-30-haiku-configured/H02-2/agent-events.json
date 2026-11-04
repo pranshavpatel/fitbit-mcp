@@ -1,0 +1,213 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01FMeYxY9T3SpWjwpCQdfr28",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google is connected with sleep and activity permissions granted. Starting the import for October 1\u20133."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01T2bU8p6ktd2f6yEYE6uEkf",
+        "name": "mcp__fitbit_eval__start_import",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity",
+            "sleep"
+          ],
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "include_unverified_types": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RF1L1ZgRMWporVMSrxue8p",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_80652cc8dda9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_015R1ywcNZhyGfQP2XXKPsxG",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Mum1BHqKvJBh4ifcLJWpmL",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I couldn't calculate your average sleep for October 1\u20133. The sleep import was denied by Google, so there is no sleep data to average.\n\n**What happened**\n- **Activity:** Imported successfully. Steps were recorded for all 3 days. The other activity types (distance, active minutes, calories, etc.) came back empty.\n- **Sleep:** Failed with `HTTP 403: PERMISSION_DENIED`. This is a permissions failure, not zero sleep. Google refused the request, so no sleep records were stored. A night of zero sleep would show up as a recorded value, and nothing was recorded for these nights.\n- The import job finished as **partial**: 14 of 15 requests succeeded, and the one sleep request was denied.\n\n**Why this is odd:** The connection check lists `sleep` among the granted permissions, yet Google returned a 403 on the sleep request. The grant the app holds may not match what Google is actually allowing, possibly because the consent was given with reduced scopes or the token is stale. Since the consent screen is in Testing mode, refresh tokens also expire after 7 days.\n\n**Next steps**\n1. Re-authorize by running `ghealth auth login` in your terminal, then tell me and I'll retry the sleep import for those dates. Let me know if you'd like me to check the connection first.\n2. Make sure the sleep permission is checked on the Google consent screen when you re-authorize.\n\nOnce sleep data is imported, I can calculate the average for those three nights."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I couldn't calculate your average sleep for October 1\u20133. The sleep import was denied by Google, so there is no sleep data to average.\n\n**What happened**\n- **Activity:** Imported successfully. Steps were recorded for all 3 days. The other activity types (distance, active minutes, calories, etc.) came back empty.\n- **Sleep:** Failed with `HTTP 403: PERMISSION_DENIED`. This is a permissions failure, not zero sleep. Google refused the request, so no sleep records were stored. A night of zero sleep would show up as a recorded value, and nothing was recorded for these nights.\n- The import job finished as **partial**: 14 of 15 requests succeeded, and the one sleep request was denied.\n\n**Why this is odd:** The connection check lists `sleep` among the granted permissions, yet Google returned a 403 on the sleep request. The grant the app holds may not match what Google is actually allowing, possibly because the consent was given with reduced scopes or the token is stale. Since the consent screen is in Testing mode, refresh tokens also expire after 7 days.\n\n**Next steps**\n1. Re-authorize by running `ghealth auth login` in your terminal, then tell me and I'll retry the sleep import for those dates. Let me know if you'd like me to check the connection first.\n2. Make sure the sleep permission is checked on the Google consent screen when you re-authorize.\n\nOnce sleep data is imported, I can calculate the average for those three nights.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 1510,
+        "cacheReadInputTokens": 48630,
+        "cacheCreationInputTokens": 4046,
+        "webSearchRequests": 0,
+        "costUSD": 0.0020517,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 481,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4046,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0020517,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 4046,
+      "cache_read_input_tokens": 48630,
+      "output_tokens": 1510,
+      "output_tokens_details": {
+        "thinking_tokens": 481
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4046,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 670,
+          "cache_read_input_tokens": 10076,
+          "cache_creation_input_tokens": 440,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 440
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

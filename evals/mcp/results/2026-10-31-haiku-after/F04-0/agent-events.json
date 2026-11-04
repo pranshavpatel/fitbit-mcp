@@ -1,0 +1,140 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Y1G3pnEBWkGZRd2AFEhN4k",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019j2wYXKmDXnfZ8a91nomNi",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your daily average for October 1\u20133, 2026 is **2,000 steps**.\n\n- **Oct 1:** 1,000 steps\n- **Oct 2:** 2,000 steps\n- **Oct 3:** 3,000 steps\n\nTo avoid counting anything twice, I used Google's data for all three days. Google has a reading for every day, so it covers the full range. Fitbit also has data for October 1, but only that one day, and I left it out so that day isn't counted from both sources. Fitbit's October 2 and 3 values are not in the local data.\n\nThe average is based on three days, so it's a small sample. The figure would change if Fitbit's October 1 reading differs from Google's, or if you'd rather use Fitbit's numbers for that day."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your daily average for October 1\u20133, 2026 is **2,000 steps**.\n\n- **Oct 1:** 1,000 steps\n- **Oct 2:** 2,000 steps\n- **Oct 3:** 3,000 steps\n\nTo avoid counting anything twice, I used Google's data for all three days. Google has a reading for every day, so it covers the full range. Fitbit also has data for October 1, but only that one day, and I left it out so that day isn't counted from both sources. Fitbit's October 2 and 3 values are not in the local data.\n\nThe average is based on three days, so it's a small sample. The figure would change if Fitbit's October 1 reading differs from Google's, or if you'd rather use Fitbit's numbers for that day.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 763,
+        "cacheReadInputTokens": 12571,
+        "cacheCreationInputTokens": 2448,
+        "webSearchRequests": 0,
+        "costUSD": 0.0009972100000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 343,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2448,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0009972100000000001,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2448,
+      "cache_read_input_tokens": 12571,
+      "output_tokens": 763,
+      "output_tokens_details": {
+        "thinking_tokens": 343
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2448,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 439,
+          "cache_read_input_tokens": 6788,
+          "cache_creation_input_tokens": 1443,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1443
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

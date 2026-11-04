@@ -1,0 +1,99 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're fully at rest, usually measured during sleep or first thing in the morning. It tells you how hard your heart works at baseline. A lower RHR generally reflects better cardiovascular fitness and efficiency. For many adults it falls between 50 and 80 bpm.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, measured in milliseconds. Your heart doesn't beat like a metronome. If your average is 60 bpm, the gaps between beats still vary a little, and HRV captures that variation. It reflects how flexibly your autonomic nervous system adjusts. A higher HRV generally means your body is more recovered and adaptable. Fitbit and similar devices typically report it overnight, often as RMSSD.\n\n**Key differences**\n\n- **What they measure:** RHR measures the average rate. HRV measures the beat-to-beat timing variability.\n- **Direction:** For RHR, lower is usually better. For HRV, higher is usually better.\n- **Speed of change:** RHR shifts slowly with fitness over weeks and months. HRV is more sensitive and can change from night to night with stress, poor sleep, alcohol, illness, or hard training.\n- **Individual variation:** HRV varies a lot between people, and age, genetics, and sex all affect it. Compare your numbers to your own baseline, not to other people's.\n\n**How they relate:** They often move in opposite directions. When you're stressed, sick, or under-recovered, RHR tends to rise and HRV tends to fall. When you're well rested and fit, the reverse is common. Looking at both together, over trends rather than single days, gives a more reliable picture than either alone.\n\n**Caveats:** Wrist devices estimate both, so treat the numbers as useful trends, not clinical measurements. A persistently very high or low RHR, or symptoms such as dizziness or palpitations, are worth raising with a clinician.\n\nIf you'd like, I can look at your own RHR and HRV trends."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Resting heart rate (RHR)** is how many times your heart beats per minute when you're fully at rest, usually measured during sleep or first thing in the morning. It tells you how hard your heart works at baseline. A lower RHR generally reflects better cardiovascular fitness and efficiency. For many adults it falls between 50 and 80 bpm.\n\n**Heart rate variability (HRV)** is the variation in time between consecutive heartbeats, measured in milliseconds. Your heart doesn't beat like a metronome. If your average is 60 bpm, the gaps between beats still vary a little, and HRV captures that variation. It reflects how flexibly your autonomic nervous system adjusts. A higher HRV generally means your body is more recovered and adaptable. Fitbit and similar devices typically report it overnight, often as RMSSD.\n\n**Key differences**\n\n- **What they measure:** RHR measures the average rate. HRV measures the beat-to-beat timing variability.\n- **Direction:** For RHR, lower is usually better. For HRV, higher is usually better.\n- **Speed of change:** RHR shifts slowly with fitness over weeks and months. HRV is more sensitive and can change from night to night with stress, poor sleep, alcohol, illness, or hard training.\n- **Individual variation:** HRV varies a lot between people, and age, genetics, and sex all affect it. Compare your numbers to your own baseline, not to other people's.\n\n**How they relate:** They often move in opposite directions. When you're stressed, sick, or under-recovered, RHR tends to rise and HRV tends to fall. When you're well rested and fit, the reverse is common. Looking at both together, over trends rather than single days, gives a more reliable picture than either alone.\n\n**Caveats:** Wrist devices estimate both, so treat the numbers as useful trends, not clinical measurements. A persistently very high or low RHR, or symptoms such as dizziness or palpitations, are worth raising with a clinician.\n\nIf you'd like, I can look at your own RHR and HRV trends.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 682,
+        "cacheReadInputTokens": 5783,
+        "cacheCreationInputTokens": 981,
+        "webSearchRequests": 0,
+        "costUSD": 0.011326300000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 981,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.011326300000000001,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 981,
+      "cache_read_input_tokens": 5783,
+      "output_tokens": 682,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 981,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 682,
+          "cache_read_input_tokens": 5783,
+          "cache_creation_input_tokens": 981,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 981
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

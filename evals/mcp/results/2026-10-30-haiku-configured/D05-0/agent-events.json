@@ -1,0 +1,169 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TFFtYsZ8PorV1ANVpuQeDH",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Google is connected and the remote check passed. Starting the sync with a two-day overlap, limited to the activity categories."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01NS2aC5ugCpSMTCqP7FuZ5v",
+        "name": "mcp__fitbit_eval__sync_data",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity"
+          ],
+          "overlap_days": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012s2CxCpJZ66TK8kj6ehmSm",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_ce25136b4cb4"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Google activity sync finished successfully. All 10 planned requests returned OK.\n\n- **Window:** 2026-10-01 to 2026-10-07 (America/New_York), which is the two-day overlap plus the newer days.\n- **Records:** 3 updated, 0 inserted, 0 unchanged, 0 restored, 0 marked deleted upstream. The 3 updates were records that already existed locally and changed on Google's side.\n- **Scope:** Activity category only. Intraday data and full heart-rate data were not included.\n\nThe job's timestamps are dated 2026-10-30, but the sync window ends on 2026-10-07. That matches the local date I was given, so the window may not reach the most recent days if today is actually 2026-10-30. If you want to confirm coverage, I can check the local data with `list_data_types`."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Google activity sync finished successfully. All 10 planned requests returned OK.\n\n- **Window:** 2026-10-01 to 2026-10-07 (America/New_York), which is the two-day overlap plus the newer days.\n- **Records:** 3 updated, 0 inserted, 0 unchanged, 0 restored, 0 marked deleted upstream. The 3 updates were records that already existed locally and changed on Google's side.\n- **Scope:** Activity category only. Intraday data and full heart-rate data were not included.\n\nThe job's timestamps are dated 2026-10-30, but the sync window ends on 2026-10-07. That matches the local date I was given, so the window may not reach the most recent days if today is actually 2026-10-30. If you want to confirm coverage, I can check the local data with `list_data_types`.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 809,
+        "cacheReadInputTokens": 29227,
+        "cacheCreationInputTokens": 2553,
+        "webSearchRequests": 0,
+        "costUSD": 0.00120817,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 231,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2553,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00120817,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2553,
+      "cache_read_input_tokens": 29227,
+      "output_tokens": 809,
+      "output_tokens_details": {
+        "thinking_tokens": 231
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2553,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 419,
+          "cache_read_input_tokens": 8163,
+          "cache_creation_input_tokens": 559,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 559
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

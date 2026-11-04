@@ -1,0 +1,116 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01B2T9SqMpMAkA8ShbkVG9T5",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google account is not connected. I checked the local status without remote verification and didn't connect anything.\n\n- **Configured:** No\n- **Tokens:** None stored\n- **Existing CLI credentials:** Not found (the `ghealth` CLI has no saved login on this machine)\n- **API availability:** The Google Health API project is available, but Google isn't onboarding new projects.\n\nIf you want to connect later, you can run `ghealth auth login` in a terminal, then ask me to connect. While the consent screen is in Testing mode, Google refresh tokens expire after 7 days, so you may need to re-authenticate that often."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google account is not connected. I checked the local status without remote verification and didn't connect anything.\n\n- **Configured:** No\n- **Tokens:** None stored\n- **Existing CLI credentials:** Not found (the `ghealth` CLI has no saved login on this machine)\n- **API availability:** The Google Health API project is available, but Google isn't onboarding new projects.\n\nIf you want to connect later, you can run `ghealth auth login` in a terminal, then ask me to connect. While the consent screen is in Testing mode, Google refresh tokens expire after 7 days, so you may need to re-authenticate that often.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 287,
+        "cacheReadInputTokens": 6581,
+        "cacheCreationInputTokens": 7024,
+        "webSearchRequests": 0,
+        "costUSD": 0.00161451,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 7024,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00161451,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 7024,
+      "cache_read_input_tokens": 6581,
+      "output_tokens": 287,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7024,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 202,
+          "cache_read_input_tokens": 6581,
+          "cache_creation_input_tokens": 443,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 443
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

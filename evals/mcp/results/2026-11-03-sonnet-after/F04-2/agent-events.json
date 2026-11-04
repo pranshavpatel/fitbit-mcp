@@ -1,0 +1,118 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HcE846JogAMS9Qyuu4AsuZ",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your daily average for October 1\u20133, 2026 is **2,000 steps**.\n\n- Oct 1: 1,000 steps\n- Oct 2: 2,000 steps\n- Oct 3: 3,000 steps\n\nTo avoid double counting, the summary used one provider, Google, for all three days. It didn't add the Fitbit and Google numbers together. Google had data for all three days (100% coverage). Fitbit had data for only one of those days, so I didn't use it.\n\nI didn't compare the Fitbit figure for that one day with Google's, so I can't say how closely the two agree."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your daily average for October 1\u20133, 2026 is **2,000 steps**.\n\n- Oct 1: 1,000 steps\n- Oct 2: 2,000 steps\n- Oct 3: 3,000 steps\n\nTo avoid double counting, the summary used one provider, Google, for all three days. It didn't add the Fitbit and Google numbers together. Google had data for all three days (100% coverage). Fitbit had data for only one of those days, so I didn't use it.\n\nI didn't compare the Fitbit figure for that one day with Google's, so I can't say how closely the two agree.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 331,
+        "cacheReadInputTokens": 12550,
+        "cacheCreationInputTokens": 1704,
+        "webSearchRequests": 0,
+        "costUSD": 0.011389,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1704,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.011389,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1704,
+      "cache_read_input_tokens": 12550,
+      "output_tokens": 331,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1704,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 191,
+          "cache_read_input_tokens": 6767,
+          "cache_creation_input_tokens": 720,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 720
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

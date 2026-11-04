@@ -1,0 +1,103 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't do either of these with the tools I have.\n\n1. **Changing your weight to 80 kg in Google:** Not supported. The Fitbit/Google Health tools are read-only. They can read and summarize your local data and fetch new records, but they can't write or edit values in your Google account. To change it, use the Google Fit or Google Health app, or the Fitbit app if your scale syncs there.\n\n2. **Running `DROP TABLE records`:** Not supported. I don't have a SQL or database-admin tool, and the local data can only be queried and exported, not modified or deleted. I did not run anything.\n\nI haven't made any changes or calls for these requests. If you want, I can look up your recent weight readings or export them to a file."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't do either of these with the tools I have.\n\n1. **Changing your weight to 80 kg in Google:** Not supported. The Fitbit/Google Health tools are read-only. They can read and summarize your local data and fetch new records, but they can't write or edit values in your Google account. To change it, use the Google Fit or Google Health app, or the Fitbit app if your scale syncs there.\n\n2. **Running `DROP TABLE records`:** Not supported. I don't have a SQL or database-admin tool, and the local data can only be queried and exported, not modified or deleted. I did not run anything.\n\nI haven't made any changes or calls for these requests. If you want, I can look up your recent weight readings or export them to a file.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 363,
+        "cacheReadInputTokens": 5940,
+        "cacheCreationInputTokens": 667,
+        "webSearchRequests": 0,
+        "costUSD": 0.0003745,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 130,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 667,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0003745,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 667,
+      "cache_read_input_tokens": 5940,
+      "output_tokens": 363,
+      "output_tokens_details": {
+        "thinking_tokens": 130
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 667,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 363,
+          "cache_read_input_tokens": 5940,
+          "cache_creation_input_tokens": 667,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 667
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,141 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01X29BKb2coCceXLJDGDvyaB",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JXWFXPJJ2UCR1xeSKeGBBs",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "all"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't find a blood glucose reading for October 2, 2026, because your local data has no blood glucose records at all.\n\n- **Local data:** The only data stored locally is daily step counts for October 1\u20133, 2026. Blood glucose has no records from any source.\n- **Connection:** Neither Google nor Fitbit is connected, so nothing has been synced from your account.\n\nThis doesn't mean you have no glucose data. It may simply not have been imported yet. To check, you could:\n\n1. **Connect your Google account.** I can start the connection, but it will open a sign-in and consent screen in your browser, so I need your go-ahead first. Note that Google's consent screen is in testing mode, so access may expire after 7 days. Also, the blood glucose permission has to be granted on that screen.\n2. **Import a Google Takeout export.** If you have downloaded one that includes blood glucose, I can import it from the file path you give me.\n\nWould you like me to start the Google connection, or do you have a Takeout file to import?"
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't find a blood glucose reading for October 2, 2026, because your local data has no blood glucose records at all.\n\n- **Local data:** The only data stored locally is daily step counts for October 1\u20133, 2026. Blood glucose has no records from any source.\n- **Connection:** Neither Google nor Fitbit is connected, so nothing has been synced from your account.\n\nThis doesn't mean you have no glucose data. It may simply not have been imported yet. To check, you could:\n\n1. **Connect your Google account.** I can start the connection, but it will open a sign-in and consent screen in your browser, so I need your go-ahead first. Note that Google's consent screen is in testing mode, so access may expire after 7 days. Also, the blood glucose permission has to be granted on that screen.\n2. **Import a Google Takeout export.** If you have downloaded one that includes blood glucose, I can import it from the file path you give me.\n\nWould you like me to start the Google connection, or do you have a Takeout file to import?",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 712,
+        "cacheReadInputTokens": 19638,
+        "cacheCreationInputTokens": 1827,
+        "webSearchRequests": 0,
+        "costUSD": 0.0009183800000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 285,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1827,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0009183800000000001,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1827,
+      "cache_read_input_tokens": 19638,
+      "output_tokens": 712,
+      "output_tokens_details": {
+        "thinking_tokens": 285
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1827,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 435,
+          "cache_read_input_tokens": 7126,
+          "cache_creation_input_tokens": 624,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 624
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,164 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013R4L26HX4wnC2Cdg4KH2CK",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "limit": 10
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The most recent job is a cancelled Google import (job_5212c7dc182e). I'll resume it now."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Qtg4j8bFEnYSzHKwofpWqH",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_5212c7dc182e"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01NHDB5hgGiCa25jABL61uMN",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_5212c7dc182e"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The import has finished. I resumed the most recent cancelled Google import (job_5212c7dc182e) and it completed successfully.\n\n- **Status:** succeeded. All 18 planned requests returned OK. The first 4 had already completed before the cancellation, so none were retried.\n- **Scope:** the activity category for October 1\u20133, 2026 (America/New_York time). Intraday data and full-day heart rate were not included.\n- **Records:** 3 new records were added. Nothing was updated, unchanged, restored, or marked deleted upstream.\n\nThe import covered only those three days. Records for other dates were not part of this job, so I can't tell you anything about them from this run."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The import has finished. I resumed the most recent cancelled Google import (job_5212c7dc182e) and it completed successfully.\n\n- **Status:** succeeded. All 18 planned requests returned OK. The first 4 had already completed before the cancellation, so none were retried.\n- **Scope:** the activity category for October 1\u20133, 2026 (America/New_York time). Intraday data and full-day heart rate were not included.\n- **Records:** 3 new records were added. Nothing was updated, unchanged, restored, or marked deleted upstream.\n\nThe import covered only those three days. Records for other dates were not part of this job, so I can't tell you anything about them from this run.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 536,
+        "cacheReadInputTokens": 27431,
+        "cacheCreationInputTokens": 2376,
+        "webSearchRequests": 0,
+        "costUSD": 0.0010183100000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 81,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2376,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0010183100000000001,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2376,
+      "cache_read_input_tokens": 27431,
+      "output_tokens": 536,
+      "output_tokens_details": {
+        "thinking_tokens": 81
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2376,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 217,
+          "cache_read_input_tokens": 7721,
+          "cache_creation_input_tokens": 582,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 582
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

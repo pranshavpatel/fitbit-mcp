@@ -1,0 +1,156 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01QRJEqkcTUDftv1GCxTXCTk",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "limit": 10
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011jmWynZw6iZs5W4i1yNKVn",
+        "name": "mcp__fitbit_eval__cancel_job",
+        "input": {
+          "job_id": "job_21f23c97a1f6"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Cancellation was requested, but the job hasn't stopped yet. I'll check its status to confirm."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01XHkAeikEtUpGcV7FDwuwd3",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_21f23c97a1f6"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The most recent job, `job_21f23c97a1f6` (a Google activity import for 2026-10-01 to 2026-10-03), is now cancelled. A follow-up status check confirmed it stopped at 17:11:29 UTC.\n\n- **Progress when stopped:** 4 of 18 requests finished. The other 14 never ran.\n- **Records:** none were written, so nothing was inserted or updated from this job.\n- **Kept:** the 4 completed requests stay saved.\n\nIf you want the import to finish, I can resume it with `resume_job`. It will skip the completed requests and pick up from the active-zone-minutes step."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The most recent job, `job_21f23c97a1f6` (a Google activity import for 2026-10-01 to 2026-10-03), is now cancelled. A follow-up status check confirmed it stopped at 17:11:29 UTC.\n\n- **Progress when stopped:** 4 of 18 requests finished. The other 14 never ran.\n- **Records:** none were written, so nothing was inserted or updated from this job.\n- **Kept:** the 4 completed requests stay saved.\n\nIf you want the import to finish, I can resume it with `resume_job`. It will skip the completed requests and pick up from the active-zone-minutes step.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 446,
+        "cacheReadInputTokens": 29403,
+        "cacheCreationInputTokens": 2334,
+        "webSearchRequests": 0,
+        "costUSD": 0.00098463,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2334,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00098463,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2334,
+      "cache_read_input_tokens": 29403,
+      "output_tokens": 446,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2334,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 208,
+          "cache_read_input_tokens": 8199,
+          "cache_creation_input_tokens": 579,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 579
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

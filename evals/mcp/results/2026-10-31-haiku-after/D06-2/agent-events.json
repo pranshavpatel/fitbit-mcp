@@ -1,0 +1,160 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RvjV1YH1hdYtkM3wBiD738",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "limit": 10
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01TMe1aBj5FdeGLtNrosfygD",
+        "name": "mcp__fitbit_eval__cancel_job",
+        "input": {
+          "job_id": "job_e4f389c73c1d"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Cancellation is requested, but it isn't confirmed yet. I'll check that the job has actually stopped."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_018rJnGXvt2F5YouMRTySPbb",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_e4f389c73c1d"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The most recent Google import (job `job_e4f389c73c1d`) is cancelled. A status check confirmed it has stopped.\n\n- **What it was:** an activity import for 2026-10-01 to 2026-10-03, with intraday data and full heart rate turned off.\n- **How far it got:** 4 of 18 requests completed. The job had been waiting on a provider rate limit and was partway through active-zone-minutes.\n- **Records:** none were written, so the local database has no changes from this job.\n- **Kept:** the 4 completed requests are saved.\n\nTo finish the import later, run `resume_job` with this job ID. It will skip the completed requests and retry the rest."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The most recent Google import (job `job_e4f389c73c1d`) is cancelled. A status check confirmed it has stopped.\n\n- **What it was:** an activity import for 2026-10-01 to 2026-10-03, with intraday data and full heart rate turned off.\n- **How far it got:** 4 of 18 requests completed. The job had been waiting on a provider rate limit and was partway through active-zone-minutes.\n- **Records:** none were written, so the local database has no changes from this job.\n- **Kept:** the 4 completed requests are saved.\n\nTo finish the import later, run `resume_job` with this job ID. It will skip the completed requests and retry the rest.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 503,
+        "cacheReadInputTokens": 28102,
+        "cacheCreationInputTokens": 2428,
+        "webSearchRequests": 0,
+        "costUSD": 0.00101892,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 43,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2428,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00101892,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2428,
+      "cache_read_input_tokens": 28102,
+      "output_tokens": 503,
+      "output_tokens_details": {
+        "thinking_tokens": 43
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2428,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 219,
+          "cache_read_input_tokens": 7906,
+          "cache_creation_input_tokens": 581,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 581
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

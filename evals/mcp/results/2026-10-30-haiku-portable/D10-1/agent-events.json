@@ -1,0 +1,192 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I'll check which local data is available, then pull the Google exercise records for October 1\u20133 two at a time."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CajYa3gjqA7zSpBcRxuYRZ",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_017fJ6KULE9drDtUH3F1P6Ya",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HDCdLTj4m3iyCTBUTpJ6Vh",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMSIsImlkIjo1LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014jzsgDXgyvm1bQni4gwLDU",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjo3LCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "There are 5 Google workouts from October 1 through 3, 2026. Each record has a duration but no workout type or name.\n\n| Date (local start) | Source ID | Duration |\n|---|---|---|\n| Oct 1, 2026, 10:00 AM | workout-0 | 20 min |\n| Oct 1, 2026, 10:00 AM | workout-1 | 30 min |\n| Oct 2, 2026, 10:00 AM | workout-2 | 40 min |\n| Oct 2, 2026, 10:00 AM | workout-3 | 50 min |\n| Oct 3, 2026, 10:00 AM | workout-4 | 60 min |\n\nEach day's total is 50 minutes on Oct 1, 90 minutes on Oct 2, and 60 minutes on Oct 3. All five are active, not deleted.\n\nI retrieved them in three requests of two, two, and one records. The local data has no workouts for the Fitbit provider in this period, and the records are marked with the parser \"eval-synthetic,\" so they may be test or placeholder data rather than real sessions."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "There are 5 Google workouts from October 1 through 3, 2026. Each record has a duration but no workout type or name.\n\n| Date (local start) | Source ID | Duration |\n|---|---|---|\n| Oct 1, 2026, 10:00 AM | workout-0 | 20 min |\n| Oct 1, 2026, 10:00 AM | workout-1 | 30 min |\n| Oct 2, 2026, 10:00 AM | workout-2 | 40 min |\n| Oct 2, 2026, 10:00 AM | workout-3 | 50 min |\n| Oct 3, 2026, 10:00 AM | workout-4 | 60 min |\n\nEach day's total is 50 minutes on Oct 1, 90 minutes on Oct 2, and 60 minutes on Oct 3. All five are active, not deleted.\n\nI retrieved them in three requests of two, two, and one records. The local data has no workouts for the Fitbit provider in this period, and the records are marked with the parser \"eval-synthetic,\" so they may be test or placeholder data rather than real sessions.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1343,
+        "cacheReadInputTokens": 29336,
+        "cacheCreationInputTokens": 3378,
+        "webSearchRequests": 0,
+        "costUSD": 0.0016412599999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 287,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3378,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0016412599999999999,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 3378,
+      "cache_read_input_tokens": 29336,
+      "output_tokens": 1343,
+      "output_tokens_details": {
+        "thinking_tokens": 287
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3378,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 495,
+          "cache_read_input_tokens": 8777,
+          "cache_creation_input_tokens": 539,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 539
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

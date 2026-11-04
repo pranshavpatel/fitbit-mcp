@@ -1,0 +1,137 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JVbdHnVhJ5gsCt7Vd5nLHv",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01UiLH4zne1v3tRyB2fXAWB7",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "include_original": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your counted average weight for October 1\u20132, 2026 is **72.57 kg**. That figure comes from a single day, October 1, so it isn't really an average across both days.\n\nThere were three readings in that window, and two of them didn't count toward the figure:\n\n- **Oct 1, 7:00 AM: 72.0 kg (72,000 g).** Not counted. The tool uses only the last reading of each day.\n- **Oct 1, 8:00 PM: 160 lb, which is 72.57 kg.** Counted, as the last reading of the day.\n- **Oct 2, 7:00 AM: 158, with no unit recorded.** Not counted. The unit is unknown, so I can't safely convert it. If it were pounds, it would be about 71.7 kg, but that's a guess.\n\nOctober 2 therefore has no usable data. If you take the 158 as pounds, the average of the two days' last readings would be about 72.1 kg. If you average all three readings, treating the 158 as pounds, you get about 72.1 kg too. I can't confirm the unit from the data.\n\nAll three readings come from a Fitbit Takeout import."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your counted average weight for October 1\u20132, 2026 is **72.57 kg**. That figure comes from a single day, October 1, so it isn't really an average across both days.\n\nThere were three readings in that window, and two of them didn't count toward the figure:\n\n- **Oct 1, 7:00 AM: 72.0 kg (72,000 g).** Not counted. The tool uses only the last reading of each day.\n- **Oct 1, 8:00 PM: 160 lb, which is 72.57 kg.** Counted, as the last reading of the day.\n- **Oct 2, 7:00 AM: 158, with no unit recorded.** Not counted. The unit is unknown, so I can't safely convert it. If it were pounds, it would be about 71.7 kg, but that's a guess.\n\nOctober 2 therefore has no usable data. If you take the 158 as pounds, the average of the two days' last readings would be about 72.1 kg. If you average all three readings, treating the 158 as pounds, you get about 72.1 kg too. I can't confirm the unit from the data.\n\nAll three readings come from a Fitbit Takeout import.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 643,
+        "cacheReadInputTokens": 12828,
+        "cacheCreationInputTokens": 2033,
+        "webSearchRequests": 0,
+        "costUSD": 0.0158528,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2033,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0158528,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2033,
+      "cache_read_input_tokens": 12828,
+      "output_tokens": 643,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2033,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 366,
+          "cache_read_input_tokens": 6762,
+          "cache_creation_input_tokens": 1337,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1337
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

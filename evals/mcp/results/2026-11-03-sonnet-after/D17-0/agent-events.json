@@ -1,0 +1,123 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013WzwVkJd5wshjPEVtJ7Noc",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Google steps for last week: Monday, October 26, 2026 to Sunday, November 1, 2026**\n\n- **Total:** 14,000 steps\n- **Daily average:** 2,000 steps\n- **Coverage:** all 7 days had data.\n- **Daily values:** every day (Oct 26 to Nov 1) was exactly 2,000 steps. The minimum, maximum and median are all 2,000, and the trend is flat.\n\nGoogle was the only provider with data for this period. The identical value on every day is unusual for real activity data. It may be placeholder or test data, or a sync problem, so you may want to check it against your device or app."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Google steps for last week: Monday, October 26, 2026 to Sunday, November 1, 2026**\n\n- **Total:** 14,000 steps\n- **Daily average:** 2,000 steps\n- **Coverage:** all 7 days had data.\n- **Daily values:** every day (Oct 26 to Nov 1) was exactly 2,000 steps. The minimum, maximum and median are all 2,000, and the trend is flat.\n\nGoogle was the only provider with data for this period. The identical value on every day is unusual for real activity data. It may be placeholder or test data, or a sync problem, so you may want to check it against your device or app.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 535,
+        "cacheReadInputTokens": 12453,
+        "cacheCreationInputTokens": 2305,
+        "webSearchRequests": 0,
+        "costUSD": 0.0158233,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 164,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2305,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0158233,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2305,
+      "cache_read_input_tokens": 12453,
+      "output_tokens": 535,
+      "output_tokens_details": {
+        "thinking_tokens": 164
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2305,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 208,
+          "cache_read_input_tokens": 6770,
+          "cache_creation_input_tokens": 1218,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1218
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

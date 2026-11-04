@@ -1,0 +1,879 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "not|doesn.t|no .*API"
+    },
+    "answer_fact_2": {
+      "pass": true,
+      "detail": "steps"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "terminal_job_observed": {
+      "pass": true,
+      "detail": ""
+    },
+    "expected_job_outcome": {
+      "pass": true,
+      "detail": "['succeeded']"
+    },
+    "takeout_imported": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D20",
+  "split": "dev",
+  "trial": 0,
+  "mode": "reference",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [],
+  "cost_usd": 0,
+  "latency_s": 1.12,
+  "error": null,
+  "answers": [
+    "Takeout steps imported; does not connect an API account."
+  ],
+  "trace": [
+    {
+      "tool": "connection_status",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"providers\": [\n    {\n      \"provider\": \"google\",\n      \"configured\": false,\n      \"client_secret_path\": \"$TRIAL/ghealth/client_secret.json\",\n      \"ghealth_cli_credentials\": \"not found\",\n      \"api_available\": true,\n      \"availability\": \"Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.\",\n      \"timezone_for_day_boundaries\": \"America/New_York\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    },\n    {\n      \"provider\": \"fitbit\",\n      \"configured\": false,\n      \"api_available\": true,\n      \"availability\": \"Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (23 day(s) left). Use an existing working Fitbit developer app only.\",\n      \"token_status\": \"none\",\n      \"connected\": false,\n      \"active_jobs\": []\n    }\n  ],\n  \"data_home\": \"$TRIAL/home\",\n  \"takeout_fallback\": \"import_takeout works without API access.\",\n  \"summary\": \"No verified API connection.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "providers": [
+            {
+              "provider": "google",
+              "configured": false,
+              "client_secret_path": "$TRIAL/ghealth/client_secret.json",
+              "ghealth_cli_credentials": "not found",
+              "api_available": true,
+              "availability": "Uses your existing Google Health API project (the ghealth CLI setup shared with health-coach-app). Google is not onboarding new projects. While the consent screen is in Testing mode, refresh tokens expire after 7 days: run `ghealth auth login` and the server picks up the new credentials.",
+              "timezone_for_day_boundaries": "America/New_York",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            },
+            {
+              "provider": "fitbit",
+              "configured": false,
+              "api_available": true,
+              "availability": "Legacy Fitbit Web API is scheduled to be turned off on 2026-10-30 (23 day(s) left). Use an existing working Fitbit developer app only.",
+              "token_status": "none",
+              "connected": false,
+              "active_jobs": []
+            }
+          ],
+          "data_home": "$TRIAL/home",
+          "takeout_fallback": "import_takeout works without API access.",
+          "summary": "No verified API connection."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0035,
+      "state": {
+        "records": [],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"activity\",\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "activity",
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0012,
+      "state": {
+        "records": [],
+        "jobs": [],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "import_takeout",
+      "arguments": {
+        "path": "$TRIAL/takeout-synthetic.zip"
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_435b8ae77d71\",\n  \"kind\": \"takeout\",\n  \"provider\": null,\n  \"status\": \"queued\",\n  \"message\": \"Queued\",\n  \"parameters\": {\n    \"path\": \"$TRIAL/takeout-synthetic.zip\"\n  },\n  \"progress\": {},\n  \"created_at\": \"2026-10-30T17:10:57Z\",\n  \"updated_at\": \"2026-10-30T17:10:57Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_435b8ae77d71",
+          "kind": "takeout",
+          "provider": null,
+          "status": "queued",
+          "message": "Queued",
+          "parameters": {
+            "path": "$TRIAL/takeout-synthetic.zip"
+          },
+          "progress": {},
+          "created_at": "2026-10-30T17:10:57Z",
+          "updated_at": "2026-10-30T17:10:57Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0026,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_435b8ae77d71",
+            "kind": "takeout",
+            "status": "running"
+          }
+        ],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_435b8ae77d71"
+      },
+      "user_turn": 1,
+      "index": 4,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_435b8ae77d71\",\n  \"kind\": \"takeout\",\n  \"provider\": null,\n  \"status\": \"running\",\n  \"message\": \"Extracting with safety limits\",\n  \"parameters\": {\n    \"path\": \"$TRIAL/takeout-synthetic.zip\"\n  },\n  \"progress\": {},\n  \"created_at\": \"2026-10-30T17:10:57Z\",\n  \"updated_at\": \"2026-10-30T17:10:57Z\",\n  \"started_at\": \"2026-10-30T17:10:57Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_435b8ae77d71",
+          "kind": "takeout",
+          "provider": null,
+          "status": "running",
+          "message": "Extracting with safety limits",
+          "parameters": {
+            "path": "$TRIAL/takeout-synthetic.zip"
+          },
+          "progress": {},
+          "created_at": "2026-10-30T17:10:57Z",
+          "updated_at": "2026-10-30T17:10:57Z",
+          "started_at": "2026-10-30T17:10:57Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0016,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_435b8ae77d71",
+            "kind": "takeout",
+            "status": "running"
+          }
+        ],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_435b8ae77d71"
+      },
+      "user_turn": 1,
+      "index": 5,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_435b8ae77d71\",\n  \"kind\": \"takeout\",\n  \"provider\": null,\n  \"status\": \"succeeded\",\n  \"message\": \"Takeout imported. 3 file(s) were not in a supported format and are listed by list_data_types.\",\n  \"parameters\": {\n    \"path\": \"$TRIAL/takeout-synthetic.zip\"\n  },\n  \"progress\": {\n    \"files_total\": 9,\n    \"files_processed\": 9,\n    \"files_unsupported\": 3,\n    \"records\": {\n      \"inserted\": 11,\n      \"updated\": 0,\n      \"unchanged\": 0,\n      \"restored\": 0\n    },\n    \"providers_detected\": [\n      \"fitbit_takeout\",\n      \"google_takeout\"\n    ],\n    \"extracted_to\": \"$TRIAL/home/takeout/job_435b8ae77d71\",\n    \"message\": \"Takeout imported. 3 file(s) were not in a supported format and are listed by list_data_types.\"\n  },\n  \"created_at\": \"2026-10-30T17:10:57Z\",\n  \"updated_at\": \"2026-10-30T17:10:57Z\",\n  \"started_at\": \"2026-10-30T17:10:57Z\",\n  \"finished_at\": \"2026-10-30T17:10:57Z\",\n  \"warnings\": [\n    \"Not extracted: Takeout/link (symbolic link not extracted)\",\n    \"part-1/Takeout/Fitbit/Global Export Data/resting_heart_rate-2026-10-01.json: 1 day(s) without a resting heart rate estimate were treated as missing\"\n  ],\n  \"warning_count\": 2\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_435b8ae77d71",
+          "kind": "takeout",
+          "provider": null,
+          "status": "succeeded",
+          "message": "Takeout imported. 3 file(s) were not in a supported format and are listed by list_data_types.",
+          "parameters": {
+            "path": "$TRIAL/takeout-synthetic.zip"
+          },
+          "progress": {
+            "files_total": 9,
+            "files_processed": 9,
+            "files_unsupported": 3,
+            "records": {
+              "inserted": 11,
+              "updated": 0,
+              "unchanged": 0,
+              "restored": 0
+            },
+            "providers_detected": [
+              "fitbit_takeout",
+              "google_takeout"
+            ],
+            "extracted_to": "$TRIAL/home/takeout/job_435b8ae77d71",
+            "message": "Takeout imported. 3 file(s) were not in a supported format and are listed by list_data_types."
+          },
+          "created_at": "2026-10-30T17:10:57Z",
+          "updated_at": "2026-10-30T17:10:57Z",
+          "started_at": "2026-10-30T17:10:57Z",
+          "finished_at": "2026-10-30T17:10:57Z",
+          "warnings": [
+            "Not extracted: Takeout/link (symbolic link not extracted)",
+            "part-1/Takeout/Fitbit/Global Export Data/resting_heart_rate-2026-10-01.json: 1 day(s) without a resting heart rate estimate were treated as missing"
+          ],
+          "warning_count": 2
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0018,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit_takeout",
+            "metric": "bmi",
+            "local_date": "2026-10-01",
+            "value": 22.4,
+            "unit": "kg/m2",
+            "record_key": "9",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "efficiency",
+            "local_date": "2026-10-02",
+            "value": 92.0,
+            "unit": "%",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "heart_rate",
+            "local_date": "2026-10-01",
+            "value": 71.0,
+            "unit": "bpm",
+            "record_key": "2026-10-01T08:00:05",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 410.0,
+            "unit": "min",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "minutes_awake",
+            "local_date": "2026-10-02",
+            "value": 40.0,
+            "unit": "min",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "resting_heart_rate",
+            "local_date": "2026-10-01",
+            "value": 56.4,
+            "unit": "bpm",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 120.0,
+            "unit": "count",
+            "record_key": "2026-10-01T08:00:00",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 80.0,
+            "unit": "count",
+            "record_key": "2026-10-01T08:01:00",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "time_in_bed",
+            "local_date": "2026-10-02",
+            "value": 450.0,
+            "unit": "min",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "weight",
+            "local_date": "2026-10-01",
+            "value": 161.2,
+            "unit": "unknown",
+            "record_key": "9",
+            "status": "active"
+          },
+          {
+            "provider": "google_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 777.0,
+            "unit": "count",
+            "record_key": "t1",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_435b8ae77d71",
+            "kind": "takeout",
+            "status": "succeeded"
+          }
+        ],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "list_data_types",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 6,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"metrics\": [\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"interval\",\n      \"unit\": \"count\",\n      \"records\": 2,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-01\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"body\",\n      \"metric\": \"bmi\",\n      \"granularity\": \"sample\",\n      \"unit\": \"kg/m2\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-01\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"body\",\n      \"metric\": \"weight\",\n      \"granularity\": \"sample\",\n      \"unit\": \"unknown\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-01\",\n      \"days_with_data\": 1,\n      \"note\": \"unit unknown; excluded from unit-converted summaries\"\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"heart\",\n      \"metric\": \"heart_rate\",\n      \"granularity\": \"sample\",\n      \"unit\": \"bpm\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-01\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"heart\",\n      \"metric\": \"resting_heart_rate\",\n      \"granularity\": \"daily\",\n      \"unit\": \"bpm\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-01\",\n      \"last_date\": \"2026-10-01\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"sleep\",\n      \"metric\": \"efficiency\",\n      \"granularity\": \"session\",\n      \"unit\": \"%\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-02\",\n      \"last_date\": \"2026-10-02\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"sleep\",\n      \"metric\": \"minutes_asleep\",\n      \"granularity\": \"session\",\n      \"unit\": \"min\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-02\",\n      \"last_date\": \"2026-10-02\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"sleep\",\n      \"metric\": \"minutes_awake\",\n      \"granularity\": \"session\",\n      \"unit\": \"min\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-02\",\n      \"last_date\": \"2026-10-02\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"fitbit_takeout\",\n      \"category\": \"sleep\",\n      \"metric\": \"time_in_bed\",\n      \"granularity\": \"session\",\n      \"unit\": \"min\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-02\",\n      \"last_date\": \"2026-10-02\",\n      \"days_with_data\": 1\n    },\n    {\n      \"provider\": \"google_takeout\",\n      \"category\": \"activity\",\n      \"metric\": \"steps\",\n      \"granularity\": \"interval\",\n      \"unit\": \"count\",\n      \"records\": 1,\n      \"deleted_upstream\": 0,\n      \"first_date\": \"2026-10-03\",\n      \"last_date\": \"2026-10-03\",\n      \"days_with_data\": 1\n    }\n  ],\n  \"missing_denied_or_failed\": [],\n  \"categories_without_local_records\": {\n    \"fitbit\": [\n      \"activity\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"sleep\",\n      \"spo2_breathing_temperature\"\n    ],\n    \"google\": [\n      \"activity\",\n      \"blood_glucose\",\n      \"body\",\n      \"cardio_fitness\",\n      \"ecg\",\n      \"exercise\",\n      \"heart\",\n      \"irn\",\n      \"nutrition\",\n      \"reproductive_health\",\n      \"sleep\",\n      \"spo2_breathing_temperature\",\n      \"symptoms_and_mood\"\n    ]\n  },\n  \"unsupported_or_unparsed\": [\n    {\n      \"provider\": \"takeout\",\n      \"category_hint\": \"archive\",\n      \"reason\": \"symbolic link not extracted\",\n      \"files_or_requests\": 1,\n      \"occurrences\": 1\n    },\n    {\n      \"provider\": \"takeout\",\n      \"category_hint\": \"csv\",\n      \"reason\": \"CSV format not parsed (header: sleep_log_entry_id,timestamp,overall_score)\",\n      \"files_or_requests\": 1,\n      \"occurrences\": 1\n    },\n    {\n      \"provider\": \"takeout\",\n      \"category_hint\": \"file\",\n      \"reason\": \"File type '.html' not parsed\",\n      \"files_or_requests\": 1,\n      \"occurrences\": 1\n    },\n    {\n      \"provider\": \"takeout\",\n      \"category_hint\": \"json\",\n      \"reason\": \"Unrecognized JSON structure (top-level: unknownThing)\",\n      \"files_or_requests\": 1,\n      \"occurrences\": 1\n    }\n  ],\n  \"sync_state\": [],\n  \"notes\": [\n    \"A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.\",\n    \"Unsupported items are retained on disk (raw responses or extracted Takeout files).\"\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "metrics": [
+            {
+              "provider": "fitbit_takeout",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "interval",
+              "unit": "count",
+              "records": 2,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-01",
+              "days_with_data": 1
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "body",
+              "metric": "bmi",
+              "granularity": "sample",
+              "unit": "kg/m2",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-01",
+              "days_with_data": 1
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "body",
+              "metric": "weight",
+              "granularity": "sample",
+              "unit": "unknown",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-01",
+              "days_with_data": 1,
+              "note": "unit unknown; excluded from unit-converted summaries"
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "heart",
+              "metric": "heart_rate",
+              "granularity": "sample",
+              "unit": "bpm",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-01",
+              "days_with_data": 1
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "heart",
+              "metric": "resting_heart_rate",
+              "granularity": "daily",
+              "unit": "bpm",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-01",
+              "last_date": "2026-10-01",
+              "days_with_data": 1
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "sleep",
+              "metric": "efficiency",
+              "granularity": "session",
+              "unit": "%",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-02",
+              "last_date": "2026-10-02",
+              "days_with_data": 1
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "sleep",
+              "metric": "minutes_asleep",
+              "granularity": "session",
+              "unit": "min",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-02",
+              "last_date": "2026-10-02",
+              "days_with_data": 1
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "sleep",
+              "metric": "minutes_awake",
+              "granularity": "session",
+              "unit": "min",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-02",
+              "last_date": "2026-10-02",
+              "days_with_data": 1
+            },
+            {
+              "provider": "fitbit_takeout",
+              "category": "sleep",
+              "metric": "time_in_bed",
+              "granularity": "session",
+              "unit": "min",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-02",
+              "last_date": "2026-10-02",
+              "days_with_data": 1
+            },
+            {
+              "provider": "google_takeout",
+              "category": "activity",
+              "metric": "steps",
+              "granularity": "interval",
+              "unit": "count",
+              "records": 1,
+              "deleted_upstream": 0,
+              "first_date": "2026-10-03",
+              "last_date": "2026-10-03",
+              "days_with_data": 1
+            }
+          ],
+          "missing_denied_or_failed": [],
+          "categories_without_local_records": {
+            "fitbit": [
+              "activity",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "sleep",
+              "spo2_breathing_temperature"
+            ],
+            "google": [
+              "activity",
+              "blood_glucose",
+              "body",
+              "cardio_fitness",
+              "ecg",
+              "exercise",
+              "heart",
+              "irn",
+              "nutrition",
+              "reproductive_health",
+              "sleep",
+              "spo2_breathing_temperature",
+              "symptoms_and_mood"
+            ]
+          },
+          "unsupported_or_unparsed": [
+            {
+              "provider": "takeout",
+              "category_hint": "archive",
+              "reason": "symbolic link not extracted",
+              "files_or_requests": 1,
+              "occurrences": 1
+            },
+            {
+              "provider": "takeout",
+              "category_hint": "csv",
+              "reason": "CSV format not parsed (header: sleep_log_entry_id,timestamp,overall_score)",
+              "files_or_requests": 1,
+              "occurrences": 1
+            },
+            {
+              "provider": "takeout",
+              "category_hint": "file",
+              "reason": "File type '.html' not parsed",
+              "files_or_requests": 1,
+              "occurrences": 1
+            },
+            {
+              "provider": "takeout",
+              "category_hint": "json",
+              "reason": "Unrecognized JSON structure (top-level: unknownThing)",
+              "files_or_requests": 1,
+              "occurrences": 1
+            }
+          ],
+          "sync_state": [],
+          "notes": [
+            "A category with no local records may be not yet imported, not granted, denied, or genuinely empty; see missing_denied_or_failed for the recorded reason.",
+            "Unsupported items are retained on disk (raw responses or extracted Takeout files)."
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0014,
+      "state": {
+        "records": [
+          {
+            "provider": "fitbit_takeout",
+            "metric": "bmi",
+            "local_date": "2026-10-01",
+            "value": 22.4,
+            "unit": "kg/m2",
+            "record_key": "9",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "efficiency",
+            "local_date": "2026-10-02",
+            "value": 92.0,
+            "unit": "%",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "heart_rate",
+            "local_date": "2026-10-01",
+            "value": 71.0,
+            "unit": "bpm",
+            "record_key": "2026-10-01T08:00:05",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "minutes_asleep",
+            "local_date": "2026-10-02",
+            "value": 410.0,
+            "unit": "min",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "minutes_awake",
+            "local_date": "2026-10-02",
+            "value": 40.0,
+            "unit": "min",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "resting_heart_rate",
+            "local_date": "2026-10-01",
+            "value": 56.4,
+            "unit": "bpm",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 120.0,
+            "unit": "count",
+            "record_key": "2026-10-01T08:00:00",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 80.0,
+            "unit": "count",
+            "record_key": "2026-10-01T08:01:00",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "time_in_bed",
+            "local_date": "2026-10-02",
+            "value": 450.0,
+            "unit": "min",
+            "record_key": "31",
+            "status": "active"
+          },
+          {
+            "provider": "fitbit_takeout",
+            "metric": "weight",
+            "local_date": "2026-10-01",
+            "value": 161.2,
+            "unit": "unknown",
+            "record_key": "9",
+            "status": "active"
+          },
+          {
+            "provider": "google_takeout",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 777.0,
+            "unit": "count",
+            "record_key": "t1",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_435b8ae77d71",
+            "kind": "takeout",
+            "status": "succeeded"
+          }
+        ],
+        "google_token_exists": false
+      }
+    }
+  ],
+  "initial": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "fitbit_takeout",
+        "metric": "bmi",
+        "local_date": "2026-10-01",
+        "value": 22.4,
+        "unit": "kg/m2",
+        "record_key": "9",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "efficiency",
+        "local_date": "2026-10-02",
+        "value": 92.0,
+        "unit": "%",
+        "record_key": "31",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "heart_rate",
+        "local_date": "2026-10-01",
+        "value": 71.0,
+        "unit": "bpm",
+        "record_key": "2026-10-01T08:00:05",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "minutes_asleep",
+        "local_date": "2026-10-02",
+        "value": 410.0,
+        "unit": "min",
+        "record_key": "31",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "minutes_awake",
+        "local_date": "2026-10-02",
+        "value": 40.0,
+        "unit": "min",
+        "record_key": "31",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "resting_heart_rate",
+        "local_date": "2026-10-01",
+        "value": 56.4,
+        "unit": "bpm",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 120.0,
+        "unit": "count",
+        "record_key": "2026-10-01T08:00:00",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 80.0,
+        "unit": "count",
+        "record_key": "2026-10-01T08:01:00",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "time_in_bed",
+        "local_date": "2026-10-02",
+        "value": 450.0,
+        "unit": "min",
+        "record_key": "31",
+        "status": "active"
+      },
+      {
+        "provider": "fitbit_takeout",
+        "metric": "weight",
+        "local_date": "2026-10-01",
+        "value": 161.2,
+        "unit": "unknown",
+        "record_key": "9",
+        "status": "active"
+      },
+      {
+        "provider": "google_takeout",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 777.0,
+        "unit": "count",
+        "record_key": "t1",
+        "status": "active"
+      }
+    ],
+    "jobs": [
+      {
+        "id": "job_435b8ae77d71",
+        "kind": "takeout",
+        "status": "succeeded"
+      }
+    ],
+    "google_token_exists": false
+  },
+  "tool_calls": 6,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "6601f613c818e8162c09d8ad266d2a7ca540c3b3aa0a7087fe92385c09aa3cbc"
+}

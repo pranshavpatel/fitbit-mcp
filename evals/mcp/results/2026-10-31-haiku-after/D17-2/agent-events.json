@@ -1,0 +1,152 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01EbkWS1X3gyCgViqdU2gdhQ",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "week",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01VwrXnetyw3eXUQs6UuzseK",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "activity",
+          "metric": "steps",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "granularity": "daily"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google steps for last week, **Monday, October 26, 2026 through Sunday, November 1, 2026**, show 2,000 steps every day, for a total of 14,000 steps over the 7 days.\n\nI don't think these numbers are your real step counts. Every day is exactly 2,000, and the raw records are tagged with the parser `eval-synthetic`, which suggests placeholder or test data rather than data from your Google account. I'd check how this data was imported before relying on it.\n\nTwo other notes:\n- I used today as Monday, November 2, 2026, based on the system date. Another note in this session gives October 31, 2026. If that's the correct date, \"last week\" would be Monday, October 19 through Sunday, October 25, and I can pull those numbers instead.\n- All 7 days have data, so nothing is missing from this range."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google steps for last week, **Monday, October 26, 2026 through Sunday, November 1, 2026**, show 2,000 steps every day, for a total of 14,000 steps over the 7 days.\n\nI don't think these numbers are your real step counts. Every day is exactly 2,000, and the raw records are tagged with the parser `eval-synthetic`, which suggests placeholder or test data rather than data from your Google account. I'd check how this data was imported before relying on it.\n\nTwo other notes:\n- I used today as Monday, November 2, 2026, based on the system date. Another note in this session gives October 31, 2026. If that's the correct date, \"last week\" would be Monday, October 19 through Sunday, October 25, and I can pull those numbers instead.\n- All 7 days have data, so nothing is missing from this range.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1497,
+        "cacheReadInputTokens": 21015,
+        "cacheCreationInputTokens": 3450,
+        "webSearchRequests": 0,
+        "costUSD": 0.00164925,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 879,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3450,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00164925,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 3450,
+      "cache_read_input_tokens": 21015,
+      "output_tokens": 1497,
+      "output_tokens_details": {
+        "thinking_tokens": 879
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3450,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 398,
+          "cache_read_input_tokens": 8151,
+          "cache_creation_input_tokens": 1372,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1372
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,161 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01XA6nwzBPnoXG4PZiaTV8k9",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01C41FTJEH1iQs8WZNvChSba",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01DgQSt1JiSCW6J27JuSb6Rr",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "sleep",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07",
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Short answer:** Your local Google sleep data covers only 2 of the 7 days (October 1\u20132). Oct 3\u20137 has no sleep records, so I can't say how those nights went.\n\n**Week of Oct 1\u20137, 2026 (one week in total)**\n\n- **Main sleep:** One night, Oct 1 at 11:00 PM to Oct 2 at 7:00 AM, with **420 minutes (7.0 hours) asleep**.\n- **Naps:** One nap on Oct 2, 2:00\u20132:40 PM, with **35 minutes asleep**.\n- **Weekly average:** Not meaningful. With one night and one nap, any average would be based on very little data.\n\n**Coverage and caveats**\n\n- **Days with sleep data:** 1 of 7 (Oct 2). Oct 1 has steps but no sleep record. Oct 3\u20137 has no sleep or step records locally.\n- **Missing isn't zero:** The empty days probably mean the data hasn't been imported, not that you didn't sleep. I haven't checked whether the data exists in Google.\n- **Measure:** The values are \"minutes asleep\" from Google's session records. They don't include time in bed, sleep stages, or sleep quality scores.\n- **Connection:** Google isn't verified as connected right now (`connection_status` reports no valid token). Tokens on the Google consent screen in Testing mode expire after 7 days. To pull newer data, you'd need to reconnect with `ghealth auth login` or the connect tool, then run a sync. I haven't made any changes.\n- **Date oddity:** The records were first stored on 2026-10-30, but the system date I was given is 2026-10-07. Check that your clock and the import timing agree before relying on the \"last synced\" timing.\n\nThis is a summary of your records, not medical advice. If sleep problems are a concern, talk to a clinician."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Short answer:** Your local Google sleep data covers only 2 of the 7 days (October 1\u20132). Oct 3\u20137 has no sleep records, so I can't say how those nights went.\n\n**Week of Oct 1\u20137, 2026 (one week in total)**\n\n- **Main sleep:** One night, Oct 1 at 11:00 PM to Oct 2 at 7:00 AM, with **420 minutes (7.0 hours) asleep**.\n- **Naps:** One nap on Oct 2, 2:00\u20132:40 PM, with **35 minutes asleep**.\n- **Weekly average:** Not meaningful. With one night and one nap, any average would be based on very little data.\n\n**Coverage and caveats**\n\n- **Days with sleep data:** 1 of 7 (Oct 2). Oct 1 has steps but no sleep record. Oct 3\u20137 has no sleep or step records locally.\n- **Missing isn't zero:** The empty days probably mean the data hasn't been imported, not that you didn't sleep. I haven't checked whether the data exists in Google.\n- **Measure:** The values are \"minutes asleep\" from Google's session records. They don't include time in bed, sleep stages, or sleep quality scores.\n- **Connection:** Google isn't verified as connected right now (`connection_status` reports no valid token). Tokens on the Google consent screen in Testing mode expire after 7 days. To pull newer data, you'd need to reconnect with `ghealth auth login` or the connect tool, then run a sync. I haven't made any changes.\n- **Date oddity:** The records were first stored on 2026-10-30, but the system date I was given is 2026-10-07. Check that your clock and the import timing agree before relying on the \"last synced\" timing.\n\nThis is a summary of your records, not medical advice. If sleep problems are a concern, talk to a clinician.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1385,
+        "cacheReadInputTokens": 21484,
+        "cacheCreationInputTokens": 2715,
+        "webSearchRequests": 0,
+        "costUSD": 0.00145094,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 506,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2715,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00145094,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2715,
+      "cache_read_input_tokens": 21484,
+      "output_tokens": 1385,
+      "output_tokens_details": {
+        "thinking_tokens": 506
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2715,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 995,
+          "cache_read_input_tokens": 8194,
+          "cache_creation_input_tokens": 690,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 690
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

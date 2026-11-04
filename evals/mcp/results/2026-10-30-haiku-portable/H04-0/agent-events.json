@@ -1,0 +1,171 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I'll check the Google connection and which sleep data is stored locally."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01MvwrsGPsFdYPn9D5HdumRA",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google",
+          "check_remote": false
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01EEwvz5g3zCh4TDq1cy4Wzj",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01VK4MuL6eJqoY1emJY4Zxhr",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "category": "sleep",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your local data has sleep for only one night in that week, so I can't give a real weekly summary.\n\n**Week covered:** Monday, Oct 26 to Sunday, Nov 1, 2026.\n\n**What's stored:**\n- **Sunday, Nov 1:** 420 minutes asleep (7 hours 0 minutes). The session ran from about 11:00 PM Oct 31 to 7:00 AM Nov 1.\n- **Mon Oct 26 through Sat Oct 31:** no sleep records. These days are missing, not zero hours of sleep.\n\n**Overnight dates:** Sleep is filed under the date you wake up, not the date you go to bed. So the night of Oct 31 into Nov 1 counts as Nov 1. Any sleep that started Sunday night is counted as Monday's, and the Monday after that is the one you'd see for that night.\n\n**Limitations and things to check:**\n- Google isn't connected in this app, so I could only read what's already stored locally. Nothing was pulled from Google for this week.\n- The one record is labeled with the parser name \"eval-synthetic,\" which suggests it may be test data rather than your real Google Health record. Please confirm it matches your own sleep before relying on it.\n- The stored data only includes total minutes asleep. It has no sleep stages, time in bed, or sleep scores.\n\n**Next steps:** If you'd like the real week, connect your Google account so I can import it. Google's sign-in needs you to complete it (through the `ghealth` CLI or a browser window), and I can't do that step for you. Once it's connected, I can sync and give you the full summary.\n\nAlso, the date context conflicts: one note says today is Nov 2 and another says Oct 30. I used Nov 2 (a Monday). If you meant the week of Oct 19 to 25, tell me and I'll check that range instead."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your local data has sleep for only one night in that week, so I can't give a real weekly summary.\n\n**Week covered:** Monday, Oct 26 to Sunday, Nov 1, 2026.\n\n**What's stored:**\n- **Sunday, Nov 1:** 420 minutes asleep (7 hours 0 minutes). The session ran from about 11:00 PM Oct 31 to 7:00 AM Nov 1.\n- **Mon Oct 26 through Sat Oct 31:** no sleep records. These days are missing, not zero hours of sleep.\n\n**Overnight dates:** Sleep is filed under the date you wake up, not the date you go to bed. So the night of Oct 31 into Nov 1 counts as Nov 1. Any sleep that started Sunday night is counted as Monday's, and the Monday after that is the one you'd see for that night.\n\n**Limitations and things to check:**\n- Google isn't connected in this app, so I could only read what's already stored locally. Nothing was pulled from Google for this week.\n- The one record is labeled with the parser name \"eval-synthetic,\" which suggests it may be test data rather than your real Google Health record. Please confirm it matches your own sleep before relying on it.\n- The stored data only includes total minutes asleep. It has no sleep stages, time in bed, or sleep scores.\n\n**Next steps:** If you'd like the real week, connect your Google account so I can import it. Google's sign-in needs you to complete it (through the `ghealth` CLI or a browser window), and I can't do that step for you. Once it's connected, I can sync and give you the full summary.\n\nAlso, the date context conflicts: one note says today is Nov 2 and another says Oct 30. I used Nov 2 (a Monday). If you meant the week of Oct 19 to 25, tell me and I'll check that range instead.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 2027,
+        "cacheReadInputTokens": 20362,
+        "cacheCreationInputTokens": 3069,
+        "webSearchRequests": 0,
+        "costUSD": 0.0018315200000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1116,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3069,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0018315200000000001,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 3069,
+      "cache_read_input_tokens": 20362,
+      "output_tokens": 2027,
+      "output_tokens_details": {
+        "thinking_tokens": 1116
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3069,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1109,
+          "cache_read_input_tokens": 8109,
+          "cache_creation_input_tokens": 607,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 607
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

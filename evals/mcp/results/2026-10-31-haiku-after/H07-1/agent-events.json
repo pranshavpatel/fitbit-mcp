@@ -1,0 +1,176 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01AKbjb8HjnRt4MVtmXUToB9",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CbbPU9oY3zANWapHzQeYpP",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_167a9e297a36"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The job is queued. I'll check its progress."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01AhdBtrFz86bbNtFhd4TV1C",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_167a9e297a36"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01LY67UVXJRC4kM1YGA6W2Lh",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The interrupted Google import finished successfully.\n\n**Job:** `job_167a9e297a36` (activity, Oct 1\u20133, 2026, America/New_York)\n- **Status:** Succeeded. All 18 planned requests returned OK. The earlier network interruption was not a problem on resume.\n- **Records:** 3 inserted, 0 updated, 0 deleted upstream.\n\n**Activity coverage:**\n- **Steps:** Data for all 3 days, Oct 1, 2 and 3. This is the only activity metric that returned data.\n- **Everything else in the activity category was empty:** active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories. Google returned successful but empty responses for these, so the account likely has no such data for these dates. That is not the same as a failed import.\n\n**Limitations:**\n- The import covered only three days, so it says nothing about longer history.\n- Sync state now shows Google synced through Oct 3.\n- I didn't include intraday data or unverified types beyond what the job requested."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The interrupted Google import finished successfully.\n\n**Job:** `job_167a9e297a36` (activity, Oct 1\u20133, 2026, America/New_York)\n- **Status:** Succeeded. All 18 planned requests returned OK. The earlier network interruption was not a problem on resume.\n- **Records:** 3 inserted, 0 updated, 0 deleted upstream.\n\n**Activity coverage:**\n- **Steps:** Data for all 3 days, Oct 1, 2 and 3. This is the only activity metric that returned data.\n- **Everything else in the activity category was empty:** active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories. Google returned successful but empty responses for these, so the account likely has no such data for these dates. That is not the same as a failed import.\n\n**Limitations:**\n- The import covered only three days, so it says nothing about longer history.\n- Sync state now shows Google synced through Oct 3.\n- I didn't include intraday data or unverified types beyond what the job requested.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 706,
+        "cacheReadInputTokens": 36555,
+        "cacheCreationInputTokens": 3780,
+        "webSearchRequests": 0,
+        "costUSD": 0.00147555,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 86,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3780,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00147555,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 3780,
+      "cache_read_input_tokens": 36555,
+      "output_tokens": 706,
+      "output_tokens_details": {
+        "thinking_tokens": 86
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3780,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 386,
+          "cache_read_input_tokens": 8430,
+          "cache_creation_input_tokens": 1429,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1429
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,138 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01LNEhByai7B5tRims3CXWxL",
+        "name": "mcp__fitbit_eval__disconnect_account",
+        "input": {
+          "provider": "google",
+          "delete_local_data": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01RMvkMkjzdSuCeKBiiCA7Xa",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Nothing has been deleted. Here is the preview of what deleting your local Google data would do.\n\n**Actions that would run if you approve:**\n1. Remove the locally stored Google tokens.\n2. Cancel any active Google jobs.\n3. Permanently delete the local Google records and the raw API responses kept on disk.\n\n**What's currently stored locally for Google:**\n- **Google (API), activity \u2013 steps:** 3 daily records, covering 2026-10-01 to 2026-10-03.\n- No other Google categories have local records.\n\n**What the preview does not cover:**\n- **Google Takeout data is not included.** It's a separate provider, `google_takeout`, with 1 steps record (2026-10-01). It stays on disk unless you also ask to delete it, and that would be a separate step.\n- **Remote access is not revoked.** The app's authorization at Google stays in place unless you ask to revoke it. Revoking is a separate option.\n- **Fitbit data is not affected.**\n\nThe preview is valid for 5 minutes. If you want to proceed with deleting the local Google data (API records and raw responses, and tokens), reply \"yes\" and I'll run the deletion. Tell me if you also want Takeout data or remote revocation included."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Nothing has been deleted. Here is the preview of what deleting your local Google data would do.\n\n**Actions that would run if you approve:**\n1. Remove the locally stored Google tokens.\n2. Cancel any active Google jobs.\n3. Permanently delete the local Google records and the raw API responses kept on disk.\n\n**What's currently stored locally for Google:**\n- **Google (API), activity \u2013 steps:** 3 daily records, covering 2026-10-01 to 2026-10-03.\n- No other Google categories have local records.\n\n**What the preview does not cover:**\n- **Google Takeout data is not included.** It's a separate provider, `google_takeout`, with 1 steps record (2026-10-01). It stays on disk unless you also ask to delete it, and that would be a separate step.\n- **Remote access is not revoked.** The app's authorization at Google stays in place unless you ask to revoke it. Revoking is a separate option.\n- **Fitbit data is not affected.**\n\nThe preview is valid for 5 minutes. If you want to proceed with deleting the local Google data (API records and raw responses, and tokens), reply \"yes\" and I'll run the deletion. Tell me if you also want Takeout data or remote revocation included.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 856,
+        "cacheReadInputTokens": 21158,
+        "cacheCreationInputTokens": 1821,
+        "webSearchRequests": 0,
+        "costUSD": 0.00100438,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 324,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1821,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00100438,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1821,
+      "cache_read_input_tokens": 21158,
+      "output_tokens": 856,
+      "output_tokens_details": {
+        "thinking_tokens": 324
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1821,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 401,
+          "cache_read_input_tokens": 7600,
+          "cache_creation_input_tokens": 667,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 667
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

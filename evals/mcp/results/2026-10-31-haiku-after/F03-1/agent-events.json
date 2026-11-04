@@ -1,0 +1,140 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011KxwZ3kMNADh2bKLG9YDfk",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "sleep",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-07"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01VbproLi84A5DCuqYsS5j7F",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "On the days you asked about, only **one of the seven days has sleep data**: **October 2, 2026**. That day totals **455 minutes (about 7 hours 35 minutes)**, naps included. The main sleep session was 420 minutes (7 hours), so the nap accounted for about 35 minutes.\n\nThe other six days (October 1 and 3\u20137) have no sleep records in your local data. That doesn't mean you didn't sleep. The data may not have been imported or synced yet, or the device may not have recorded those nights. I didn't count them as zero.\n\nBecause there's only one day, I can't give a meaningful typical-day average or trend. If you want, I can run a sync to fetch any newer sleep data from Google and check again."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "On the days you asked about, only **one of the seven days has sleep data**: **October 2, 2026**. That day totals **455 minutes (about 7 hours 35 minutes)**, naps included. The main sleep session was 420 minutes (7 hours), so the nap accounted for about 35 minutes.\n\nThe other six days (October 1 and 3\u20137) have no sleep records in your local data. That doesn't mean you didn't sleep. The data may not have been imported or synced yet, or the device may not have recorded those nights. I didn't count them as zero.\n\nBecause there's only one day, I can't give a meaningful typical-day average or trend. If you want, I can run a sync to fetch any newer sleep data from Google and check again.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 742,
+        "cacheReadInputTokens": 12867,
+        "cacheCreationInputTokens": 2164,
+        "webSearchRequests": 0,
+        "costUSD": 0.0009328700000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 329,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2164,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0009328700000000001,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 2164,
+      "cache_read_input_tokens": 12867,
+      "output_tokens": 742,
+      "output_tokens_details": {
+        "thinking_tokens": 329
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2164,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 423,
+          "cache_read_input_tokens": 6793,
+          "cache_creation_input_tokens": 1445,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1445
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

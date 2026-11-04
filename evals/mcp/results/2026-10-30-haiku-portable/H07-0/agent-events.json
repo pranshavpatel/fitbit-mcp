@@ -1,0 +1,185 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Q5D17rWE2wxtnB5gJucra3",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011Y2fn9LpRb2rpJmUCnD3eN",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_636f57f45e15"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The resume job is queued. I'll check its progress."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01MWTsQ2fTMchCbJsteHs2BU",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_636f57f45e15"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The job succeeded. I'll check what activity data is now in the local database."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01K1oFCTCMMV9wWEeU1fKV53",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The interrupted Google import resumed and finished successfully. All 18 planned requests returned OK, and the job covered only October 1\u20133, 2026 (activity category).\n\n**What was imported**\n- **Steps:** 3 daily records, one for each day from October 1 to 3. This is the only activity metric with data.\n- The job inserted 3 records and updated, unchanged, or deleted none.\n\n**Activity metrics with no data**\nThese 12 requests succeeded but returned no records for this window: active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories.\n\nAn empty response can mean the data doesn't exist for those days, or that the permission wasn't granted. The local record doesn't say which, so I can't tell from here. If you expect distance or calorie data for those days, check the Google permissions for this connection.\n\n**Limitations**\n- Coverage is only the three days requested, not your full history.\n- Other categories (sleep, heart, body, and so on) have no local Google records yet.\n- Google's sync state now shows data through October 3, 2026."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The interrupted Google import resumed and finished successfully. All 18 planned requests returned OK, and the job covered only October 1\u20133, 2026 (activity category).\n\n**What was imported**\n- **Steps:** 3 daily records, one for each day from October 1 to 3. This is the only activity metric with data.\n- The job inserted 3 records and updated, unchanged, or deleted none.\n\n**Activity metrics with no data**\nThese 12 requests succeeded but returned no records for this window: active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories.\n\nAn empty response can mean the data doesn't exist for those days, or that the permission wasn't granted. The local record doesn't say which, so I can't tell from here. If you expect distance or calorie data for those days, check the Google permissions for this connection.\n\n**Limitations**\n- Coverage is only the three days requested, not your full history.\n- Other categories (sleep, heart, body, and so on) have no local Google records yet.\n- Google's sync state now shows data through October 3, 2026.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 934,
+        "cacheReadInputTokens": 35270,
+        "cacheCreationInputTokens": 4114,
+        "webSearchRequests": 0,
+        "costUSD": 0.0016435000000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 290,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4114,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0016435000000000002,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 4114,
+      "cache_read_input_tokens": 35270,
+      "output_tokens": 934,
+      "output_tokens_details": {
+        "thinking_tokens": 290
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4114,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 546,
+          "cache_read_input_tokens": 8214,
+          "cache_creation_input_tokens": 1547,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1547
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

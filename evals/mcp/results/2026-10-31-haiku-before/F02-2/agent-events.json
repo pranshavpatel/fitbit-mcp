@@ -1,0 +1,141 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01JT6DqykiyK16ByzkDcw2vn",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_014UgTDVAdmKpcTFRmb4FWGi",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "body",
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "include_original": true
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Average: about 72.3 kg** (72.29 kg) for October 1\u20132, 2026, based on two readings, both on October 1.\n\n- **Oct 1, 7:00 AM:** 72,000 g = 72.0 kg\n- **Oct 1, 8:00 PM:** 160 lb = 72.58 kg\n\n**Not counted:**\n- **Oct 2, 7:00 AM:** a reading of 158 with no unit recorded. I excluded it because I can't tell whether it's kilograms or pounds. If it's pounds, it would be about 71.7 kg; if kilograms, 158 kg is implausible, so it's probably pounds. Check the original Fitbit entry to confirm.\n\nAs a result, October 2 has no usable kilogram value, so the average reflects only October 1. The data comes from a Google Takeout import, and each day has just one or two weigh-ins, so this is a thin sample."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Average: about 72.3 kg** (72.29 kg) for October 1\u20132, 2026, based on two readings, both on October 1.\n\n- **Oct 1, 7:00 AM:** 72,000 g = 72.0 kg\n- **Oct 1, 8:00 PM:** 160 lb = 72.58 kg\n\n**Not counted:**\n- **Oct 2, 7:00 AM:** a reading of 158 with no unit recorded. I excluded it because I can't tell whether it's kilograms or pounds. If it's pounds, it would be about 71.7 kg; if kilograms, 158 kg is implausible, so it's probably pounds. Check the original Fitbit entry to confirm.\n\nAs a result, October 2 has no usable kilogram value, so the average reflects only October 1. The data comes from a Google Takeout import, and each day has just one or two weigh-ins, so this is a thin sample.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 880,
+        "cacheReadInputTokens": 19949,
+        "cacheCreationInputTokens": 2268,
+        "webSearchRequests": 0,
+        "costUSD": 0.00109369,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 376,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2268,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00109369,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 2268,
+      "cache_read_input_tokens": 19949,
+      "output_tokens": 880,
+      "output_tokens_details": {
+        "thinking_tokens": 376
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2268,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 603,
+          "cache_read_input_tokens": 7422,
+          "cache_creation_input_tokens": 776,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 776
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,159 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011PfUMmSGfTWHMdgvq9cHkH",
+        "name": "mcp__fitbit_eval__import_takeout",
+        "input": {
+          "path": "/private/tmp/fitbit-mcp-eval-97isepji/takeout-synthetic.zip"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011zknrbKhFqhjAtXupZ7cnY",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01Ey71MgEPd5k6fZJ8XgwKoA",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_fec30f002f25"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01QotGxw34wFpgqnwhneCE24",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The import finished. It did not connect your API account.\n\n**Import status:** The job succeeded. It processed all 9 files and inserted 11 records. Three files weren't in a supported format, and one symbolic link was skipped.\n\n**Coverage:** The data is very thin. It spans only 2026-10-01 to 2026-10-03.\n\n| Source | Data | Dates |\n|---|---|---|\n| Fitbit Takeout | Steps (2 records) | Oct 1 |\n| Fitbit Takeout | Heart rate (1 sample) | Oct 1 |\n| Fitbit Takeout | Resting heart rate (1 day) | Oct 1 |\n| Fitbit Takeout | BMI (1 sample) | Oct 1 |\n| Fitbit Takeout | Weight (1 sample) | Oct 1 |\n| Fitbit Takeout | Sleep: efficiency, minutes asleep, minutes awake and time in bed (one session) | Oct 2 |\n| Google Takeout | Steps (1 record) | Oct 3 |\n\n**Limitations:**\n- The weight unit is unknown. Weight is left out of unit-converted summaries.\n- One resting-heart-rate day had no estimate and was treated as missing, not zero.\n- The files that weren't parsed were:\n  - a sleep-score CSV (`sleep_log_entry_id, timestamp, overall_score`)\n  - an `.html` file\n  - a JSON file with an unrecognized structure (`unknownThing`)\n  - the symbolic link\n- The unparsed files are still on disk in the extraction folder. Their contents aren't in the database.\n- Nothing was imported for several categories, including exercise, SpO2/breathing/temperature, nutrition and cardio fitness.\n\n**API connection:** Importing a Takeout archive works without API access, and it doesn't create a connection. Neither Google nor Fitbit is connected: both show no token and are not configured.\n- **Google:** The `ghealth` CLI credentials weren't found. You'd need to run `ghealth auth login` or complete a browser sign-in.\n- **Fitbit:** The legacy Fitbit Web API is scheduled to shut off on 2026-10-30. It only works with an existing developer app.\n\nI can start a Google connection if you'd like. That needs your consent in the browser."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The import finished. It did not connect your API account.\n\n**Import status:** The job succeeded. It processed all 9 files and inserted 11 records. Three files weren't in a supported format, and one symbolic link was skipped.\n\n**Coverage:** The data is very thin. It spans only 2026-10-01 to 2026-10-03.\n\n| Source | Data | Dates |\n|---|---|---|\n| Fitbit Takeout | Steps (2 records) | Oct 1 |\n| Fitbit Takeout | Heart rate (1 sample) | Oct 1 |\n| Fitbit Takeout | Resting heart rate (1 day) | Oct 1 |\n| Fitbit Takeout | BMI (1 sample) | Oct 1 |\n| Fitbit Takeout | Weight (1 sample) | Oct 1 |\n| Fitbit Takeout | Sleep: efficiency, minutes asleep, minutes awake and time in bed (one session) | Oct 2 |\n| Google Takeout | Steps (1 record) | Oct 3 |\n\n**Limitations:**\n- The weight unit is unknown. Weight is left out of unit-converted summaries.\n- One resting-heart-rate day had no estimate and was treated as missing, not zero.\n- The files that weren't parsed were:\n  - a sleep-score CSV (`sleep_log_entry_id, timestamp, overall_score`)\n  - an `.html` file\n  - a JSON file with an unrecognized structure (`unknownThing`)\n  - the symbolic link\n- The unparsed files are still on disk in the extraction folder. Their contents aren't in the database.\n- Nothing was imported for several categories, including exercise, SpO2/breathing/temperature, nutrition and cardio fitness.\n\n**API connection:** Importing a Takeout archive works without API access, and it doesn't create a connection. Neither Google nor Fitbit is connected: both show no token and are not configured.\n- **Google:** The `ghealth` CLI credentials weren't found. You'd need to run `ghealth auth login` or complete a browser sign-in.\n- **Fitbit:** The legacy Fitbit Web API is scheduled to shut off on 2026-10-30. It only works with an existing developer app.\n\nI can start a Google connection if you'd like. That needs your consent in the browser.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1013,
+        "cacheReadInputTokens": 28371,
+        "cacheCreationInputTokens": 3938,
+        "webSearchRequests": 0,
+        "costUSD": 0.0287351,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 3938,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0287351,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 3938,
+      "cache_read_input_tokens": 28371,
+      "output_tokens": 1013,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3938,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 773,
+          "cache_read_input_tokens": 8184,
+          "cache_creation_input_tokens": 1537,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1537
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

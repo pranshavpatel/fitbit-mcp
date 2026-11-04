@@ -1,0 +1,162 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_019hdH9Db82vCxD163TrvCzY",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01J6faKzDoxKTAiW8McLW44Z",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01BVRdC8rLLe6cJJ3evyomCK",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "activity",
+          "metric": "steps",
+          "provider": "google",
+          "start_date": "2026-10-26",
+          "end_date": "2026-11-01",
+          "limit": 100
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your Google steps for last week were **14,000 steps in total, averaging 2,000 per day**.\n\n- **Date range:** Monday, October 26, 2026 through Sunday, November 1, 2026. I used today's date as November 2, 2026, which is a Monday, so \"last week\" is the full Monday\u2013Sunday period just before it.\n- **Daily values:** all seven days show 2,000 steps (Oct 26, 27, 28, 29, 30, 31 and Nov 1).\n\nSome caveats:\n\n- **Suspicious values:** every day is exactly 2,000, which is unlikely for real activity. The records are also labeled with the parser `eval-synthetic`, so they may be test data rather than your actual steps.\n- **No live connection:** Google is not connected in this setup (no verified API connection, no token). I only read the local database, so these numbers reflect whatever was imported, not a fresh pull from Google.\n- **Date discrepancy:** the environment notes list today as October 30, 2026, but the system date is November 2, 2026. I went with November 2. If October 30 is correct, the Oct 31 and Nov 1 records would be dated in the future, so the data itself suggests November 2 is right.\n\nIf you want real figures, you could connect your Google account (or import a Takeout export) and then rerun the summary."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your Google steps for last week were **14,000 steps in total, averaging 2,000 per day**.\n\n- **Date range:** Monday, October 26, 2026 through Sunday, November 1, 2026. I used today's date as November 2, 2026, which is a Monday, so \"last week\" is the full Monday\u2013Sunday period just before it.\n- **Daily values:** all seven days show 2,000 steps (Oct 26, 27, 28, 29, 30, 31 and Nov 1).\n\nSome caveats:\n\n- **Suspicious values:** every day is exactly 2,000, which is unlikely for real activity. The records are also labeled with the parser `eval-synthetic`, so they may be test data rather than your actual steps.\n- **No live connection:** Google is not connected in this setup (no verified API connection, no token). I only read the local database, so these numbers reflect whatever was imported, not a fresh pull from Google.\n- **Date discrepancy:** the environment notes list today as October 30, 2026, but the system date is November 2, 2026. I went with November 2. If October 30 is correct, the Oct 31 and Nov 1 records would be dated in the future, so the data itself suggests November 2 is right.\n\nIf you want real figures, you could connect your Google account (or import a Takeout export) and then rerun the summary.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1719,
+        "cacheReadInputTokens": 21252,
+        "cacheCreationInputTokens": 4398,
+        "webSearchRequests": 0,
+        "costUSD": 0.0019522200000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1007,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4398,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0019522200000000002,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 4398,
+      "cache_read_input_tokens": 21252,
+      "output_tokens": 1719,
+      "output_tokens_details": {
+        "thinking_tokens": 1007
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4398,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 769,
+          "cache_read_input_tokens": 8581,
+          "cache_creation_input_tokens": 1364,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1364
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

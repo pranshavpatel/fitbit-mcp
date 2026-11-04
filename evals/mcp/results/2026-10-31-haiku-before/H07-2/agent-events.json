@@ -1,0 +1,201 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01ALE7U3x4gSfG1mJqxcN33o",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "limit": 10
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01YK572uEdDoio5zQk48Tqtq",
+        "name": "mcp__fitbit_eval__resume_job",
+        "input": {
+          "job_id": "job_740ad3087e88"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The resume is queued. I'll check its progress."
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01U9BZLvHJZDWXVLphnRvuaT",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_740ad3087e88"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01H2ZUPRDAQJVDX6hft7DPD9",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_012MBB1hDS4cv2uKR9f5Kpiw",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "activity",
+          "provider": "google",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The interrupted Google import (job `job_740ad3087e88`) resumed and finished successfully. Every planned request (18 of 18) completed.\n\n**Imported activity coverage (Oct 1\u20133, 2026):**\n- **Steps:** 3 days of data, one per day: Oct 1 = 1,000, Oct 2 = 2,000, Oct 3 = 3,000.\n- **Everything else in the activity category came back empty.** Google returned no records for active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories. Those requests succeeded, so the account most likely has no data for these types in this window. I can't tell that for certain, though, and it may also reflect how the account or permissions are set up.\n\n**Limitations:**\n- The import covered only Oct 1\u20133, 2026, the window the job was created with. Activity from any other dates is not in the local database.\n- The steps values look like round test figures, so please check them against your Google Health app before relying on them.\n- Sleep, heart, body, and other categories have no Google records locally, because this job only requested activity."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The interrupted Google import (job `job_740ad3087e88`) resumed and finished successfully. Every planned request (18 of 18) completed.\n\n**Imported activity coverage (Oct 1\u20133, 2026):**\n- **Steps:** 3 days of data, one per day: Oct 1 = 1,000, Oct 2 = 2,000, Oct 3 = 3,000.\n- **Everything else in the activity category came back empty.** Google returned no records for active energy burned, active minutes, active zone minutes, activity level, altitude, basal energy burned, calories in heart rate zone, distance, floors, sedentary period, swim lengths, time in heart rate zone, and total calories. Those requests succeeded, so the account most likely has no data for these types in this window. I can't tell that for certain, though, and it may also reflect how the account or permissions are set up.\n\n**Limitations:**\n- The import covered only Oct 1\u20133, 2026, the window the job was created with. Activity from any other dates is not in the local database.\n- The steps values look like round test figures, so please check them against your Google Health app before relying on them.\n- Sleep, heart, body, and other categories have no Google records locally, because this job only requested activity.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 874,
+        "cacheReadInputTokens": 45293,
+        "cacheCreationInputTokens": 4510,
+        "webSearchRequests": 0,
+        "costUSD": 0.00179313,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 82,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4510,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00179313,
+    "usage": {
+      "input_tokens": 12,
+      "cache_creation_input_tokens": 4510,
+      "cache_read_input_tokens": 45293,
+      "output_tokens": 874,
+      "output_tokens_details": {
+        "thinking_tokens": 82
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4510,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 396,
+          "cache_read_input_tokens": 9649,
+          "cache_creation_input_tokens": 804,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 804
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

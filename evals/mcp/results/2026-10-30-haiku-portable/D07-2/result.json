@@ -1,0 +1,384 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "succeed|complet|finish"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "terminal_job_observed": {
+      "pass": true,
+      "detail": ""
+    },
+    "expected_job_outcome": {
+      "pass": true,
+      "detail": "['succeeded']"
+    },
+    "actual_activity_rows": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D07",
+  "split": "dev",
+  "trial": 2,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.00096499,
+  "latency_s": 5.92,
+  "error": null,
+  "answers": [
+    "The most recent cancelled Google import (job `job_8a9968f13630`) has been resumed and finished successfully.\n\n- **Result:** All 18 planned requests succeeded. The 4 requests completed before the cancellation were kept, so the job did not start over.\n- **Records:** 3 new activity records were inserted. Nothing was updated, unchanged, restored, or marked deleted upstream.\n- **Scope:** The job covered activity data for October 1\u20133, 2026, with unverified types included and no intraday or full heart-rate data.\n\nNote that only 3 new records came in for a three-day window. If you expected more, that may just reflect what Google returned for those dates."
+  ],
+  "trace": [
+    {
+      "tool": "job_status",
+      "arguments": {},
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"jobs\": [\n    {\n      \"job_id\": \"job_8a9968f13630\",\n      \"kind\": \"import\",\n      \"provider\": \"google\",\n      \"status\": \"cancelled\",\n      \"message\": \"Cancelled; completed requests are kept. resume_job continues from here.\",\n      \"parameters\": {\n        \"mode\": \"import\",\n        \"start_date\": \"2026-10-01\",\n        \"end_date\": \"2026-10-03\",\n        \"categories\": [\n          \"activity\"\n        ],\n        \"include_intraday\": false,\n        \"full_heart_rate\": false,\n        \"include_unverified\": true,\n        \"timezone\": \"America/New_York\"\n      },\n      \"progress\": {\n        \"requests_total\": 18,\n        \"requests_done\": 4,\n        \"requests_by_status\": {\n          \"ok\": 4,\n          \"pending\": 14\n        },\n        \"records\": {\n          \"inserted\": 0,\n          \"updated\": 0,\n          \"unchanged\": 0,\n          \"restored\": 0,\n          \"marked_deleted_upstream\": 0\n        },\n        \"estimated_hours_remaining_at_quota\": null,\n        \"current\": \"active-zone-minutes\",\n        \"current_window\": [\n          \"2026-10-01\",\n          \"2026-10-03\"\n        ],\n        \"current_pages\": 0,\n        \"current_records\": 0\n      },\n      \"created_at\": \"2026-10-30T17:11:03Z\",\n      \"updated_at\": \"2026-10-30T17:11:03Z\",\n      \"started_at\": \"2026-10-30T17:11:03Z\",\n      \"finished_at\": \"2026-10-30T17:11:03Z\",\n      \"next_step\": \"resume_job continues and retries failed requests; completed requests are kept.\"\n    }\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "jobs": [
+            {
+              "job_id": "job_8a9968f13630",
+              "kind": "import",
+              "provider": "google",
+              "status": "cancelled",
+              "message": "Cancelled; completed requests are kept. resume_job continues from here.",
+              "parameters": {
+                "mode": "import",
+                "start_date": "2026-10-01",
+                "end_date": "2026-10-03",
+                "categories": [
+                  "activity"
+                ],
+                "include_intraday": false,
+                "full_heart_rate": false,
+                "include_unverified": true,
+                "timezone": "America/New_York"
+              },
+              "progress": {
+                "requests_total": 18,
+                "requests_done": 4,
+                "requests_by_status": {
+                  "ok": 4,
+                  "pending": 14
+                },
+                "records": {
+                  "inserted": 0,
+                  "updated": 0,
+                  "unchanged": 0,
+                  "restored": 0,
+                  "marked_deleted_upstream": 0
+                },
+                "estimated_hours_remaining_at_quota": null,
+                "current": "active-zone-minutes",
+                "current_window": [
+                  "2026-10-01",
+                  "2026-10-03"
+                ],
+                "current_pages": 0,
+                "current_records": 0
+              },
+              "created_at": "2026-10-30T17:11:03Z",
+              "updated_at": "2026-10-30T17:11:03Z",
+              "started_at": "2026-10-30T17:11:03Z",
+              "finished_at": "2026-10-30T17:11:03Z",
+              "next_step": "resume_job continues and retries failed requests; completed requests are kept."
+            }
+          ]
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.001,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_8a9968f13630",
+            "kind": "import",
+            "status": "cancelled"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "resume_job",
+      "arguments": {
+        "job_id": "job_8a9968f13630"
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_8a9968f13630\",\n  \"kind\": \"import\",\n  \"provider\": \"google\",\n  \"status\": \"queued\",\n  \"message\": \"Queued to resume\",\n  \"parameters\": {\n    \"mode\": \"import\",\n    \"start_date\": \"2026-10-01\",\n    \"end_date\": \"2026-10-03\",\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"include_unverified\": true,\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 18,\n    \"requests_done\": 4,\n    \"requests_by_status\": {\n      \"ok\": 4,\n      \"pending\": 14\n    },\n    \"records\": {\n      \"inserted\": 0,\n      \"updated\": 0,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"active-zone-minutes\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-03\"\n    ],\n    \"current_pages\": 0,\n    \"current_records\": 0\n  },\n  \"created_at\": \"2026-10-30T17:11:03Z\",\n  \"updated_at\": \"2026-10-30T17:11:05Z\",\n  \"started_at\": \"2026-10-30T17:11:03Z\",\n  \"next_step\": \"Poll job_status; cancel_job stops it safely.\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_8a9968f13630",
+          "kind": "import",
+          "provider": "google",
+          "status": "queued",
+          "message": "Queued to resume",
+          "parameters": {
+            "mode": "import",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-03",
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "include_unverified": true,
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 18,
+            "requests_done": 4,
+            "requests_by_status": {
+              "ok": 4,
+              "pending": 14
+            },
+            "records": {
+              "inserted": 0,
+              "updated": 0,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "active-zone-minutes",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-03"
+            ],
+            "current_pages": 0,
+            "current_records": 0
+          },
+          "created_at": "2026-10-30T17:11:03Z",
+          "updated_at": "2026-10-30T17:11:05Z",
+          "started_at": "2026-10-30T17:11:03Z",
+          "next_step": "Poll job_status; cancel_job stops it safely."
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0024,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_8a9968f13630",
+            "kind": "import",
+            "status": "queued"
+          }
+        ],
+        "google_token_exists": true
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_8a9968f13630"
+      },
+      "user_turn": 1,
+      "index": 3,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_8a9968f13630\",\n  \"kind\": \"import\",\n  \"provider\": \"google\",\n  \"status\": \"succeeded\",\n  \"message\": \"Completed; every planned request succeeded.\",\n  \"parameters\": {\n    \"mode\": \"import\",\n    \"start_date\": \"2026-10-01\",\n    \"end_date\": \"2026-10-03\",\n    \"categories\": [\n      \"activity\"\n    ],\n    \"include_intraday\": false,\n    \"full_heart_rate\": false,\n    \"include_unverified\": true,\n    \"timezone\": \"America/New_York\"\n  },\n  \"progress\": {\n    \"requests_total\": 18,\n    \"requests_done\": 18,\n    \"requests_by_status\": {\n      \"ok\": 18\n    },\n    \"records\": {\n      \"inserted\": 3,\n      \"updated\": 0,\n      \"unchanged\": 0,\n      \"restored\": 0,\n      \"marked_deleted_upstream\": 0\n    },\n    \"estimated_hours_remaining_at_quota\": null,\n    \"current\": \"calories-in-heart-rate-zone\",\n    \"current_window\": [\n      \"2026-10-01\",\n      \"2026-10-03\"\n    ],\n    \"current_pages\": 1,\n    \"current_records\": 0,\n    \"account_snapshots_not_retrieved\": [],\n    \"message\": \"Completed; every planned request succeeded.\"\n  },\n  \"created_at\": \"2026-10-30T17:11:03Z\",\n  \"updated_at\": \"2026-10-30T17:11:05Z\",\n  \"started_at\": \"2026-10-30T17:11:03Z\",\n  \"finished_at\": \"2026-10-30T17:11:05Z\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_8a9968f13630",
+          "kind": "import",
+          "provider": "google",
+          "status": "succeeded",
+          "message": "Completed; every planned request succeeded.",
+          "parameters": {
+            "mode": "import",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-03",
+            "categories": [
+              "activity"
+            ],
+            "include_intraday": false,
+            "full_heart_rate": false,
+            "include_unverified": true,
+            "timezone": "America/New_York"
+          },
+          "progress": {
+            "requests_total": 18,
+            "requests_done": 18,
+            "requests_by_status": {
+              "ok": 18
+            },
+            "records": {
+              "inserted": 3,
+              "updated": 0,
+              "unchanged": 0,
+              "restored": 0,
+              "marked_deleted_upstream": 0
+            },
+            "estimated_hours_remaining_at_quota": null,
+            "current": "calories-in-heart-rate-zone",
+            "current_window": [
+              "2026-10-01",
+              "2026-10-03"
+            ],
+            "current_pages": 1,
+            "current_records": 0,
+            "account_snapshots_not_retrieved": [],
+            "message": "Completed; every planned request succeeded."
+          },
+          "created_at": "2026-10-30T17:11:03Z",
+          "updated_at": "2026-10-30T17:11:05Z",
+          "started_at": "2026-10-30T17:11:03Z",
+          "finished_at": "2026-10-30T17:11:05Z"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.002,
+      "state": {
+        "records": [
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-01",
+            "value": 1000.0,
+            "unit": "count",
+            "record_key": "2026-10-01",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-02",
+            "value": 2000.0,
+            "unit": "count",
+            "record_key": "2026-10-02",
+            "status": "active"
+          },
+          {
+            "provider": "google",
+            "metric": "steps",
+            "local_date": "2026-10-03",
+            "value": 3000.0,
+            "unit": "count",
+            "record_key": "2026-10-03",
+            "status": "active"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "job_8a9968f13630",
+            "kind": "import",
+            "status": "succeeded"
+          }
+        ],
+        "google_token_exists": true
+      }
+    }
+  ],
+  "initial": {
+    "records": [],
+    "jobs": [
+      {
+        "id": "job_8a9968f13630",
+        "kind": "import",
+        "status": "cancelled"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "final": {
+    "records": [
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-01",
+        "value": 1000.0,
+        "unit": "count",
+        "record_key": "2026-10-01",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-02",
+        "value": 2000.0,
+        "unit": "count",
+        "record_key": "2026-10-02",
+        "status": "active"
+      },
+      {
+        "provider": "google",
+        "metric": "steps",
+        "local_date": "2026-10-03",
+        "value": 3000.0,
+        "unit": "count",
+        "record_key": "2026-10-03",
+        "status": "active"
+      }
+    ],
+    "jobs": [
+      {
+        "id": "job_8a9968f13630",
+        "kind": "import",
+        "status": "succeeded"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "tool_calls": 3,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": "job_8a9968f13630",
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

@@ -1,0 +1,169 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01BWQ1addaey7EAZMtBni2Z6",
+        "name": "mcp__fitbit_eval__import_takeout",
+        "input": {
+          "path": "/private/tmp/fitbit-mcp-eval-p7n4hn36/takeout-synthetic.zip"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011X1EhGEL2m7pXtUBjq5Ucp",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "all"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01B5ovDcbyd9nfNfr9AQyBkK",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_24af6bd0587f"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_017wfzLcTPcnifxn7ACbXFys",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The Takeout import finished successfully, but it does not connect your API account. The archive gave you only a few days of data.\n\n**Import status:** Succeeded. 9 files were processed and 11 records were inserted. Nothing was updated or skipped.\n\n**What you have locally (coverage):**\n- **Fitbit Takeout**\n  - Steps: 2 records on 2026-10-01\n  - Heart rate: 1 sample on 2026-10-01\n  - Resting heart rate: 1 day, 2026-10-01\n  - Weight: 1 record on 2026-10-01, but the unit is unknown, so it's excluded from unit-converted summaries\n  - BMI: 1 record on 2026-10-01\n  - Sleep: 1 session on 2026-10-02 (minutes asleep, minutes awake, time in bed, efficiency)\n- **Google Takeout**\n  - Steps: 1 record on 2026-10-03\n\nEvery other category (exercise, cardio fitness, SpO2, nutrition, and so on) has no local records. Days without data are missing, not zero.\n\n**Warnings and unparsed files:**\n- The archive contained a symbolic link, which was not extracted.\n- One day of resting heart rate (2026-10-01) had no estimate and was treated as missing.\n- Four files were not parsed: a sleep-log CSV, an HTML file, and a JSON file with an unrecognized structure. Three of these are counted as unsupported; the symbolic link is the fourth item. The raw files are kept on disk.\n\n**Does this connect your API account?** No. The import only reads the archive. Your API connections are both still unconnected:\n- **Google:** not connected. Google is not onboarding new projects, so the connection depends on your existing ghealth CLI setup.\n- **Fitbit:** not connected. The tool reports that the legacy Fitbit Web API is scheduled to be turned off on 2026-10-30, so that route may no longer work.\n\nIf you want live data beyond this archive, you would need to connect an account separately. I can start that when you tell me which provider to use."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The Takeout import finished successfully, but it does not connect your API account. The archive gave you only a few days of data.\n\n**Import status:** Succeeded. 9 files were processed and 11 records were inserted. Nothing was updated or skipped.\n\n**What you have locally (coverage):**\n- **Fitbit Takeout**\n  - Steps: 2 records on 2026-10-01\n  - Heart rate: 1 sample on 2026-10-01\n  - Resting heart rate: 1 day, 2026-10-01\n  - Weight: 1 record on 2026-10-01, but the unit is unknown, so it's excluded from unit-converted summaries\n  - BMI: 1 record on 2026-10-01\n  - Sleep: 1 session on 2026-10-02 (minutes asleep, minutes awake, time in bed, efficiency)\n- **Google Takeout**\n  - Steps: 1 record on 2026-10-03\n\nEvery other category (exercise, cardio fitness, SpO2, nutrition, and so on) has no local records. Days without data are missing, not zero.\n\n**Warnings and unparsed files:**\n- The archive contained a symbolic link, which was not extracted.\n- One day of resting heart rate (2026-10-01) had no estimate and was treated as missing.\n- Four files were not parsed: a sleep-log CSV, an HTML file, and a JSON file with an unrecognized structure. Three of these are counted as unsupported; the symbolic link is the fourth item. The raw files are kept on disk.\n\n**Does this connect your API account?** No. The import only reads the archive. Your API connections are both still unconnected:\n- **Google:** not connected. Google is not onboarding new projects, so the connection depends on your existing ghealth CLI setup.\n- **Fitbit:** not connected. The tool reports that the legacy Fitbit Web API is scheduled to be turned off on 2026-10-30, so that route may no longer work.\n\nIf you want live data beyond this archive, you would need to connect an account separately. I can start that when you tell me which provider to use.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1208,
+        "cacheReadInputTokens": 28067,
+        "cacheCreationInputTokens": 4109,
+        "webSearchRequests": 0,
+        "costUSD": 0.0017072699999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 262,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4109,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0017072699999999999,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 4109,
+      "cache_read_input_tokens": 28067,
+      "output_tokens": 1208,
+      "output_tokens_details": {
+        "thinking_tokens": 262
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4109,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 863,
+          "cache_read_input_tokens": 8196,
+          "cache_creation_input_tokens": 1560,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1560
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

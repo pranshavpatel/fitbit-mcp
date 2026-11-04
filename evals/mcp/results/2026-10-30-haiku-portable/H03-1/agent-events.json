@@ -1,0 +1,180 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011Br7kMUjgX2JKpN6cnL7Br",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_017L5VsCgQqYHFtdPGkVcU5w",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "order": "asc"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01YaX8XWU5G14wqRDafZQDhh",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "limit": 2,
+          "order": "asc",
+          "cursor": "eyJkIjoiMjAyNi0xMC0wMiIsImlkIjoyLCJvcmRlciI6ImFzYyJ9"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0144RJwee8DrK3YCGsetKrvV",
+        "name": "mcp__fitbit_eval__export_data",
+        "input": {
+          "provider": "google",
+          "metric": "steps",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "format": "csv"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Here are the Google daily step counts for October 1\u20133, 2026. I pulled them two records at a time and left out the Fitbit copy.\n\n| Date | Steps |\n|---|---|\n| 2026-10-01 | 1,000 |\n| 2026-10-02 | 2,000 |\n| 2026-10-03 | 3,000 |\n\nThe Google records were exported to CSV at:\n`/private/tmp/fitbit-mcp-eval-26hgrene/home/exports/fitbit-google-steps-20261030-131324.csv`\n\nThe export contains 3 records. The file is stored locally with owner-only permissions and was not uploaded anywhere.\n\nLimitations: these values are from local data only. Each record is a date-only daily total with no time-of-day detail. I didn't check the live Google connection, so the numbers reflect what was last imported. The \"parser\" field on each record reads \"eval-synthetic,\" which suggests the data may be test or synthetic rather than real readings from your device. You may want to confirm that before relying on these figures."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Here are the Google daily step counts for October 1\u20133, 2026. I pulled them two records at a time and left out the Fitbit copy.\n\n| Date | Steps |\n|---|---|\n| 2026-10-01 | 1,000 |\n| 2026-10-02 | 2,000 |\n| 2026-10-03 | 3,000 |\n\nThe Google records were exported to CSV at:\n`/private/tmp/fitbit-mcp-eval-26hgrene/home/exports/fitbit-google-steps-20261030-131324.csv`\n\nThe export contains 3 records. The file is stored locally with owner-only permissions and was not uploaded anywhere.\n\nLimitations: these values are from local data only. Each record is a date-only daily total with no time-of-day detail. I didn't check the live Google connection, so the numbers reflect what was last imported. The \"parser\" field on each record reads \"eval-synthetic,\" which suggests the data may be test or synthetic rather than real readings from your device. You may want to confirm that before relying on these figures.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 1147,
+        "cacheReadInputTokens": 36367,
+        "cacheCreationInputTokens": 2891,
+        "webSearchRequests": 0,
+        "costUSD": 0.0015163700000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 170,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2891,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0015163700000000002,
+    "usage": {
+      "input_tokens": 10,
+      "cache_creation_input_tokens": 2891,
+      "cache_read_input_tokens": 36367,
+      "output_tokens": 1147,
+      "output_tokens_details": {
+        "thinking_tokens": 170
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2891,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 336,
+          "cache_read_input_tokens": 8514,
+          "cache_creation_input_tokens": 325,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 325
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

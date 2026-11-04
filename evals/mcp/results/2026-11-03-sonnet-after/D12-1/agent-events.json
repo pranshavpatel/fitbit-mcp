@@ -1,0 +1,134 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_016q5WBTF7x5qVaLAYm378W8",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01V4xdJ1jFBBLvuJzFpkLk7k",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "exercise",
+          "metric": "duration",
+          "provider": "google",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-03",
+          "min_value": 45
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Two Google workouts from October 2\u20133, 2026 were longer than 45 minutes:\n\n| Date | Start (local) | Duration | Source ID |\n|---|---|---|---|\n| Oct 2, 2026 | 10:00 | 50 min | `workout-3` |\n| Oct 3, 2026 | 10:00 | 60 min | `workout-4` |\n\nThe local database has 5 Google exercise sessions in total, covering Oct 1\u20133. I filtered for sessions of at least 45 minutes, so a session of exactly 45 minutes would also have appeared. None did. The database doesn't include workout type or name, only date, start time, duration and source ID."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Two Google workouts from October 2\u20133, 2026 were longer than 45 minutes:\n\n| Date | Start (local) | Duration | Source ID |\n|---|---|---|---|\n| Oct 2, 2026 | 10:00 | 50 min | `workout-3` |\n| Oct 3, 2026 | 10:00 | 60 min | `workout-4` |\n\nThe local database has 5 Google exercise sessions in total, covering Oct 1\u20133. I filtered for sessions of at least 45 minutes, so a session of exactly 45 minutes would also have appeared. None did. The database doesn't include workout type or name, only date, start time, duration and source ID.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 444,
+        "cacheReadInputTokens": 20111,
+        "cacheCreationInputTokens": 1835,
+        "webSearchRequests": 0,
+        "costUSD": 0.013803100000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1835,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.013803100000000002,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 1835,
+      "cache_read_input_tokens": 20111,
+      "output_tokens": 444,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1835,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 219,
+          "cache_read_input_tokens": 7273,
+          "cache_creation_input_tokens": 632,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 632
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

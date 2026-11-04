@@ -845,6 +845,8 @@ EXERCISES: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "pull up": (("lats",), ("biceps",)),
     "chin up": (("lats", "biceps"), ()),
     "lat pulldown": (("lats",), ("biceps",)),
+    "close grip lat pulldown": (("lats",), ("biceps",)),      # separate so its heavier loads don't read as pulldown PRs
+    "single arm lat pulldown": (("lats",), ("biceps",)),
     "deadlift": (("hamstrings", "glutes"), ("lats", "quads")),
     "romanian deadlift": (("hamstrings",), ("glutes",)),
     "squat": (("quads", "glutes"), ("hamstrings",)),
@@ -868,6 +870,7 @@ EXERCISES: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "back extension": ((), ("glutes", "hamstrings")),          # mostly lower back, which isn't tracked
     "archer pull": (("shoulders",), ("lats",)),                 # cable/band archer pull: rear delts, upper back
     "curl": (("biceps",), ()),
+    "single arm cable curl": (("biceps",), ()),
     "incline curl": (("biceps",), ()),
     "preacher curl": (("biceps",), ()),
     "hammer curl": (("biceps",), ()),
@@ -903,6 +906,9 @@ EXERCISE_ALIASES = {
     "cable lat pullover": "lat pullover", "pullover": "lat pullover", "straight arm pulldown": "lat pullover",
     "widegrip cable row": "wide grip row", "wide grip cable row": "wide grip row",
     "single hand preacher curl": "preacher curl", "single arm preacher curl": "preacher curl", "cable row": "row", "seated row": "row", "bent over row": "row",
+    "closegrip lat pulldown": "close grip lat pulldown", "single hand lat pulldown": "single arm lat pulldown",
+    "single hand cable bicep curl": "single arm cable curl", "single arm cable bicep curl": "single arm cable curl",
+    "single hand row": "single arm row", "bentover barbell row": "row",
     "pullup": "pull up", "pullups": "pull up", "chinup": "chin up", "chinups": "chin up",
     "pulldown": "lat pulldown", "lat pull": "lat pulldown", "rdl": "romanian deadlift", "dl": "deadlift",
     "back squat": "squat", "front squat": "squat", "lunges": "lunge",

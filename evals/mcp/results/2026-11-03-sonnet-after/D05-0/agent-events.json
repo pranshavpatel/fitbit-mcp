@@ -1,0 +1,151 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01LQXXmR5DP4EpyM48wyZSMB",
+        "name": "mcp__fitbit_eval__connection_status",
+        "input": {
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_0172o2tmmojTBXZS5Vp6woqX",
+        "name": "mcp__fitbit_eval__sync_data",
+        "input": {
+          "provider": "google",
+          "categories": [
+            "activity"
+          ],
+          "overlap_days": 2
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013iVnL7Zi7MNYhoWmkjmFGq",
+        "name": "mcp__fitbit_eval__job_status",
+        "input": {
+          "job_id": "job_7d1ddaff23ef"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The activity sync for your Google account finished successfully. All 10 requests completed with no errors.\n\n- **Records:** 3 were updated. None were inserted, restored, or flagged as deleted upstream.\n- **Window:** The job covered 2026-10-01 to 2026-10-07 (America/New_York). That's wider than the two days you asked for. The tool seems to measure the overlap from the last sync date, not from today. The system date is also inconsistent: the job shows November 2026, but the sync ended at 2026-10-07. So the sync may not include anything newer than October 7.\n- **Scope:** I synced only the activity category, since you asked for activity data. Sleep, heart and other categories were not synced."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "The activity sync for your Google account finished successfully. All 10 requests completed with no errors.\n\n- **Records:** 3 were updated. None were inserted, restored, or flagged as deleted upstream.\n- **Window:** The job covered 2026-10-01 to 2026-10-07 (America/New_York). That's wider than the two days you asked for. The tool seems to measure the overlap from the last sync date, not from today. The system date is also inconsistent: the job shows November 2026, but the sync ended at 2026-10-07. So the sync may not include anything newer than October 7.\n- **Scope:** I synced only the activity category, since you asked for activity data. Sleep, heart and other categories were not synced.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 475,
+        "cacheReadInputTokens": 27394,
+        "cacheCreationInputTokens": 2344,
+        "webSearchRequests": 0,
+        "costUSD": 0.0168814,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 2344,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.0168814,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 2344,
+      "cache_read_input_tokens": 27394,
+      "output_tokens": 475,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2344,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 230,
+          "cache_read_input_tokens": 7587,
+          "cache_creation_input_tokens": 540,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 540
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

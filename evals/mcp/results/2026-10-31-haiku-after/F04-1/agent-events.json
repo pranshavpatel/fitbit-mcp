@@ -1,0 +1,184 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-haiku-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01CNNoqM9rzGHdCY7i8pcUCH",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01YSKZXSZuEuEiV9oHm1Jrdg",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "provider": "fitbit"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013vqj2c31uC3YrJsjR9uCgA",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03",
+          "provider": "google"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_011TZtccNCQGYcyifFamML9x",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "steps",
+          "period": "day",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-03"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": []
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Your daily average is **2,000 steps** for October 1\u20133, using Google's numbers for all three days.\n\n| Date | Google | Fitbit | Used |\n|---|---|---|---|\n| Oct 1 | 1,000 | 9,000 | 1,000 (Google) |\n| Oct 2 | 2,000 | no data | 2,000 |\n| Oct 3 | 3,000 | no data | 3,000 |\n\nI used one source per day so nothing is counted twice. The tool's default choice was Google for all three days, so I followed that.\n\nThe two sources disagree sharply on October 1 (1,000 vs. 9,000). I can't tell from the data which is correct, so the average depends on that day:\n- With Google's Oct 1 figure, the average is 2,000.\n- With Fitbit's Oct 1 figure (and Google for Oct 2\u20133), the average is about 4,667.\n\nIt's worth checking which device or app recorded the full day on October 1. Fitbit only has data for that one day, so it isn't a reliable basis for the whole range."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "Your daily average is **2,000 steps** for October 1\u20133, using Google's numbers for all three days.\n\n| Date | Google | Fitbit | Used |\n|---|---|---|---|\n| Oct 1 | 1,000 | 9,000 | 1,000 (Google) |\n| Oct 2 | 2,000 | no data | 2,000 |\n| Oct 3 | 3,000 | no data | 3,000 |\n\nI used one source per day so nothing is counted twice. The tool's default choice was Google for all three days, so I followed that.\n\nThe two sources disagree sharply on October 1 (1,000 vs. 9,000). I can't tell from the data which is correct, so the average depends on that day:\n- With Google's Oct 1 figure, the average is 2,000.\n- With Fitbit's Oct 1 figure (and Google for Oct 2\u20133), the average is about 4,667.\n\nIt's worth checking which device or app recorded the full day on October 1. Fitbit only has data for that one day, so it isn't a reliable basis for the whole range.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-haiku-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 1567,
+        "cacheReadInputTokens": 21884,
+        "cacheCreationInputTokens": 4006,
+        "webSearchRequests": 0,
+        "costUSD": 0.00180414,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 720,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 4006,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.00180414,
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 4006,
+      "cache_read_input_tokens": 21884,
+      "output_tokens": 1567,
+      "output_tokens_details": {
+        "thinking_tokens": 720
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4006,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 517,
+          "cache_read_input_tokens": 9023,
+          "cache_creation_input_tokens": 1054,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1054
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

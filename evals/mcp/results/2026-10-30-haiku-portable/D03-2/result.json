@@ -1,0 +1,201 @@
+{
+  "passed": true,
+  "checks": {
+    "required_tools": {
+      "pass": true,
+      "detail": ""
+    },
+    "final_answer": {
+      "pass": true,
+      "detail": ""
+    },
+    "answer_fact_1": {
+      "pass": true,
+      "detail": "fail|not linked|not connect|unable|error|could not"
+    },
+    "discovery_before_data": {
+      "pass": true,
+      "detail": ""
+    },
+    "call_budget": {
+      "pass": true,
+      "detail": ""
+    },
+    "terminal_job_observed": {
+      "pass": true,
+      "detail": ""
+    },
+    "expected_job_outcome": {
+      "pass": true,
+      "detail": "['failed']"
+    },
+    "records_unchanged": {
+      "pass": true,
+      "detail": ""
+    },
+    "no_critical_failures": {
+      "pass": true,
+      "detail": ""
+    }
+  },
+  "critical_failures": [],
+  "grading_limit": "Deterministic facts/trace/state checks; narrative completeness is not human-calibrated.",
+  "case": "D03",
+  "split": "dev",
+  "trial": 2,
+  "mode": "agent",
+  "model": "haiku",
+  "profile": "portable",
+  "actual_models": [
+    "claude-haiku-5-5"
+  ],
+  "cost_usd": 0.0009319300000000001,
+  "latency_s": 6.25,
+  "error": null,
+  "answers": [
+    "**No, the connection did not work.** The ghealth CLI credentials loaded, but the test request failed with `ACCOUNT_NOT_LINKED`, which means no Google Health identity is linked to that Google account. Nothing is connected, and no data was imported.\n\nThe credentials did get the read-only permissions for activity, sleep, nutrition, heart and ECG, measurements, symptoms, reproductive health, mindfulness, location, profile, and settings. The problem is on the account side, not the token.\n\nTo fix it, the Google account the ghealth CLI is signed into needs a linked Google Health profile. Setting that up in the Google Health or Fitbit app, or on the Google Health website, may fix it. Once that's done, I can retry the connection.\n\nIf you can't get the account linked, two other options are:\n- **Browser sign-in:** I can open a browser OAuth flow with the Google account you want to use.\n- **Google Takeout:** You can export your health data from Google Takeout and I can import the archive locally.\n\nWhich would you like to do?"
+  ],
+  "trace": [
+    {
+      "tool": "connect_account",
+      "arguments": {
+        "provider": "google",
+        "method": "ghealth_cli"
+      },
+      "user_turn": 1,
+      "index": 1,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_dafd5977c095\",\n  \"kind\": \"connect\",\n  \"provider\": \"google\",\n  \"status\": \"queued\",\n  \"message\": \"Queued\",\n  \"parameters\": {\n    \"method\": \"ghealth_cli\",\n    \"timeout_seconds\": 300\n  },\n  \"progress\": {},\n  \"created_at\": \"2026-10-30T17:10:39Z\",\n  \"updated_at\": \"2026-10-30T17:10:39Z\",\n  \"next_step\": \"Reusing the ghealth CLI's existing Google credentials (no browser). Poll job_status; success means a read-only API call worked.\",\n  \"method\": \"ghealth_cli\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_dafd5977c095",
+          "kind": "connect",
+          "provider": "google",
+          "status": "queued",
+          "message": "Queued",
+          "parameters": {
+            "method": "ghealth_cli",
+            "timeout_seconds": 300
+          },
+          "progress": {},
+          "created_at": "2026-10-30T17:10:39Z",
+          "updated_at": "2026-10-30T17:10:39Z",
+          "next_step": "Reusing the ghealth CLI's existing Google credentials (no browser). Poll job_status; success means a read-only API call worked.",
+          "method": "ghealth_cli"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0035,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_dafd5977c095",
+            "kind": "connect",
+            "status": "running"
+          }
+        ],
+        "google_token_exists": false
+      }
+    },
+    {
+      "tool": "job_status",
+      "arguments": {
+        "job_id": "job_dafd5977c095"
+      },
+      "user_turn": 1,
+      "index": 2,
+      "protocol_version": "2026-07-28",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"job_id\": \"job_dafd5977c095\",\n  \"kind\": \"connect\",\n  \"provider\": \"google\",\n  \"status\": \"failed\",\n  \"message\": \"The ghealth credentials loaded, but a read-only test request failed (no linked Google Health identity (ACCOUNT_NOT_LINKED)).\",\n  \"parameters\": {\n    \"method\": \"ghealth_cli\",\n    \"timeout_seconds\": 300\n  },\n  \"progress\": {\n    \"stage\": \"validating_api_access\",\n    \"granted_scopes\": [\n      \"https://www.googleapis.com/auth/googlehealth.activity_and_fitness.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.ecg.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.health_metrics_and_measurements.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.irn.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.location.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.logged_symptoms.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.mindfulness.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.nutrition.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.profile.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.reproductive_health.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.settings.readonly\",\n      \"https://www.googleapis.com/auth/googlehealth.sleep.readonly\"\n    ],\n    \"denied_scopes\": [],\n    \"credential_source\": \"ghealth CLI credentials\"\n  },\n  \"created_at\": \"2026-10-30T17:10:39Z\",\n  \"updated_at\": \"2026-10-30T17:10:39Z\",\n  \"error\": \"The ghealth credentials loaded, but a read-only test request failed (no linked Google Health identity (ACCOUNT_NOT_LINKED)).\",\n  \"started_at\": \"2026-10-30T17:10:39Z\",\n  \"finished_at\": \"2026-10-30T17:10:39Z\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "job_id": "job_dafd5977c095",
+          "kind": "connect",
+          "provider": "google",
+          "status": "failed",
+          "message": "The ghealth credentials loaded, but a read-only test request failed (no linked Google Health identity (ACCOUNT_NOT_LINKED)).",
+          "parameters": {
+            "method": "ghealth_cli",
+            "timeout_seconds": 300
+          },
+          "progress": {
+            "stage": "validating_api_access",
+            "granted_scopes": [
+              "https://www.googleapis.com/auth/googlehealth.activity_and_fitness.readonly",
+              "https://www.googleapis.com/auth/googlehealth.ecg.readonly",
+              "https://www.googleapis.com/auth/googlehealth.health_metrics_and_measurements.readonly",
+              "https://www.googleapis.com/auth/googlehealth.irn.readonly",
+              "https://www.googleapis.com/auth/googlehealth.location.readonly",
+              "https://www.googleapis.com/auth/googlehealth.logged_symptoms.readonly",
+              "https://www.googleapis.com/auth/googlehealth.mindfulness.readonly",
+              "https://www.googleapis.com/auth/googlehealth.nutrition.readonly",
+              "https://www.googleapis.com/auth/googlehealth.profile.readonly",
+              "https://www.googleapis.com/auth/googlehealth.reproductive_health.readonly",
+              "https://www.googleapis.com/auth/googlehealth.settings.readonly",
+              "https://www.googleapis.com/auth/googlehealth.sleep.readonly"
+            ],
+            "denied_scopes": [],
+            "credential_source": "ghealth CLI credentials"
+          },
+          "created_at": "2026-10-30T17:10:39Z",
+          "updated_at": "2026-10-30T17:10:39Z",
+          "error": "The ghealth credentials loaded, but a read-only test request failed (no linked Google Health identity (ACCOUNT_NOT_LINKED)).",
+          "started_at": "2026-10-30T17:10:39Z",
+          "finished_at": "2026-10-30T17:10:39Z"
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "duration_s": 0.0007,
+      "state": {
+        "records": [],
+        "jobs": [
+          {
+            "id": "job_dafd5977c095",
+            "kind": "connect",
+            "status": "failed"
+          }
+        ],
+        "google_token_exists": true
+      }
+    }
+  ],
+  "initial": {
+    "records": [],
+    "jobs": [],
+    "google_token_exists": false
+  },
+  "final": {
+    "records": [],
+    "jobs": [
+      {
+        "id": "job_dafd5977c095",
+        "kind": "connect",
+        "status": "failed"
+      }
+    ],
+    "google_token_exists": true
+  },
+  "tool_calls": 2,
+  "fixture_meta": {
+    "archive": "$TRIAL/takeout-synthetic.zip",
+    "job_id": null,
+    "date": "2026-10-07",
+    "timezone": "America/New_York"
+  },
+  "protocol_versions_observed": [
+    "2026-07-28"
+  ],
+  "discovered_schema_sha256": "78465566e16eb05d5a35ac0156e1f2f4a6b883da43e8744230ab4179309b0606"
+}

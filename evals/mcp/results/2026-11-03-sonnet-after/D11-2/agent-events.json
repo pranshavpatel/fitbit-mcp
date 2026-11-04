@@ -1,0 +1,131 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01M644DkZod5KfSrtqy8eYYF",
+        "name": "mcp__fitbit_eval__list_data_types",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_013PGT4z7XPA7U7ztuGtKQCJ",
+        "name": "mcp__fitbit_eval__query_data",
+        "input": {
+          "category": "blood_glucose",
+          "start_date": "2026-10-02",
+          "end_date": "2026-10-02"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I can't tell you your blood glucose for October 2, 2026, because the local database has no blood glucose records. The only data stored is daily step counts for October 1\u20133, 2026. I didn't substitute another metric.\n\nI only checked the local database. Blood glucose may simply not have been imported yet. It could also be that the data wasn't granted, or that none exists. If you'd like, I can check the connection and try importing the blood glucose category. That needs your account connected, and it will only find data if your Fitbit or Google Health account actually has glucose readings."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "I can't tell you your blood glucose for October 2, 2026, because the local database has no blood glucose records. The only data stored is daily step counts for October 1\u20133, 2026. I didn't substitute another metric.\n\nI only checked the local database. Blood glucose may simply not have been imported yet. It could also be that the data wasn't granted, or that none exists. If you'd like, I can check the connection and try importing the blood glucose category. That needs your account connected, and it will only find data if your Fitbit or Google Health account actually has glucose readings.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 332,
+        "cacheReadInputTokens": 12815,
+        "cacheCreationInputTokens": 1360,
+        "webSearchRequests": 0,
+        "costUSD": 0.010049500000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1360,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.010049500000000001,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1360,
+      "cache_read_input_tokens": 12815,
+      "output_tokens": 332,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1360,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 175,
+          "cache_read_input_tokens": 6756,
+          "cache_creation_input_tokens": 663,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 663
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]

@@ -1,0 +1,118 @@
+[
+  {
+    "type": "system",
+    "subtype": "init",
+    "tools": [
+      "mcp__fitbit_eval__cancel_job",
+      "mcp__fitbit_eval__connect_account",
+      "mcp__fitbit_eval__connection_status",
+      "mcp__fitbit_eval__disconnect_account",
+      "mcp__fitbit_eval__export_data",
+      "mcp__fitbit_eval__import_takeout",
+      "mcp__fitbit_eval__job_status",
+      "mcp__fitbit_eval__list_data_types",
+      "mcp__fitbit_eval__query_data",
+      "mcp__fitbit_eval__resume_job",
+      "mcp__fitbit_eval__start_import",
+      "mcp__fitbit_eval__summarize_data",
+      "mcp__fitbit_eval__sync_data"
+    ],
+    "model": "claude-sonnet-5-5",
+    "mcp_servers": [
+      {
+        "name": "fitbit_eval",
+        "status": "connected",
+        "source": "dynamic"
+      }
+    ],
+    "claude_code_version": "2.1.314"
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01EGCsgHAiBu2c5yFYEAeqyG",
+        "name": "mcp__fitbit_eval__summarize_data",
+        "input": {
+          "metric": "weight",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-02",
+          "period": "day"
+        },
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ]
+  },
+  {
+    "type": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**Weight for October 1\u20132, 2026 (kg)**\n\n- **Oct 1:** 72.57 kg. This is the only day with a usable measurement.\n- **Oct 2:** no usable measurement.\n- Coverage is 1 of 2 days (50%). The mean, median, min and max are all 72.57 kg, because only one value exists. A trend isn't available, since that needs at least 6 days of data.\n\n**Excluded measurements**\n- **One measurement was excluded because its unit was unknown.** This can happen with some Takeout files. The tool can't tell whether the number is kilograms or pounds, so it left the value out instead of guessing. The summary doesn't say which day it fell on. If it was on Oct 2, that would explain the gap. I haven't confirmed that.\n- **Oct 1 had more than one reading.** The tool uses the last reading of the day, and that is the 72.57 kg figure.\n\nAll the data came from a Fitbit Takeout import. No other source had data for these dates. Oct 2 is a gap, not a zero.\n\nI can pull the raw records for these two days to see the excluded entry, if you'd like."
+      }
+    ]
+  },
+  {
+    "type": "result",
+    "subtype": "success",
+    "result": "**Weight for October 1\u20132, 2026 (kg)**\n\n- **Oct 1:** 72.57 kg. This is the only day with a usable measurement.\n- **Oct 2:** no usable measurement.\n- Coverage is 1 of 2 days (50%). The mean, median, min and max are all 72.57 kg, because only one value exists. A trend isn't available, since that needs at least 6 days of data.\n\n**Excluded measurements**\n- **One measurement was excluded because its unit was unknown.** This can happen with some Takeout files. The tool can't tell whether the number is kilograms or pounds, so it left the value out instead of guessing. The summary doesn't say which day it fell on. If it was on Oct 2, that would explain the gap. I haven't confirmed that.\n- **Oct 1 had more than one reading.** The tool uses the last reading of the day, and that is the 72.57 kg figure.\n\nAll the data came from a Fitbit Takeout import. No other source had data for these dates. Oct 2 is a gap, not a zero.\n\nI can pull the raw records for these two days to see the excluded entry, if you'd like.",
+    "is_error": false,
+    "modelUsage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 4,
+        "outputTokens": 512,
+        "cacheReadInputTokens": 12829,
+        "cacheCreationInputTokens": 1262,
+        "webSearchRequests": 0,
+        "costUSD": 0.011458900000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 1262,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "total_cost_usd": 0.011458900000000001,
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 1262,
+      "cache_read_input_tokens": 12829,
+      "output_tokens": 512,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 1262,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 372,
+          "cache_read_input_tokens": 6763,
+          "cache_creation_input_tokens": 565,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 565
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "permission_denials": []
+  }
+]
